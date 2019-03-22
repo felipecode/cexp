@@ -1,0 +1,8 @@
+{
+  "route":{"file":"route_file.xml","id": 1}
+  "scenarios":{}, # HERE IS A SPECIFICATION THAT SHOULD MATCH IF THEY DONT MATCH ACUSe it !
+  ""
+
+
+
+}
