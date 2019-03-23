@@ -1,6 +1,6 @@
 
 
-class Agent():
+class Agent(object):
 
 
     def __init__(self):
@@ -8,12 +8,19 @@ class Agent():
 
         self._sensors = None # Set the used sensors for this cases
 
+    def run_step(self, input_data):
+        """
+        Execute one step of navigation.
+        :return: control
+        """
+        pass
 
-    # TODO THIS part goes to the other, to the base agent.
-    def run_step(self):
-        # Here is the agent polict
-        return control
-
+    def destroy(self):
+        """
+        Destroy (clean-up) the agent
+        :return:
+        """
+        pass
     def unroll(self, experience):
 
         experience.set_sensors(self._sensors)

@@ -1,7 +1,7 @@
 
 
-from experience.experience import Experience
-from agents.dummy_agent import DummyAgent
+from expdb.experience.experience import Experience
+from expdb.agents.dummy_agent import DummyAgent
 
 
 if __name__ == '__main__':

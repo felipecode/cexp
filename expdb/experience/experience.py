@@ -1,6 +1,6 @@
-from experience.server_manager import ServerManagerDocker
-import experience.utils.route_configuration_parser as parser
-from experience.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
+from expdb.experience import ServerManagerDocker
+from expdb import experience as parser
+from expdb.experience.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
 import socket
 from contextlib import closing
 import carla
