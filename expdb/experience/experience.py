@@ -1,4 +1,4 @@
-from expdb.experience import ServerManagerDocker
+from expdb.experience.server_manager import ServerManagerDocker
 from expdb import experience as parser
 from expdb.experience.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
 import socket
@@ -49,7 +49,7 @@ class Experience(object):
         client = carla.Client('localhost', free_port)
         client.set_timeout(self.client_timeout)
 
-        self.world = client.load_world(route_description['town_name'])
+        self.world = client.load_world(self._route['town_name'])
         settings = self.world.get_settings()
         settings.synchronous_mode = True
         self.world.apply_settings(settings)
@@ -70,6 +70,9 @@ class Experience(object):
         pass
 
 
+
+
+    # TODO this probably go to some subclass
 
     def build_master_scenario(self, route, town_name):
         # We have to find the target.
