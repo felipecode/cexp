@@ -12,6 +12,8 @@ def find_free_port():
         return s.getsockname()[1]
 
 
+# TODO this probably requires many subclasses
+
 class Experience(object):
 
     def __init__(self, json, params):
@@ -58,6 +60,14 @@ class Experience(object):
 
         self._master_scenario = self.build_master_scenario()
 
+
+
+    def get_data(self):
+
+        # Each experience can have a reference datapoint , where the data is already collected. That can go
+        # Directly to the json where the data is collected.
+
+        pass
 
 
 

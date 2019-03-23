@@ -24,7 +24,8 @@ class Agent(object):
     def unroll(self, experience):
 
         experience.set_sensors(self._sensors)
-        experience.start() # Block where with all carla things
+        # TODO optimize this with a bank of carlas
+        experience.start()  # Block where with all carla things
 
         experience_data_dict = {}
         while experience.is_running():
