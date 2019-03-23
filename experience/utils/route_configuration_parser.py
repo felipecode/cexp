@@ -35,13 +35,13 @@ def parse_routes_file(route_filename):
         route_id = route.attrib['id']
         waypoint_list = []  # the list of waypoints that can be found on this route
         for waypoint in route.iter('waypoint'):
-             waypoint_list.append(waypoint)  # Waypoints is basically a list of XML nodes
+            waypoint_list.append(waypoint)  # Waypoints is basically a list of XML nodes
 
         list_route_descriptions.append({
-                                    'id': route_id,
-                                    'town_name': route_town,
-                                    'trajectory': waypoint_list
-                                     })
+                                        'id': route_id,
+                                        'town_name': route_town,
+                                        'trajectory': waypoint_list
+                                        })
 
     return list_route_descriptions
 

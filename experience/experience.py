@@ -1,14 +1,24 @@
 from experience.server_manager import ServerManagerDocker
-import experience.utils.route_configuration_parser  as parser
+import experience.utils.route_configuration_parser as parser
+from experience.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
+import socket
+from contextlib import closing
+import carla
+
+
+def find_free_port():
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
+        s.bind(('', 0))
+        return s.getsockname()[1]
+
 
 class Experience(object):
-
 
     def __init__(self, json, params):
 
         # TODO with params we can get the server that is going to be built
 
-        self._environment = ServerManagerDocker(params) # Create a carla here , no configuration is needed.
+        self._environment = ServerManagerDocker(params)  # Create a carla here , no configuration is needed.
 
         # Params can also se where the system works.
 
@@ -19,22 +29,22 @@ class Experience(object):
 
         # There is always the master scenario to control the actual route
         self._master_scenario = None
+        # Parsing the
+        self._route = parser.parse_routes_file(json['route'])
 
-
-        self._route = parser.parse_route(json['route'])
-
+        # The timeout for waiting for the server to start.
+        self.client_timeout = 25.0
 
         # Create all the scenarios here
 
     def start(self):
-        # SHOULD KNOW SOMEHOW THE CARLA PORT
-
-        # TODO CARLA SHOULD BE CREATED JUST ONCE
-        # if carla was not created, just restart it
-
+        free_port = find_free_port()
+        # TODO CARLA SHOULD BE CREATED JUST ONCE, if carla was not created, just restart it
+        # Starting the carla simulator
+        self._environment.reset(port=free_port)
 
         # setup world and client assuming that the CARLA server is up and running
-        client = carla.Client(args.host, int(args.port))
+        client = carla.Client('localhost', free_port)
         client.set_timeout(self.client_timeout)
 
         self.world = client.load_world(route_description['town_name'])
@@ -44,8 +54,11 @@ class Experience(object):
         # Set the actor pool so the scenarios can prepare themselves when needed
         CarlaActorPool.set_world(self.world)
 
+        CarlaDataProvider.set_world(self.world)
 
         self._master_scenario = self.build_master_scenario()
+
+
 
 
     def build_master_scenario(self, route, town_name):
