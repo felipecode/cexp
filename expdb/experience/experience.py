@@ -1,5 +1,10 @@
+import json
+import os
+import glob
+
+
 from expdb.experience.server_manager import ServerManagerDocker
-from expdb import experience as parser
+import expdb.utils.route_configuration_parser as parser
 from expdb.experience.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
 import socket
 from contextlib import closing
@@ -16,26 +21,23 @@ def find_free_port():
 
 class Experience(object):
 
-    def __init__(self, json, params):
-
-        # TODO with params we can get the server that is going to be built
-
-        self._environment = ServerManagerDocker(params)  # Create a carla here , no configuration is needed.
-
-        # Params can also se where the system works.
-
-        self._json = json
-
+    def __init__(self, jsonfile, params):
 
         # TODO params also can set which kind of data is going to be collected.
-
+        # Create a carla server description here, params set which kind like docker or straight.
+        self._environment = ServerManagerDocker(params)
+        # Read the json file being
+        with open(jsonfile, 'r') as f:
+            self._json = json.loads(f.read())
+        # Parsing the general json description file
+        self._route = parser.parse_routes_file(json['route'])
         # There is always the master scenario to control the actual route
         self._master_scenario = None
-        # Parsing the
-        self._route = parser.parse_routes_file(json['route'])
-
         # The timeout for waiting for the server to start.
         self.client_timeout = 25.0
+        # The os environment file
+        if "SRL_DATASET_PATH" not in os.environ and params['save_dataset']:
+            raise ValueError("SRL DATASET not defined")
 
         # Create all the scenarios here
 
@@ -48,7 +50,6 @@ class Experience(object):
         # setup world and client assuming that the CARLA server is up and running
         client = carla.Client('localhost', free_port)
         client.set_timeout(self.client_timeout)
-
         self.world = client.load_world(self._route['town_name'])
         settings = self.world.get_settings()
         settings.synchronous_mode = True
@@ -63,11 +64,32 @@ class Experience(object):
 
 
     def get_data(self):
+        # TODO this should have a dataloader to load in parallel all the images
 
         # Each experience can have a reference datapoint , where the data is already collected. That can go
         # Directly to the json where the data is collected.
+        # This is the package that is where the data is saved.
+        # It is always save in the SRL path
+        package_name = self._json['package_name']
 
-        pass
+        # We should save the entire dataset in the memory
+
+        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name)
+
+        # If the metadata does not exist the experience does not have a reference data.
+        if os.path.exists(os.path.join(root_path, 'metadata.json')):
+            raise ValueError("The data is not evaluated yet")
+        # Read the metadata telling the sensors that exist
+        with open(os.path.join(root_path, 'metadata.json'), 'r') as f:
+            metadata_dict = json.loads(f.read())
+
+
+
+        full_episode_data_dict = data_parser.parse_episode(root_path, metadata_dict)
+
+
+        return full_episode_data_dict
+
 
 
 

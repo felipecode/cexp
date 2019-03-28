@@ -2,9 +2,7 @@
 
 class Agent(object):
 
-
     def __init__(self):
-
         self._sensors = None  # Set the used sensors for this cases
 
     def run_step(self, input_data):
