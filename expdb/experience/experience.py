@@ -4,7 +4,7 @@ import glob
 
 
 from expdb.experience.server_manager import ServerManagerDocker
-import expdb.utils.route_configuration_parser as parser
+import expdb.experience.utils.route_configuration_parser as parser
 from expdb.experience.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
 import socket
 from contextlib import closing
