@@ -13,10 +13,13 @@ if __name__ == '__main__':
     json = 'expdb/database/test.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True}
-    exp = Experience(json, params)  # THe experience
-    exp.start()
-    agent = DummyAgent()
-    data = agent.unroll(exp)
-    save_data(data)  # We have some kind of experience saver to save this data.
+    exp_batch = ExperienceBatch(json, params)  # THe experience is built, the files necessary to load CARLA and the scenario are made
+
+    for exp in exp_batch:
+        # The policy selected to run this experience vector (The class basically) This policy can also learn, just
+        # by taking the output from the experience.
+        agent = DummyAgent()
+        data = agent.unroll(exp)
+        save_data(data)  # We have some kind of experience saver to save this data.
 
 

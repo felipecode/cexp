@@ -2,11 +2,13 @@ from __future__ import print_function
 import math
 import json
 import numpy as np
+import carla
 import xml.etree.ElementTree as ET
 """
     Module use to parse all the route and scenario configuration parameters .
 """
 
+TRIGGER_THRESHOLD = 5.0   # Threshold to say if a trigger position is new or repeated, works for matching positions
 
 def parse_annotations_file(annotation_filename):
     # Return the annotations of which positions where the scenarios are going to happen.\
@@ -19,13 +21,12 @@ def parse_annotations_file(annotation_filename):
     return annotation_dict
 
 
+
 def parse_routes_file(route_filename):
     """
-        Returns a list of route elements that is where the challenge is going to happen.
-    Args
-        route_filename: the path to a set of routes.
-    Returns
-        List of dicts containing the waypoints, id and town of the routes
+    Returns a list of route elements that is where the challenge is going to happen.
+    :param route_filename: the path to a set of routes.
+    :return:  List of dicts containing the waypoints, id and town of the routes
     """
 
     list_route_descriptions = []
@@ -35,15 +36,65 @@ def parse_routes_file(route_filename):
         route_id = route.attrib['id']
         waypoint_list = []  # the list of waypoints that can be found on this route
         for waypoint in route.iter('waypoint'):
-            waypoint_list.append(waypoint)  # Waypoints is basically a list of XML nodes
+             waypoint_list.append(carla.Location(x=float(waypoint.attrib['x']),
+                                                 y=float(waypoint.attrib['y']),
+                                                 z=float(waypoint.attrib['z'])))  # Waypoints is basically a list of XML nodes
 
         list_route_descriptions.append({
-                                        'id': route_id,
-                                        'town_name': route_town,
-                                        'trajectory': waypoint_list
-                                        })
+                                    'id': route_id,
+                                    'town_name': route_town,
+                                    'trajectory': waypoint_list
+                                     })
 
     return list_route_descriptions
+
+
+def parse_exp_vec(exp_vec):
+    """
+
+    :param exp_vec:
+    :return: A vector with elements ready to instance the experience.
+    [{'name':  # The name of this specific
+        {'route', # The route ( Trajectory of carla locations ()
+         'scenario'  # The scenario specification dict ( Not the object yet)
+         'policy'   # THe policy to be instantiated.
+         }
+
+     }]
+    """
+    exp_vec_parsed = {}
+    # Keep all the loaded files in a dict.
+    full_loaded_route_files = {}
+    # keep track also the loaded scenario files.
+    # Read all the dicts
+    for exp_name in exp_vec.keys():
+        exp_dict = exp_vec[exp_name]
+        # add the exp name as a reference to the dict
+        exp_vec_parsed.update({exp_name: {}})
+        # Read the file
+        if exp_dict['route']['file'] not in full_loaded_route_files:
+            full_loaded_route_files.update({exp_dict['route']['file']: parse_routes_file(exp_dict['route']['file'])})
+
+        # The file should now be already there and you just seek for the id you are looking
+        for read_routes in full_loaded_route_files[exp_dict['route']['file']]:
+
+            if read_routes['id'] == exp_dict['route']['id']:
+                exp_vec_parsed[exp_name].update({'route': read_routes['trajectory']})
+
+        # check the scenarios files (They can be in more than one file) and load the corresponding scenario.
+
+        scenarios_file = parse_annotations_file(exp_dict['scenarios']['file'])
+
+        possible_scenarios, existent_triggers = scan_route_for_scenarios(read_routes['trajectory'], scenarios_file)
+        exp_vec_parsed[exp_name].update({'scenarios': possible_scenarios})
+
+        exp_vec_parsed[exp_name].update({'vehicle_model': exp_dict['vehicle_model']})
+        exp_vec_parsed[exp_name].update({'town_name': exp_dict['town_name']})
+        #    if exp_dict['route']['file'] not in full_loaded_route_files:
+
+    return exp_vec_parsed
+
+
 
 
 def create_location_waypoint(location):
@@ -70,16 +121,42 @@ def remove_redundancy(list_of_vehicles):
     return vehicle_dict
 
 
+def check_trigger_position(new_trigger, existing_triggers):
+    """
+    Check if this trigger position already exists or if it is a new one.
+    :param new_trigger:
+    :param existing_triggers:
+    :return:
+    """
+
+    for trigger_id in existing_triggers.keys():
+        trigger = existing_triggers[trigger_id]
+        dx = trigger['x'] - new_trigger['x']
+        dy = trigger['y'] - new_trigger['y']
+        distance = math.sqrt(dx*dx + dy*dy)
+        if distance < TRIGGER_THRESHOLD:
+            return trigger_id
+
+    return None
+
+
+def convert_waypoint_float(waypoint):
+
+    waypoint['x'] = float(waypoint['x'])
+    waypoint['y'] = float(waypoint['y'])
+    waypoint['z'] = float(waypoint['z'])
+    waypoint['yaw'] = float(waypoint['yaw'])
+
+
+
+
 def scan_route_for_scenarios(route_description, world_annotations):
 
     """
     Just returns a plain list of possible scenarios that can happen in this route by matching
     the locations from the scenario into the route description
 
-    For what I understood it does not matter where it actually matches!
-
-    Returns
-        A list of scenario definitions with their correspondent parameters
+    :return:  A list of scenario definitions with their correspondent parameters
     """
 
     def match_world_location_to_route(world_location, route_description):
@@ -89,51 +166,80 @@ def scan_route_for_scenarios(route_description, world_annotations):
             world_location:
             route_description:
         """
-        def match_waypoints(w1, wnode):
-            dx = w1['x'] - float(wnode.attrib['x'])
-            dy = w1['y'] - float(wnode.attrib['y'])
-            dz = w1['z'] - float(wnode.attrib['z'])
+        def match_waypoints(w1, wtransform):
+            dx = float(w1['x']) - wtransform.x
+            dy = float(w1['y']) - wtransform.y
+            dz = float(w1['z']) - wtransform.z
             dist_position = math.sqrt(dx * dx + dy * dy + dz * dz)
-            dyaw = w1['yaw'] - float(wnode.attrib['yaw'])
-            dpitch = w1['pitch'] - float(wnode.attrib['pitch'])
 
-            dist_angle = math.sqrt(dyaw * dyaw + dpitch * dpitch)
+            #dist_angle = math.sqrt(dyaw * dyaw + dpitch * dpitch)
 
-            return dist_angle < 1 and dist_position < 1  # TODO  check this threshold, I have no idea
+            return  dist_position < TRIGGER_THRESHOLD  # dist_angle < TRIGGER_ANGLE_THRESHOLD and
 
         # TODO this function can be optimized to run on Log(N) time
         for route_waypoint in route_description:
-            if match_waypoints(world_location, route_waypoint):
+            if match_waypoints(world_location, route_waypoint[0].location):
                 return True
 
         return False
 
-    possible_scenarios = []
+    # the triggers dictionaries:
+    existent_triggers = {}
+    # We have a table of IDs and trigger positions associated
+    possible_scenarios = {}
 
-    for town_name, scenarios in world_annotations.items():
+    # Keep track of the trigger ids being added
+    latest_trigger_id = 0
 
+    for town_name in world_annotations.keys():
         if town_name != route_description['town_name']:
             continue
 
+        scenarios = world_annotations[town_name]
         for scenario in scenarios:  # For each existent scenario
             scenario_type = scenario["scenario_type"]
-            for location in scenario["Available_Localizations"]:
-                waypoint = create_location_waypoint(location)   # Function until fran fixes the format
-                if match_world_location_to_route(waypoint, route_description['trajectory']):
-                    # We match a location for this scenario, create a scenario object so this scenario
-                    # can be instantiated later
+            if "available_event_configurations" in scenario:
+                for event in scenario["available_event_configurations"]:
+                    waypoint = event['transform']
+                    convert_waypoint_float(waypoint)
+                    if match_world_location_to_route(waypoint, route_description['trajectory']):
+                        # We match a location for this scenario, create a scenario object so this scenario
+                        # can be instantiated later
+                        if 'other_actors' in event:
+                            other_vehicles = event['other_actors']
+                        else:
+                            other_vehicles = None
 
-                    if 'Antagonist_Vehicles' in location:
-                        other_vehicles = remove_redundancy(location['Antagonist_Vehicles'])
-                    else:
-                        other_vehicles = None
+                        scenario_description = {
+                                               'name': scenario_type,
+                                               'other_actors': other_vehicles,
+                                               'trigger_position': waypoint
+                                               }
 
-                    scenario_description = {
-                                           'name': scenario_type,
-                                           'Antagonist_Vehicles': other_vehicles,
-                                           'trigger_position': waypoint
-                                           }
-                    possible_scenarios.append(scenario_description)
+                        trigger_id = check_trigger_position(waypoint, existent_triggers)
+                        if trigger_id is None:
+                            # This trigger does not exist create a new reference on existent triggers
+                            existent_triggers.update({latest_trigger_id: waypoint})
+                            # Update a reference for this trigger on the possible scenarios
+                            possible_scenarios.update({latest_trigger_id: []})
+                            trigger_id = latest_trigger_id
+                            # Increment the latest trigger
+                            latest_trigger_id += 1
 
-    return possible_scenarios
+                        possible_scenarios[trigger_id].append(scenario_description)
+            else:
+                if -1 not in existent_triggers:
+                    # If the triggerless scenario does not exist create it
+                    existent_triggers.update({-1: None})
+                    # add an empty vec for the triggerless scenario.
+                    possible_scenarios.update({-1: []})
+
+                scenario_description = {
+                    'name': scenario_type,
+                    'other_actors': None,
+                    'trigger_position': None
+                }
+                possible_scenarios[-1].append(scenario_description)
+
+    return possible_scenarios, existent_triggers
 

@@ -9,19 +9,19 @@ Basic CARLA Autonomous Driving training scenario
 """
 
 import py_trees
-
-from srunner.scenariomanager.atomic_scenario_behavior import *
-from srunner.scenariomanager.atomic_scenario_criteria import *
-from srunner.scenarios.basic_scenario import *
-
-
-CHALLENGE_BASIC_SCENARIOS = ["ChallengeBasic"]
+# TODO BAD PRACTICE TO IMPORT ALL
+from expdb.scenariomanager.atomic_scenario_behavior import *
+from expdb.scenariomanager.atomic_scenario_criteria import *
+from expdb.scenarios.basic_scenario import *
 
 
-class Master(BasicScenario):
+CHALLENGE_BASIC_SCENARIOS = ["MasterScenario"]
+
+
+class MasterScenario(BasicScenario):
 
     """
-    Implementation of a dummy scenario
+    Implementation of a  Master scenario that controls the route.
     """
 
     category = "Master"
@@ -45,9 +45,9 @@ class Master(BasicScenario):
         else:
             raise ValueError("Master scenario must have a route")
 
-        super(Master, self).__init__("ChallengeBasic", ego_vehicle=ego_vehicle, config=config,
-                                     world=world, debug_mode=debug_mode,
-                                     terminate_on_failure=True, criteria_enable=criteria_enable)
+        super(MasterScenario, self).__init__("MasterScenario", ego_vehicle=ego_vehicle, config=config,
+                                             world=world, debug_mode=debug_mode,
+                                             terminate_on_failure=True, criteria_enable=criteria_enable)
 
     def _create_behavior(self):
         """
@@ -69,8 +69,8 @@ class Master(BasicScenario):
 
         collision_criterion = CollisionTest(self.ego_vehicle, terminate_on_failure=True)
         target_criterion = InRadiusRegionTest(self.ego_vehicle,
-                                              x=self.target.transform.location.x,
-                                              y=self.target.transform.location.y,
+                                              x=self.target.location.x,
+                                              y=self.target.location.y,
                                               radius=self.radius)
 
         route_criterion = InRouteTest(self.ego_vehicle,
@@ -83,7 +83,11 @@ class Master(BasicScenario):
 
         wrong_way_criterion = WrongLaneTest(self.ego_vehicle)
 
+        onsidewalk_criterion = OnSidewalkTest(self.ego_vehicle)
+
         red_light_criterion = RunningRedLightTest(self.ego_vehicle)
+
+        stop_criterion = RunningStopTest(self.ego_vehicle)
 
         parallel_criteria = py_trees.composites.Parallel("group_criteria",
                                                          policy=py_trees.common.ParallelPolicy.SUCCESS_ON_ONE)
@@ -93,7 +97,9 @@ class Master(BasicScenario):
         parallel_criteria.add_child(target_criterion)
         parallel_criteria.add_child(route_criterion)
         parallel_criteria.add_child(wrong_way_criterion)
+        parallel_criteria.add_child(onsidewalk_criterion)
         parallel_criteria.add_child(red_light_criterion)
+        parallel_criteria.add_child(stop_criterion)
 
         return parallel_criteria
 

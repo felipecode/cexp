@@ -1,13 +1,15 @@
+"""
+The agent class is an interface to run experiences, the actual policy must inherit from agent in order to
+execute. It should implement the run_step function
+"""
 
 
 class Agent(object):
 
-    def __init__(self):
-        self._sensors = None  # Set the used sensors for this cases
 
     def run_step(self, input_data):
         """
-        Execute one step of navigation.
+        Execute one step of navigation. Must be implemented
         :return: control
         """
         pass
@@ -18,11 +20,18 @@ class Agent(object):
         :return:
         """
         pass
-    def unroll(self, experience):
 
-        experience.set_sensors(self._sensors)
-        # TODO optimize this with a bank of carlas
-        experience.start()  # Block where with all carla things
+    def sensors(self):
+
+        sensors_dict = {}
+
+        return sensors_dict
+
+    def unroll(self, experience):
+        # unroll a full episode for the agent. This produces an experience, that can be used directly for learning.
+
+        experience.add_sensors(self.sensors())
+        experience.start()  # Make all the scenarios and run them.
 
         experience_data_dict = {}
         while experience.is_running():
@@ -39,7 +48,7 @@ class Agent(object):
 
             experience_data_dict.update({'measurements': measurements})
 
-            # With this the experince runner also s
+            # With this the experience runner also s
             experience.run_step(controls)
 
         # The summary can be used already for a benchmark or for something else.

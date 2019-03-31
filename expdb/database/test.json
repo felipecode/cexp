@@ -1,15 +1,55 @@
 {
 
+  "exps":
 
-  "test_1": {
-    "route": {
-      "file": "route_file.xml",
-      "id": 1
+    {"test1":
+
+      {
+        "route": {
+          "file": "route_file.xml",
+          "id": 1
+        },
+        "scenarios": {
+          "file": "scenario.json"
+        },
+        "town_name": "Town01",
+        "vehicle_model": "vehicle.lincoln.mkz2017"
+      },
+
+    "test2":
+
+      {
+        "route": {
+          "file": "route_file.xml",
+          "id": 2
+        },
+        "scenarios": {
+          "file": "scenario.json"
+        },
+        "town_name": "Town01",
+        "vehicle_model": "vehicle.lincoln.mkz2017"
+      }
     },
-    "scenarios": ["t1s1"],
-    "policy": "RoamingAgent"
-  }
 
+  "additional_sensors": [
+    {"type": "sensor.camera.rgb",
+     "x": 2.0, "y": 0.0,
+      "z": 1.40, "roll": 0.0,
+      "pitch": 0.0, "yaw": 0.0,
+      "width": 800, "height": 600,
+      "fov": 100,
+      "id": "rgb"},
+     {"type": "sensor.can_bus",
+      "reading_frequency": 25,
+      "id": "can_bus"
+      },
+     {"type": "sensor.other.gnss",
+      "x": 0.7, "y": -0.4, "z": 1.60,
+      "id": "GPS"}
+
+  ],
+
+  "policy": "RoamingAgent"
 
 
 }

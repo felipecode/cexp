@@ -1,19 +1,7 @@
 {
-
-
   "Town01": [
-		{
-            "id": "t1s1",
-			"scenario_type": "Scenario1",
-			"transform": {
-              "x": "368.55",
-              "y": "326.42",
-              "z": "1.0",
-              "yaw": "180",
-              "pitch": "0"
-            }
-        }
+    {
+      "scenario_type": "ScenarioEmergency"
+    }
   ]
-
-
 }
