@@ -29,6 +29,7 @@ class Experience(object):
         # Read the json file being
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
+
         # Parsing the general json description file
         self._route = parser.parse_routes_file(json['route'])
         # There is always the master scenario to control the actual route
@@ -46,7 +47,6 @@ class Experience(object):
         # TODO CARLA SHOULD BE CREATED JUST ONCE, if carla was not created, just restart it
         # Starting the carla simulator
         self._environment.reset(port=free_port)
-
         # setup world and client assuming that the CARLA server is up and running
         client = carla.Client('localhost', free_port)
         client.set_timeout(self.client_timeout)
@@ -61,11 +61,8 @@ class Experience(object):
 
         self._master_scenario = self.build_master_scenario()
 
-
-
     def get_data(self):
         # TODO this should have a dataloader to load in parallel all the images
-
         # Each experience can have a reference datapoint , where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
@@ -111,7 +108,7 @@ class Experience(object):
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
 
-        # TODO FOR NOW THERE IS NO SCENARIOS.
+        # TODO FOR NOW THERE IS NO SCENARIOS, JUST ROUTE, I WILL MAKE A GENERIC EMERGENCY SCENARIO.
         """
             Based on the parsed route and possible scenarios, build all the scenario classes.
         :param scenario_definition_vec: the dictionary defining the scenarios

@@ -1,8 +1,14 @@
 {
-  "route":{"file":"route_file.xml","id": 1}
-  "scenarios":{}, # HERE IS A SPECIFICATION THAT SHOULD MATCH IF THEY DONT MATCH ACUSe it !
-  "package_name":
-  "policy": ,
+
+
+  "test_1": {
+    "route": {
+      "file": "route_file.xml",
+      "id": 1
+    },
+    "scenarios": ["t1s1"],
+    "policy": "RoamingAgent"
+  }
 
 
 
