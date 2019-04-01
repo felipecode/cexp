@@ -21,7 +21,6 @@ class ServerManager(object):
     def reset(self, host="127.0.0.1", port=2000):
         raise NotImplementedError("This function is to be implemented")
 
-
     def wait_until_ready(self, wait=10.0):
         time.sleep(wait)
 
@@ -62,24 +61,18 @@ class ServerManagerBinary(ServerManager):
             print(self._i)
             self._i += 1
 
+
 class ServerManagerDocker(ServerManager):
+
     def __init__(self, opt_dict):
         super(ServerManagerDocker, self).__init__(opt_dict)
-
-        if 'DOCKER_VERSION' in opt_dict:
-            self._docker_string = '{}'.format(opt_dict['DOCKER_VERSION'])
-        else:
-            logging.error('Docker version not provided!')
-
+        self._docker_name = opt_dict['docker_name']
+        self._gpu = opt_dict['gpu']
         self._docker_id = ''
 
-
     def reset(self, host="127.0.0.1", port=2000):
-
-        # FIND THE PORT AUTOMATICALLY. GPU ALSO NEED TO BE FIND
-
         # first we check if there is need to clean up
-        if self._proc is not None and self._docker_id is not '':
+        if self._proc is not None:
             logging.info('Stopping previous server [PID=%s]', self._proc.pid)
             self.stop()
             self._proc.kill()
@@ -88,12 +81,23 @@ class ServerManagerDocker(ServerManager):
         self._docker_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(64))
         # temporary config file
 
-        exec_command = "docker run --name {} -p {}-{}:{}-{} --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 " \
-                       "carlasim/carla:{} /bin/bash CarlaUE4.sh > -world-port={} -benchmark -fps=20 /dev/null".format(
-            self._docker_id, port, port+2, port, port+2, self._docker_string, port)
+        #exec_command = "docker run --name {} -p {}-{}:{}-{} --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 " \
+        #               "carlasim/carla:{} /bin/bash CarlaUE4.sh > -world-port={} -benchmark -fps=20 /dev/null".format(
+        #    self._docker_id, port, port+2, port, port+2, self._docker_string, port)
 
-        print(exec_command)
-        self._proc = subprocess.Popen(exec_command)
+        my_env = os.environ.copy()
+        my_env["NV_GPU"] = str(self._gpu)
+        self._proc = subprocess.Popen(['docker', 'run', '--name', self._docker_id,'--rm', '-d', '-p',
+                               str(port)+'-'+str(port+2)+':'+str(port)+'-'+str(port+2),
+                               '--runtime=nvidia', '-e', 'NVIDIA_VISIBLE_DEVICES='+str(self._gpu), self._docker_name,
+                               '/bin/bash', 'CarlaUE4.sh',
+                               '-benchmark', '-fps=20', '-carla-port=' + str(port)], shell=False,
+                              stdout=subprocess.PIPE, env=my_env)
+
+        (out, err) = self._proc.communicate()
+
+        print("Going to communicate")
+        time.sleep(30)
 
     def stop(self):
         exec_command = ['docker', 'kill', '{}'.format(self._docker_id)]

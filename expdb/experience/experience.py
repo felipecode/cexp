@@ -273,7 +273,7 @@ class Experience(object):
 
 class ExperienceBatch(object):
     """
-
+    It is a batch of instanced exp files that can be iterated to have instanced experiments to get
     """
 
     def __init__(self, jsonfile, params, iterations_to_execute):
@@ -285,8 +285,6 @@ class ExperienceBatch(object):
         # Read the json file being
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
-        # Parsing the general json description file
-        self._route_vec = parser.parse_routes_vec(json['route'])
         # The timeout for waiting for the server to start.
         self.client_timeout = 25.0
         # The os environment file
@@ -316,10 +314,10 @@ class ExperienceBatch(object):
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
 
-
     def __iter__(self):
         if self._experiences is None:
-            raise("You are trying to iterate over an unstarted experience batch, run the start method ")
+            raise ValueError("You are trying to iterate over an unstarted experience batch, run the start method ")
+
         return iter([random.choice(self._experiences) for _ in range(self._iterations_to_execute)])
 
     def __len__(self):
