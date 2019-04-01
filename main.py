@@ -13,8 +13,11 @@ if __name__ == '__main__':
     # A single loop being made
     json = 'expdb/database/test.json'
     # Dictionary with the necessary params related to the execution not the model itself.
-    params = {'save_dataset': True}
-    exp_batch = ExperienceBatch(json, params)  # THe experience is built, the files necessary to load CARLA and the scenario are made
+    params = {'save_dataset': True,
+              'docker_name': 'carlasim/carla:0.9.4',
+              'gpu': 0}
+    exp_batch = ExperienceBatch(json, params, 10)  # THe experience is built, the files necessary
+                                                    # to load CARLA and the scenario are made
     exp_batch.start()
     for exp in exp_batch:
         # The policy selected to run this experience vector (The class basically) This policy can also learn, just

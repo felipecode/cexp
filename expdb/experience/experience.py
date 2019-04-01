@@ -270,6 +270,10 @@ class Experience(object):
         # TODO: produce a summary from the experience
         return None
 
+    def get_measurements_data(self):
+        # CHeck what kind of measurments can we get.
+        return None
+
 
 class ExperienceBatch(object):
     """
@@ -316,7 +320,7 @@ class ExperienceBatch(object):
 
     def __iter__(self):
         if self._experiences is None:
-            raise ValueError("You are trying to iterate over an unstarted experience batch, run the start method ")
+            raise ValueError("You are trying to iterate over an not started experience batch, run the start method ")
 
         return iter([random.choice(self._experiences) for _ in range(self._iterations_to_execute)])
 
