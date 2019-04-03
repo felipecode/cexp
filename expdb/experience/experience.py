@@ -192,8 +192,6 @@ class Experience(object):
 
 
 
-
-
     # TODO this probably go to some subclass
 
     def build_master_scenario(self, route, town_name):
