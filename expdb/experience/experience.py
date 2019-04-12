@@ -278,7 +278,7 @@ class ExperienceBatch(object):
     It is a batch of instanced exp files that can be iterated to have instanced experiments to get
     """
 
-    def __init__(self, jsonfile, params, iterations_to_execute):
+    def __init__(self, jsonfile, params, iterations_to_execute, batch_size):
 
 
         # TODO params also can set which kind of data is going to be collected.
@@ -315,6 +315,8 @@ class ExperienceBatch(object):
                              parserd_exp['scenarios'], parserd_exp['vehicle_model'])
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
+
+
 
     def __iter__(self):
         if self._experiences is None:

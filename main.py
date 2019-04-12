@@ -16,7 +16,8 @@ if __name__ == '__main__':
     params = {'save_dataset': True,
               'docker_name': 'carlasim/carla:0.9.4',
               'gpu': 0}
-    exp_batch = ExperienceBatch(json, params, 10)  # THe experience is built, the files necessary
+    # TODO for now batch size is one
+    exp_batch = ExperienceBatch(json, params, 10, 1)  # THe experience is built, the files necessary
                                                     # to load CARLA and the scenario are made
     exp_batch.start()
     for exp in exp_batch:
