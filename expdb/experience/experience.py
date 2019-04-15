@@ -320,6 +320,7 @@ class ExperienceBatch(object):
         #for exp_name in .keys():
         parserd_exp_dict = parser.parse_exp_vec(self._json['exps'])
         # Instance an experience.
+        print(parserd_exp_dict)
         for exp_name in self._json['exps'].keys():
             exp = Experience(self._client, exp_name, parserd_exp_dict[exp_name]['route'],
                              parserd_exp_dict[exp_name]['town_name'],

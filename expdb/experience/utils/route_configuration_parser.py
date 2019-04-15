@@ -1,6 +1,7 @@
 from __future__ import print_function
 import math
 import json
+import os
 import numpy as np
 import carla
 import xml.etree.ElementTree as ET
@@ -68,13 +69,17 @@ def parse_exp_vec(exp_vec):
     # keep track also the loaded scenario files.
     # Read all the dicts
     print (exp_vec)
+    routes_root_path = os.path.join(*os.path.realpath(__file__).split('/')[:-3], 'database/routes')
+    print (routes_root_path)
     for exp_name in exp_vec.keys():
         exp_dict = exp_vec[exp_name]
         # add the exp name as a reference to the dict
         exp_vec_parsed.update({exp_name: {}})
         # Read the file
         if exp_dict['route']['file'] not in full_loaded_route_files:
-            full_loaded_route_files.update({exp_dict['route']['file']: parse_routes_file(exp_dict['route']['file'])})
+            full_loaded_route_files.update({exp_dict['route']['file']: parse_routes_file(
+                                                                                    os.path.join(routes_root_path,
+                                                                                     exp_dict['route']['file']))})
 
         # The file should now be already there and you just seek for the id you are looking
         for read_routes in full_loaded_route_files[exp_dict['route']['file']]:
