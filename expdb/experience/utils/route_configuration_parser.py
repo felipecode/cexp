@@ -67,6 +67,7 @@ def parse_exp_vec(exp_vec):
     full_loaded_route_files = {}
     # keep track also the loaded scenario files.
     # Read all the dicts
+    print (exp_vec)
     for exp_name in exp_vec.keys():
         exp_dict = exp_vec[exp_name]
         # add the exp name as a reference to the dict

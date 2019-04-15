@@ -317,15 +317,15 @@ class ExperienceBatch(object):
         self._client.set_timeout(self.client_timeout)
         # We instantiate experience here using the recently connected client
         self._experiences = []
-        for exp_name in self._json['exps']:
-            parserd_exp = parser.parse_exp_vec(exp_name)
-            # Instance an experience.
-            exp = Experience(self._client, exp_name, parserd_exp['route'], parserd_exp['town_name'],
-                             parserd_exp['scenarios'], parserd_exp['vehicle_model'])
+        #for exp_name in .keys():
+        parserd_exp_dict = parser.parse_exp_vec(self._json['exps'])
+        # Instance an experience.
+        for exp_name in self._json['exps'].keys():
+            exp = Experience(self._client, exp_name, parserd_exp_dict[exp_name]['route'],
+                             parserd_exp_dict[exp_name]['town_name'],
+                             parserd_exp_dict[exp_name]['scenarios'], parserd_exp_dict[exp_name]['vehicle_model'])
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
-
-
 
     def __iter__(self):
         if self._experiences is None:
