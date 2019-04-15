@@ -10,7 +10,7 @@
           "id": 1
         },
         "scenarios": {
-          "file": "scenario.json"
+          "file": "scenario3.json"
         },
         "town_name": "Town01",
         "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -24,7 +24,7 @@
           "id": 2
         },
         "scenarios": {
-          "file": "scenario.json"
+          "file": "scenario3.json"
         },
         "town_name": "Town01",
         "vehicle_model": "vehicle.lincoln.mkz2017"

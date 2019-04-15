@@ -6,15 +6,18 @@ import socket
 from contextlib import closing
 import carla
 
+# We use the scenario runner directly
+from srunner.scenariomanager.timer import GameTime, TimeOut
+from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
+from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
+from srunner.scenarios.master_scenario import MasterScenario
+from srunner.challenge.envs.sensor_interface import CallBack, CANBusSensor
+
+
 
 import expdb.experience.utils.route_configuration_parser as parser
-
-from expdb.experience.scenariotools.timer import GameTime, TimeOut
 from expdb.experience.server_manager import ServerManagerDocker
-from expdb.experience.scenariotools.carla_data_provider import CarlaActorPool, CarlaDataProvider
-from expdb.experience.scenariotools.config_parser import ActorConfigurationData, ScenarioConfiguration
-from expdb.experience.sensors.sensor_interface import CallBack, CANBusSensor, HDMapReader
-from expdb.experience.scenarios.master_scenario import MasterScenario
+
 
 
 def find_free_port():
@@ -76,16 +79,12 @@ class Experience(object):
         """
         # If ego_vehicle already exists, just update location
         # Otherwise spawn ego vehicle
-        return CarlaActorPool.setup_actor(self._vehicle_model, start_transform, True)
-        #else:
-        #    self.ego_vehicle.set_transform(start_transform)
+        return CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
+
 
     def start(self):
         # You load at start since it already put some objects around
-        self.world = self._client.load_world(self._town_name)
-        settings = self.world.get_settings()  # TODO: ADD THE LOAD TOWN TO FOCUS ON Synch THE BUG.
-        settings.synchronous_mode = True
-        self.world.apply_settings(settings)
+        self._load_world()
         # Set the actor pool so the scenarios can prepare themselves when needed
         CarlaActorPool.set_world(self.world)
 
@@ -98,7 +97,7 @@ class Experience(object):
         # Spawn the ego vehicle.
         self._ego_actor = self.spawn_ego_car(self._route[0])
         # It should also spawn all the sensors
-        # TODO for now all the sensors are setup into the ego_vehicle, this can be spanded
+        # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self.setup_sensors(self._sensor_desc_dict, self._ego_actor)
 
 
@@ -116,9 +115,6 @@ class Experience(object):
             if sensor_spec['type'].startswith('sensor.can_bus'):
                 # The speedometer pseudo sensor is created directly here
                 sensor = CANBusSensor(vehicle, sensor_spec['reading_frequency'])
-            elif sensor_spec['type'].startswith('sensor.hd_map'):
-                # The HDMap pseudo sensor is created directly here
-                sensor = HDMapReader(vehicle, sensor_spec['reading_frequency'])
             # These are the sensors spawned on the carla world
             else:
                 bp = bp_library.find(sensor_spec['type'])
@@ -166,7 +162,6 @@ class Experience(object):
 
 
     def get_data(self):
-        # TODO this should have a dataloader to load in parallel all the images
         # Each experience can have a reference datapoint , where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
@@ -183,8 +178,6 @@ class Experience(object):
         # Read the metadata telling the sensors that exist
         with open(os.path.join(root_path, 'metadata.json'), 'r') as f:
             metadata_dict = json.loads(f.read())
-
-
 
         full_episode_data_dict = data_parser.parse_episode(root_path, metadata_dict)
 
@@ -208,6 +201,22 @@ class Experience(object):
         CarlaDataProvider.register_actor(self._ego_actor)
 
         return MasterScenario(self.world, self._ego_actor, master_scenario_configuration)
+
+
+    def _load_world(self):
+        # A new world can only be loaded in async mode
+        if self.world is not None:
+            settings = self.world.get_settings()
+            settings.synchronous_mode = False
+            settings.no_rendering_mode = False
+            self.world.apply_settings(settings)
+        self.world = self._client.load_world(self._town_name)
+        self.timestamp = self.world.wait_for_tick()
+        settings = self.world.get_settings()
+        settings.synchronous_mode = True
+        if self.track == 4:
+            settings.no_rendering_mode = True
+        self.world.apply_settings(settings)
 
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
