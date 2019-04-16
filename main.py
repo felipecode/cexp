@@ -10,7 +10,7 @@ from expdb.experience.datatools.data_writer import save_data
 if __name__ == '__main__':
 
     # A single loop being made
-    json = 'expdb/database/test.json'
+    json = 'database/test.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'docker_name': 'carlasim/carla:0.9.5',
