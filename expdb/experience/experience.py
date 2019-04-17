@@ -122,7 +122,9 @@ class Experience(object):
         self._list_scenarios = [self._master_scenario]
 
         # Spawn the ego vehicle.
-        self._ego_actor = self.spawn_ego_car(self._route[0])
+        self._ego_actor = self.spawn_ego_car(self._route[0][0])
+        if self._ego_actor is None:
+            raise RuntimeError(" Could Not spawn the ego vehicle on position ", self._route[0][0].location)
         # It should also spawn all the sensors
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
