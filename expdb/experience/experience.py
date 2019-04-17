@@ -202,8 +202,6 @@ class Experience(object):
 
         return full_episode_data_dict
 
-
-
     # TODO this probably go to some subclass
 
     def build_master_scenario(self, route, town_name):
@@ -211,7 +209,7 @@ class Experience(object):
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
         master_scenario_configuration.target = route[-1]  # Take the last point and add as target.
-        master_scenario_configuration.route = route
+        master_scenario_configuration.route = convert_transform_to_location(route)
         master_scenario_configuration.town = town_name
         # TODO THIS NAME IS BIT WEIRD SINCE THE EGO VEHICLE  IS ALREADY THERE, IT IS MORE ABOUT THE TRANSFORM
         master_scenario_configuration.ego_vehicle = ActorConfigurationData('vehicle.lincoln.mkz2017',
@@ -258,7 +256,7 @@ class Experience(object):
 
     def run_step(self, controls):
         if self._ego_actor is None:
-            raise ValueError("Applying control withoug egoactor spawned.")
+            raise ValueError("Applying control without egoactor spawned.")
         # Basically apply the controls to the ego actor.
 
         # update all scenarios
