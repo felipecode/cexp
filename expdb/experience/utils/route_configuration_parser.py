@@ -89,9 +89,13 @@ def parse_exp_vec(exp_vec):
 
         # check the scenarios files (They can be in more than one file) and load the corresponding scenario.
 
-        scenarios_file = parse_annotations_file(exp_dict['scenarios']['file'])
+        if exp_dict['scenarios']['file'] != "None":
+            scenarios_file = parse_annotations_file(exp_dict['scenarios']['file'])
 
-        possible_scenarios, existent_triggers = scan_route_for_scenarios(read_routes['trajectory'], scenarios_file)
+            possible_scenarios, existent_triggers = scan_route_for_scenarios(read_routes['trajectory'], scenarios_file)
+        else:
+            possible_scenarios = None
+
         exp_vec_parsed[exp_name].update({'scenarios': possible_scenarios})
 
         exp_vec_parsed[exp_name].update({'vehicle_model': exp_dict['vehicle_model']})
