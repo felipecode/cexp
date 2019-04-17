@@ -38,7 +38,7 @@ class Agent(object):
             # update all scenarios
 
             sensor_data = experience.get_sensor_data()
-            measurements = experience.get_measurements_data() #MEASUREMENTS CAN BE JOINED
+            measurements = experience.get_measurements_data()  #MEASUREMENTS CAN BE JOINED
 
             controls = self.run_step(sensor_data)
 

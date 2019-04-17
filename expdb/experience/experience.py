@@ -44,22 +44,21 @@ It also can have additional sensors that are experience related not policy relat
 
 
 class Experience(object):
+    def __init__(self, name, client, exp_config, exp_params):
 
-
-
-    def __init__(self, name, client, route, town_name, scenarios, vehicle_model, batch_size=1, save_data=True):
+        self._batch_size = exp_params['batch_size']
         # if the data is going to be saved for this experience
-        self._save_data = save_data
+        self._save_data = exp_params['save_data']
         # the name of this experience object
         self._experience_name = name
         # We have already a connection object to a CARLA server
         self._client = client  # TODO client is going to be a vector ( Or a batch object)
         # The route is already specified
-        self._route = route
+        self._route = exp_config['route']
         # An experience is associate with a certain town name ( THat is also associated with scenarios and a route)
-        self._town_name = town_name
+        self._town_name = exp_config['town_name']
         # Thee scenarios that are going to be associated with this route.
-        self._scenarios = scenarios
+        self._scenarios = exp_config['scenarios']
         # The world starts unnitialized.
         self.world = None
         # All the sensors that are going to be spawned, a vector of dictionaries
@@ -68,7 +67,7 @@ class Experience(object):
         self._sensor_interface = None
         self._ego_actor = None
         # The vehicle car model that is going to be spawned
-        self._vehicle_model = vehicle_model
+        self._vehicle_model = exp_config['vehicle_model']
         # The scenarios running
         self._list_scenarios = None
         self._master_scenario = None
@@ -210,6 +209,7 @@ class Experience(object):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
+        print (route)
         master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
         master_scenario_configuration.route = convert_transform_to_location(route)
         master_scenario_configuration.town = town_name
@@ -326,6 +326,7 @@ class ExperienceBatch(object):
         # The os environment file
         if "SRL_DATASET_PATH" not in os.environ and params['save_dataset']:
             raise ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
+        self._params = params
 
         # uninitialized experiences vector
         self._experiences = None
@@ -345,18 +346,14 @@ class ExperienceBatch(object):
         # We instantiate experience here using the recently connected client
         self._experiences = []
         parserd_exp_dict = parser.parse_exp_vec(self._json['exps'])
-        #TODO add file joining on the beginning.
+        #TODO add file joining on the beginning. ( ADDING MANY ExP DESC FILES )
         print(parserd_exp_dict)
         # For all the experiences on the file.
         for exp_name in self._json['exps'].keys():
             # Instance an experience.
-            exp = Experience(exp_name, self._client, parserd_exp_dict[exp_name]['route'],
-                             parserd_exp_dict[exp_name]['town_name'],
-                             parserd_exp_dict[exp_name]['scenarios'], parserd_exp_dict[exp_name]['vehicle_model'])
+            exp = Experience(exp_name, self._client, parserd_exp_dict[exp_name], self._params['exp_params'])
             # add the additional sensors ( The ones not provided by the policy )
-
             exp.add_sensors(self._json['additional_sensors'])
-
             self._experiences.append(exp)
 
 

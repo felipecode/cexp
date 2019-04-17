@@ -14,9 +14,13 @@ if __name__ == '__main__':
     params = {'save_dataset': True,
               'docker_name': 'carlasim/carla:0.9.5',
               'gpu': 0,
-              'save_data': True}
+              'save_data': True,
+              'exp_params': {
+                  'batch_size': 1,
+                  'save_data': True
+              }}
     # TODO for now batch size is one
-    exp_batch = ExperienceBatch(json, params, 10, 1)  # THe experience is built, the files necessary
+    exp_batch = ExperienceBatch(json, params, 10, params['exp_params']['batch_size'])  # THe experience is built, the files necessary
                                                       # to load CARLA and the scenario are made
     exp_batch.start()
     for exp in exp_batch:
@@ -24,6 +28,5 @@ if __name__ == '__main__':
         # by taking the output from the experience.
         agent = DummyAgent()
         data = agent.unroll(exp)
-        save_data(data)  # We have some kind of experience saver to save this data.
 
 
