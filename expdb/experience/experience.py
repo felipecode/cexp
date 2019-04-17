@@ -129,7 +129,7 @@ class Experience(object):
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
-        writter.save_metadata()
+        self._writter.save_metadata()
 
 
 
