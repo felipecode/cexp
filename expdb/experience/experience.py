@@ -219,6 +219,7 @@ class Experience(object):
     # TODO this probably go to some subclass
 
     def build_master_scenario(self, route, town_name):
+        print (route)
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()

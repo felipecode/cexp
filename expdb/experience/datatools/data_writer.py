@@ -58,20 +58,21 @@ class Writter(object):
 
     # TODO think about noise
 
-    def save_metadata(self, settings_module):
+    def save_metadata(self, sensors_dictionary):
 
 
 
         with open(os.path.join(self._dataset_path, 'metadata.json'), 'w') as fo:
             jsonObj = {}
             jsonObj.update(settings_module.sensors_yaw)
-            # The full
-            jsonObj.update({'full_name': settings_module.FOV})
+            # The full name of the experience ( It can be something different for now we keep the same)
+            jsonObj.update({'full_name': None})
+            # The sensors dictionary used
+            jsonObj.update({'sensors': None})
+
+            # The scenarios used and its configuration
 
             # The sensors, full sensors configuration.
-            jsonObj.update({'fov': settings_module.FOV})
-            jsonObj.update({'width': settings_module.WINDOW_WIDTH})
-            jsonObj.update({'height': settings_module.WINDOW_HEIGHT})
             jsonObj.update({'lateral_noise_percentage': settings_module.lat_noise_percent})
             jsonObj.update({'longitudinal_noise_percentage': settings_module.long_noise_percent})
             jsonObj.update({'car range': settings_module.NumberOfVehicles})
