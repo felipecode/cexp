@@ -58,7 +58,8 @@ def parse_exp_vec(exp_vec):
     [{'name':  # The name of this specific
         {'route', # The route ( Trajectory of carla locations ()
          'scenario'  # The scenario specification dict ( Not the object yet)
-         'policy'   # THe policy to be instantiated.
+         'vehicle_model': the model of the vehicle that is going to be used to drive around
+         'town_name': the town for collecting all the experience.
          }
 
      }]
@@ -81,12 +82,10 @@ def parse_exp_vec(exp_vec):
                                                                                     os.path.join(routes_root_path,
                                                                                      exp_dict['route']['file']))})
 
-        print (full_loaded_route_files)
         # The file should now be already there and you just seek for the id you are looking
         for read_routes in full_loaded_route_files[exp_dict['route']['file']]:
-            print(read_routes)
 
-            if read_routes['id'] == exp_dict['route']['id']:
+            if int(read_routes['id']) == int(exp_dict['route']['id']):
                 exp_vec_parsed[exp_name].update({'route': read_routes['trajectory']})
 
         # check the scenarios files (They can be in more than one file) and load the corresponding scenario.
