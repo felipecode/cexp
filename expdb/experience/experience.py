@@ -289,10 +289,12 @@ class ExperienceBatch(object):
 
     def __init__(self, jsonfile, params, iterations_to_execute, batch_size):
 
-
-        # TODO params also can set which kind of data is going to be collected.
+        self._batch_size = batch_size  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
-        self._environment = ServerManagerDocker(params)
+        self._environment_batch = []
+        for i in range(self._batch_size):
+            self._environment_batch.append(ServerManagerDocker(params))
+
         # Read the json file being
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
@@ -300,7 +302,7 @@ class ExperienceBatch(object):
         self.client_timeout = 25.0
         # The os environment file
         if "SRL_DATASET_PATH" not in os.environ and params['save_dataset']:
-            raise ValueError("SRL DATASET not defined")
+            raise ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
 
         # uninitialized experiences vector
         self._experiences = None
@@ -309,15 +311,16 @@ class ExperienceBatch(object):
         self._client = None
 
     def start(self):
+        # TODO: this setup is hardcoded for Batch_size == 1
         free_port = find_free_port()
-        # Starting the carla simulator
-        self._environment.reset(port=free_port)
+        # Starting the carla simulators
+        for env in self._environment_batch:
+            env.reset(port=free_port)
         # setup world and client assuming that the CARLA server is up and running
         self._client = carla.Client('localhost', free_port)
         self._client.set_timeout(self.client_timeout)
         # We instantiate experience here using the recently connected client
         self._experiences = []
-        #for exp_name in .keys():
         parserd_exp_dict = parser.parse_exp_vec(self._json['exps'])
         # Instance an experience.
         print(parserd_exp_dict)
@@ -327,6 +330,7 @@ class ExperienceBatch(object):
                              parserd_exp_dict[exp_name]['scenarios'], parserd_exp_dict[exp_name]['vehicle_model'])
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
+
 
     def __iter__(self):
         if self._experiences is None:
