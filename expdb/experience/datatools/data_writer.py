@@ -58,12 +58,11 @@ class Writter(object):
 
     # TODO think about noise
 
-    def save_metadata(dataset_path, settings_module):
+    def save_metadata(self, settings_module):
 
 
-        """
 
-        with open(os.path.join(dataset_path, 'metadata.json'), 'w') as fo:
+        with open(os.path.join(self._dataset_path, 'metadata.json'), 'w') as fo:
             jsonObj = {}
             jsonObj.update(settings_module.sensors_yaw)
             # The full
@@ -80,7 +79,7 @@ class Writter(object):
             jsonObj.update({'set_of_weathers': settings_module.set_of_weathers})
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
-        """
+
 
 
 

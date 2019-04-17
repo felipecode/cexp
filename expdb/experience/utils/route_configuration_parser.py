@@ -37,15 +37,9 @@ def parse_routes_file(route_filename):
         route_id = route.attrib['id']
         waypoint_list = []  # the list of waypoints that can be found on this route
         for waypoint in route.iter('waypoint'):
-             waypoint_list.append(carla.Transform(location=carla.Location(x=float(waypoint.attrib['x']),
-                                                                          y=float(waypoint.attrib['y']),
-                                                                          z=float(waypoint.attrib['z'])),
-                                                  rotation= carla.Rotation(roll=float(waypoint.attrib['roll']),
-                                                                           pitch=float(waypoint.attrib['pitch']),
-                                                                           yaw=float(waypoint.attrib['yaw'])
-                                                                           )
-                                                  )
-                                  )
+             waypoint_list.append(carla.Location(x=float(waypoint.attrib['x']),
+                                                 y=float(waypoint.attrib['y']),
+                                                 z=float(waypoint.attrib['z'])))  # Waypoints is basically a list of XML nodes
 
         list_route_descriptions.append({
                                     'id': route_id,

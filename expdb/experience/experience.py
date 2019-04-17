@@ -13,6 +13,7 @@ from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDat
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.challenge.envs.sensor_interface import CallBack, CANBusSensor
+from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
 
 import expdb.experience.utils.route_configuration_parser as parser
 from expdb.experience.server_manager import ServerManagerDocker
@@ -111,8 +112,10 @@ class Experience(object):
         self._load_world()
         # Set the actor pool so the scenarios can prepare themselves when needed
         CarlaActorPool.set_world(self.world)
-
+        # Get
         CarlaDataProvider.set_world(self.world)
+        # We make the route less coarse and with the necessary turns
+        self._route = interpolate_trajectory(self.world, self._route)
         # MAKE A SCENARIO BUILDER CLASS
         self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
@@ -219,7 +222,7 @@ class Experience(object):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
-        master_scenario_configuration.target = route[-1]  # Take the last point and add as target.
+        master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
         master_scenario_configuration.route = convert_transform_to_location(route)
         master_scenario_configuration.town = town_name
         # TODO THIS NAME IS BIT WEIRD SINCE THE EGO VEHICLE  IS ALREADY THERE, IT IS MORE ABOUT THE TRANSFORM
