@@ -1,4 +1,7 @@
-def record_route_statistics_default(master_scenarios, route_id):
+from srunner.scenariomanager.traffic_events import TrafficEventType
+import py_trees
+
+def record_route_statistics_default(master_scenario, route_id):
     """
       This function is intended to be called from outside and provide
       statistics about the scenario (human-readable, for the CARLA challenge.)

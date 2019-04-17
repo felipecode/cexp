@@ -1,6 +1,7 @@
 import json
 import os
 import glob
+import py_trees
 import random
 import socket
 from contextlib import closing
@@ -209,9 +210,8 @@ class Experience(object):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
-        print (route)
-        master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
-        master_scenario_configuration.route = convert_transform_to_location(route)
+        master_scenario_configuration.target = route[-1]  # Take the last point and add as target.
+        master_scenario_configuration.route = route
         master_scenario_configuration.town = town_name
         # TODO THIS NAME IS BIT WEIRD SINCE THE EGO VEHICLE  IS ALREADY THERE, IT IS MORE ABOUT THE TRANSFORM
         master_scenario_configuration.ego_vehicle = ActorConfigurationData('vehicle.lincoln.mkz2017',
