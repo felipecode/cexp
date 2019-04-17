@@ -1,6 +1,7 @@
 import glob
-
 import os
+
+""" Parse the data that was already written """
 
 
 def parse_sensor()

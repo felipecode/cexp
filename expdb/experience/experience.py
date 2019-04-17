@@ -170,11 +170,12 @@ class Experience(object):
 
         # We should save the entire dataset in the memory
 
-        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name)
+        if "SRL_DATASET_PATH" not in os.environ:
+            root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name)
 
         # If the metadata does not exist the experience does not have a reference data.
         if os.path.exists(os.path.join(root_path, 'metadata.json')):
-            raise ValueError("The data is not evaluated yet")
+            raise ValueError("The data is not generated yet")
         # Read the metadata telling the sensors that exist
         with open(os.path.join(root_path, 'metadata.json'), 'r') as f:
             metadata_dict = json.loads(f.read())
@@ -214,14 +215,12 @@ class Experience(object):
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
         settings.synchronous_mode = True
-        if self.track == 4:
-            settings.no_rendering_mode = True
         self.world.apply_settings(settings)
 
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
 
-        # TODO FOR NOW THERE IS NO SCENARIOS, JUST ROUTE, I WILL MAKE A GENERIC EMERGENCY SCENARIO.
+        # TODO FOR NOW THERE IS NO SCENARIOS, JUST ROUTE, 
         """
             Based on the parsed route and possible scenarios, build all the scenario classes.
         :param scenario_definition_vec: the dictionary defining the scenarios
@@ -322,14 +321,18 @@ class ExperienceBatch(object):
         # We instantiate experience here using the recently connected client
         self._experiences = []
         parserd_exp_dict = parser.parse_exp_vec(self._json['exps'])
-        # Instance an experience.
+        #TODO add file joining on the beginning.
         print(parserd_exp_dict)
+        # For all the experiences on the file.
         for exp_name in self._json['exps'].keys():
+            # Instance an experience.
             exp = Experience(self._client, exp_name, parserd_exp_dict[exp_name]['route'],
                              parserd_exp_dict[exp_name]['town_name'],
                              parserd_exp_dict[exp_name]['scenarios'], parserd_exp_dict[exp_name]['vehicle_model'])
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
+
+            self._experiences.append(exp)
 
 
     def __iter__(self):

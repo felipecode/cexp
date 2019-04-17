@@ -50,7 +50,8 @@
 
   ],
 
-  "policy": "RoamingAgent"
+  "policy": "RoamingAgent",
+  "package_name": "test_dataset"
 
 
 }
