@@ -18,7 +18,7 @@ import expdb.experience.utils.route_configuration_parser as parser
 from expdb.experience.server_manager import ServerManagerDocker
 
 
-from expdb.experience.datatools.data_writer import save_experience
+import expdb.experience.datatools.data_writer as writer
 
 def find_free_port():
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
@@ -43,6 +43,7 @@ as well as a communication channel with the CARLA servers.
 It also can have additional sensors that are experience related not policy related.
 """
 
+#TODO for now all the writting is made by the experience
 
 class Experience(object):
     def __init__(self, name, client, exp_config, exp_params):
@@ -74,14 +75,17 @@ class Experience(object):
         self._master_scenario = None
         # if we are going to save, we keep track of a dictionary with all the data
         if self._save_data:
-            self._experience_data = {'sensor_data': [],
-                                     'measurements': [],
-                                     'summary': []}
+            self._experience_data = {'sensor_data': None,
+                                     'measurements': None,
+                                     'controls': None}
+            # this will make
+            writer.start(exp_params['exp_batch_name'], self._experience_name)
 
 
     def __del__(self):
+        # TODO ADD DELETE the GENERATED DATASET IN CASE OF FAILURE PARAMETER
         if self._save_data:
-            save_experience(self._experience_data)
+            save_summary(self.get_summary())
 
 
     def add_sensors(self, sensors):
@@ -117,6 +121,9 @@ class Experience(object):
         # It should also spawn all the sensors
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
+
+        save_metadata()
+
 
 
     def setup_sensors(self, sensors, vehicle):
@@ -189,7 +196,9 @@ class Experience(object):
         # We should save the entire dataset in the memory
 
         if "SRL_DATASET_PATH" not in os.environ:
-            root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name)
+            raise ValueError(" Define the full dataset path")
+
+        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name)
 
         # If the metadata does not exist the experience does not have a reference data.
         if os.path.exists(os.path.join(root_path, 'metadata.json')):
@@ -278,6 +287,9 @@ class Experience(object):
         # time continues
         self.world.tick()
         self.timestamp = self.world.wait_for_tick()
+
+        if self._save_data:
+            save_experience(self._experience_data)
 
 
     def get_sensor_data(self):
