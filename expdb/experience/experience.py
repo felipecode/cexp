@@ -116,15 +116,17 @@ class Experience(object):
         CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
         _, self._route = interpolate_trajectory(self.world, self._route)
-        # MAKE A SCENARIO BUILDER CLASS
-        self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
-        #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
-        self._list_scenarios = [self._master_scenario]
 
         # Spawn the ego vehicle.
         self._ego_actor = self.spawn_ego_car(self._route[0][0])
         if self._ego_actor is None:
             raise RuntimeError(" Could Not spawn the ego vehicle on position ", self._route[0][0].location)
+        
+        # MAKE A SCENARIO BUILDER CLASS
+        self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
+        #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
+        self._list_scenarios = [self._master_scenario]
+
         # It should also spawn all the sensors
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
