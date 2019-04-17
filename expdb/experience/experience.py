@@ -17,6 +17,7 @@ import expdb.experience.utils.route_configuration_parser as parser
 from expdb.experience.server_manager import ServerManagerDocker
 
 
+from expdb.experience.datatools.data_writer import save_experience
 
 def find_free_port():
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
@@ -36,14 +37,20 @@ def convert_transform_to_location(transform_vec):
 # TODO this probably requires many subclasses
 
 """
-The experience class encapsulates the experience with the policy as well as the sensors this policy will capture.
+The experience class encapsulates the experience all the scenarios that the policy is going to execute
+as well as a communication channel with the CARLA servers.
 It also can have additional sensors that are experience related not policy related.
 """
 
 
 class Experience(object):
 
-    def __init__(self, name, client, route, town_name, scenarios, vehicle_model, batch_size=1):
+
+
+    def __init__(self, name, client, route, town_name, scenarios, vehicle_model, batch_size=1, save_data=True):
+        # if the data is going to be saved for this experience
+        self._save_data = save_data
+        # the name of this experience object
         self._experience_name = name
         # We have already a connection object to a CARLA server
         self._client = client  # TODO client is going to be a vector ( Or a batch object)
@@ -65,6 +72,18 @@ class Experience(object):
         # The scenarios running
         self._list_scenarios = None
         self._master_scenario = None
+        # if we are going to save, we keep track of a dictionary with all the data
+        if self._save_data:
+            self._experience_data = {'sensor_data':[],
+                                     'measurements':[],
+                                     'summary':[]}
+
+
+    def __del__(self):
+        if self._save_data:
+            save_experience(self._experience_data)
+
+
 
     def add_sensors(self, sensors):
         if not isinstance(sensors, list):
@@ -220,7 +239,7 @@ class Experience(object):
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
 
-        # TODO FOR NOW THERE IS NO SCENARIOS, JUST ROUTE, 
+        # TODO FOR NOW THERE IS NO SCENARIOS, JUST ROUTE,
         """
             Based on the parsed route and possible scenarios, build all the scenario classes.
         :param scenario_definition_vec: the dictionary defining the scenarios
@@ -281,6 +300,9 @@ class Experience(object):
         return None
 
 
+
+
+
 class ExperienceBatch(object):
     """
     It is a batch of instanced exp files that can be iterated to have instanced experiments to get
@@ -330,6 +352,8 @@ class ExperienceBatch(object):
                              parserd_exp_dict[exp_name]['town_name'],
                              parserd_exp_dict[exp_name]['scenarios'], parserd_exp_dict[exp_name]['vehicle_model'])
             # add the additional sensors ( The ones not provided by the policy )
+
+            print (self._json['additional_sensors'])
             exp.add_sensors(self._json['additional_sensors'])
 
             self._experiences.append(exp)

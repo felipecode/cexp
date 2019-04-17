@@ -33,21 +33,18 @@ class Agent(object):
         experience.add_sensors(self.sensors())
         experience.start()  # Make all the scenarios and run them.
 
-        experience_data_dict = {}
+        # experience_data_dict = {}
         while experience.is_running():
             # update all scenarios
 
             sensor_data = experience.get_sensor_data()
-            experience_data_dict.update({'sensor_data': sensor_data})
             measurements = experience.get_measurements_data()
-            experience_data_dict.update({'measurements': measurements})
-            controls = self.run_step(sensor_data)
+
+            controls = self.run_step(sensor_data, measurements)
 
             # With this the experience runner also unroll all the scenarios
             experience.run_step(controls)
 
-        # The summary can be used already for a benchmark or for something else.
-        experience_data_dict.update({"summary": experience.get_summary()})
 
-        return experience_data_dict
+        #return experience_data_dict
 

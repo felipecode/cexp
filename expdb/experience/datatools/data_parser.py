@@ -4,7 +4,11 @@ import os
 """ Parse the data that was already written """
 
 
-def parse_sensor()
+def parse_sensor():
+
+    #### asf
+
+    pass
 
 
 
