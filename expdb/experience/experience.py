@@ -50,7 +50,7 @@ class Experience(object):
 
         self._batch_size = exp_params['batch_size']
         # if the data is going to be saved for this experience
-        self._save_data = exp_params['save_data']
+        self._save_data = exp_params['save_dataset']
         # the name of this experience object
         self._experience_name = name
         # We have already a connection object to a CARLA server
@@ -74,7 +74,7 @@ class Experience(object):
         self._list_scenarios = None
         self._master_scenario = None
         # if we are going to save, we keep track of a dictionary with all the data
-        self._writter = Writter(exp_params['exp_batch_name'], self._experience_name)
+        self._writter = Writter(exp_params['package_name'], self._experience_name)
 
         if self._save_data:
             self._experience_data = {'sensor_data': None,
@@ -356,6 +356,13 @@ class ExperienceBatch(object):
         # setup world and client assuming that the CARLA server is up and running
         self._client = carla.Client('localhost', free_port)
         self._client.set_timeout(self.client_timeout)
+        # Create the configuration dictionary of the exp batch to pass to all experiements
+        exp_params = {
+            'batch_size': self._batch_size,
+            'save_dataset': self._params['save_dataset'],
+            'package_name': self._json['package_name']
+        }
+
         # We instantiate experience here using the recently connected client
         self._experiences = []
         parserd_exp_dict = parser.parse_exp_vec(self._json['exps'])
@@ -364,7 +371,7 @@ class ExperienceBatch(object):
         # For all the experiences on the file.
         for exp_name in self._json['exps'].keys():
             # Instance an experience.
-            exp = Experience(exp_name, self._client, parserd_exp_dict[exp_name], self._params['exp_params'])
+            exp = Experience(exp_name, self._client, parserd_exp_dict[exp_name], exp_params)
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
             self._experiences.append(exp)

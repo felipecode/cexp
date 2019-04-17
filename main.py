@@ -15,12 +15,10 @@ if __name__ == '__main__':
               'docker_name': 'carlasim/carla:0.9.5',
               'gpu': 0,
               'save_data': True,
-              'exp_params': {
-                  'batch_size': 1,
-                  'save_data': True
-              }}
+              'batch_size': 1
+              }
     # TODO for now batch size is one
-    exp_batch = ExperienceBatch(json, params, 10, params['exp_params']['batch_size'])  # THe experience is built, the files necessary
+    exp_batch = ExperienceBatch(json, params, 10, params['batch_size'])  # THe experience is built, the files necessary
                                                       # to load CARLA and the scenario are made
     exp_batch.start()
     for exp in exp_batch:
