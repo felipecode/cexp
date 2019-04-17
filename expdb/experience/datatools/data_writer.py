@@ -12,18 +12,23 @@ from google.protobuf.json_format import MessageToJson, MessageToDict
 
 class Writter(object):
 
-    def __init__(self):
+    def __init__(self, dataset_name, exp_name):
 
         if "SRL_DATASET_PATH" not in os.environ:
-            root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name)
+            raise  ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
 
-        self._experience_name =
-        self._dataset_name  =
+        root_path = os.environ["SRL_DATASET_PATH"]
 
-        if not os.path.exists(dataset_path):
-            os.makedirs(dataset_path)
+        self._root_path = root_path
+        self._experience_name = exp_name
+        self._dataset_name  = dataset_name
 
-    def write_json_measurements(episode_path, data_point_id, measurements, control, control_noise, state):
+        self._dataset_path = os.path.join(root_path, dataset_name, exp_name)
+
+        if not os.path.exists(self._dataset_path):
+            os.makedirs(self._dataset_path)
+
+    def _write_json_measurements(self, episode_path, data_point_id, measurements, control, scenario_control, state):
 
         with open(os.path.join(episode_path, 'measurements_' + data_point_id.zfill(5) + '.json'), 'w') as fo:
 
@@ -34,16 +39,15 @@ class Writter(object):
             jsonObj.update({'brake': control.brake})
             jsonObj.update({'hand_brake': control.hand_brake})
             jsonObj.update({'reverse': control.reverse})
-            jsonObj.update({'steer_noise': control_noise.steer})
-            jsonObj.update({'throttle_noise': control_noise.throttle})
-            jsonObj.update({'brake_noise': control_noise.brake})
+            jsonObj.update({'steer_noise': scenario_control.steer})
+            jsonObj.update({'throttle_noise': scenario_control.throttle})
+            jsonObj.update({'brake_noise': scenario_control.brake})
 
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
 
-    def start(dataset_path):
 
-    def save_experience(data_dict):
+    def save_experience(self, experience_data):
 
 
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
@@ -55,6 +59,10 @@ class Writter(object):
     # TODO think about noise
 
     def save_metadata(dataset_path, settings_module):
+
+
+        """
+
         with open(os.path.join(dataset_path, 'metadata.json'), 'w') as fo:
             jsonObj = {}
             jsonObj.update(settings_module.sensors_yaw)
@@ -72,6 +80,7 @@ class Writter(object):
             jsonObj.update({'set_of_weathers': settings_module.set_of_weathers})
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
+        """
 
 
 

@@ -18,7 +18,7 @@ import expdb.experience.utils.route_configuration_parser as parser
 from expdb.experience.server_manager import ServerManagerDocker
 
 
-import expdb.experience.datatools.data_writer as writer
+from  expdb.experience.datatools.data_writer import  Writter
 
 def find_free_port():
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
@@ -74,18 +74,20 @@ class Experience(object):
         self._list_scenarios = None
         self._master_scenario = None
         # if we are going to save, we keep track of a dictionary with all the data
+        self._writter = Writter(exp_params['exp_batch_name'], self._experience_name)
+
         if self._save_data:
             self._experience_data = {'sensor_data': None,
                                      'measurements': None,
-                                     'controls': None}
-            # this will make
-            writer.start(exp_params['exp_batch_name'], self._experience_name)
+                                     'ego_controls': None,
+                                     'scenario_controls': None}
 
 
     def __del__(self):
         # TODO ADD DELETE the GENERATED DATASET IN CASE OF FAILURE PARAMETER
-        if self._save_data:
-            save_summary(self.get_summary())
+        #if self._save_data:
+        #    save_summary(self.get_summary())
+        pass
 
 
     def add_sensors(self, sensors):
@@ -122,7 +124,7 @@ class Experience(object):
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
-        save_metadata()
+        writter.save_metadata()
 
 
 
@@ -265,19 +267,20 @@ class Experience(object):
 
     def run_step(self, controls):
         if self._ego_actor is None:
-            raise ValueError("Applying control without egoactor spawned.")
+            raise ValueError("Applying control without ego-actor spawned.")
         # Basically apply the controls to the ego actor.
 
+        self._experience_data['ego_controls'] = controls
         # update all scenarios
         GameTime.on_carla_tick(self.timestamp)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
         for scenario in self._list_scenarios:
             scenario.scenario.scenario_tree.tick_once()
-            # print("\n")
-            # py_trees.display.print_ascii_tree(
-            #    scenario.scenario.scenario_tree, show_status=True)
-            # sys.stdout.flush()
+            controls = scenario.change_control(controls)
+
+        self._experience_data['scenario_controls'] = controls
+
 
         self._ego_actor.apply_control(controls)
 
@@ -289,7 +292,7 @@ class Experience(object):
         self.timestamp = self.world.wait_for_tick()
 
         if self._save_data:
-            save_experience(self._experience_data)
+            self._writter.save_experience(self._experience_data)
 
 
     def get_sensor_data(self):
