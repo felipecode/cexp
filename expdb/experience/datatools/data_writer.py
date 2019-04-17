@@ -58,9 +58,9 @@ class Writter(object):
 
     # TODO think about noise
 
-    def save_metadata(self, sensors_dictionary):
+    def save_metadata(self, sensors_dictionary=None):
 
-
+        return
 
         with open(os.path.join(self._dataset_path, 'metadata.json'), 'w') as fo:
             jsonObj = {}

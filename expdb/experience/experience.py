@@ -121,7 +121,7 @@ class Experience(object):
         self._ego_actor = self.spawn_ego_car(self._route[0][0])
         if self._ego_actor is None:
             raise RuntimeError(" Could Not spawn the ego vehicle on position ", self._route[0][0].location)
-        
+
         # MAKE A SCENARIO BUILDER CLASS
         self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
@@ -142,6 +142,7 @@ class Experience(object):
         :param vehicle: ego vehicle
         :return:
         """
+        print (sensors)
         bp_library = self.world.get_blueprint_library()
         instanced_sensors = []
         for sensor_spec in sensors:
