@@ -74,9 +74,9 @@ class Experience(object):
         self._master_scenario = None
         # if we are going to save, we keep track of a dictionary with all the data
         if self._save_data:
-            self._experience_data = {'sensor_data':[],
-                                     'measurements':[],
-                                     'summary':[]}
+            self._experience_data = {'sensor_data': [],
+                                     'measurements': [],
+                                     'summary': []}
 
 
     def __del__(self):
@@ -286,8 +286,11 @@ class Experience(object):
     def get_sensor_data(self):
 
         # Get the sensor data from the policy + the additional sensors data
-        # ALSO TAKES THE SENSORS TAKEN BY THE POLICY
-        return self._sensor_interface.get_data()
+        sensor_data = self._sensor_interface.get_data()
+        if self._save_data:
+            self._experience_data['sensor_data'].append(sensor_data)
+
+        return sensor_data
 
     def get_summary(self):
         # Compile the summary from all the executed scenarios.
@@ -353,7 +356,6 @@ class ExperienceBatch(object):
                              parserd_exp_dict[exp_name]['scenarios'], parserd_exp_dict[exp_name]['vehicle_model'])
             # add the additional sensors ( The ones not provided by the policy )
 
-            print (self._json['additional_sensors'])
             exp.add_sensors(self._json['additional_sensors'])
 
             self._experiences.append(exp)

@@ -5,8 +5,6 @@ import carla
 class DummyAgent(Agent):
 
 
-
-    # TODO THIS part goes to the other, to the base agent.
     def run_step(self, input_data):
         print("=====================>")
         for key, val in input_data.items():

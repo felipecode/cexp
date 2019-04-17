@@ -23,9 +23,9 @@ class Agent(object):
 
     def sensors(self):
 
-        sensors_dict = {}
+        sensors_vec = []
 
-        return sensors_dict
+        return sensors_vec
 
     def unroll(self, experience):
         # unroll a full episode for the agent. This produces an experience, that can be used directly for learning.
@@ -38,9 +38,9 @@ class Agent(object):
             # update all scenarios
 
             sensor_data = experience.get_sensor_data()
-            measurements = experience.get_measurements_data()
+            measurements = experience.get_measurements_data() #MEASUREMENTS CAN BE JOINED
 
-            controls = self.run_step(sensor_data, measurements)
+            controls = self.run_step(sensor_data)
 
             # With this the experience runner also unroll all the scenarios
             experience.run_step(controls)
