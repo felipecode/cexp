@@ -1,6 +1,5 @@
 ###  DCLXVI  
-#### Drive CarLa eXperience VI
-
+#### Driving CarLa eXperience conVIncer
 
 This  repository serves for collecting experience at CARLA using the scenarios
 platform of the CARLA challenge. 

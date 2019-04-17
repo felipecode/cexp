@@ -84,7 +84,6 @@ class Experience(object):
             save_experience(self._experience_data)
 
 
-
     def add_sensors(self, sensors):
         if not isinstance(sensors, list):
             raise ValueError(" Sensors added to the experience should be a list of dictionaries")
@@ -351,7 +350,7 @@ class ExperienceBatch(object):
         # For all the experiences on the file.
         for exp_name in self._json['exps'].keys():
             # Instance an experience.
-            exp = Experience(self._client, exp_name, parserd_exp_dict[exp_name]['route'],
+            exp = Experience(exp_name, self._client, parserd_exp_dict[exp_name]['route'],
                              parserd_exp_dict[exp_name]['town_name'],
                              parserd_exp_dict[exp_name]['scenarios'], parserd_exp_dict[exp_name]['vehicle_model'])
             # add the additional sensors ( The ones not provided by the policy )
