@@ -115,7 +115,7 @@ class Experience(object):
         # Get
         CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
-        self._route = interpolate_trajectory(self.world, self._route)
+        _, self._route = interpolate_trajectory(self.world, self._route)
         # MAKE A SCENARIO BUILDER CLASS
         self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
@@ -219,7 +219,6 @@ class Experience(object):
     # TODO this probably go to some subclass
 
     def build_master_scenario(self, route, town_name):
-        print (route)
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
