@@ -24,7 +24,8 @@
           "id": 2
         },
         "scenarios": {
-          "file": "None"
+          "file": "None",
+          "route_independent": "Background"
         },
         "town_name": "Town01",
         "vehicle_model": "vehicle.lincoln.mkz2017"

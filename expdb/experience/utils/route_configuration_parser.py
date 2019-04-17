@@ -107,8 +107,8 @@ def parse_exp_vec(exp_vec):
 
 
 
-
 def create_location_waypoint(location):
+
     # Function to correct frans weird names.
     return {
 

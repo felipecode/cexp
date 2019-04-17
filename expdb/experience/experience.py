@@ -13,8 +13,6 @@ from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfigur
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.challenge.envs.sensor_interface import CallBack, CANBusSensor
 
-
-
 import expdb.experience.utils.route_configuration_parser as parser
 from expdb.experience.server_manager import ServerManagerDocker
 
@@ -45,10 +43,10 @@ It also can have additional sensors that are experience related not policy relat
 
 class Experience(object):
 
-    def __init__(self, name, client, route, town_name, scenarios, vehicle_model):
+    def __init__(self, name, client, route, town_name, scenarios, vehicle_model, batch_size=1):
         self._experience_name = name
         # We have already a connection object to a CARLA server
-        self._client = client
+        self._client = client  # TODO client is going to be a vector ( Or a batch object)
         # The route is already specified
         self._route = route
         # An experience is associate with a certain town name ( THat is also associated with scenarios and a route)
@@ -57,8 +55,8 @@ class Experience(object):
         self._scenarios = scenarios
         # The world starts unnitialized.
         self.world = None
-        # All the sensors that are going to be spawned
-        self._sensor_desc_dict = {}
+        # All the sensors that are going to be spawned, a vector of dictionaries
+        self._sensor_desc_vec = []
         # Sensor interface, a buffer that contains all the read sensors
         self._sensor_interface = None
         self._ego_actor = None
@@ -69,8 +67,10 @@ class Experience(object):
         self._master_scenario = None
 
     def add_sensors(self, sensors):
+        if not isinstance(sensors, list):
+            raise ValueError(" Sensors added to the experience should be a list of dictionaries")
 
-        self._sensor_desc_dict.update(sensors)
+        self._sensor_desc_vec += sensors
 
     def spawn_ego_car(self, start_transform):
         """
@@ -98,7 +98,7 @@ class Experience(object):
         self._ego_actor = self.spawn_ego_car(self._route[0])
         # It should also spawn all the sensors
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
-        self.setup_sensors(self._sensor_desc_dict, self._ego_actor)
+        self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
 
     def setup_sensors(self, sensors, vehicle):
