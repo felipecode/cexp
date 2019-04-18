@@ -7,7 +7,6 @@ import shutil
 
 from google.protobuf.json_format import MessageToJson, MessageToDict
 
-#TODO MAYBE CREATE SOME CLASS HERE
 
 
 class Writter(object):
@@ -70,14 +69,18 @@ class Writter(object):
             # The sensors dictionary used
             jsonObj.update({'sensors': None})
 
-            # The scenarios used and its configuration
+            # The scenarios used and its configuration, a dictionary with the scenarios and their parameters
+            # Should also consider the randomly generate parameters from the scenario
+            jsonObj.update({'scenarios': None})
+
+            # Set of weathers, all the posible
+            jsonObj.update({'set_of_weathers': settings_module.set_of_weathers})
 
             # The sensors, full sensors configuration.
             jsonObj.update({'lateral_noise_percentage': settings_module.lat_noise_percent})
             jsonObj.update({'longitudinal_noise_percentage': settings_module.long_noise_percent})
             jsonObj.update({'car range': settings_module.NumberOfVehicles})
             jsonObj.update({'pedestrian range': settings_module.NumberOfPedestrians})
-            jsonObj.update({'set_of_weathers': settings_module.set_of_weathers})
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
 

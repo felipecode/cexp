@@ -39,6 +39,9 @@ def convert_transform_to_location(transform_vec):
 
 # TODO this probably requires many subclasses
 
+
+# The scenarios should not have this triggering thing they can however. add some scenario editor ??
+
 """
 The experience class encapsulates the experience all the scenarios that the policy is going to execute
 as well as a communication channel with the CARLA servers.
@@ -69,6 +72,8 @@ class Experience(object):
         self._sensor_desc_vec = []
         # Sensor interface, a buffer that contains all the read sensors
         self._sensor_interface = None
+        # Instanced sensors for this specific experience
+        self._instanced_sensors = []
         self._ego_actor = None
         # The vehicle car model that is going to be spawned
         self._vehicle_model = exp_config['vehicle_model']
@@ -130,6 +135,7 @@ class Experience(object):
         # It should also spawn all the sensors
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self._sensor_interface = SensorInterface()
+        print (" EGO ACTOR")
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
         self._writter.save_metadata()
@@ -145,7 +151,6 @@ class Experience(object):
         """
         print (sensors)
         bp_library = self.world.get_blueprint_library()
-        instanced_sensors = []
         for sensor_spec in sensors:
             # These are the pseudosensors (not spawned)
             if sensor_spec['type'].startswith('sensor.can_bus'):
@@ -186,7 +191,7 @@ class Experience(object):
                                                 vehicle)
             # setup callback
             sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface))
-            instanced_sensors.append(sensor)
+            self._instanced_sensors.append(sensor)
 
         # check that all sensors have initialized their data structure
         while not self._sensor_interface.all_sensors_ready():
@@ -194,7 +199,6 @@ class Experience(object):
             self.world.tick()
             self.world.wait_for_tick()
 
-        return instanced_sensors
 
 
     def get_data(self):
