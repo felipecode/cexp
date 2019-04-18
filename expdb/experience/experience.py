@@ -19,7 +19,7 @@ import expdb.experience.utils.route_configuration_parser as parser
 from expdb.experience.sensors.sensor_interface import CallBack, CANBusSensor
 from expdb.experience.server_manager import ServerManagerDocker
 from expdb.experience.sensors.sensor_interface import SensorInterface
-from 
+from expdb.experience.scorer import record_route_statistics_default
 
 
 from  expdb.experience.datatools.data_writer import  Writter
@@ -97,10 +97,9 @@ class Experience(object):
 
 
     def destroy(self):
-        # TODO ADD DELETE the GENERATED DATASET IN CASE OF FAILURE PARAMETER
-        #if self._save_data:
-        #    save_summary(self.get_summary())
-        pass
+        if self._save_data:
+            self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._experience_name))
+
 
 
     def add_sensors(self, sensors):

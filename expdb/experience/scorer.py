@@ -1,7 +1,7 @@
 from srunner.scenariomanager.traffic_events import TrafficEventType
 import py_trees
 
-def record_route_statistics_default(master_scenario, route_id):
+def record_route_statistics_default(master_scenario, exp_name):
     """
       This function is intended to be called from outside and provide
       statistics about the scenario (human-readable, for the CARLA challenge.)
@@ -102,7 +102,7 @@ def record_route_statistics_default(master_scenario, route_id):
     final_score = max(score_route - score_penalty, 0)
 
     return_message += "\n=================================="
-    return_message += "\n==[r{}:{}] [Score = {:.2f} : (route_score={}, infractions=-{})]".format(route_id, result,
+    return_message += "\n==[r{}:{}] [Score = {:.2f} : (route_score={}, infractions=-{})]".format(exp_name, result,
                                                                                                  final_score,
                                                                                                  score_route,
                                                                                                  score_penalty)
@@ -138,7 +138,7 @@ def record_route_statistics_default(master_scenario, route_id):
 
     return_message += "\n=================================="
 
-    current_statistics = {'id': route_id,
+    current_statistics = {'exp_name': exp_name,
                           'score_composed': score_composed,
                           'score_route': score_route,
                           'score_penalty': score_penalty,
