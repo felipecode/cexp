@@ -89,6 +89,8 @@ class Experience(object):
                                      'measurements': None,
                                      'ego_controls': None,
                                      'scenario_controls': None}
+        # the name of the package this exp is into
+        self._package_name = exp_params['package_name']
         logging.debug("Instantiated Experience %s" % self._experience_name)
 
 
@@ -140,7 +142,7 @@ class Experience(object):
         self._sensor_interface = SensorInterface()
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
-        self._writter.save_metadata()
+        self._writter.save_metadata(self)
 
         logging.debug("Started Experience %s" % self._experience_name)
 
@@ -204,21 +206,19 @@ class Experience(object):
             self.world.tick()
             self.world.wait_for_tick()
 
-
-
-    def get_data(self):
+    def get_data(self):   # TODO: The data you might want for an experience is needed
         # Each experience can have a reference datapoint , where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
         # It is always save in the SRL path
-        package_name = self._json['package_name']
+        package_name = self._package_name
 
         # We should save the entire dataset in the memory
 
         if "SRL_DATASET_PATH" not in os.environ:
-            raise ValueError(" Define the full dataset path")
+            raise ValueError("SRL DATASET not defined, set the place where the dataset was saved before")
 
-        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name)
+        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name, self._experience_name)
 
         # If the metadata does not exist the experience does not have a reference data.
         if os.path.exists(os.path.join(root_path, 'metadata.json')):

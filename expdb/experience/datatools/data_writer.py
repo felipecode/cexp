@@ -32,22 +32,10 @@ class Writter(object):
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
 
-    def _write_json_measurements(self, episode_path, measurements, control, scenario_control, state):
 
-        with open(os.path.join(episode_path, 'measurements_' + self._latest_id.zfill(6) + '.json'), 'w') as fo:
+    def _build_measurements(self, world):
 
-            jsonObj = MessageToDict(measurements)
-            jsonObj.update(state)
-            jsonObj.update({'steer': control.steer})
-            jsonObj.update({'throttle': control.throttle})
-            jsonObj.update({'brake': control.brake})
-            jsonObj.update({'hand_brake': control.hand_brake})
-            jsonObj.update({'reverse': control.reverse})
-            jsonObj.update({'steer_noise': scenario_control.steer})
-            jsonObj.update({'throttle_noise': scenario_control.throttle})
-            jsonObj.update({'brake_noise': scenario_control.brake})
-
-            fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
+        return {}
 
     def _create_scenario_dict(self, scenarios_object_list):
 
@@ -59,9 +47,24 @@ class Writter(object):
 
         return scenario_info
 
+    def _write_json_measurements(self, measurements, control, scenario_control, state):
+        # Build measurements object
 
+        with open(os.path.join(self._full_path, 'measurements_' + self._latest_id.zfill(6) + '.json'), 'w') as fo:
+            jsonObj = {}
+            jsonObj.update(measurements)
+            jsonObj.update({'steer': control.steer})
+            jsonObj.update({'throttle': control.throttle})
+            jsonObj.update({'brake': control.brake})
+            jsonObj.update({'hand_brake': control.hand_brake})
+            jsonObj.update({'reverse': control.reverse})
+            jsonObj.update({'steer_noise': scenario_control.steer})
+            jsonObj.update({'throttle_noise': scenario_control.throttle})
+            jsonObj.update({'brake_noise': scenario_control.brake})
 
-    def save_experience(self, measurements):
+            fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
+
+    def save_experience(self, world, control, scenario_control ):
         """
          It is also used to step the current data being written
         :param measurements:
@@ -71,13 +74,13 @@ class Writter(object):
 
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
-
-        self._write_json_measurements( measurements)
+        self._write_json_measurements( self._build_measurements(world), control, scenario_control)
         self._latest_id += 1
 
 
-    def save_summary(self):
+    def save_summary(self, statistics):
 
+        with open(os.path.join(self._full_path, 'measurements_' + self._latest_id.zfill(6) + '.json'), 'w') as fo:
         pass
 
 
