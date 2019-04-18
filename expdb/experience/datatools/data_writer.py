@@ -83,7 +83,7 @@ class Writer(object):
     def _write_json_measurements(self, measurements, control, scenario_control):
         # Build measurements object
 
-        with open(os.path.join(self._full_path, 'measurements_' + self._latest_id.zfill(6) + '.json'), 'w') as fo:
+        with open(os.path.join(self._full_path, 'measurements_' + str(self._latest_id).zfill(6) + '.json'), 'w') as fo:
             jsonObj = {}
             jsonObj.update(measurements)
             jsonObj.update({'steer': control.steer})
