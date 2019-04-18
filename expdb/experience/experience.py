@@ -136,6 +136,7 @@ class Experience(object):
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self._sensor_interface = SensorInterface()
         print (" EGO ACTOR")
+        print (self._ego_actor)
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
         self._writter.save_metadata()
