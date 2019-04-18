@@ -49,6 +49,10 @@ class Writter(object):
 
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
+    def _create_scenario_dict(self):
+
+
+
 
     def save_experience(self, measurements):
         """
@@ -71,18 +75,19 @@ class Writter(object):
 
 
 
-    def save_metadata(self, sensors_dictionary=None):
+    def save_metadata(self, experience):
 
         with open(os.path.join(self._full_path, 'metadata.json'), 'w') as fo:
             jsonObj = {}
 
             # The full name of the experience ( It can be something different for now we keep the same)
-            jsonObj.update({'full_name': None})
+            jsonObj.update({'full_name': experience._experience_name})
             # The sensors dictionary used
-            jsonObj.update({'sensors': None})
+            jsonObj.update({'sensors': experience._sensor_desc_vec})
 
             # The scenarios used and its configuration, a dictionary with the scenarios and their parameters
             # Should also consider the randomly generate parameters from the scenario
+            scenario_dict = self._create_scenario_dict(experience._list_scenarios)
             jsonObj.update({'scenarios': None})
 
             # Set of weathers, all the posible
@@ -105,15 +110,15 @@ class Writter(object):
     """
         functions called asynchronously by the thread to write the sensors
     """
+    # TODO, check for synch issues, should probably run on synch mode.
+    def write_image(self, image, tag):
+        image.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))
 
-    def write_image(self, image):
-        # TODO ACTUALLY ALL NEED the tage
+    def write_lidar(self, lidar, tag):
 
-        pass
+        lidar.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))
 
-    def write_lidar(self, lidar):
-        pass
-
+    # in principle these are not needed.
     def write_gnss(self, gnss):
         pass
 

@@ -12,7 +12,7 @@ if __name__ == '__main__':
     json = 'database/test.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
-              'docker_name': 'carlasim/carla:0.9.5',
+              'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'save_data': True,
               'batch_size': 1
@@ -26,7 +26,6 @@ if __name__ == '__main__':
         # by taking the output from the experience.
         agent = DummyAgent()
         data = agent.unroll(exp)
-
 
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
