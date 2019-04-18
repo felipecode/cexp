@@ -50,7 +50,7 @@ class Writter(object):
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
     def _create_scenario_dict(self):
-
+        pass
 
 
 
@@ -115,7 +115,6 @@ class Writter(object):
         image.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))
 
     def write_lidar(self, lidar, tag):
-
         lidar.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))
 
     # in principle these are not needed.
