@@ -41,16 +41,17 @@ class Writer(object):
                         }
         # All the actors present we save their information
         for actor in world.get_actors():
-            if actor.attributes['role_name'] == 'hero':
-                transform = actor.get_transform()
-                velocity = actor.get_velocity()
-                measurements['ego_actor'].update({
+            if 'vehicle' in actor.type_id:
+                if actor.attributes['role_name'] == 'hero':
+                    transform = actor.get_transform()
+                    velocity = actor.get_velocity()
+                    measurements['ego_actor'].update({
 
-                    "position": [transform.location.x, transform.location.y, transform.location.z],
-                    "orientation": [transform.rotation.roll, transform.rotation.pitch, transform.rotation.yaw],
-                    "velocity": [velocity.x, velocity.y, velocity.z]
-                 }
-                )
+                        "position": [transform.location.x, transform.location.y, transform.location.z],
+                        "orientation": [transform.rotation.roll, transform.rotation.pitch, transform.rotation.yaw],
+                        "velocity": [velocity.x, velocity.y, velocity.z]
+                     }
+                    )
 
 
 

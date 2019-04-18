@@ -122,8 +122,6 @@ class Experience(object):
             self._ego_actor = None
         Experience.number_of_executions += 1
 
-
-
     def stop(self):
         # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
         if self._save_data:
@@ -140,7 +138,6 @@ class Experience(object):
     def clean_experience_data(self):
         # Just in case something happens we clean the data that was collected
         pass
-
 
     def add_sensors(self, sensors):
         if not isinstance(sensors, list):
@@ -168,7 +165,6 @@ class Experience(object):
         # Set the world for the global data provider
         CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
-        #print (self._route)
         print ( " ARE GOING TO INTERPOLATE")
         _, self._route = interpolate_trajectory(self.world, self._route)
 
@@ -194,8 +190,6 @@ class Experience(object):
             scenario.scenario.scenario_tree.tick_once()
 
         logging.debug("Started Experience %s" % self._experience_name)
-
-
 
 
     def setup_sensors(self, sensors, vehicle):
@@ -254,7 +248,7 @@ class Experience(object):
             print(" waiting for one data reading from sensors...")
             self.world.tick()
             self.world.wait_for_tick()
-
+    # TODO USE THIS GET DATA DIRECTLY 
     def get_data(self):   # TODO: The data you might want for an experience is needed
         # Each experience can have a reference datapoint , where the data is already collected. That can go
         # Directly to the json where the data is collected.
@@ -296,7 +290,6 @@ class Experience(object):
         CarlaDataProvider.register_actor(self._ego_actor)
 
         return MasterScenario(self.world, self._ego_actor, master_scenario_configuration)
-
 
     def _load_world(self):
         # A new world can only be loaded in async mode
@@ -360,7 +353,7 @@ class Experience(object):
         if self._save_data:
             self._writter.save_experience(self.world, self._experience_data)
 
-
+    """ interface methods """
     def get_sensor_data(self):
 
         # Get the sensor data from the policy + the additional sensors data
