@@ -100,7 +100,7 @@ class CANBusSensor(object):
     def __call__(self):
 
         """ We convert the vehicle physics information into a convenient dictionary """
-
+        print (self._vehicle)
         vehicle_physics = self._vehicle.get_physics_control()
         wheels_list_dict = []
         for wheel in vehicle_physics.wheels:
