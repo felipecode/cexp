@@ -97,9 +97,10 @@ class Experience(object):
 
 
     def destroy(self):
+        # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
+
         if self._save_data:
             self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._experience_name))
-
 
 
     def add_sensors(self, sensors):
@@ -126,6 +127,7 @@ class Experience(object):
         CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
         print (self._route)
+        print ( " ARE GOING TO INTERPOLATE")
         _, self._route = interpolate_trajectory(self.world, self._route)
 
         # Spawn the ego vehicle.
@@ -156,7 +158,6 @@ class Experience(object):
         :param vehicle: ego vehicle
         :return:
         """
-        print (sensors)
         bp_library = self.world.get_blueprint_library()
         for sensor_spec in sensors:
             # These are the pseudosensors (not spawned)

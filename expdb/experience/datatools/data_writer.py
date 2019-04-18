@@ -15,7 +15,7 @@ class Writter(object):
         directly on the sensor interface.
     """
 
-    def __init__(self, dataset_name, exp_name):
+    def __init__(self, dataset_name, exp_name, other_vehicles=True):
 
         if "SRL_DATASET_PATH" not in os.environ:
             raise  ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
@@ -34,6 +34,18 @@ class Writter(object):
 
 
     def _build_measurements(self, world):
+
+        measurements = {"ego_actor":{},
+                        "opponents":{},
+                        ""
+                        }
+        # All the actors present we save their information
+        for actor in world.get_actors():
+
+
+        #
+
+
 
         return {}
 
