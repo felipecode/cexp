@@ -31,6 +31,7 @@ class Agent(object):
         # unroll a full episode for the agent. This produces an experience, that can be used directly for learning.
 
         experience.add_sensors(self.sensors())
+        print (" AGENT UNROLLING ")
         experience.start()  # Make all the scenarios and run them.
 
         # experience_data_dict = {}

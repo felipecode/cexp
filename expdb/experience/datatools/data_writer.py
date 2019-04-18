@@ -106,7 +106,7 @@ class Writer(object):
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
         self._write_json_measurements(self._build_measurements(world), experience_data['ego_controls'],
-                                      experience_data['scenario_controls'] )
+                                      experience_data['scenario_controls'])
         self._latest_id += 1
 
 

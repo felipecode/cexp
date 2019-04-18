@@ -123,7 +123,7 @@ class Experience(object):
         self._load_world()
         # Set the actor pool so the scenarios can prepare themselves when needed
         CarlaActorPool.set_world(self.world)
-        # Get
+        # Set the world for the global data provider
         CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
         #print (self._route)
@@ -311,7 +311,7 @@ class Experience(object):
         self.world.tick()
         self.timestamp = self.world.wait_for_tick()
         if self._save_data:
-            self._writter.save_experience(self._experience_data)
+            self._writter.save_experience(self.world, self._experience_data)
 
 
     def get_sensor_data(self):
@@ -327,6 +327,7 @@ class Experience(object):
     def get_summary(self):
         # Compile the summary from all the executed scenarios.
         # THE POLICY WHICH EXECUTED THIS SCENARIO GOES INTO THE ANNOTATIONS OF IT
+        # CHECK IF IT IS READY TO SCORE>
         # TODO: produce a summary from the experience
         return None
 
