@@ -125,6 +125,7 @@ class Experience(object):
         # Get
         CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
+        print (self._route)
         _, self._route = interpolate_trajectory(self.world, self._route)
 
         # Spawn the ego vehicle.
