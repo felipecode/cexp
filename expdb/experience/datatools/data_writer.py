@@ -43,7 +43,7 @@ class Writter(object):
         for scenario in scenarios_object_list:
 
 
-            scenario_info.update({'name': scenario.__class____name__})
+            scenario_info.update({'name': scenario.__class__.__name__})
 
         return scenario_info
 
