@@ -45,6 +45,6 @@ class Agent(object):
             # With this the experience runner also unroll all the scenarios
             experience.run_step(controls)
 
-
+        experience.destroy()
         #return experience_data_dict
 
