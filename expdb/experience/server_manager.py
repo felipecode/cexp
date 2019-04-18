@@ -97,7 +97,7 @@ class ServerManagerDocker(ServerManager):
         (out, err) = self._proc.communicate()
 
         print("Going to communicate")
-        time.sleep(100)
+        time.sleep(150)
 
     def stop(self):
         exec_command = ['docker', 'kill', '{}'.format(self._docker_id)]

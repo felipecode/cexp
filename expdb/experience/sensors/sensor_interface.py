@@ -166,48 +166,57 @@ class CANBusSensor(object):
 
 
 class CallBack(object):
-    def __init__(self, tag, sensor, data_provider):
+    def __init__(self, tag, sensor, data_provider, writer=None):
         self._tag = tag
         self._data_provider = data_provider
 
         self._data_provider.register_sensor(tag, sensor)
+        self._writer = writer
 
     def __call__(self, data):
         if isinstance(data, carla.Image):
-            self._parse_image_cb(data, self._tag)
+            self._parse_image_cb(data, self._tag, self._writer)
         elif isinstance(data, carla.LidarMeasurement):
-            self._parse_lidar_cb(data, self._tag)
+            self._parse_lidar_cb(data, self._tag, self._writer)
         elif isinstance(data, carla.GnssEvent):
-            self._parse_gnss_cb(data, self._tag)
+            self._parse_gnss_cb(data, self._tag, self._writer)
         elif isinstance(data, CANBusMeasurement) or isinstance(data, HDMapMeasurement) \
                 or isinstance(data, SceneLayoutMeasurement) or isinstance(data, ObjectMeasurements):
-            self._parse_pseudosensor(data, self._tag)
+            self._parse_pseudosensor(data, self._tag, self._writer)
         else:
             logging.error('No callback method for this sensor.')
 
     # Parsing CARLA physical Sensors
-    def _parse_image_cb(self, image, tag):
+    def _parse_image_cb(self, image, tag, writer):
+        if writer is not None:
+            writer.write_image(image)
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
-        array = copy.deepcopy(array)
+        array = copy.deepcopy(array)  # TODO IS THIS NEEDED  ?
         array = np.reshape(array, (image.height, image.width, 4))
         array = array[:, :, :3]
         array = array[:, :, ::-1]
         self._data_provider.update_sensor(tag, array, image.frame_number)
 
-    def _parse_lidar_cb(self, lidar_data, tag):
+    def _parse_lidar_cb(self, lidar_data, tag, writer):
+        if writer is not None:
+            writer.write_lidar(lidar_data)
         points = np.frombuffer(lidar_data.raw_data, dtype=np.dtype('f4'))
         points = copy.deepcopy(points)
         points = np.reshape(points, (int(points.shape[0] / 3), 3))
         self._data_provider.update_sensor(tag, points, lidar_data.frame_number)
 
-    def _parse_gnss_cb(self, gnss_data, tag):
+    def _parse_gnss_cb(self, gnss_data, tag, writer=None):
+        if writer is not None:
+            writer.write_gnss(gnss_data)
         array = np.array([gnss_data.latitude,
                           gnss_data.longitude,
                           gnss_data.altitude], dtype=np.float32)
         self._data_provider.update_sensor(tag, array, gnss_data.frame_number)
 
     # The pseudo sensors already come properly parsed, so we can basically use a single function
-    def _parse_pseudosensor(self, package, tag):
+    def _parse_pseudosensor(self, package, tag, writer=None):
+        if writer is not None:
+            writer.write_pseudo(package, tag)
         self._data_provider.update_sensor(tag, package.data, package.frame_number)
 
 

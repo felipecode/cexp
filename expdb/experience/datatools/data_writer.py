@@ -7,9 +7,13 @@ import shutil
 
 from google.protobuf.json_format import MessageToJson, MessageToDict
 
-
+# TODO write expbatch related data.
 
 class Writter(object):
+    """
+        Organizing the writting process, note that the sensors are written on a separate thread.
+        directly on the sensor interface.
+    """
 
     def __init__(self, dataset_name, exp_name):
 
@@ -21,13 +25,14 @@ class Writter(object):
         self._root_path = root_path
         self._experience_name = exp_name
         self._dataset_name  = dataset_name
+        self._latest_id = 0
 
-        self._dataset_path = os.path.join(root_path, dataset_name, exp_name)
+        self._full_path = os.path.join(root_path, dataset_name, exp_name)
 
-        if not os.path.exists(self._dataset_path):
-            os.makedirs(self._dataset_path)
+        if not os.path.exists(self._full_path):
+            os.makedirs(self._full_path)
 
-    def _write_json_measurements(self, episode_path, data_point_id, measurements, control, scenario_control, state):
+    def _write_json_measurements(self, episode_path, measurements, control, scenario_control, state):
 
         with open(os.path.join(episode_path, 'measurements_' + data_point_id.zfill(5) + '.json'), 'w') as fo:
 
@@ -45,25 +50,26 @@ class Writter(object):
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
 
-
-    def save_experience(self, experience_data):
+    def save_experience(self,   measurements):
 
 
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
 
+        self._write_json_measurements(data_point_id, measurements)
+
+
+    def save_summary(self):
+
         pass
 
 
-    # TODO think about noise
 
     def save_metadata(self, sensors_dictionary=None):
 
-        return
-
-        with open(os.path.join(self._dataset_path, 'metadata.json'), 'w') as fo:
+        with open(os.path.join(self._full_path, 'metadata.json'), 'w') as fo:
             jsonObj = {}
-            jsonObj.update(settings_module.sensors_yaw)
+
             # The full name of the experience ( It can be something different for now we keep the same)
             jsonObj.update({'full_name': None})
             # The sensors dictionary used
@@ -74,58 +80,44 @@ class Writter(object):
             jsonObj.update({'scenarios': None})
 
             # Set of weathers, all the posible
-            jsonObj.update({'set_of_weathers': settings_module.set_of_weathers})
+            jsonObj.update({'set_of_weathers': None})
 
-            # The sensors, full sensors configuration.
-            jsonObj.update({'lateral_noise_percentage': settings_module.lat_noise_percent})
-            jsonObj.update({'longitudinal_noise_percentage': settings_module.long_noise_percent})
-            jsonObj.update({'car range': settings_module.NumberOfVehicles})
-            jsonObj.update({'pedestrian range': settings_module.NumberOfPedestrians})
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
 
 
+    def delete_experience(self):
+        """
+        If the experience was bad, following the scenarios criteria, we may want to delete it.
+        :return:
+        """
+
+        shutil.rmtree(self._full_path)
+
+
+
+    """
+        functions called asynchronously by the thread to write the sensors
+    """
+
+    def write_image(self, image):
+        # TODO ACTUALLY ALL NEED the tage
+
+        pass
+
+    def write_lidar(self, lidar):
+        pass
+
+    def write_gnss(self, gnss):
+        pass
+
+    def write_pseudo(self, pseudo_data, pseudo_tag):
 
 
 
 
-    def write_sensor_data(episode_path, data_point_id, sensor_data, sensors_frequency):
-        try:
-            from PIL import Image as PImage
-        except ImportError:
-            raise RuntimeError(
-                'cannot import PIL, make sure pillow package is installed')
 
-        for name, data in sensor_data.items():
-            if int(data_point_id) % int((1/sensors_frequency[name])) == 0:
-                format = '.png'
-                if 'RGB' in name:
-                    format = '.png'
-                if 'Lidar' in name:
-                    format = '.ply'
-                data.save_to_disk(os.path.join(episode_path, name + '_' + data_point_id.zfill(5)), format)
-
-
-
-
-
-    def add_episode_metadata(dataset_path, episode_number, episode_aspects):
-
-        if not os.path.exists(os.path.join(dataset_path, 'episode_' + episode_number)):
-            os.mkdir(os.path.join(dataset_path, 'episode_' + episode_number))
-
-        with open(os.path.join(dataset_path, 'episode_' + episode_number, 'metadata.json'), 'w') as fo:
-
-            jsonObj = {}
-            jsonObj.update({'number_of_pedestrian': episode_aspects['number_of_pedestrians']})
-            jsonObj.update({'number_of_vehicles': episode_aspects['number_of_vehicles']})
-            jsonObj.update({'seeds_pedestrians': episode_aspects['seeds_pedestrians']})
-            jsonObj.update({'seeds_vehicles': episode_aspects['seeds_vehicles']})
-            jsonObj.update({'weather': episode_aspects['weather']})
-            fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
-
-
-
+    """
     def add_data_point(measurements, control, control_noise, sensor_data, state,
                        dataset_path, episode_number, data_point_id, sensors_frequency):
 
@@ -138,5 +130,4 @@ class Writter(object):
 
     # Delete an episode in the case
     def delete_episode(dataset_path, episode_number):
-
-        shutil.rmtree(os.path.join(dataset_path, 'episode_' + episode_number))
+    """

@@ -12,10 +12,10 @@ from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
-from srunner.challenge.envs.sensor_interface import CallBack, CANBusSensor
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
 
 import expdb.experience.utils.route_configuration_parser as parser
+from expdb.experience.sensors.sensor_interface import CallBack, CANBusSensor
 from expdb.experience.server_manager import ServerManagerDocker
 from expdb.experience.sensors.sensor_interface import SensorInterface
 
@@ -190,7 +190,8 @@ class Experience(object):
                 sensor = self.world.spawn_actor(bp, sensor_transform,
                                                 vehicle)
             # setup callback
-            sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface))
+            sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
+                                   writer=self._writter))
             self._instanced_sensors.append(sensor)
 
         # check that all sensors have initialized their data structure
