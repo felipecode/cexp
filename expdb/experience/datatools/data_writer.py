@@ -43,7 +43,7 @@ class Writter(object):
         for scenario in scenarios_object_list:
 
 
-            scenario_info.update({'name': scenario.__name__})
+            scenario_info.update({'name': scenario.__class____name__})
 
         return scenario_info
 
@@ -70,7 +70,6 @@ class Writter(object):
         :param measurements:
         :return:
         """
-
 
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
