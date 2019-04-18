@@ -49,8 +49,15 @@ class Writter(object):
 
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
-    def _create_scenario_dict(self):
-        pass
+    def _create_scenario_dict(self, scenarios_object_list):
+
+        scenario_info = {}
+        for scenario in scenarios_object_list:
+
+
+            scenario_info.update({'name': scenario.__name__})
+
+        return scenario_info
 
 
 
@@ -88,7 +95,7 @@ class Writter(object):
             # The scenarios used and its configuration, a dictionary with the scenarios and their parameters
             # Should also consider the randomly generate parameters from the scenario
             scenario_dict = self._create_scenario_dict(experience._list_scenarios)
-            jsonObj.update({'scenarios': None})
+            jsonObj.update({'scenarios': scenario_dict})
 
             # Set of weathers, all the posible
             jsonObj.update({'set_of_weathers': None})

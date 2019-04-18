@@ -189,7 +189,7 @@ class CallBack(object):
     # Parsing CARLA physical Sensors
     def _parse_image_cb(self, image, tag, writer):
         if writer is not None:
-            writer.write_image(image)
+            writer.write_image(image, tag)
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
         array = copy.deepcopy(array)  # TODO IS THIS NEEDED  ?
         array = np.reshape(array, (image.height, image.width, 4))
@@ -199,7 +199,7 @@ class CallBack(object):
 
     def _parse_lidar_cb(self, lidar_data, tag, writer):
         if writer is not None:
-            writer.write_lidar(lidar_data)
+            writer.write_lidar(lidar_data, tag)
         points = np.frombuffer(lidar_data.raw_data, dtype=np.dtype('f4'))
         points = copy.deepcopy(points)
         points = np.reshape(points, (int(points.shape[0] / 3), 3))
@@ -207,7 +207,7 @@ class CallBack(object):
 
     def _parse_gnss_cb(self, gnss_data, tag, writer=None):
         if writer is not None:
-            writer.write_gnss(gnss_data)
+            writer.write_gnss(gnss_data, tag)
         array = np.array([gnss_data.latitude,
                           gnss_data.longitude,
                           gnss_data.altitude], dtype=np.float32)
