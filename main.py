@@ -1,4 +1,4 @@
-
+import logging
 
 from expdb.experience.experience import ExperienceBatch
 from expdb.agents.dummy_agent import DummyAgent
@@ -28,3 +28,5 @@ if __name__ == '__main__':
         data = agent.unroll(exp)
 
 
+
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)

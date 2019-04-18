@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import glob
 import py_trees
@@ -88,6 +89,8 @@ class Experience(object):
                                      'measurements': None,
                                      'ego_controls': None,
                                      'scenario_controls': None}
+        logging.debug("Instantiated Experience %s" % self._experience_name)
+
 
 
     def __del__(self):
@@ -135,11 +138,13 @@ class Experience(object):
         # It should also spawn all the sensors
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
         self._sensor_interface = SensorInterface()
-        print (" EGO ACTOR")
-        print (self._ego_actor)
+        print(" EGO ACTOR")
+        print(self._ego_actor)
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
         self._writter.save_metadata()
+
+        logging.debug("Started Experience %s" % self._experience_name)
 
 
 
@@ -296,7 +301,7 @@ class Experience(object):
 
         self._experience_data['scenario_controls'] = controls
 
-
+        print ( " RAN STEP ")
         self._ego_actor.apply_control(controls)
 
         #if self.route_visible:  TODO this is useful debug
@@ -305,7 +310,6 @@ class Experience(object):
         # time continues
         self.world.tick()
         self.timestamp = self.world.wait_for_tick()
-
         if self._save_data:
             self._writter.save_experience(self._experience_data)
 
