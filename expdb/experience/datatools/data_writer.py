@@ -36,18 +36,17 @@ class Writter(object):
     def _build_measurements(self, world):
 
         measurements = {"ego_actor":{},
-                        "opponents":{},
-                        ""
+                        "opponents":{}   # What else ?
                         }
         # All the actors present we save their information
         for actor in world.get_actors():
 
 
-        #
+           pass
 
 
 
-        return {}
+        return measurements
 
     def _create_scenario_dict(self, scenarios_object_list):
 
