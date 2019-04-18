@@ -34,7 +34,7 @@ class Writter(object):
 
     def _write_json_measurements(self, episode_path, measurements, control, scenario_control, state):
 
-        with open(os.path.join(episode_path, 'measurements_' + data_point_id.zfill(5) + '.json'), 'w') as fo:
+        with open(os.path.join(episode_path, 'measurements_' + self._latest_id.zfill(6) + '.json'), 'w') as fo:
 
             jsonObj = MessageToDict(measurements)
             jsonObj.update(state)
@@ -50,13 +50,19 @@ class Writter(object):
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
 
-    def save_experience(self,   measurements):
+    def save_experience(self, measurements):
+        """
+         It is also used to step the current data being written
+        :param measurements:
+        :return:
+        """
 
 
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
 
-        self._write_json_measurements(data_point_id, measurements)
+        self._write_json_measurements( measurements)
+        self._latest_id += 1
 
 
     def save_summary(self):
@@ -112,22 +118,23 @@ class Writter(object):
         pass
 
     def write_pseudo(self, pseudo_data, pseudo_tag):
+        pass
 
 
 
 
 
-    """
-    def add_data_point(measurements, control, control_noise, sensor_data, state,
-                       dataset_path, episode_number, data_point_id, sensors_frequency):
+"""
+def add_data_point(measurements, control, control_noise, sensor_data, state,
+                   dataset_path, episode_number, data_point_id, sensors_frequency):
 
-        episode_path = os.path.join(dataset_path, 'episode_' + episode_number)
-        if not os.path.exists(os.path.join(dataset_path, 'episode_' + episode_number)):
-            os.mkdir(os.path.join(dataset_path, 'episode_' + episode_number))
-        write_sensor_data(episode_path, data_point_id, sensor_data, sensors_frequency)
-        write_json_measurements(episode_path, data_point_id, measurements, control, control_noise,
-                                state)
+    episode_path = os.path.join(dataset_path, 'episode_' + episode_number)
+    if not os.path.exists(os.path.join(dataset_path, 'episode_' + episode_number)):
+        os.mkdir(os.path.join(dataset_path, 'episode_' + episode_number))
+    write_sensor_data(episode_path, data_point_id, sensor_data, sensors_frequency)
+    write_json_measurements(episode_path, data_point_id, measurements, control, control_noise,
+                            state)
 
-    # Delete an episode in the case
-    def delete_episode(dataset_path, episode_number):
-    """
+# Delete an episode in the case
+def delete_episode(dataset_path, episode_number):
+"""
