@@ -57,7 +57,9 @@ class Experience(object):
     number_of_executions = 0
 
     def __init__(self, name, client, exp_config, exp_params):
-
+        # We keep this so we can reset the experience
+        self._exp_config = exp_config
+        self._exp_params = exp_params
         self._batch_size = exp_params['batch_size']
         # if the data is going to be saved for this experience
         self._save_data = exp_params['save_dataset']
@@ -122,7 +124,7 @@ class Experience(object):
 
 
 
-    def reset(self):
+    def stop(self):
         # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
         if self._save_data:
             self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._experience_name))
@@ -133,8 +135,11 @@ class Experience(object):
             settings.synchronous_mode = False
             self.world.apply_settings(settings)
             self.world = None
+        self.__init__(self._experience_name, self._client, self._exp_config, self._exp_params)
 
-        self.__init__(self._experience_name, self)
+    def clean_experience_data(self):
+        # Just in case something happens we clean the data that was collected
+        pass
 
 
     def add_sensors(self, sensors):
@@ -152,7 +157,10 @@ class Experience(object):
         # Otherwise spawn ego vehicle
         return CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
 
-    def start(self):
+    def reset(self):
+        # If the world already exists we need to clean up a bit first.
+        if self.world is not None:
+            self.stop()
         # You load at start since it already put some objects around
         self._load_world()
         # Set the actor pool so the scenarios can prepare themselves when needed
@@ -181,7 +189,12 @@ class Experience(object):
 
         self._writter.save_metadata(self)
 
+        # We tick the scenarios to get them started
+        for scenario in self._list_scenarios:
+            scenario.scenario.scenario_tree.tick_once()
+
         logging.debug("Started Experience %s" % self._experience_name)
+
 
 
 

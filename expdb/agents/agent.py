@@ -32,7 +32,7 @@ class Agent(object):
 
         experience.add_sensors(self.sensors())
         print (" AGENT UNROLLING ")
-        experience.start()  # Make all the scenarios and run them.
+        experience.reset()  # Make all the scenarios and run them.
 
         # experience_data_dict = {}
         while experience.is_running():
@@ -46,7 +46,6 @@ class Agent(object):
             # With this the experience runner also unroll all the scenarios
             experience.run_step(controls)
 
-        experience.destroy()
         #return experience_data_dict
         return None
         #eturn experience.get_data()
