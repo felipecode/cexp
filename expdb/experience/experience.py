@@ -50,9 +50,12 @@ as well as a communication channel with the CARLA servers.
 It also can have additional sensors that are experience related not policy related.
 """
 
-#TODO for now all the writting is made by the experience
+# TODO keep track of how many times each experience is executed and show that.
 
 class Experience(object):
+    # We keep track here the number of times this class was executed.
+    number_of_executions = 0
+
     def __init__(self, name, client, exp_config, exp_params):
 
         self._batch_size = exp_params['batch_size']
@@ -83,7 +86,8 @@ class Experience(object):
         self._list_scenarios = None
         self._master_scenario = None
         # if we are going to save, we keep track of a dictionary with all the data
-        self._writter = Writer(exp_params['package_name'], self._experience_name)
+        self._writter = Writer(exp_params['package_name'], self._experience_name + '_'
+                                                           + str(Experience.number_of_executions))
 
         if self._save_data:
             self._experience_data = {'sensor_data': None,
@@ -96,11 +100,41 @@ class Experience(object):
 
 
 
-    def destroy(self):
-        # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
+    def _cleanup(self, ego=False):
+        """
+        Remove and destroy all actors
+        """
+        # We need enumerate here, otherwise the actors are not properly removed
+        for i, _ in enumerate(self._instanced_sensors):
+            if self._instanced_sensors[i] is not None:
+                self._instanced_sensors[i].stop()
+                self._instanced_sensors[i].destroy()
+                self._instanced_sensors[i] = None
+        self._instanced_sensors = []
 
+        CarlaActorPool.cleanup()
+        CarlaDataProvider.cleanup()
+
+        if ego and self._ego_actor is not None:
+            self._ego_actor.destroy()
+            self._ego_actor = None
+        Experience.number_of_executions += 1
+
+
+
+    def reset(self):
+        # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
         if self._save_data:
             self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._experience_name))
+
+        self._cleanup(True)
+        if self.world is not None:
+            settings = self.world.get_settings()
+            settings.synchronous_mode = False
+            self.world.apply_settings(settings)
+            self.world = None
+
+        self.__init__(self._experience_name, self)
 
 
     def add_sensors(self, sensors):
@@ -326,14 +360,15 @@ class Experience(object):
 
     def get_summary(self):
         # Compile the summary from all the executed scenarios.
-        # THE POLICY WHICH EXECUTED THIS SCENARIO GOES INTO THE ANNOTATIONS OF IT
-        # CHECK IF IT IS READY TO SCORE>
-        # TODO: produce a summary from the experience
+        # TODO THE POLICY WHICH EXECUTED THIS SCENARIO GOES INTO THE ANNOTATIONS OF IT
+        if not self.is_running():
+            return None
+
         return None
 
     def get_measurements_data(self):
         # CHeck what kind of measurments can we get.
-        return None
+        return self._writter._build_measurements(self.world)
 
 
 

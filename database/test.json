@@ -39,11 +39,7 @@
       "pitch": 0.0, "yaw": 0.0,
       "width": 800, "height": 600,
       "fov": 100,
-      "id": "rgb"},
-     {"type": "sensor.can_bus",
-      "reading_frequency": 25,
-      "id": "can_bus"
-      }
+      "id": "rgb"}
 
   ],
 

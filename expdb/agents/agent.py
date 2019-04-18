@@ -48,4 +48,6 @@ class Agent(object):
 
         experience.destroy()
         #return experience_data_dict
+        return None
+        #eturn experience.get_data()
 

@@ -26,6 +26,7 @@ if __name__ == '__main__':
         # by taking the output from the experience.
         agent = DummyAgent()
         data = agent.unroll(exp)
+        agent.destroy()
 
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
