@@ -80,8 +80,10 @@ class Writter(object):
 
     def save_summary(self, statistics):
 
-        with open(os.path.join(self._full_path, 'measurements_' + self._latest_id.zfill(6) + '.json'), 'w') as fo:
-        pass
+        with open(os.path.join(self._full_path, 'summary.json'), 'w') as fo:
+            jsonObj = {}
+            jsonObj.update(statistics)
+            fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
 
 
