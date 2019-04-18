@@ -125,7 +125,7 @@ class Writter(object):
         lidar.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))
 
     # in principle these are not needed.
-    def write_gnss(self, gnss):
+    def write_gnss(self, gnss, tag):
         pass
 
     def write_pseudo(self, pseudo_data, pseudo_tag):

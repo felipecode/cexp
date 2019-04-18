@@ -43,10 +43,7 @@
      {"type": "sensor.can_bus",
       "reading_frequency": 25,
       "id": "can_bus"
-      },
-     {"type": "sensor.other.gnss",
-      "x": 0.7, "y": -0.4, "z": 1.60,
-      "id": "GPS"}
+      }
 
   ],
 
