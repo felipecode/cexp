@@ -17,6 +17,7 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory, c
 
 import expdb.experience.utils.route_configuration_parser as parser
 from expdb.experience.server_manager import ServerManagerDocker
+from expdb.experience.sensors.sensor_interface import SensorInterface
 
 
 from  expdb.experience.datatools.data_writer import  Writter
@@ -106,7 +107,6 @@ class Experience(object):
         # Otherwise spawn ego vehicle
         return CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
 
-
     def start(self):
         # You load at start since it already put some objects around
         self._load_world()
@@ -129,6 +129,7 @@ class Experience(object):
 
         # It should also spawn all the sensors
         # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
+        self._sensor_interface = SensorInterface()
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
         self._writter.save_metadata()
