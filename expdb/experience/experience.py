@@ -22,7 +22,7 @@ from expdb.experience.sensors.sensor_interface import SensorInterface
 from expdb.experience.scorer import record_route_statistics_default
 
 
-from  expdb.experience.datatools.data_writer import  Writter
+from  expdb.experience.datatools.data_writer import  Writer
 
 def find_free_port():
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
@@ -83,7 +83,7 @@ class Experience(object):
         self._list_scenarios = None
         self._master_scenario = None
         # if we are going to save, we keep track of a dictionary with all the data
-        self._writter = Writter(exp_params['package_name'], self._experience_name)
+        self._writter = Writer(exp_params['package_name'], self._experience_name)
 
         if self._save_data:
             self._experience_data = {'sensor_data': None,
@@ -126,7 +126,7 @@ class Experience(object):
         # Get
         CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
-        print (self._route)
+        #print (self._route)
         print ( " ARE GOING TO INTERPOLATE")
         _, self._route = interpolate_trajectory(self.world, self._route)
 
@@ -319,7 +319,8 @@ class Experience(object):
         # Get the sensor data from the policy + the additional sensors data
         sensor_data = self._sensor_interface.get_data()
         if self._save_data:
-            self._experience_data['sensor_data'].append(sensor_data)
+            pass
+            #TODO THIS COULD BE A SYNCH POINT, for synch mode that is not needed
 
         return sensor_data
 
@@ -394,7 +395,6 @@ class ExperienceBatch(object):
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
             self._experiences.append(exp)
-
 
     def __iter__(self):
         if self._experiences is None:

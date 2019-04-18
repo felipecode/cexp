@@ -9,13 +9,13 @@ from google.protobuf.json_format import MessageToJson, MessageToDict
 
 # TODO write expbatch related data.
 
-class Writter(object):
+class Writer(object):
     """
-        Organizing the writting process, note that the sensors are written on a separate thread.
+        Organizing the writing process, note that the sensors are written on a separate thread.
         directly on the sensor interface.
     """
 
-    def __init__(self, dataset_name, exp_name, other_vehicles=True):
+    def __init__(self, dataset_name, exp_name, other_vehicles=False, road_information=False):
 
         if "SRL_DATASET_PATH" not in os.environ:
             raise  ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
@@ -35,16 +35,38 @@ class Writter(object):
 
     def _build_measurements(self, world):
 
-        measurements = {"ego_actor":{},
-                        "opponents":{}   # What else ?
+        measurements = {"ego_actor": {},
+                        "opponents": {},   # Todo add more information on demand, now just ego actor
+                        "lane": {}
                         }
         # All the actors present we save their information
         for actor in world.get_actors():
+            if actor.attributes['role_name'] == 'hero':
+                transform = actor.get_transform()
+                velocity = actor.get_velocity()
+                measurements['ego_actor'].update({
+
+                    "position": [transform.location.x, transform.location.y, transform.location.z],
+                    "orientation": [transform.rotation.roll, transform.rotation.pitch, transform.rotation.yaw],
+                    "velocity": [velocity.x, velocity.y, velocity.z]
+                 }
+                )
 
 
-           pass
 
-
+        # Add other actors and lane information
+        # general actor info
+        # type_id
+        # parent
+        # semantic_tags
+        # is_alive
+        # attributes
+        # get_world()
+        # get_location()
+        # get_transform()
+        # get_velocity()
+        # get_angular_velocity()
+        # get_acceleration()
 
         return measurements
 
@@ -53,12 +75,11 @@ class Writter(object):
         scenario_info = {}
         for scenario in scenarios_object_list:
 
-
             scenario_info.update({'name': scenario.__class__.__name__})
 
         return scenario_info
 
-    def _write_json_measurements(self, measurements, control, scenario_control, state):
+    def _write_json_measurements(self, measurements, control, scenario_control):
         # Build measurements object
 
         with open(os.path.join(self._full_path, 'measurements_' + self._latest_id.zfill(6) + '.json'), 'w') as fo:
@@ -75,7 +96,7 @@ class Writter(object):
 
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
-    def save_experience(self, world, control, scenario_control ):
+    def save_experience(self, world, experience_data):
         """
          It is also used to step the current data being written
         :param measurements:
@@ -84,7 +105,8 @@ class Writter(object):
 
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
-        self._write_json_measurements( self._build_measurements(world), control, scenario_control)
+        self._write_json_measurements(self._build_measurements(world), experience_data['ego_controls'],
+                                      experience_data['scenario_controls'] )
         self._latest_id += 1
 
 
@@ -94,7 +116,6 @@ class Writter(object):
             jsonObj = {}
             jsonObj.update(statistics)
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
-
 
 
     def save_metadata(self, experience):
@@ -126,7 +147,6 @@ class Writter(object):
         """
 
         shutil.rmtree(self._full_path)
-
 
 
     """
