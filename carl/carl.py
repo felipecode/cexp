@@ -1,8 +1,23 @@
+import json
+import carla
+import socket
+from contextlib import closing
+
+from carl.experience.server_manager import ServerManagerDocker
+from carl.experience.experience import Experience
+import carl.experience.datatools.data_parser as parser
+
+
+def find_free_port():
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
+        s.bind(('', 0))
+        return s.getsockname()[1]
 
 
 class CARL(object):
     """
-    It is a batch of instanced exp files that can be iterated to have instanced experiments to get
+    THE main CARL module.
+    It contains a batch of instanced exp files that can be iterated to have instanced experiments to get
     """
 
     def __init__(self, jsonfile, params, iterations_to_execute, batch_size):

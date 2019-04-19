@@ -1,11 +1,7 @@
 import json
 import logging
 import os
-import glob
 import py_trees
-import random
-import socket
-from contextlib import closing
 import carla
 
 # We use the scenario runner directly
@@ -15,19 +11,12 @@ from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfigur
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
 
-import carl.experience.utils.route_configuration_parser as parser
 from carl.experience.sensors.sensor_interface import CallBack, CANBusSensor
-from carl.experience.server_manager import ServerManagerDocker
 from carl.experience.sensors.sensor_interface import SensorInterface
 from carl.experience.scorer import record_route_statistics_default
 
 
-from  carl.experience.datatools.data_writer import  Writer
-
-def find_free_port():
-    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
-        s.bind(('', 0))
-        return s.getsockname()[1]
+from carl.experience.datatools.data_writer import Writer
 
 
 def convert_transform_to_location(transform_vec):
@@ -339,7 +328,7 @@ class Experience(object):
 
         self._experience_data['scenario_controls'] = controls
 
-        print ( " RAN STEP ")
+        #print ( " RAN STEP ")
         self._ego_actor.apply_control(controls)
 
         #if self.route_visible:  TODO this is useful debug
