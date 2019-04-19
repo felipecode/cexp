@@ -9,7 +9,7 @@ from carl.agents.pg_agent import PGAgent
 if __name__ == '__main__':
 
     # A single loop being made
-    json = 'database/test.json'
+    json = 'database/sample_json.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'docker_name': 'carlalatest:latest',
