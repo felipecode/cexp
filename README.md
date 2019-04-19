@@ -1,5 +1,5 @@
-###  DCLXVI  
-#### Driving CarLa eXperience conVIncer
+
+#### CARL CARLA Reinforcement Learning Framework
 
 This  repository serves for collecting experience at CARLA using the scenarios
 platform of the CARLA challenge. It allows easy data collection in a policy "unroll" interface used
