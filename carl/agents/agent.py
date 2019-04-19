@@ -14,9 +14,22 @@ class Agent(object):
         """
         pass
 
-    def destroy(self):
+    def make_reward(self, vehicle, sensors, scenarios, route):
         """
-        Destroy (clean-up) the agent
+        Return the reward for a given step. Must be implemented by some inherited class
+        :param measurements:
+        :param sensors:
+        :param scenarios:
+        :return:
+        """
+        pass
+
+    def make_state(self, vehicle, sensors, scenarios, route):
+        """
+        for a given step of the run return the current relevant state for
+        :param measurements:
+        :param sensors:
+        :param scenarios:
         :return:
         """
         pass
@@ -27,24 +40,38 @@ class Agent(object):
 
         return sensors_vec
 
+    def reinforce(self, rewards):
+        # Should contain the  weight update algorithm if the agent uses it.
+
+        pass
+
+    def destroy(self):
+        """
+        Destroy (clean-up) the agent
+        :return:
+        """
+        pass
+
     def unroll(self, experience):
-        # unroll a full episode for the agent. This produces an experience, that can be used directly for learning.
+        """
+         unroll a full episode for the agent. This produces an state and reward vectors
+         that are defined by the agent, that can be used directly for learning.
+        """
 
         experience.add_sensors(self.sensors())
-        sensor_data, measurements, state = experience.reset()  # Make all the scenarios and run them.
+        # You reset the scenario with and pass the make reward functions that are going to be used on the training.
+        state, reward = experience.reset(self.make_reward, self.make_state)
 
-        # experience_data_dict = {}
+        # Start the rewards and state vectors used
+        reward_vec = []
+        state_vec = []
+
         while experience.is_running():
-            # update all scenarios
-
-            # sensor_data = experience.get_sensor_data()
-            # measurements = experience.get_measurements_data()  #MEASUREMENTS CAN BE JOINED
-
-            controls = self.run_step(sensor_data)
+            controls = self.run_step(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = experience.run_step(controls)
 
-        #return experience_data_dict
-        return None
-        #eturn experience.get_data()
+            reward_vec.append(reward)
+            state_vec.append(state)
 
+        return state_vec, reward_vec

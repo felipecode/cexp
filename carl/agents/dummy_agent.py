@@ -5,6 +5,27 @@ import carla
 class DummyAgent(Agent):
 
 
+    def make_reward(self, measurements, sensors, scenarios):
+        """
+        Return the reward for a given step. Must be implemented by some inherited class
+        :param measurements:
+        :param sensors:
+        :param scenarios:
+        :return:
+        """
+        return None
+
+    def make_state(self, measurements, sensors, scenarios):
+        """
+        for a given run.Must be implemented by some inherited class
+        :param measurements:
+        :param sensors:
+        :param scenarios:
+        :return:
+        """
+
+        return None
+
     def run_step(self, input_data):
         print("=====================>")
         for key, val in input_data.items():
