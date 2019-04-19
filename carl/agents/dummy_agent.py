@@ -1,5 +1,5 @@
 
-from expdb.agents.agent import Agent
+from carl.agents.agent import Agent
 import carla
 
 class DummyAgent(Agent):

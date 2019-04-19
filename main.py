@@ -1,7 +1,7 @@
 import logging
 
-from expdb.experience.experience import ExperienceBatch
-from expdb.agents.dummy_agent import DummyAgent
+from carl.experience.experience import ExperienceBatch
+from carl.agents.dummy_agent import DummyAgent
 
 ###
 # TODO MAKE SCENARIO ASSIGMENT DETERMINISTIC
