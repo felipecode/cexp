@@ -19,7 +19,7 @@ def convert_transform_to_location(transform_vec):
 # TODO ADD CARLA LOGGING
 class Experience(object):
 
-    def __init__(self, client, vehicle_model, start_transform, sensors, writter):
+    def __init__(self, client, vehicle_model, route, sensors, save_data=False):
         """
         The environment contains all the objects (vehicles, sensors) and scenarios of the the current experience
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
@@ -32,11 +32,14 @@ class Experience(object):
         self._client = client
 
         self._vehicle_model = vehicle_model
+
+        # Sensor interface, a buffer that contains all the read sensors
         self._sensor_interface = SensorInterface()
-        # We pass again the writter object so the sensors can write when necessary.
-        self._writter = writter
+
         # We instance the ego actor object
-        self._spawn_ego_car(start_transform)
+        _, self._route = interpolate_trajectory(self.world, self._route)
+
+        self._spawn_ego_car(route[0][0])
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
         # Load the world
@@ -53,6 +56,18 @@ class Experience(object):
         self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
         self._list_scenarios = [self._master_scenario]
+
+        if self._save_data:
+            # if we are going to save, we keep track of a dictionary with all the data
+            self._writter = Writer(exp_params['package_name'], self._environment_name + '_'
+                                   + str(Environment.number_of_executions))
+            self._environment_data = {'sensor_data': None,
+                                      'measurements': None,
+                                      'ego_controls': None,
+                                      'scenario_controls': None}
+        else:
+            self._writter = None
+
 
     def tick_scenarios(self):
 

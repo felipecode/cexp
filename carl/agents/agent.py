@@ -34,10 +34,19 @@ class Agent(object):
         """
         pass
 
+    def _make_state_batch(self, exp_vec):
+        state_vec = []
+        for exp in exp_vec:
+            state_vec.append(self.make_state(exp))
+
+    def _make_state_batch(self, exp_vec):
+        state_vec = []
+        for exp in exp_vec:
+            state_vec.append(self.make_state(exp))
+
     def sensors(self):
 
         sensors_vec = []
-
         return sensors_vec
 
     def reinforce(self, rewards):
@@ -66,7 +75,7 @@ class Agent(object):
         reward_vec = []
         state_vec = []
         count = 0
-        while count < 10:#experience.is_running():
+        while count < 10:  #experience.is_running():
             controls = self.run_step(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = experience.run_step(controls)
