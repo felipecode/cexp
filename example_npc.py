@@ -22,9 +22,8 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-
     exp_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
-                                                                                   # to load CARLA and the scenarios are made
+                                                                                 # to load CARLA and the scenarios are made
     # Here some docker was set
     exp_batch.start()
 
