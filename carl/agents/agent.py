@@ -81,7 +81,7 @@ class Agent(object):
 
         environment.add_sensors(self.sensors())
         # You reset the scenario with and pass the make reward functions that are going to be used on the training.
-        state, reward = environment.reset(self.make_state, self.make_reward)
+        state, reward = environment.reset(self._make_state_batch, self._make_reward_batch)
         # Start the rewards and state vectors used
         reward_vec = []
         state_vec = []
