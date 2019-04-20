@@ -42,6 +42,12 @@ class Environment(object):
         # Load the world
         self._load_world()
 
+
+        self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
+        #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
+        self._list_scenarios = [self._master_scenario]
+
+
     def _spawn_ego_car(self, start_transform):
         """
         Spawn or update all scenario actors according to
