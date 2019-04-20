@@ -6,7 +6,7 @@ import os
 from contextlib import closing
 
 from carl.experience.server_manager import ServerManagerDocker
-from carl.experience.experience import Experience
+from carl.experience.experience import Environment
 import carl.experience.utils.route_configuration_parser as parser
 
 
@@ -70,7 +70,7 @@ class CARL(object):
         # For all the experiences on the file.
         for exp_name in self._json['exps'].keys():
             # Instance an experience.
-            exp = Experience(exp_name, self._client, parserd_exp_dict[exp_name], exp_params)
+            exp = Environment(exp_name, self._client, parserd_exp_dict[exp_name], exp_params)
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
             self._experiences.append(exp)

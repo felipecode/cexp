@@ -208,16 +208,18 @@ class PGAgent(Agent):
         R = 0
         # running_reward = (10 * 0.99) + (self._iteration * 0.01)
         # Discount future rewards back to the present using gamma
+        discount_rewards = []
         for r in rewards[::-1]:
             R = r + self._policy.gamma * R
-            rewards.insert(0, R)
+            discount_rewards.insert(0, R)
 
         # Scale rewards
-        rewards = torch.FloatTensor(rewards)
-        rewards = (rewards - rewards.mean()) / (rewards.std() + np.finfo(np.float32).eps)
+        discount_rewards = torch.FloatTensor(discount_rewards)
+        discount_rewards = (discount_rewards - discount_rewards.mean()) /\
+                           (discount_rewards.std() + np.finfo(np.float32).eps)
 
         # Calculate loss
-        loss = (torch.sum(torch.mul(self._policy.policy_history, Variable(rewards)).mul(-1), -1))
+        loss = (torch.sum(torch.mul(self._policy.policy_history, Variable(discount_rewards)).mul(-1), -1))
 
         # Update network weights
         self._optimizer.zero_grad()
@@ -226,9 +228,8 @@ class PGAgent(Agent):
 
         # Save and initialize episode history counters
         self._policy.loss_history.append(loss.data.item())
-        self._policy.reward_history.append(np.sum(self._policy.reward_episode))
+        self._policy.reward_history.append(np.sum(rewards))
         self._policy.policy_history = Variable(torch.Tensor())
-        self._policy.reward_episode = []
 
 
     def destroy(self):
