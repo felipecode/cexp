@@ -24,6 +24,11 @@ class Agent(object):
         """
         pass
 
+    def _make_reward_batch(self, exp_vec):
+        state_vec = []
+        for exp in exp_vec:
+            state_vec.append(self.make_state(exp))
+
     def make_state(self, vehicle, sensors, scenarios, route):
         """
         for a given step of the run return the current relevant state for
@@ -33,11 +38,6 @@ class Agent(object):
         :return:
         """
         pass
-
-    def _make_state_batch(self, exp_vec):
-        state_vec = []
-        for exp in exp_vec:
-            state_vec.append(self.make_state(exp))
 
     def _make_state_batch(self, exp_vec):
         state_vec = []
@@ -76,7 +76,7 @@ class Agent(object):
         state_vec = []
         count = 0
         while count < 10:  #experience.is_running():
-            controls = self.run_step(state)
+            controls = self.run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = experience.run_step(controls)
 

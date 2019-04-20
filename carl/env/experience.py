@@ -1,11 +1,19 @@
 import carla
 
+from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
-from carl.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
-
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
+
+
+from carl.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
+from carl.env.scorer import record_route_statistics_default
+
+
+from carl.env.datatools.data_writer import Writer
+
+from carl.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
 
 def convert_transform_to_location(transform_vec):
 
@@ -19,11 +27,14 @@ def convert_transform_to_location(transform_vec):
 # TODO ADD CARLA LOGGING
 class Experience(object):
 
-    def __init__(self, client, vehicle_model, route, sensors, save_data=False):
+    def __init__(self, client, vehicle_model, route, sensors, exp_params, save_data=False):
         """
-        The environment contains all the objects (vehicles, sensors) and scenarios of the the current experience
+        The experience is like a instance of the environment
+         contains all the objects (vehicles, sensors) and scenarios of the the current experience
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
         """
+        # this parameter sets all the sensor threads and the main thread into saving data
+        self._save_data = save_data
         # Start objects that are going to be created
         self.world = None
         self._ego_actor = None
@@ -59,8 +70,8 @@ class Experience(object):
 
         if self._save_data:
             # if we are going to save, we keep track of a dictionary with all the data
-            self._writter = Writer(exp_params['package_name'], self._environment_name + '_'
-                                   + str(Environment.number_of_executions))
+            self._writter = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
+                                   exp_params['exp_number'])
             self._environment_data = {'sensor_data': None,
                                       'measurements': None,
                                       'ego_controls': None,
@@ -88,6 +99,24 @@ class Experience(object):
             scenario.scenario.scenario_tree.tick_once()
             controls = scenario.change_control(controls)
 
+        self._environment_data['ego_controls'] = controls
+        return controls
+
+
+    def apply_control(self, controls):
+
+        self._environment_data['scenario_controls'] = controls
+        self._ego_actor.apply_control(controls)
+
+
+    def tick_world(self):
+
+        self.world.tick()
+        self.timestamp = self.world.wait_for_tick()
+
+
+        if self._save_data:
+             self._writter.save_environment(self.world, self._environment_data)
     """
         FUNCTIONS FOR BUILDING 
     """

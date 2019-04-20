@@ -49,9 +49,9 @@ class Environment(object):
         # We keep this so we can reset the environment
         self._exp_config = exp_config
         self._env_params = env_params
-        self._batch_size = exp_params['batch_size']
+        self._batch_size = env_params['batch_size']
         # if the data is going to be saved for this environment
-        self._save_data = exp_params['save_dataset']
+        self._save_data = env_params['save_dataset']
         # the name of this experience object
         self._environment_name = name
         # We have already a connection object to a CARLA server
@@ -155,7 +155,7 @@ class Environment(object):
         # Set the world for the global data provider
         #CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
-        print ( " ARE GOING TO INTERPOLATE")
+
         #_, self._route = interpolate_trajectory(self.world, self._route)
 
         # Spawn the ego vehicle.
@@ -180,8 +180,6 @@ class Environment(object):
         for exp in self._exp_list:
             exp.tick_scenarios()
         # We tick the scenarios to get them started
-        for scenario in self._list_scenarios:   # TODO ENVIRONMENT FUNCTION TO TICK SCENARIOS ( IN A LOOP )
-            scenario.scenario.scenario_tree.tick_once()
 
         logging.debug("Started Environment %s" % self._environment_name)
 
@@ -226,38 +224,43 @@ class Environment(object):
 
         return self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.RUNNING
 
-    def run_step(self, controls):
+    def run_step(self, control_vec):
         # TODO for in all the environments
         if self._ego_actor is None:
             raise ValueError("Applying control without ego-actor spawned.")
         # Basically apply the controls to the ego actor.
 
-        self._environment_data['ego_controls'] = controls
-        # update all scenarios
-        GameTime.on_carla_tick(self.timestamp)
-        CarlaDataProvider.on_carla_tick()
-        # update all scenarios
-        for scenario in self._list_scenarios: #
-            scenario.scenario.scenario_tree.tick_once()
-            controls = scenario.change_control(controls)
+        #self._environment_data['ego_controls'] = controls
 
-        self._environment_data['scenario_controls'] = controls
+        # update all scenarios
+        for i in range(len(self._exp_list)):
+            exp = self._exp_list[i]
+            control = control_vec[i]
+            control = exp.tick_scenarios_control(control)
+            exp.apply_control(control)
+            exp.tick_world()
 
-        print ( " RAN STEP ")
-        self._ego_actor.apply_control(controls)
+        #for exp in self._exp_list:
+        #    control = exp.tick_scenarios_control()
+        #    exp.apply_control(control)
+
+
+        #self._environment_data['scenario_controls'] = controls
+
+       # print ( " RAN STEP ")
+        #self._ego_actor.apply_control(controls)
 
         #if self.route_visible:  TODO this is useful debug
         #    self.draw_waypoints(trajectory,
         #                        vertical_shift=1.0, persistency=scenario.timeout)
         # time continues
-        self.world.tick()
-        self.timestamp = self.world.wait_for_tick()
 
-        if self._save_data:
-            self._writter.save_environment(self.world, self._environment_data)
 
-        return self.StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
-               self.RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)
+        # if self._save_data:
+        #     self._writter.save_environment(self.world, self._environment_data)
+
+        return self.StateFunction(self._exp_list), \
+               self.RewardFunction(self._exp_list)
 
     """ interface methods """
     def get_sensor_data(self):
