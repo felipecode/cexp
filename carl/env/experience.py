@@ -249,7 +249,7 @@ class Experience(object):
         """
         pass
 
-    def _cleanup(self, ego=False):
+    def cleanup(self, ego=False):
         """
         Remove and destroy all actors
         """

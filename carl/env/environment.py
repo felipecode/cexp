@@ -67,7 +67,7 @@ class Environment(object):
         Remove and destroy all actors
         """
         for exp in self._exp_list:
-            exp._cleanup()
+            exp.cleanup()
         Environment.number_of_executions += 1
 
     def stop(self):
@@ -109,7 +109,7 @@ class Environment(object):
 
         if Environment.number_of_executions == 0:  # if it is the first time we execute this env
             # we use one of the experimebnts
-            self._exp_list[0]._writter.save_metadata(self)
+            self._exp_list[0]._writer.save_metadata(self)
 
         for exp in self._exp_list:
             exp.tick_scenarios()
@@ -168,9 +168,8 @@ class Environment(object):
             exp.apply_control(control)
             exp.tick_world()
 
-
         return self.StateFunction(self._exp_list), \
-               self.RewardFunction(self._exp_list)
+                 self.RewardFunction(self._exp_list)
 
     """ interface methods """
     """
