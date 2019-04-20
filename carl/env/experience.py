@@ -39,8 +39,8 @@ class Experience(object):
             self._exp_params = exp_params
             # carla recorder mode save the full carla logs to do some replays
             client.start_recorder('env_{}_number_{}_batch_{:0>4d}.log'.format(self._exp_params['env_name'],
-                                                                       self._exp_params['env_number'],
-                                                                       self._exp_params['exp_number']))
+                                                                              self._exp_params['env_number'],
+                                                                              self._exp_params['exp_number']))
             # this parameter sets all the sensor threads and the main thread into saving data
             self._save_data = save_data
             # Start objects that are going to be created
@@ -125,7 +125,7 @@ class Experience(object):
         self.timestamp = self.world.wait_for_tick()
 
         if self._save_data:
-             self._writer.save_environment(self.world, self._environment_data)
+             self._writer.save_experience(self.world, self._environment_data)
 
 
     def is_running(self):
