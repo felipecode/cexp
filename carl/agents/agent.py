@@ -61,7 +61,6 @@ class Agent(object):
         experience.add_sensors(self.sensors())
         # You reset the scenario with and pass the make reward functions that are going to be used on the training.
         state, reward = experience.reset(self.make_reward, self.make_state)
-
         # Start the rewards and state vectors used
         reward_vec = []
         state_vec = []

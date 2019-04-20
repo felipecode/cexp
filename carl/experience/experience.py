@@ -141,7 +141,7 @@ class Experience(object):
         # Otherwise spawn ego vehicle
         return CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
 
-    def reset(self):
+    def reset(self, RewardFunction, StateFunction):
         # If the world already exists we need to clean up a bit first.
         if self.world is not None:
             self.stop()
@@ -178,6 +178,8 @@ class Experience(object):
 
         logging.debug("Started Experience %s" % self._experience_name)
 
+        return RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
+               StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)
 
     # TODO USE THIS GET DATA DIRECTLY
     def get_data(self):   # TODO: The data you might want for an experience is needed
