@@ -76,21 +76,25 @@ class Experience(object):
         # The scenarios running
         self._list_scenarios = None
         self._master_scenario = None
-        # if we are going to save, we keep track of a dictionary with all the data
-        self._writter = Writer(exp_params['package_name'], self._experience_name + '_'
-                                                           + str(Experience.number_of_executions))
+
 
         if self._save_data:
+            # if we are going to save, we keep track of a dictionary with all the data
+            self._writter = Writer(exp_params['package_name'], self._experience_name + '_'
+                                   + str(Experience.number_of_executions))
             self._experience_data = {'sensor_data': None,
                                      'measurements': None,
                                      'ego_controls': None,
                                      'scenario_controls': None}
+        else:
+            self._writter = None
+
         # the name of the package this exp is into
         self._package_name = exp_params['package_name']
         logging.debug("Instantiated Experience %s" % self._experience_name)
         # functions defined by the policy to compute the adequate state and rewards based on CARLA data
-        self.RewardFunction = None
         self.StateFunction = None
+        self.RewardFunction = None
 
     def _cleanup(self, ego=False):
         """
@@ -126,6 +130,7 @@ class Experience(object):
         self.__init__(self._experience_name, self._client, self._exp_config, self._exp_params)
 
     def clean_experience_data(self):
+        # TODO for every single different environment...
         # Just in case something happens we clean the data that was collected
         pass
 
@@ -144,10 +149,10 @@ class Experience(object):
         # Otherwise spawn ego vehicle
         return CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
 
-    def reset(self, RewardFunction, StateFunction):
+    def reset(self, StateFunction, RewardFunction):
         # set the state and reward functions to be used on this episode
-        self.RewardFunction = RewardFunction
         self.StateFunction = StateFunction
+        self.RewardFunction = RewardFunction
 
         # If the world already exists we need to clean up a bit first.
         if self.world is not None:
@@ -185,8 +190,9 @@ class Experience(object):
 
         logging.debug("Started Experience %s" % self._experience_name)
 
-        return RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
-               StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)
+        return StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
+               RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)
+
 
     # TODO USE THIS GET DATA DIRECTLY
     def get_data(self):   # TODO: The data you might want for an experience is needed
@@ -302,19 +308,8 @@ class Experience(object):
         settings.synchronous_mode = True
         self.world.apply_settings(settings)
 
-
-    def build_scenario_instances(self, scenario_definition_vec, town_name):
-
-        # TODO FOR NOW THERE IS NO SCENARIOS, JUST ROUTE,
-        """
-            Based on the parsed route and possible scenarios, build all the scenario classes.
-        :param scenario_definition_vec: the dictionary defining the scenarios
-        :param town: the town where scenarios are going to be
-        :return:
-        """
-        pass
-
     def is_running(self):
+        # TODO this function should synchronize with all the instanced environment.
         """
             The master scenario tests if the route is still running.
         """
@@ -352,8 +347,8 @@ class Experience(object):
         if self._save_data:
             self._writter.save_experience(self.world, self._experience_data)
 
-        return self.RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
-               self.StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)
+        return self.StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
+               self.RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)
 
     """ interface methods """
     def get_sensor_data(self):
