@@ -24,7 +24,6 @@ def convert_transform_to_location(transform_vec):
 
     return location_vec
 
-# TODO for batch sizes bigger than 1 the environment is repeated
 
 class Experience(object):
 
@@ -53,16 +52,17 @@ class Experience(object):
         self._sensor_interface = SensorInterface()
         # Load the world
         self._load_world()
+        # Set the actor pool so the scenarios can prepare themselves when needed
+        CarlaActorPool.set_world(self.world)
+        # Set the world for the global data provider
+        CarlaDataProvider.set_world(self.world)
         # We instance the ego actor object
         _, self._route = interpolate_trajectory(self.world, route)
 
         self._spawn_ego_car(self._route[0][0])
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
-        # Set the actor pool so the scenarios can prepare themselves when needed
-        CarlaActorPool.set_world(self.world)
-        # Set the world for the global data provider
-        CarlaDataProvider.set_world(self.world)
+
         # Data for building the master scenario
         self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario

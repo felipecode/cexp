@@ -26,13 +26,17 @@ if __name__ == '__main__':
     exp_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
                                                                                    # to load CARLA and the scenarios are made
     # Here some docker was set
-    exp_batch.start()
+    exp_batch.start(no_server =True)  # no carla server mode.
 
     for exp in exp_batch:
-        env_data = exp.get_data()
-        exp_data in da
-        for data_point
-        il_agent.update()
-        agent.reinforce(rewards)
+        # it can be personalized to return different types of data.
+        env_data = exp.get_data()  # returns a basically a way to read all the data properly
+        # for now it basically returns a big vector containing all the
+        for data_point in env_data:
+            pass
+            #env_data[['measurements']  -> has all the measurements
+            #env_data['rgb'] --> You can access the sensors directly by their ids.
+
+
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
