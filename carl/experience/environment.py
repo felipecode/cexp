@@ -1,25 +1,42 @@
 import carla
 
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
-from carl.experience.sensors.sensor_interface import CANBusSensor, CallBack
+from carl.experience.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
 
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 
-class Environment():
-    def __init__(self, vehicle_model ):
-        """
 
+def convert_transform_to_location(transform_vec):
+
+    location_vec = []
+    for transform_tuple in transform_vec:
+        location_vec.append((transform_tuple[0].location, transform_tuple[1]))
+
+    return location_vec
+
+
+
+class Environment(object):
+
+    def __init__(self, world, vehicle_model, start_transform, sensors, writter):
+        """
+        The environment contains all the objects (vehicles, sensors) and scenarios of the the current experience
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
         """
 
+        self.world = world
+        self._vehicle_model = vehicle_model
+        self._sensor_interface = SensorInterface()
+        # We pass again the writter object so the sensors can write when necessary.
+        self._writter = writter
 
-        self.world
-        self._vehicle_model
-        self._instanced_sensors
+        self._ego_actor = self._spawn_ego_car(start_transform)
+
+        self._instanced_sensors = self._setup_sensors(sensors, self._ego_actor)
 
 
-    def spawn_ego_car(self, start_transform):
+    def _spawn_ego_car(self, start_transform):
         """
         Spawn or update all scenario actors according to
         a certain start position.
@@ -30,7 +47,7 @@ class Environment():
 
 
 
-    def setup_sensors(self, sensors, vehicle):
+    def _setup_sensors(self, sensors, vehicle):
         """
         Create the sensors defined by the user and attach them to the ego-vehicle
         :param sensors: list of sensors
@@ -127,6 +144,27 @@ class Environment():
         :return:
         """
         pass
+
+    def _cleanup(self, ego=False):
+        """
+        Remove and destroy all actors
+        """
+        # We need enumerate here, otherwise the actors are not properly removed
+        for i, _ in enumerate(self._instanced_sensors):
+            if self._instanced_sensors[i] is not None:
+                self._instanced_sensors[i].stop()
+                self._instanced_sensors[i].destroy()
+                self._instanced_sensors[i] = None
+        self._instanced_sensors = []
+
+        CarlaActorPool.cleanup()
+        CarlaDataProvider.cleanup()
+
+        if ego and self._ego_actor is not None:
+            self._ego_actor.destroy()
+            self._ego_actor = None
+        Experience.number_of_executions += 1
+
 
     def destroy(self):
         """

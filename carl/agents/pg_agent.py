@@ -156,7 +156,7 @@ class PGAgent(Agent):
 
         return control
 
-    def make_reward(self):
+    def make_reward(self, vehicle, sensors, scenarios, route):
         """
         Basic reward that basically returns 1.0 for when the agent is alive and zero otherwise.
         :return: 1.0
