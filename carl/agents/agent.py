@@ -35,6 +35,7 @@ class Agent(object):
     def _make_reward_batch(self, exp_vec):
         reward_vec = []
         for exp in exp_vec:
+            if exp.is_running()
             reward_vec.append(self.make_reward(exp))
         return reward_vec
 
@@ -84,7 +85,7 @@ class Agent(object):
         reward_vec = []
         state_vec = []
         count = 0
-        while count < 10:  #experience.is_running():
+        while environment.is_running():
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = environment.run_step(controls)

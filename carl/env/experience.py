@@ -1,4 +1,5 @@
 import carla
+import py_trees
 
 from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
@@ -58,14 +59,12 @@ class Experience(object):
         self._spawn_ego_car(self._route[0][0])
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
-
-
         # Set the actor pool so the scenarios can prepare themselves when needed
         CarlaActorPool.set_world(self.world)
         # Set the world for the global data provider
         CarlaDataProvider.set_world(self.world)
-
-        self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])  # Data for building the master scenario
+        # Data for building the master scenario
+        self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
         self._list_scenarios = [self._master_scenario]
 
@@ -118,6 +117,16 @@ class Experience(object):
 
         if self._save_data:
              self._writter.save_environment(self.world, self._environment_data)
+
+
+    def is_running(self):
+        """
+            The master scenario tests if the route is still running for this experiment
+        """
+        if self._master_scenario is None:
+            raise ValueError('You should not run a route without a master scenario')
+
+        return self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.RUNNING
 
     """
         FUNCTIONS FOR BUILDING 

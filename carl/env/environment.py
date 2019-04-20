@@ -1,21 +1,8 @@
 import json
 import logging
 import os
-import py_trees
-import carla
 
-# We use the scenario runner directly
-from srunner.scenariomanager.timer import GameTime, TimeOut
-from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
-from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
-from srunner.scenarios.master_scenario import MasterScenario
-from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
-
-from carl.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
-from carl.env.scorer import record_route_statistics_default
 from carl.env.experience import Experience
-
-from carl.env.datatools.data_writer import Writer
 
 
 def convert_transform_to_location(transform_vec):
@@ -160,26 +147,19 @@ class Environment(object):
 
         return full_episode_data_dict
 
-
     def is_running(self):
-        # TODO this function should synchronize with all the instanced environment.
         """
             The master scenario tests if the route is still running.
         """
-        for
-        if self._master_scenario is None:
-            raise ValueError('You should not run a route without a master scenario')
-
-        return self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.RUNNING
+        for exp in self._exp_list:
+            if exp.is_running():  # If any exp is still running then this environment is still on.
+                return True
+        # if no exp is running then the environment is already done
+        return False
 
     def run_step(self, control_vec):
-        # TODO for in all the environments
-        if self._ego_actor is None:
-            raise ValueError("Applying control without ego-actor spawned.")
-        # Basically apply the controls to the ego actor.
 
-        #self._environment_data['ego_controls'] = controls
-
+        # Run the loop for all the experiments on the batch.
         # update all scenarios
         for i in range(len(self._exp_list)):
             exp = self._exp_list[i]
@@ -188,29 +168,12 @@ class Environment(object):
             exp.apply_control(control)
             exp.tick_world()
 
-        #for exp in self._exp_list:
-        #    control = exp.tick_scenarios_control()
-        #    exp.apply_control(control)
-
-
-        #self._environment_data['scenario_controls'] = controls
-
-       # print ( " RAN STEP ")
-        #self._ego_actor.apply_control(controls)
-
-        #if self.route_visible:  TODO this is useful debug
-        #    self.draw_waypoints(trajectory,
-        #                        vertical_shift=1.0, persistency=scenario.timeout)
-        # time continues
-
-
-        # if self._save_data:
-        #     self._writter.save_environment(self.world, self._environment_data)
 
         return self.StateFunction(self._exp_list), \
                self.RewardFunction(self._exp_list)
 
     """ interface methods """
+    """
     def get_sensor_data(self):
 
         # Get the sensor data from the policy + the additional sensors data
@@ -232,7 +195,7 @@ class Environment(object):
     def get_measurements_data(self):
         # CHeck what kind of measurments can we get.
         return self._writter._build_measurements(self.world)
-
+    """
 
 
 
