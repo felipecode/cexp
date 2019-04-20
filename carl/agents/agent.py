@@ -65,8 +65,6 @@ class Agent(object):
         reward_vec = []
         state_vec = []
 
-        print (" Got state ", state)
-
         while experience.is_running():
             controls = self.run_step(state)
             # With this the experience runner also unroll all the scenarios

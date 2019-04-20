@@ -5,7 +5,7 @@ from carl.experience.sensors.sensor_interface import CANBusSensor, CallBack, Sen
 
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
-
+from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
 
 def convert_transform_to_location(transform_vec):
 
@@ -42,11 +42,28 @@ class Environment(object):
         # Load the world
         self._load_world()
 
+        # Set the actor pool so the scenarios can prepare themselves when needed
+        CarlaActorPool.set_world(self.world)
+        # Set the world for the global data provider
+        CarlaDataProvider.set_world(self.world)
+        # We make the route less coarse and with the necessary turns
+        print ( " ARE GOING TO INTERPOLATE")
+        _, self._route = interpolate_trajectory(self.world, self._route)
 
         self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
         self._list_scenarios = [self._master_scenario]
 
+    def tick_scenarios(self):
+
+        # We tick the scenarios to get them started
+        for scenario in self._list_scenarios:
+            scenario.scenario.scenario_tree.tick_once()
+
+
+    """
+        FUNCTIONS FOR BUILDING 
+    """
 
     def _spawn_ego_car(self, start_transform):
         """
@@ -176,7 +193,6 @@ class Environment(object):
         if ego and self._ego_actor is not None:
             self._ego_actor.destroy()
             self._ego_actor = None
-        Experience.number_of_executions += 1
 
 
     def destroy(self):

@@ -182,10 +182,10 @@ class Experience(object):
         self._sensor_interface = SensorInterface()
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
-        self._writter.save_metadata(self)
+        self._writter.save_metadata(self) # TODO here is environmen
 
         # We tick the scenarios to get them started
-        for scenario in self._list_scenarios:
+        for scenario in self._list_scenarios:   # TODO ENVIRONMENT FUNCTION TO TICK SCENARIOS ( IN A LOOP )
             scenario.scenario.scenario_tree.tick_once()
 
         logging.debug("Started Experience %s" % self._experience_name)
