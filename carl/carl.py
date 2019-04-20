@@ -44,7 +44,7 @@ class CARL(object):
         self._experiences = None
         # Starting the number of iterations that are going to be ran.
         self._iterations_to_execute = iterations_to_execute
-        self._client = None
+        self._client_vec = None
 
     def start(self):
         # TODO: this setup is hardcoded for Batch_size == 1
@@ -53,8 +53,8 @@ class CARL(object):
         for env in self._environment_batch:
             env.reset(port=free_port)
         # setup world and client assuming that the CARLA server is up and running
-        self._client = carla.Client('localhost', free_port)
-        self._client.set_timeout(self.client_timeout)
+        self._client_vec = [carla.Client('localhost', free_port)]
+        self._client_vec[0].set_timeout(self.client_timeout)
         # Create the configuration dictionary of the exp batch to pass to all experiements
         exp_params = {
             'batch_size': self._batch_size,
@@ -70,7 +70,7 @@ class CARL(object):
         # For all the experiences on the file.
         for exp_name in self._json['exps'].keys():
             # Instance an experience.
-            exp = Environment(exp_name, self._client, parserd_exp_dict[exp_name], exp_params)
+            exp = Environment(exp_name, self._client_vec, parserd_exp_dict[exp_name], exp_params)
             # add the additional sensors ( The ones not provided by the policy )
             exp.add_sensors(self._json['additional_sensors'])
             self._experiences.append(exp)

@@ -64,28 +64,10 @@ class Environment(object):
         self._scenarios = env_config['scenarios']
         # All the sensors that are going to be spawned, a vector of dictionaries
         self._sensor_desc_vec = []
-        # Instanced sensors for this specific environment
-        self._instanced_sensors = []
-        self._ego_actor = None
         # The vehicle car model that is going to be spawned
         self._vehicle_model = env_config['vehicle_model']
+        # the list of all experiences to be instanciated at the start
         self._exp_list = []
-        # The scenarios running
-        #self._list_scenarios = None
-        #self._master_scenario = None
-
-        # TODO WRITTER IS FOR THE ENVIRONMENT
-        #if self._save_data:
-        #    # if we are going to save, we keep track of a dictionary with all the data
-        #    self._writter = Writer(exp_params['package_name'], self._environment_name + '_'
-        #                           + str(Environment.number_of_executions))
-        #    self._environment_data = {'sensor_data': None,
-        #                              'measurements': None,
-        #                              'ego_controls': None,
-        #                              'scenario_controls': None}
-        #else:
-        #    self._writter = None
-
         # the name of the package this env is into
         self._package_name = env_params['package_name']
         logging.debug("Instantiated Environment %s" % self._environment_name)
@@ -115,8 +97,8 @@ class Environment(object):
 
     def stop(self):
         # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
-        if self._save_data:
-            self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._environment_name))
+        #if self._save_data:
+        #    self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._environment_name))
 
         self._cleanup(True)
         if self.world is not None:
@@ -137,7 +119,6 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-
     def reset(self, StateFunction, RewardFunction):
         # set the state and reward functions to be used on this episode
         self.StateFunction = StateFunction
@@ -156,30 +137,6 @@ class Environment(object):
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, exp_params, save_data=self._save_data))
-        # You load at start since it already put some objects around
-        #self._load_world()
-        # Set the actor pool so the scenarios can prepare themselves when needed
-        #CarlaActorPool.set_world(self.world)
-        # Set the world for the global data provider
-        #CarlaDataProvider.set_world(self.world)
-        # We make the route less coarse and with the necessary turns
-
-        #_, self._route = interpolate_trajectory(self.world, self._route)
-
-        # Spawn the ego vehicle.
-        # self._ego_actor = self.spawn_ego_car(self._route[0][0])
-        #if self._ego_actor is None:
-        #    raise RuntimeError(" Could Not spawn the ego vehicle on position ", self._route[0][0].location)
-
-        # MAKE A SCENARIO BUILDER CLASS
-        #elf._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
-        #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
-        #self._list_scenarios = [self._master_scenario]
-
-        # It should also spawn all the sensors
-        # TODO for now all the sensors are setup into the ego_vehicle, this can be expanded
-        #self._sensor_interface = SensorInterface()
-        #self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
         if Environment.number_of_executions == 0:  # if it is the first time we execute this env
             # we use one of the experimebnts
