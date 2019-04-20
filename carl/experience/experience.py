@@ -88,6 +88,9 @@ class Experience(object):
         # the name of the package this exp is into
         self._package_name = exp_params['package_name']
         logging.debug("Instantiated Experience %s" % self._experience_name)
+        # functions defined by the policy to compute the adequate state and rewards based on CARLA data
+        self.RewardFunction = None
+        self.StateFunction = None
 
     def _cleanup(self, ego=False):
         """
@@ -142,6 +145,10 @@ class Experience(object):
         return CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
 
     def reset(self, RewardFunction, StateFunction):
+        # set the state and reward functions to be used on this episode
+        self.RewardFunction = RewardFunction
+        self.StateFunction = StateFunction
+
         # If the world already exists we need to clean up a bit first.
         if self.world is not None:
             self.stop()
@@ -341,8 +348,12 @@ class Experience(object):
         # time continues
         self.world.tick()
         self.timestamp = self.world.wait_for_tick()
+
         if self._save_data:
             self._writter.save_experience(self.world, self._experience_data)
+
+        return self.RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
+               self.StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)
 
     """ interface methods """
     def get_sensor_data(self):

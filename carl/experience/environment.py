@@ -15,26 +15,32 @@ def convert_transform_to_location(transform_vec):
 
     return location_vec
 
-
+# TODO for batch sizes bigger than 1 the environment is repeated
 
 class Environment(object):
 
-    def __init__(self, world, vehicle_model, start_transform, sensors, writter):
+    def __init__(self, client, vehicle_model, start_transform, sensors, writter):
         """
         The environment contains all the objects (vehicles, sensors) and scenarios of the the current experience
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
         """
+        # Start objects that are going to be created
+        self.world = None
+        self._ego_actor = None
+        self._instanced_sensors = []
+        # set the client object connected to the
+        self._client = client
 
-        self.world = world
         self._vehicle_model = vehicle_model
         self._sensor_interface = SensorInterface()
         # We pass again the writter object so the sensors can write when necessary.
         self._writter = writter
-
-        self._ego_actor = self._spawn_ego_car(start_transform)
-
-        self._instanced_sensors = self._setup_sensors(sensors, self._ego_actor)
-
+        # We instance the ego actor object
+        self._spawn_ego_car(start_transform)
+        # We setup all the instanced sensors
+        self._setup_sensors(sensors, self._ego_actor)
+        # Load the world
+        self._load_world()
 
     def _spawn_ego_car(self, start_transform):
         """
@@ -43,7 +49,7 @@ class Environment(object):
         """
         # If ego_vehicle already exists, just update location
         # Otherwise spawn ego vehicle
-        return CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
+        self._ego_actor = CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
 
 
 
@@ -103,6 +109,7 @@ class Environment(object):
             print(" waiting for one data reading from sensors...")
             self.world.tick()
             self.world.wait_for_tick()
+
     # TODO USE THIS GET DATA DIRECTLY
 
     def build_master_scenario(self, route, town_name):
