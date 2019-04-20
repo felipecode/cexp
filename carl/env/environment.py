@@ -13,7 +13,7 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory, c
 
 from carl.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
 from carl.env.scorer import record_route_statistics_default
-
+from carl.env.experience import Experience
 
 from carl.env.datatools.data_writer import Writer
 
@@ -33,9 +33,9 @@ def convert_transform_to_location(transform_vec):
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
 
 """
-The experience class encapsulates the experience all the scenarios that the policy is going to execute
+The environment class encapsulates the experience all the scenarios that the policy is going to execute
 as well as a communication channel with the CARLA servers.
-It also can have additional sensors that are experience related not policy related.
+It also can have additional sensors that are environment related not policy related.
 """
 
 # TODO keep track of how many times each experience is executed and show that.
@@ -46,14 +46,14 @@ class Environment(object):
     number_of_executions = 0
 
     def __init__(self, name, client, exp_config, exp_params):
-        # We keep this so we can reset the experience
+        # We keep this so we can reset the environment
         self._exp_config = exp_config
         self._exp_params = exp_params
         self._batch_size = exp_params['batch_size']
-        # if the data is going to be saved for this experience
+        # if the data is going to be saved for this environment
         self._save_data = exp_params['save_dataset']
         # the name of this experience object
-        self._experience_name = name
+        self._environment_name = name
         # We have already a connection object to a CARLA server
         self._client = client  # TODO client is going to be a vector ( Or a batch object)
         # The route is already specified
@@ -68,7 +68,7 @@ class Environment(object):
         self._sensor_desc_vec = []
         # Sensor interface, a buffer that contains all the read sensors
         self._sensor_interface = None
-        # Instanced sensors for this specific experience
+        # Instanced sensors for this specific environment
         self._instanced_sensors = []
         self._ego_actor = None
         # The vehicle car model that is going to be spawned
@@ -80,18 +80,18 @@ class Environment(object):
 
         if self._save_data:
             # if we are going to save, we keep track of a dictionary with all the data
-            self._writter = Writer(exp_params['package_name'], self._experience_name + '_'
+            self._writter = Writer(exp_params['package_name'], self._environment_name + '_'
                                    + str(Environment.number_of_executions))
-            self._experience_data = {'sensor_data': None,
-                                     'measurements': None,
-                                     'ego_controls': None,
-                                     'scenario_controls': None}
+            self._environment_data = {'sensor_data': None,
+                                      'measurements': None,
+                                      'ego_controls': None,
+                                      'scenario_controls': None}
         else:
             self._writter = None
 
-        # the name of the package this exp is into
+        # the name of the package this env is into
         self._package_name = exp_params['package_name']
-        logging.debug("Instantiated Experience %s" % self._experience_name)
+        logging.debug("Instantiated Experience %s" % self._environment_name)
         # functions defined by the policy to compute the adequate state and rewards based on CARLA data
         self.StateFunction = None
         self.RewardFunction = None
@@ -119,7 +119,7 @@ class Environment(object):
     def stop(self):
         # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
         if self._save_data:
-            self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._experience_name))
+            self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._environment_name))
 
         self._cleanup(True)
         if self.world is not None:
@@ -127,16 +127,16 @@ class Environment(object):
             settings.synchronous_mode = False
             self.world.apply_settings(settings)
             self.world = None
-        self.__init__(self._experience_name, self._client, self._exp_config, self._exp_params)
+        self.__init__(self._environment_name, self._client, self._exp_config, self._exp_params)
 
-    def clean_experience_data(self):
+    def clean_environment_data(self):
         # TODO for every single different environment...
         # Just in case something happens we clean the data that was collected
         pass
 
     def add_sensors(self, sensors):
         if not isinstance(sensors, list):
-            raise ValueError(" Sensors added to the experience should be a list of dictionaries")
+            raise ValueError(" Sensors added to the environment should be a list of dictionaries")
 
         self._sensor_desc_vec += sensors
 
@@ -188,15 +188,15 @@ class Environment(object):
         for scenario in self._list_scenarios:   # TODO ENVIRONMENT FUNCTION TO TICK SCENARIOS ( IN A LOOP )
             scenario.scenario.scenario_tree.tick_once()
 
-        logging.debug("Started Experience %s" % self._experience_name)
+        logging.debug("Started Experience %s" % self._environment_name)
 
         return StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
                RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)
 
 
     # TODO USE THIS GET DATA DIRECTLY
-    def get_data(self):   # TODO: The data you might want for an experience is needed
-        # Each experience can have a reference datapoint , where the data is already collected. That can go
+    def get_data(self):   # TODO: The data you might want for an environment is needed
+        # Each environment can have a reference datapoint , where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
         # It is always save in the SRL path
@@ -207,9 +207,9 @@ class Environment(object):
         if "SRL_DATASET_PATH" not in os.environ:
             raise ValueError("SRL DATASET not defined, set the place where the dataset was saved before")
 
-        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name, self._experience_name)
+        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name, self._environment_name)
 
-        # If the metadata does not exist the experience does not have a reference data.
+        # If the metadata does not exist the environment does not have a reference data.
         if os.path.exists(os.path.join(root_path, 'metadata.json')):
             raise ValueError("The data is not generated yet")
         # Read the metadata telling the sensors that exist
@@ -319,20 +319,21 @@ class Environment(object):
         return self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.RUNNING
 
     def run_step(self, controls):
+        # TODO for in all the environments
         if self._ego_actor is None:
             raise ValueError("Applying control without ego-actor spawned.")
         # Basically apply the controls to the ego actor.
 
-        self._experience_data['ego_controls'] = controls
+        self._environment_data['ego_controls'] = controls
         # update all scenarios
         GameTime.on_carla_tick(self.timestamp)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
-        for scenario in self._list_scenarios:
+        for scenario in self._list_scenarios: #
             scenario.scenario.scenario_tree.tick_once()
             controls = scenario.change_control(controls)
 
-        self._experience_data['scenario_controls'] = controls
+        self._environment_data['scenario_controls'] = controls
 
         print ( " RAN STEP ")
         self._ego_actor.apply_control(controls)
@@ -345,7 +346,7 @@ class Environment(object):
         self.timestamp = self.world.wait_for_tick()
 
         if self._save_data:
-            self._writter.save_experience(self.world, self._experience_data)
+            self._writter.save_environment(self.world, self._environment_data)
 
         return self.StateFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route), \
                self.RewardFunction(self._ego_actor, self._instanced_sensors, self._list_scenarios, self._route)

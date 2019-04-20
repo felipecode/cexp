@@ -19,7 +19,7 @@ def find_free_port():
 class CARL(object):
     """
     THE main CARL module.
-    It contains a batch of instanced exp files that can be iterated to have instanced experiments to get
+    It contains the instanced env files that can be iterated to have instanced experiments to get
     """
 
     def __init__(self, jsonfile, params, iterations_to_execute, batch_size):

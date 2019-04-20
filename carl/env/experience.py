@@ -61,6 +61,18 @@ class Experience(object):
             scenario.scenario.scenario_tree.tick_once()
 
 
+    def tick_scenarios_control(self):
+        """
+        Here we tick the scenarios and also change the control based on the scenario properties
+
+        """
+        GameTime.on_carla_tick(self.timestamp)
+        CarlaDataProvider.on_carla_tick()
+        # update all scenarios
+        for scenario in self._list_scenarios: #
+            scenario.scenario.scenario_tree.tick_once()
+            controls = scenario.change_control(controls)
+
     """
         FUNCTIONS FOR BUILDING 
     """

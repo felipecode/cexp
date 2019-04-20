@@ -156,7 +156,7 @@ class PGAgent(Agent):
 
         return control
 
-    def make_reward(self, vehicle, sensors, scenarios, route):
+    def make_reward(self, vehicle, sensors, scenarios, route): # TODO this receives a vector of environments
         """
         Basic reward that basically returns 1.0 for when the agent is alive and zero otherwise.
         :return: 1.0
@@ -203,7 +203,7 @@ class PGAgent(Agent):
 
         return closest_waypoint, direction
 
-    def reinforce(self, rewards):
+    def reinforce(self, rewards): # TODO should this have a batch size ???
         print (" REINFORCING ")
         print (rewards)
         # Should contain the  weight update algorithm if the agent uses it.
