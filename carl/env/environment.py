@@ -45,9 +45,9 @@ class Environment(object):
     # We keep track here the number of times this class was executed.
     number_of_executions = 0
 
-    def __init__(self, name, client_vec, exp_config, env_params):
+    def __init__(self, name, client_vec, env_config, env_params):
         # We keep this so we can reset the environment
-        self._exp_config = exp_config
+        self._exp_config = env_config
         self._env_params = env_params
         self._batch_size = env_params['batch_size']
         # if the data is going to be saved for this environment
@@ -57,18 +57,18 @@ class Environment(object):
         # We have already a connection object to a CARLA server
         self._client_vec = client_vec
         # The route is already specified
-        self._route = exp_config['route']
+        self._route = env_config['route']
         # An experience is associate with a certain town name ( THat is also associated with scenarios and a route)
-        self._town_name = exp_config['town_name']
+        self._town_name = env_config['town_name']
         # Thee scenarios that are going to be associated with this route.
-        self._scenarios = exp_config['scenarios']
+        self._scenarios = env_config['scenarios']
         # All the sensors that are going to be spawned, a vector of dictionaries
         self._sensor_desc_vec = []
         # Instanced sensors for this specific environment
         self._instanced_sensors = []
         self._ego_actor = None
         # The vehicle car model that is going to be spawned
-        self._vehicle_model = exp_config['vehicle_model']
+        self._vehicle_model = env_config['vehicle_model']
         self._exp_list = []
         # The scenarios running
         #self._list_scenarios = None
@@ -87,7 +87,7 @@ class Environment(object):
         #    self._writter = None
 
         # the name of the package this env is into
-        self._package_name = exp_params['package_name']
+        self._package_name = env_params['package_name']
         logging.debug("Instantiated Environment %s" % self._environment_name)
         # functions defined by the policy to compute the adequate state and rewards based on CARLA data
         self.StateFunction = None
@@ -145,9 +145,17 @@ class Environment(object):
 
         # TODO kill all the experiences before.
 
+
         for i in range(self._batch_size):
+            exp_params = {
+                'env_name': self._environment_name,
+                'package_name': self._package_name,
+                'town_name': self._town_name,
+                'env_number': Environment.number_of_executions,
+                'exp_number': i
+            }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
-                                             self._sensor_desc_vec, save_data=self._env_params))
+                                             self._sensor_desc_vec, exp_params, save_data=self._save_data))
         # You load at start since it already put some objects around
         #self._load_world()
         # Set the actor pool so the scenarios can prepare themselves when needed

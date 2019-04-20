@@ -24,7 +24,7 @@ def convert_transform_to_location(transform_vec):
     return location_vec
 
 # TODO for batch sizes bigger than 1 the environment is repeated
-# TODO ADD CARLA LOGGING
+
 class Experience(object):
 
     def __init__(self, client, vehicle_model, route, sensors, exp_params, save_data=False):
@@ -64,7 +64,7 @@ class Experience(object):
         print ( " ARE GOING TO INTERPOLATE")
         _, self._route = interpolate_trajectory(self.world, self._route)
 
-        self._master_scenario = self.build_master_scenario(self._route, self._town_name)  # Data for building the master scenario
+        self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])  # Data for building the master scenario
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
         self._list_scenarios = [self._master_scenario]
 
