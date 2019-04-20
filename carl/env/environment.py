@@ -109,7 +109,7 @@ class Environment(object):
 
         if Environment.number_of_executions == 0:  # if it is the first time we execute this env
             # we use one of the experimebnts
-            self._exp_list[0]._writer.save_metadata(self)
+            self._exp_list[0]._writer.save_metadata(self, self._exp_list[0]._instanced_sensors)
 
         for exp in self._exp_list:
             exp.tick_scenarios()

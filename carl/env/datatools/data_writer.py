@@ -126,7 +126,7 @@ class Writer(object):
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
 
-    def save_metadata(self, environment):
+    def save_metadata(self, environment, list_scenarios):
 
         with open(os.path.join(self._base_path, 'metadata.json'), 'w') as fo:
             jsonObj = {}
@@ -138,7 +138,8 @@ class Writer(object):
 
             # The scenarios used and its configuration, a dictionary with the scenarios and their parameters
             # Should also consider the randomly generate parameters from the scenario
-            scenario_dict = self._create_scenario_dict(environment._list_scenarios)
+            scenario_dict = self._create_scenario_dict(list_scenarios)
+            # TODO the full list of scenarios can be already some dictionary on the beggining no need to send instanced ones
             jsonObj.update({'scenarios': scenario_dict})
 
             # Set of weathers, all the posible
