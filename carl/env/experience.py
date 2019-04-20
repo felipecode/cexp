@@ -1,7 +1,7 @@
 import carla
 
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
-from carl.experience.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
+from carl.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
 
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario

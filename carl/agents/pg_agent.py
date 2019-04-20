@@ -204,6 +204,8 @@ class PGAgent(Agent):
         return closest_waypoint, direction
 
     def reinforce(self, rewards):
+        print (" REINFORCING ")
+        print (rewards)
         # Should contain the  weight update algorithm if the agent uses it.
         R = 0
         # running_reward = (10 * 0.99) + (self._iteration * 0.01)

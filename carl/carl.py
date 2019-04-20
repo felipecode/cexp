@@ -5,9 +5,9 @@ import random
 import os
 from contextlib import closing
 
-from carl.experience.server_manager import ServerManagerDocker
-from carl.experience.experience import Environment
-import carl.experience.utils.route_configuration_parser as parser
+from carl.env.server_manager import ServerManagerDocker
+from carl.env.environment import Environment
+import carl.env.utils.route_configuration_parser as parser
 
 
 def find_free_port():

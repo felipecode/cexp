@@ -11,11 +11,11 @@ from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfigur
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
 
-from carl.experience.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
-from carl.experience.scorer import record_route_statistics_default
+from carl.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
+from carl.env.scorer import record_route_statistics_default
 
 
-from carl.experience.datatools.data_writer import Writer
+from carl.env.datatools.data_writer import Writer
 
 
 def convert_transform_to_location(transform_vec):
