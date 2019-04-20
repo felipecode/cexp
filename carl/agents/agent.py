@@ -71,16 +71,15 @@ class Agent(object):
         """
         pass
 
-    def unroll(self, experience):
-        #TODO make all of this vector size 1
+    def unroll(self, environment):
         """
          unroll a full episode for the agent. This produces an state and reward vectors
          that are defined by the agent, that can be used directly for learning.
         """
 
-        experience.add_sensors(self.sensors())
+        environment.add_sensors(self.sensors())
         # You reset the scenario with and pass the make reward functions that are going to be used on the training.
-        state, reward = experience.reset(self.make_state, self.make_reward)
+        state, reward = environment.reset(self.make_state, self.make_reward)
         # Start the rewards and state vectors used
         reward_vec = []
         state_vec = []
@@ -88,7 +87,7 @@ class Agent(object):
         while count < 10:  #experience.is_running():
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
-            state, reward = experience.run_step(controls)
+            state, reward = environment.run_step(controls)
 
             reward_vec.append(reward)
             state_vec.append(state)

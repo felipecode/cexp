@@ -50,7 +50,7 @@ class Experience(object):
         # We instance the ego actor object
         _, self._route = interpolate_trajectory(self.world, self._route)
 
-        self._spawn_ego_car(route[0][0])
+        self._spawn_ego_car(self._route[0][0])
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
         # Load the world
@@ -60,9 +60,6 @@ class Experience(object):
         CarlaActorPool.set_world(self.world)
         # Set the world for the global data provider
         CarlaDataProvider.set_world(self.world)
-        # We make the route less coarse and with the necessary turns
-        print ( " ARE GOING TO INTERPOLATE")
-        _, self._route = interpolate_trajectory(self.world, route)
 
         self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])  # Data for building the master scenario
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
@@ -117,6 +114,7 @@ class Experience(object):
 
         if self._save_data:
              self._writter.save_environment(self.world, self._environment_data)
+
     """
         FUNCTIONS FOR BUILDING 
     """
