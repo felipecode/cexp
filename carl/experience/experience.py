@@ -11,7 +11,7 @@ from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfigur
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
 
-from carl.experience.sensors.sensor_interface import SensorInterface
+from carl.experience.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
 from carl.experience.scorer import record_route_statistics_default
 
 
@@ -208,6 +208,64 @@ class Experience(object):
         return full_episode_data_dict
 
     # TODO this probably go to some subclass
+    def setup_sensors(self, sensors, vehicle):
+        """
+        Create the sensors defined by the user and attach them to the ego-vehicle
+        :param sensors: list of sensors
+        :param vehicle: ego vehicle
+        :return:
+        """
+        bp_library = self.world.get_blueprint_library()
+        for sensor_spec in sensors:
+            # These are the pseudosensors (not spawned)
+            if sensor_spec['type'].startswith('sensor.can_bus'):
+                # The speedometer pseudo sensor is created directly here
+                sensor = CANBusSensor(vehicle, sensor_spec['reading_frequency'])
+            # These are the sensors spawned on the carla world
+            else:
+                bp = bp_library.find(sensor_spec['type'])
+                if sensor_spec['type'].startswith('sensor.camera'):
+                    bp.set_attribute('image_size_x', str(sensor_spec['width']))
+                    bp.set_attribute('image_size_y', str(sensor_spec['height']))
+                    bp.set_attribute('fov', str(sensor_spec['fov']))
+                    sensor_location = carla.Location(x=sensor_spec['x'], y=sensor_spec['y'],
+                                                     z=sensor_spec['z'])
+                    sensor_rotation = carla.Rotation(pitch=sensor_spec['pitch'],
+                                                     roll=sensor_spec['roll'],
+                                                     yaw=sensor_spec['yaw'])
+                elif sensor_spec['type'].startswith('sensor.lidar'):
+                    bp.set_attribute('range', '200')
+                    bp.set_attribute('rotation_frequency', '10')
+                    bp.set_attribute('channels', '32')
+                    bp.set_attribute('upper_fov', '15')
+                    bp.set_attribute('lower_fov', '-30')
+                    bp.set_attribute('points_per_second', '500000')
+                    sensor_location = carla.Location(x=sensor_spec['x'], y=sensor_spec['y'],
+                                                     z=sensor_spec['z'])
+                    sensor_rotation = carla.Rotation(pitch=sensor_spec['pitch'],
+                                                     roll=sensor_spec['roll'],
+                                                     yaw=sensor_spec['yaw'])
+                elif sensor_spec['type'].startswith('sensor.other.gnss'):
+                    sensor_location = carla.Location(x=sensor_spec['x'], y=sensor_spec['y'],
+                                                     z=sensor_spec['z'])
+                    sensor_rotation = carla.Rotation()
+
+                # create sensor
+                sensor_transform = carla.Transform(sensor_location, sensor_rotation)
+                sensor = self.world.spawn_actor(bp, sensor_transform,
+                                                vehicle)
+            # setup callback
+            sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
+                                   writer=self._writter))
+            self._instanced_sensors.append(sensor)
+
+        # check that all sensors have initialized their data structure
+        while not self._sensor_interface.all_sensors_ready():
+            print(" waiting for one data reading from sensors...")
+            self.world.tick()
+            self.world.wait_for_tick()
+
+    # TODO USE THIS GET DATA DIRECTLY
 
     def build_master_scenario(self, route, town_name):
         # We have to find the target.

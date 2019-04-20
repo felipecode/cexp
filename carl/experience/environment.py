@@ -1,7 +1,18 @@
+import carla
 
+from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
+from carl.experience.sensors.sensor_interface import CANBusSensor, CallBack
+
+from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
+from srunner.scenarios.master_scenario import MasterScenario
 
 class Environment():
-    def __init__(self):
+    def __init__(self, vehicle_model ):
+        """
+
+        :param vehicle_model: the model that is going to be used to spawn the ego CAR
+        """
+
 
         self.world
         self._vehicle_model
@@ -113,6 +124,13 @@ class Environment():
             Based on the parsed route and possible scenarios, build all the scenario classes.
         :param scenario_definition_vec: the dictionary defining the scenarios
         :param town: the town where scenarios are going to be
+        :return:
+        """
+        pass
+
+    def destroy(self):
+        """
+        To destroy all the objects related to carla that can be found here
         :return:
         """
         pass
