@@ -305,7 +305,7 @@ class Experience(object):
         self.world = self._client.load_world(self._town_name)
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
-        settings.synchronous_mode = True
+        settings.synchronous_mode = False
         self.world.apply_settings(settings)
 
     def is_running(self):
