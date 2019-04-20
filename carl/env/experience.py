@@ -62,7 +62,7 @@ class Experience(object):
         CarlaDataProvider.set_world(self.world)
         # We make the route less coarse and with the necessary turns
         print ( " ARE GOING TO INTERPOLATE")
-        _, self._route = interpolate_trajectory(self.world, self._route)
+        _, self._route = interpolate_trajectory(self.world, route)
 
         self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])  # Data for building the master scenario
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
