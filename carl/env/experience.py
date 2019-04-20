@@ -69,7 +69,7 @@ class Experience(object):
         GameTime.on_carla_tick(self.timestamp)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
-        for scenario in self._list_scenarios: #
+        for scenario in self._list_scenarios:  #
             scenario.scenario.scenario_tree.tick_once()
             controls = scenario.change_control(controls)
 

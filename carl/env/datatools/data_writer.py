@@ -15,7 +15,11 @@ class Writer(object):
         directly on the sensor interface.
     """
 
-    def __init__(self, dataset_name, exp_name, other_vehicles=False, road_information=False):
+    def __init__(self, dataset_name, env_name, env_number, batch_number,
+                 other_vehicles=False, road_information=False):
+        """
+            We have a certain name but also the number of thee environment  ( How many times this env was repeated)
+        """
 
         if "SRL_DATASET_PATH" not in os.environ:
             raise  ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
@@ -23,11 +27,14 @@ class Writer(object):
         root_path = os.environ["SRL_DATASET_PATH"]
 
         self._root_path = root_path
-        self._experience_name = exp_name
+        self._experience_name = env_name
         self._dataset_name  = dataset_name
         self._latest_id = 0
-
-        self._full_path = os.path.join(root_path, dataset_name, exp_name)
+        # path for the writter for this specific batch
+        self._full_path = os.path.join(root_path, dataset_name, env_name,
+                                       str(env_number) + '_' + str(batch_number))
+        # base path, for writting the metadata for the environment
+        self._base_path = os.path.join(root_path, dataset_name, env_name)
 
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
@@ -119,19 +126,19 @@ class Writer(object):
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
 
-    def save_metadata(self, experience):
+    def save_metadata(self, environment):
 
-        with open(os.path.join(self._full_path, 'metadata.json'), 'w') as fo:
+        with open(os.path.join(self._base_path, 'metadata.json'), 'w') as fo:
             jsonObj = {}
 
             # The full name of the experience ( It can be something different for now we keep the same)
-            jsonObj.update({'full_name': experience._experience_name})
+            jsonObj.update({'full_name': environment._environment_name})
             # The sensors dictionary used
-            jsonObj.update({'sensors': experience._sensor_desc_vec})
+            jsonObj.update({'sensors': environment._sensor_desc_vec})
 
             # The scenarios used and its configuration, a dictionary with the scenarios and their parameters
             # Should also consider the randomly generate parameters from the scenario
-            scenario_dict = self._create_scenario_dict(experience._list_scenarios)
+            scenario_dict = self._create_scenario_dict(environment._list_scenarios)
             jsonObj.update({'scenarios': scenario_dict})
 
             # Set of weathers, all the posible

@@ -182,7 +182,8 @@ class Environment(object):
         self._sensor_interface = SensorInterface()
         self.setup_sensors(self._sensor_desc_vec, self._ego_actor)
 
-        self._writter.save_metadata(self) # TODO here is environmen
+        if Environment.number_of_executions == 0:  # if it is the first time we execute this env
+            self._writter.save_metadata(self) # TODO here is environmen
 
         # We tick the scenarios to get them started
         for scenario in self._list_scenarios:   # TODO ENVIRONMENT FUNCTION TO TICK SCENARIOS ( IN A LOOP )
