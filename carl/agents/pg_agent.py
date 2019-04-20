@@ -156,7 +156,7 @@ class PGAgent(Agent):
 
         return control
 
-    def make_reward(self, vehicle, sensors, scenarios, route): # TODO this receives a vector of environments
+    def make_reward(self, exp):
         """
         Basic reward that basically returns 1.0 for when the agent is alive and zero otherwise.
         :return: 1.0
@@ -164,14 +164,14 @@ class PGAgent(Agent):
 
         return 1.0
 
-    def make_state(self, vehicle, sensors, scenarios, route):
+    def make_state(self, exp):
         # state is divided in three parts, the speed, the angle_error, the high level command
         # Get the closest waypoint
-        waypoint, _ = self._get_current_wp_direction(vehicle.get_transform().location, route)
-        norm, angle = compute_magnitude_angle(waypoint.location, vehicle.get_transform().location,
-                                              vehicle.get_transform().rotation.yaw)
+        waypoint, _ = self._get_current_wp_direction(exp._ego_actor.get_transform().location, exp._route)
+        norm, angle = compute_magnitude_angle(waypoint.location, exp._ego_actor.get_transform().location,
+                                              exp._ego_actor.get_transform().rotation.yaw)
 
-        return np.array([_get_forward_speed(vehicle) / 12.0,  # Normalize to by dividing by 12
+        return np.array([_get_forward_speed(exp._ego_actor) / 12.0,  # Normalize to by dividing by 12
                          angle / 180.0])
 
 

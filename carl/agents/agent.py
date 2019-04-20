@@ -22,7 +22,7 @@ class Agent(object):
 
         return controls_vec
 
-    def make_reward(self, vehicle, sensors, scenarios, route):
+    def make_reward(self, exp):
         """
         Return the reward for a given step. Must be implemented by some inherited class
         :param measurements:
@@ -39,7 +39,7 @@ class Agent(object):
                 reward_vec.append(self.make_reward(exp))
         return reward_vec
 
-    def make_state(self, vehicle, sensors, scenarios, route):
+    def make_state(self, exp):
         """
         for a given step of the run return the current relevant state for
         :param measurements:
