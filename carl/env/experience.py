@@ -26,7 +26,7 @@ def convert_transform_to_location(transform_vec):
 
 
 class Experience(object):
-
+    # TODO ADD CARLA RECORDER FLAG PROPERLY
     def __init__(self, client, vehicle_model, route, sensors, exp_params, save_data=False, carla_recorder=False):
         """
         The experience is like a instance of the environment
@@ -124,10 +124,8 @@ class Experience(object):
 
         self.world.tick()
         self.timestamp = self.world.wait_for_tick()
-
         if self._save_data:
              self._writer.save_experience(self.world, self._environment_data)
-
 
     def is_running(self):
         """
@@ -236,7 +234,8 @@ class Experience(object):
         self.world = self._client.load_world(self._town_name)
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
-        settings.synchronous_mode = True
+        #TODO FIX SYNCH MODEL
+        settings.synchronous_mode = False
         self.world.apply_settings(settings)
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
