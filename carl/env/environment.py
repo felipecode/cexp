@@ -166,6 +166,7 @@ class Environment(object):
         """
             The master scenario tests if the route is still running.
         """
+        for
         if self._master_scenario is None:
             raise ValueError('You should not run a route without a master scenario')
 

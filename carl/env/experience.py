@@ -50,15 +50,15 @@ class Experience(object):
 
         # Sensor interface, a buffer that contains all the read sensors
         self._sensor_interface = SensorInterface()
-
+        # Load the world
+        self._load_world()
         # We instance the ego actor object
         _, self._route = interpolate_trajectory(self.world, route)
 
         self._spawn_ego_car(self._route[0][0])
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
-        # Load the world
-        self._load_world()
+
 
         # Set the actor pool so the scenarios can prepare themselves when needed
         CarlaActorPool.set_world(self.world)
@@ -191,7 +191,6 @@ class Experience(object):
             self.world.tick()
             self.world.wait_for_tick()
 
-    # TODO USE THIS GET DATA DIRECTLY
 
     def build_master_scenario(self, route, town_name):
         # We have to find the target.
@@ -220,7 +219,6 @@ class Experience(object):
         settings = self.world.get_settings()
         settings.synchronous_mode = True
         self.world.apply_settings(settings)
-
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
 
