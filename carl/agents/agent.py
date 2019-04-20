@@ -35,8 +35,8 @@ class Agent(object):
     def _make_reward_batch(self, exp_vec):
         reward_vec = []
         for exp in exp_vec:
-            if exp.is_running()
-            reward_vec.append(self.make_reward(exp))
+            if exp.is_running():
+                reward_vec.append(self.make_reward(exp))
         return reward_vec
 
     def make_state(self, vehicle, sensors, scenarios, route):
@@ -52,7 +52,8 @@ class Agent(object):
     def _make_state_batch(self, exp_vec):
         state_vec = []
         for exp in exp_vec:
-            state_vec.append(self.make_state(exp))
+            if exp.is_running():
+                state_vec.append(self.make_state(exp))
         return state_vec
 
     def sensors(self):
@@ -89,7 +90,7 @@ class Agent(object):
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = environment.run_step(controls)
-
+            # TODO check the posible sizes mismatches here
             reward_vec.append(reward)
             state_vec.append(state)
             count += 1
