@@ -33,6 +33,8 @@ class Experience(object):
          contains all the objects (vehicles, sensors) and scenarios of the the current experience
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
         """
+        # save all the experiment parameters to be used later
+        self._exp_params = exp_params
         # this parameter sets all the sensor threads and the main thread into saving data
         self._save_data = save_data
         # Start objects that are going to be created
@@ -41,6 +43,8 @@ class Experience(object):
         self._instanced_sensors = []
         # set the client object connected to the
         self._client = client
+        # We also set the town name to be used
+        self._town_name = exp_params['town_name']
 
         self._vehicle_model = vehicle_model
 
@@ -48,7 +52,7 @@ class Experience(object):
         self._sensor_interface = SensorInterface()
 
         # We instance the ego actor object
-        _, self._route = interpolate_trajectory(self.world, self._route)
+        _, self._route = interpolate_trajectory(self.world, route)
 
         self._spawn_ego_car(self._route[0][0])
         # We setup all the instanced sensors
@@ -233,6 +237,12 @@ class Experience(object):
         """
         Remove and destroy all actors
         """
+        if self._save_data:
+            self._writter.save_summary(record_route_statistics_default(self._master_scenario,
+                                                                       self._exp_params['env_name'] + '_' +
+                                                                       self._exp_params['env_number'] + '_' +
+                                                                       self._exp_params['exp_number']))
+
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):
             if self._instanced_sensors[i] is not None:

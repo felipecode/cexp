@@ -47,7 +47,7 @@ class Environment(object):
 
     def __init__(self, name, client_vec, env_config, env_params):
         # We keep this so we can reset the environment
-        self._exp_config = env_config
+        self._env_config = env_config
         self._env_params = env_params
         self._batch_size = env_params['batch_size']
         # if the data is going to be saved for this environment
@@ -75,38 +75,19 @@ class Environment(object):
         self.StateFunction = None
         self.RewardFunction = None
 
-    def _cleanup(self, ego=False):
+    def _cleanup(self):
         """
         Remove and destroy all actors
         """
-        # We need enumerate here, otherwise the actors are not properly removed
-        for i, _ in enumerate(self._instanced_sensors):
-            if self._instanced_sensors[i] is not None:
-                self._instanced_sensors[i].stop()
-                self._instanced_sensors[i].destroy()
-                self._instanced_sensors[i] = None
-        self._instanced_sensors = []
-
-        CarlaActorPool.cleanup()
-        CarlaDataProvider.cleanup()
-
-        if ego and self._ego_actor is not None:
-            self._ego_actor.destroy()
-            self._ego_actor = None
+        for exp in self._exp_list:
+            exp._cleanup()
         Environment.number_of_executions += 1
 
     def stop(self):
         # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
-        #if self._save_data:
-        #    self._writter.save_summary(record_route_statistics_default(self._master_scenario, self._environment_name))
+        self._cleanup()
 
-        self._cleanup(True)
-        if self.world is not None:
-            settings = self.world.get_settings()
-            settings.synchronous_mode = False
-            self.world.apply_settings(settings)
-            self.world = None
-        self.__init__(self._environment_name, self._client, self._exp_config, self._exp_params)
+        self.__init__(self._environment_name, self._client_vec, self._env_config, self._env_params)
 
     def clean_environment_data(self):
         # TODO for every single different environment...
@@ -125,7 +106,8 @@ class Environment(object):
         self.RewardFunction = RewardFunction
 
         # TODO kill all the experiences before.
-
+        if len (self._exp_list) > 0:
+            self.stop()
 
         for i in range(self._batch_size):
             exp_params = {
