@@ -23,12 +23,12 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = PGAgent()
     # this could be joined
-    exp_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
+    env_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
                                                                                                # to load CARLA and the scenarios are made
     # Here some docker was set
-    exp_batch.start()
+    env_batch.start()
 
-    for exp in exp_batch:
+    for exp in env_batch:
         # The policy selected to run this experience vector (The class basically) This policy can also learn, just
         # by taking the output from the experience.
         # I need a mechanism to test the rewards so I can test the policy gradient strategy

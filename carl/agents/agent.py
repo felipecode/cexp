@@ -102,4 +102,6 @@ class Agent(object):
             self.add_value(state_batch, state)
             count += 1
 
+        environment.stop()
+
         return state_batch, reward_batch
