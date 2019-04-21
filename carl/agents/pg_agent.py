@@ -239,9 +239,9 @@ class PGAgent(Agent):
         self._policy.policy_history = Variable(torch.Tensor())
 
 
-    def destroy(self):
+    def reset(self):
         """
-        Destroy (clean-up) the agent
+        Destroy (clean-up) the agent objects that are use on CARLA
         :return:
         """
         pass

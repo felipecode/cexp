@@ -69,12 +69,13 @@ class Agent(object):
 
         pass
 
-    def destroy(self):
+    def reset(self):
         """
         Destroy (clean-up) the agent
         :return:
         """
         pass
+
     def add_value(self, value_batch, value_vec):
 
         for i in range(len(value_batch)):
@@ -103,5 +104,6 @@ class Agent(object):
             count += 1
 
         environment.stop()
+        self.reset()
 
         return state_batch, reward_batch

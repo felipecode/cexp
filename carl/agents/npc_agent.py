@@ -48,3 +48,8 @@ class NPCAgent(Agent):
         This agent cannot learn so there is no reinforce
         """
         pass
+
+    def reset(self):
+        
+        self.route_assigned = False
+        self._agent = None
