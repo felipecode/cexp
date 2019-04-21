@@ -50,8 +50,6 @@ class Environment(object):
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
 
-
-
     def _cleanup(self):
         """
         Remove and destroy all actors

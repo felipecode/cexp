@@ -14,21 +14,6 @@
         },
         "town_name": "Town01",
         "vehicle_model": "vehicle.lincoln.mkz2017"
-      },
-
-    "test2":
-
-      {
-        "route": {
-          "file": "routes_town01.xml",
-          "id": 2
-        },
-        "scenarios": {
-          "file": "None",
-          "route_independent": "Background"
-        },
-        "town_name": "Town01",
-        "vehicle_model": "vehicle.lincoln.mkz2017"
       }
     },
 

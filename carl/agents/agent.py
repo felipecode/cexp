@@ -93,15 +93,14 @@ class Agent(object):
         # Start the rewards and state vectors used
         reward_batch = [[]] * environment._batch_size
         state_batch = [[]] * environment._batch_size
-        count = 0
-        while count < 10:
+
+        while environment.is_running():
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = environment.run_step(controls)
             # TODO check the posible sizes mismatches here
             self.add_value(reward_batch, reward)
             self.add_value(state_batch, state)
-            count += 1
 
         environment.stop()
         self.reset()

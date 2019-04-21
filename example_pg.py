@@ -19,7 +19,7 @@ if __name__ == '__main__':
               'remove_wrong_data': False
               }
     # TODO for now batch size is one
-    number_of_iterations = 10
+    number_of_iterations = 12
     # The idea is that the agent class should be completely independent
     agent = PGAgent()
     # this could be joined
@@ -34,6 +34,14 @@ if __name__ == '__main__':
         # I need a mechanism to test the rewards so I can test the policy gradient strategy
         states, rewards = agent.unroll(env)
         agent.reinforce(rewards)
+
+
+        running_reward = (running_reward * 0.99) + (time * 0.01)
+
+        update_policy()
+
+        if episode % 5 == 0:
+            print('Episode {}\tLast length: {:5d}\tAverage length: {:.2f}'.format(episode, time, running_reward))
 
 
 
