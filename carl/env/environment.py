@@ -88,13 +88,13 @@ class Environment(object):
         self._sensor_desc_vec += sensors
 
     def reset(self, StateFunction, RewardFunction):
-
+        print ("reseting ", self._environment_name)
         if len(self._exp_list) > 0:
             self.stop()
         # set the state and reward functions to be used on this episode
         self.StateFunction = StateFunction
         self.RewardFunction = RewardFunction
-        
+
         for i in range(self._batch_size):
             exp_params = {
                 'env_name': self._environment_name,

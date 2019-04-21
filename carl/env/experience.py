@@ -57,13 +57,13 @@ class Experience(object):
             if self._save_data:
                 # if we are going to save, we keep track of a dictionary with all the data
                 self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
-                                       exp_params['exp_number'])
+                                      exp_params['exp_number'])
                 self._environment_data = {'sensor_data': None,
                                           'measurements': None,
                                           'ego_controls': None,
                                           'scenario_controls': None}
             else:
-                self._writter = None
+                self._writer = None
             # Sensor interface, a buffer that contains all the read sensors
             self._sensor_interface = SensorInterface()
             # Load the world
@@ -83,7 +83,6 @@ class Experience(object):
             self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
             #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
             self._list_scenarios = [self._master_scenario]
-
 
         except:
             client.stop_recorder()
@@ -111,7 +110,6 @@ class Experience(object):
         self._environment_data['ego_controls'] = controls
 
         return controls
-
 
     def apply_control(self, controls):
 
@@ -148,8 +146,6 @@ class Experience(object):
         # If ego_vehicle already exists, just update location
         # Otherwise spawn ego vehicle
         self._ego_actor = CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
-
-
 
     def _setup_sensors(self, sensors, vehicle):
         """
@@ -275,10 +271,3 @@ class Experience(object):
             self._ego_actor.destroy()
             self._ego_actor = None
 
-
-    def destroy(self):
-        """
-        To destroy all the objects related to carla that can be found here
-        :return:
-        """
-        pass
