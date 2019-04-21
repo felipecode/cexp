@@ -27,7 +27,7 @@ def convert_transform_to_location(transform_vec):
 
 class Experience(object):
     # TODO ADD CARLA RECORDER FLAG PROPERLY
-    def __init__(self, client, vehicle_model, route, sensors, exp_params, save_data=False, carla_recorder=False):
+    def __init__(self, client, vehicle_model, route, sensors, exp_params, save_data=False):
         """
         The experience is like a instance of the environment
          contains all the objects (vehicles, sensors) and scenarios of the the current experience
@@ -38,9 +38,10 @@ class Experience(object):
             # save all the experiment parameters to be used later
             self._exp_params = exp_params
             # carla recorder mode save the full carla logs to do some replays
-            client.start_recorder('env_{}_number_{}_batch_{:0>4d}.log'.format(self._exp_params['env_name'],
-                                                                              self._exp_params['env_number'],
-                                                                              self._exp_params['exp_number']))
+            if self._exp_params['carla_recorder']:
+                client.start_recorder('env_{}_number_{}_batch_{:0>4d}.log'.format(self._exp_params['env_name'],
+                                                                                  self._exp_params['env_number'],
+                                                                                  self._exp_params['exp_number']))
             # this parameter sets all the sensor threads and the main thread into saving data
             self._save_data = save_data
             # Start objects that are going to be created
@@ -85,6 +86,7 @@ class Experience(object):
             self._list_scenarios = [self._master_scenario]
 
         except:
+
             client.stop_recorder()
 
 
@@ -114,7 +116,6 @@ class Experience(object):
     def apply_control(self, controls):
 
         self._environment_data['scenario_controls'] = controls
-        #print (" Apply control")
         self._ego_actor.apply_control(controls)
 
 
@@ -230,6 +231,7 @@ class Experience(object):
         self.world = self._client.load_world(self._town_name)
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
+        settings.no_rendering_mode = self._exp_params['non_rendering_mode']
         settings.synchronous_mode = True
         self.world.apply_settings(settings)
 
