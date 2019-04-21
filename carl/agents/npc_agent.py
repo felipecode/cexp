@@ -18,21 +18,20 @@ class NPCAgent(Agent):
         self.route_assigned = False
         self._agent = None
 
-    def make_state(self, vehicle, sensors, scenarios, route):
+    def make_state(self, exp):
         if not self._agent:
-            self._agent = BasicAgent(vehicle)
+            self._agent = BasicAgent(exp._ego_actor)
 
         if not self.route_assigned:
             #for transform, road_option in self._global_plan_world_coord:
             #    wp = CarlaDataProvider.get_map().get_waypoint(transform.location)
             #    plan.append((wp, road_option))
-
-            self._agent._local_planner.set_global_plan(route)
+            self._agent._local_planner.set_global_plan(exp._route)
             self.route_assigned = True
 
         return None
 
-    def make_reward(self, vehicle, sensors, scenarios, route):
+    def make_reward(self, exp):
         # Just basically return None since the reward is not used for a non
 
         return None
