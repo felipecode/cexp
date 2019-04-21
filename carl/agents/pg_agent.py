@@ -225,6 +225,8 @@ class PGAgent(Agent):
                                (discount_rewards.std() + 0.000001)
             # TODO THIS IS CLEARLY WRONG NEED TO FILL AND MAKE A UNIQUE NUMPY HERE
             # Calculate loss
+            print (self._policy.policy_history)
+            print (Variable(discount_rewards))
             loss = (torch.sum(torch.mul(self._policy.policy_history, Variable(discount_rewards)).mul(-1), -1))
             print ("Loss ", loss)
 
