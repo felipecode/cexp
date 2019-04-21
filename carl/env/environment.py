@@ -4,19 +4,6 @@ import os
 
 from carl.env.experience import Experience
 
-
-def convert_transform_to_location(transform_vec):
-
-    location_vec = []
-    for transform_tuple in transform_vec:
-        location_vec.append((transform_tuple[0].location, transform_tuple[1]))
-
-    return location_vec
-
-
-# TODO this probably requires many subclasses
-
-
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
 
 """
@@ -25,15 +12,13 @@ as well as a communication channel with the CARLA servers.
 It also can have additional sensors that are environment related not policy related.
 """
 
-# TODO keep track of how many times each experience is executed and show that.
-
 
 class Environment(object):
     # We keep track here the number of times this class was executed.
     number_of_executions = 0
 
     def __init__(self, name, client_vec, env_config, env_params):
-        # We keep this so we can reset the environment
+        # We keep these configuration files so we can reset the environment
         self._env_config = env_config
         self._env_params = env_params
         self._batch_size = env_params['batch_size']
@@ -53,7 +38,7 @@ class Environment(object):
         self._sensor_desc_vec = []
         # The vehicle car model that is going to be spawned
         self._vehicle_model = env_config['vehicle_model']
-        # the list of all experiences to be instanciated at the start
+        # the list of all experiences to be instantiated at the start
         self._exp_list = []
         # the name of the package this env is into
         self._package_name = env_params['package_name']
@@ -67,19 +52,17 @@ class Environment(object):
         Remove and destroy all actors
         """
         for exp in self._exp_list:
+            if self._env_params['save_dataset'] and self._env_params['remove_wrongdata']:
+                # We clean
+                exp.clean_bad_dataset()
             exp.cleanup()
+
         Environment.number_of_executions += 1
 
     def stop(self):
-        # CHECK IF THE EPISODE COMPLETE the necessary ammount of points.
         self._cleanup()
-
         self.__init__(self._environment_name, self._client_vec, self._env_config, self._env_params)
 
-    def clean_environment_data(self):
-        # TODO for every single different environment...
-        # Just in case something happens we clean the data that was collected
-        pass
 
     def add_sensors(self, sensors):
         if not isinstance(sensors, list):
@@ -107,7 +90,7 @@ class Environment(object):
                                              self._sensor_desc_vec, exp_params, save_data=self._save_data))
 
         if Environment.number_of_executions == 0:  # if it is the first time we execute this env
-            # we use one of the experimebnts
+            # we use one of the experiments to build the metadata
             self._exp_list[0]._writer.save_metadata(self, self._exp_list[0]._instanced_sensors)
 
         for exp in self._exp_list:
@@ -148,7 +131,7 @@ class Environment(object):
 
     def is_running(self):
         """
-            The master scenario tests if the route is still running.
+            We use the running experiments to check if the route is still running
         """
         for exp in self._exp_list:
             if exp.is_running():  # If any exp is still running then this environment is still on.

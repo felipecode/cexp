@@ -57,7 +57,7 @@ class HDMapReader(object):
         # Tell that this function receives what the producer does.
         self._callback = callback
 
-    def destroy(self):
+    def stop(self):
         self._run_ps = False
 
 
@@ -160,7 +160,7 @@ class CANBusSensor(object):
         # Tell that this function receives what the producer does.
         self._callback = callback
 
-    def destroy(self):
+    def stop(self):
         self._run_ps = False
 
 

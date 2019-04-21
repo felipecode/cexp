@@ -245,7 +245,7 @@ class Experience(object):
         """
         pass
 
-    def cleanup(self, ego=False):
+    def cleanup(self, ego=True):
         """
         Remove and destroy all actors
         """
@@ -270,4 +270,16 @@ class Experience(object):
         if ego and self._ego_actor is not None:
             self._ego_actor.destroy()
             self._ego_actor = None
+
+        if self.world is not None:
+            settings = self.world.get_settings()
+            settings.synchronous_mode = False
+            self.world.apply_settings(settings)
+
+            self.world = None
+
+    def clean_bad_dataset(self):
+        # Basically remove the folder associated with this exp if the status was not success,
+        # or if did not achieve the correct ammount of points
+        pass
 
