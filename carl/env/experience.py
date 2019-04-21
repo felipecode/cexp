@@ -38,7 +38,7 @@ class Experience(object):
             # save all the experiment parameters to be used later
             self._exp_params = exp_params
             # carla recorder mode save the full carla logs to do some replays
-            if self._exp_params['carla_recorder']:
+            if self._exp_params['carla_recording']:
                 client.start_recorder('env_{}_number_{}_batch_{:0>4d}.log'.format(self._exp_params['env_name'],
                                                                                   self._exp_params['env_number'],
                                                                                   self._exp_params['exp_number']))
