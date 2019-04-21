@@ -77,7 +77,6 @@ class Agent(object):
         pass
 
     def add_value(self, value_batch, value_vec):
-        print (value_vec)
         for value in value_vec:
             if value is None:
                 return
