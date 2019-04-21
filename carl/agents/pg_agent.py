@@ -203,11 +203,11 @@ class PGAgent(Agent):
 
         return closest_waypoint, direction
 
-    def reinforce(self, rewards):
+    def reinforce(self, reward_batch):
         print (" REINFORCING ")
-        print (rewards)
+        print (reward_batch)
 
-        for i in
+        for rewards in reward_batch:
             # Should contain the  weight update algorithm if the agent uses it.
             R = 0
             # running_reward = (10 * 0.99) + (self._iteration * 0.01)
@@ -221,7 +221,7 @@ class PGAgent(Agent):
             discount_rewards = torch.FloatTensor(discount_rewards)
             discount_rewards = (discount_rewards - discount_rewards.mean()) /\
                                (discount_rewards.std() + np.finfo(np.float32).eps)
-
+            # TODO THIS IS CLEARLY WRONG NEED TO FILL AND MAKE A UNIQUE NUMPY HERE
             # Calculate loss
             loss = (torch.sum(torch.mul(self._policy.policy_history, Variable(discount_rewards)).mul(-1), -1))
 
