@@ -23,10 +23,13 @@ class NPCAgent(Agent):
             self._agent = BasicAgent(exp._ego_actor)
 
         if not self.route_assigned:
-            #for transform, road_option in self._global_plan_world_coord:
-            #    wp = CarlaDataProvider.get_map().get_waypoint(transform.location)
-            #    plan.append((wp, road_option))
-            self._agent._local_planner.set_global_plan(exp._route)
+
+            plan = []
+            for transform, road_option in exp._route:
+                wp = exp._ego_actor.get_world().get_map().get_waypoint(transform.location)
+                plan.append((wp, road_option))
+
+            self._agent._local_planner.set_global_plan(plan)
             self.route_assigned = True
 
         return None
