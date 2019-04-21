@@ -19,7 +19,7 @@ if __name__ == '__main__':
               'remove_wrong_data': False
               }
     # TODO for now batch size is one
-    number_of_iterations = 12
+    number_of_iterations = 10000
     # The idea is that the agent class should be completely independent
     agent = PGAgent()
     # this could be joined
@@ -27,7 +27,8 @@ if __name__ == '__main__':
                                                                                                # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
-
+    count_episode_number = 0
+    running_reward = 10
     for env in env_batch:
         # The policy selected to run this experience vector (The class basically) This policy can also learn, just
         # by taking the output from the experience.
@@ -35,14 +36,13 @@ if __name__ == '__main__':
         states, rewards = agent.unroll(env)
         agent.reinforce(rewards)
 
+        # TODO change this to average length
+        running_reward = (running_reward * 0.99) + (len(rewards[0]) * 0.01)
 
-        running_reward = (running_reward * 0.99) + (time * 0.01)
+        if count_episode_number % 5 == 0:
+            print('Episode {}\tLast length: {:5d}\tAverage length: {:.2f}'.format(count_episode_number, len(rewards[0]),
+                                                                                  running_reward))
 
-        update_policy()
-
-        if episode % 5 == 0:
-            print('Episode {}\tLast length: {:5d}\tAverage length: {:.2f}'.format(episode, time, running_reward))
-
-
+        count_episode_number += 1
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)

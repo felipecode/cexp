@@ -114,7 +114,7 @@ class Experience(object):
     def apply_control(self, controls):
 
         self._environment_data['scenario_controls'] = controls
-        print (" Apply control")
+        #print (" Apply control")
         self._ego_actor.apply_control(controls)
 
 
