@@ -218,12 +218,14 @@ class PGAgent(Agent):
                 discount_rewards.insert(0, R)
 
             # Scale rewards
+            print ("dis ", discount_rewards)
             discount_rewards = torch.FloatTensor(discount_rewards)
             discount_rewards = (discount_rewards - discount_rewards.mean()) /\
                                (discount_rewards.std() + np.finfo(np.float32).eps)
             # TODO THIS IS CLEARLY WRONG NEED TO FILL AND MAKE A UNIQUE NUMPY HERE
             # Calculate loss
             loss = (torch.sum(torch.mul(self._policy.policy_history, Variable(discount_rewards)).mul(-1), -1))
+            print ("Loss ", loss)
 
         # Update network weights
         self._optimizer.zero_grad()
@@ -232,7 +234,7 @@ class PGAgent(Agent):
 
         # Save and initialize episode history counters
         self._policy.loss_history.append(loss.data.item())
-        self._policy.reward_history.append(np.sum(rewards))
+        self._policy.reward_history.append(np.sum(discount_rewards))
         self._policy.policy_history = Variable(torch.Tensor())
 
 
