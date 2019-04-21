@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     # For each of the routes to be evaluated.
     new_json = {"exps": {},
-                "additional_sensors":{},
+                "additional_sensors": [],
                 "package_name": "straights"}   # TODO change exps to envs
     for env_number in range(16):
 

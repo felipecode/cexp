@@ -89,7 +89,9 @@ class Environment(object):
                 'package_name': self._package_name,
                 'town_name': self._town_name,
                 'env_number': Environment.number_of_executions[self._environment_name],
-                'exp_number': i
+                'exp_number': i,
+                'non_rendering_mode': self._env_params['non_rendering_mode'],
+                'carla_recording': self._env_params['carla_recording']
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, exp_params, save_data=self._save_data))
