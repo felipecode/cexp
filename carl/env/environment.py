@@ -20,6 +20,7 @@ class Environment(object):
     def __init__(self, name, client_vec, env_config, env_params):
         # We keep these configuration files so we can reset the environment
         self._env_config = env_config
+        print (self._env_config)
         self._env_params = env_params
         self._batch_size = env_params['batch_size']
         # if the data is going to be saved for this environment

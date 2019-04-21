@@ -3,7 +3,7 @@
     "exps": {
         "route0": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 0
             },
             "scenarios": {
@@ -14,7 +14,7 @@
         },
         "route1": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 1
             },
             "scenarios": {
@@ -25,7 +25,7 @@
         },
         "route10": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 10
             },
             "scenarios": {
@@ -36,7 +36,7 @@
         },
         "route11": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 11
             },
             "scenarios": {
@@ -47,7 +47,7 @@
         },
         "route12": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 12
             },
             "scenarios": {
@@ -58,7 +58,7 @@
         },
         "route13": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 13
             },
             "scenarios": {
@@ -69,7 +69,7 @@
         },
         "route14": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 14
             },
             "scenarios": {
@@ -80,7 +80,7 @@
         },
         "route15": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 15
             },
             "scenarios": {
@@ -91,7 +91,7 @@
         },
         "route2": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 2
             },
             "scenarios": {
@@ -102,7 +102,7 @@
         },
         "route3": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 3
             },
             "scenarios": {
@@ -113,7 +113,7 @@
         },
         "route4": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 4
             },
             "scenarios": {
@@ -124,7 +124,7 @@
         },
         "route5": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 5
             },
             "scenarios": {
@@ -135,7 +135,7 @@
         },
         "route6": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 6
             },
             "scenarios": {
@@ -146,7 +146,7 @@
         },
         "route7": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 7
             },
             "scenarios": {
@@ -157,7 +157,7 @@
         },
         "route8": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 8
             },
             "scenarios": {
@@ -168,7 +168,7 @@
         },
         "route9": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": 9
             },
             "scenarios": {

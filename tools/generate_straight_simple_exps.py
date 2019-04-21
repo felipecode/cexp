@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
         env_dict = {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "straight_town01.xml",
                 "id": env_number
             },
             "scenarios": {
