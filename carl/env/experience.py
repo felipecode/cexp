@@ -257,8 +257,8 @@ class Experience(object):
         if self._save_data:
             self._writer.save_summary(record_route_statistics_default(self._master_scenario,
                                                                       self._exp_params['env_name'] + '_' +
-                                                                      self._exp_params['env_number'] + '_' +
-                                                                      self._exp_params['exp_number']))
+                                                                      str(self._exp_params['env_number']) + '_' +
+                                                                      str(self._exp_params['exp_number'])))
 
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):
