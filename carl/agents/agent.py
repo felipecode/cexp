@@ -78,7 +78,10 @@ class Agent(object):
 
     def add_value(self, value_batch, value_vec):
         print (value_vec)
-        if value_vec.any() is not None and len(value_vec) > 0:
+        for value in value_vec:
+            if value is None:
+                return
+        if len(value_vec) > 0:
             for i in range(len(value_batch)):
                 value_batch[i].append(value_vec[i])
 
