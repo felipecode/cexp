@@ -36,7 +36,7 @@ def compute_magnitude_angle(target_location, current_location, orientation):
     norm_target = np.linalg.norm(target_vector)
 
     forward_vector = np.array([math.cos(math.radians(orientation)), math.sin(math.radians(orientation))])
-    d_angle = math.degrees(math.acos(np.dot(forward_vector, target_vector) / norm_target))
+    d_angle = math.degrees(math.acos(np.dot(forward_vector, target_vector) / (norm_target+0.000001)))
 
     return (norm_target, d_angle)
 
