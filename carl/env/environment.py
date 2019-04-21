@@ -15,7 +15,7 @@ It also can have additional sensors that are environment related not policy rela
 
 class Environment(object):
     # We keep track here the number of times this class was executed.
-    number_of_executions = 0
+    number_of_executions = {}
 
     def __init__(self, name, client_vec, env_config, env_params):
         # We keep these configuration files so we can reset the environment
@@ -46,6 +46,11 @@ class Environment(object):
         # functions defined by the policy to compute the adequate state and rewards based on CARLA data
         self.StateFunction = None
         self.RewardFunction = None
+        # create the environment
+        if self._environment_name not in Environment.number_of_executions:
+            Environment.number_of_executions.update({self._environment_name: 0})
+
+
 
     def _cleanup(self):
         """
@@ -57,7 +62,10 @@ class Environment(object):
                 exp.clean_bad_dataset()
             exp.cleanup()
 
-        Environment.number_of_executions += 1
+        if self._environment_name in Environment.number_of_executions:
+            Environment.number_of_executions[self._environment_name] += 1
+        else:
+            raise ValueError("Cleaning up non created environment")
 
     def stop(self):
         self._cleanup()
@@ -82,13 +90,13 @@ class Environment(object):
                 'env_name': self._environment_name,
                 'package_name': self._package_name,
                 'town_name': self._town_name,
-                'env_number': Environment.number_of_executions,
+                'env_number': Environment.number_of_executions[self._environment_name],
                 'exp_number': i
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, exp_params, save_data=self._save_data))
 
-        if Environment.number_of_executions == 0:  # if it is the first time we execute this env
+        if self._environment_name in Environment.number_of_executions:  # if it is the first time we execute this env
             # we use one of the experiments to build the metadata
             self._exp_list[0]._writer.save_metadata(self, self._exp_list[0]._instanced_sensors)
 
@@ -150,7 +158,7 @@ class Environment(object):
             exp.tick_world()
 
         return self.StateFunction(self._exp_list), \
-                 self.RewardFunction(self._exp_list)
+                    self.RewardFunction(self._exp_list)
 
     """ interface methods """
     """
