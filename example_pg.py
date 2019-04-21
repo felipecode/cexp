@@ -16,7 +16,9 @@ if __name__ == '__main__':
               'gpu': 0,
               'save_data': False,
               'batch_size': 1,
-              'remove_wrong_data': False
+              'remove_wrong_data': False,
+              'non_rendering_mode': True,
+              'carla_recording': False
               }
     # TODO for now batch size is one
     number_of_iterations = 10000

@@ -77,13 +77,13 @@ class Agent(object):
         pass
 
     def add_value(self, value_batch, value_vec):
-        print ("BATCH TO ADD ")
-        print (value_batch)
-        print ( "VALUE VECTOR ")
-        print(value_vec)
-
-        for i in range(len(value_batch)):
-            value_batch[i].append(value_vec[i])
+        #print ("BATCH TO ADD ")
+        #print (value_batch)
+        #print ( "VALUE VECTOR ")
+        #print(value_vec)
+        if None not in value_vec and len(value_vec) > 0:
+            for i in range(len(value_batch)):
+                value_batch[i].append(value_vec[i])
 
     def unroll(self, environment):
         """
@@ -102,6 +102,7 @@ class Agent(object):
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = environment.run_step(controls)
+
             # TODO check the posible sizes mismatches here
             self.add_value(reward_batch, reward)
             self.add_value(state_batch, state)
