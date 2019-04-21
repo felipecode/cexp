@@ -203,25 +203,27 @@ class PGAgent(Agent):
 
         return closest_waypoint, direction
 
-    def reinforce(self, rewards): # TODO should this have a batch size ???
+    def reinforce(self, rewards):
         print (" REINFORCING ")
         print (rewards)
-        # Should contain the  weight update algorithm if the agent uses it.
-        R = 0
-        # running_reward = (10 * 0.99) + (self._iteration * 0.01)
-        # Discount future rewards back to the present using gamma
-        discount_rewards = []
-        for r in rewards[::-1]:
-            R = r + self._policy.gamma * R
-            discount_rewards.insert(0, R)
 
-        # Scale rewards
-        discount_rewards = torch.FloatTensor(discount_rewards)
-        discount_rewards = (discount_rewards - discount_rewards.mean()) /\
-                           (discount_rewards.std() + np.finfo(np.float32).eps)
+        for i in
+            # Should contain the  weight update algorithm if the agent uses it.
+            R = 0
+            # running_reward = (10 * 0.99) + (self._iteration * 0.01)
+            # Discount future rewards back to the present using gamma
+            discount_rewards = []
+            for r in rewards[::-1]:
+                R = r + self._policy.gamma * R
+                discount_rewards.insert(0, R)
 
-        # Calculate loss
-        loss = (torch.sum(torch.mul(self._policy.policy_history, Variable(discount_rewards)).mul(-1), -1))
+            # Scale rewards
+            discount_rewards = torch.FloatTensor(discount_rewards)
+            discount_rewards = (discount_rewards - discount_rewards.mean()) /\
+                               (discount_rewards.std() + np.finfo(np.float32).eps)
+
+            # Calculate loss
+            loss = (torch.sum(torch.mul(self._policy.policy_history, Variable(discount_rewards)).mul(-1), -1))
 
         # Update network weights
         self._optimizer.zero_grad()

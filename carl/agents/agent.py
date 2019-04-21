@@ -1,3 +1,4 @@
+import numpy as np
 """
 The agent class is an interface to run experiences, the actual policy must inherit from agent in order to
 execute. It should implement the run_step function
@@ -33,10 +34,12 @@ class Agent(object):
         pass
 
     def _make_reward_batch(self, exp_vec):
-        reward_vec = []
+        reward_vec = [None] * len(exp_vec)
+        count = 0
         for exp in exp_vec:
             if exp.is_running():
-                reward_vec.append(self.make_reward(exp))
+                reward_vec[count] = self.make_reward(exp)
+            count += 1
         return reward_vec
 
     def make_state(self, exp):
@@ -72,6 +75,10 @@ class Agent(object):
         :return:
         """
         pass
+    def add_value(self, value_batch, value_vec):
+
+        for i in range(len(value_batch)):
+            value_batch[i].append(value_vec[i])
 
     def unroll(self, environment):
         """
@@ -83,16 +90,16 @@ class Agent(object):
         # You reset the scenario with and pass the make reward functions that are going to be used on the training.
         state, reward = environment.reset(self._make_state_batch, self._make_reward_batch)
         # Start the rewards and state vectors used
-        reward_vec = []
-        state_vec = []
+        reward_batch = [[]] * environment._batch_size
+        state_batch = [[]] * environment._batch_size
         count = 0
-        while environment.is_running():
+        while count < 10:
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = environment.run_step(controls)
             # TODO check the posible sizes mismatches here
-            reward_vec.append(reward)
-            state_vec.append(state)
+            self.add_value(reward_batch, reward)
+            self.add_value(state_batch, state)
             count += 1
 
-        return state_vec, reward_vec
+        return state_batch, reward_batch
