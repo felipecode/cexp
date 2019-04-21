@@ -28,11 +28,11 @@ if __name__ == '__main__':
     # Here some docker was set
     env_batch.start()
 
-    for exp in env_batch:
+    for env in env_batch:
         # The policy selected to run this experience vector (The class basically) This policy can also learn, just
         # by taking the output from the experience.
         # I need a mechanism to test the rewards so I can test the policy gradient strategy
-        states, rewards = agent.unroll(exp)
+        states, rewards = agent.unroll(env)
         agent.reinforce(rewards)
 
 
