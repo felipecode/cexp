@@ -52,7 +52,7 @@ class Environment(object):
         Remove and destroy all actors
         """
         for exp in self._exp_list:
-            if self._env_params['save_dataset'] and self._env_params['remove_wrongdata']:
+            if self._env_params['save_dataset'] and self._env_params['remove_wrong_data']:
                 # We clean
                 exp.clean_bad_dataset()
             exp.cleanup()
@@ -62,7 +62,6 @@ class Environment(object):
     def stop(self):
         self._cleanup()
         self.__init__(self._environment_name, self._client_vec, self._env_config, self._env_params)
-
 
     def add_sensors(self, sensors):
         if not isinstance(sensors, list):

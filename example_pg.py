@@ -15,7 +15,8 @@ if __name__ == '__main__':
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'save_data': False,
-              'batch_size': 1
+              'batch_size': 1,
+              'remove_wrong_data': False
               }
     # TODO for now batch size is one
     number_of_iterations = 10
