@@ -230,8 +230,7 @@ class Experience(object):
         self.world = self._client.load_world(self._town_name)
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
-        #TODO FIX SYNCH MODEL
-        settings.synchronous_mode = False
+        settings.synchronous_mode = True
         self.world.apply_settings(settings)
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):

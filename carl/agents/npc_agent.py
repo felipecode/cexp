@@ -50,6 +50,6 @@ class NPCAgent(Agent):
         pass
 
     def reset(self):
-        
+
         self.route_assigned = False
         self._agent = None
