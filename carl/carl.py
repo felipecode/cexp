@@ -59,7 +59,8 @@ class CARL(object):
         exp_params = {
             'batch_size': self._batch_size,
             'save_dataset': self._params['save_dataset'],
-            'package_name': self._json['package_name']
+            'package_name': self._json['package_name'],
+            'remove_wrong_data': self._params['remove_wrong_data']
         }
 
         # We instantiate experience here using the recently connected client
