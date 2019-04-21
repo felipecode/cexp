@@ -62,7 +62,7 @@ class CARL(object):
             'package_name': self._json['package_name'],
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
-            'carla_recorder': self._params['carla_recorder']
+            'carla_recording': self._params['carla_recording']
         }
 
         # We instantiate experience here using the recently connected client
