@@ -227,7 +227,7 @@ class PGAgent(Agent):
             # Calculate loss
             print (self._policy.policy_history)
             print (Variable(discount_rewards))
-            loss = (torch.sum(torch.mul(self._policy.policy_history, Variable(discount_rewards)).mul(-1), -1))
+            loss = (torch.sum(torch.mul(self._policy.policy_history[0:len(discount_rewards)], Variable(discount_rewards)).mul(-1), -1))
             print ("Loss ", loss)
 
         # Update network weights
