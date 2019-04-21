@@ -60,7 +60,9 @@ class CARL(object):
             'batch_size': self._batch_size,
             'save_dataset': self._params['save_dataset'],
             'package_name': self._json['package_name'],
-            'remove_wrong_data': self._params['remove_wrong_data']
+            'remove_wrong_data': self._params['remove_wrong_data'],
+            'non_rendering_mode': self._params['non_rendering_mode'],
+            'carla_recorder': self._params['carla_recorder']
         }
 
         # We instantiate experience here using the recently connected client
