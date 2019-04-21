@@ -235,7 +235,7 @@ class PGAgent(Agent):
 
         # Save and initialize episode history counters
         self._policy.loss_history.append(loss.data.item())
-        self._policy.reward_history.append(np.sum(discount_rewards))
+        self._policy.reward_history.append(np.sum(reward_batch[0]))
         self._policy.policy_history = Variable(torch.Tensor())
 
 
