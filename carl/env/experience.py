@@ -231,7 +231,7 @@ class Experience(object):
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
-        settings.synchronous_mode = True
+        settings.synchronous_mode = False
         self.world.apply_settings(settings)
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
