@@ -18,12 +18,12 @@ if __name__ == '__main__':
               'batch_size': 1,
               'remove_wrong_data': False,
               'non_rendering_mode': True,
-              'carla_recording': False
+              'carla_recording': True
               }
     # TODO for now batch size is one
     number_of_iterations = 10000
     # The idea is that the agent class should be completely independent
-    agent = PGAgent()
+    agent = PGAgent('8100.pth')
     # this could be joined
     env_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
                                                                                                # to load CARLA and the scenarios are made

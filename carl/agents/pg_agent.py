@@ -97,9 +97,12 @@ class Policy(nn.Module):
 
 class PGAgent(Agent):
 
-    def __init__(self):
+    def __init__(self, checkpoint_number=None):
 
         self._policy = Policy()
+        if checkpoint_number is not None:
+            checkpoint = torch.load(checkpoint_number)
+            self._policy.load_state_dict(checkpoint['state_dict'])
         self._optimizer = optim.Adam(self._policy.parameters(), lr=learning_rate)
         self._iteration = 0
         self._episode = 0
