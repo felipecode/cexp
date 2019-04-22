@@ -102,6 +102,7 @@ class PGAgent(Agent):
         self._policy = Policy()
         self._optimizer = optim.Adam(self._policy.parameters(), lr=learning_rate)
         self._iteration = 0
+        self._episode = 0
 
     def run_step(self, state):
         # Select an action (0 or 1) by running policy model and choosing based on the probabilities in state
@@ -242,6 +243,14 @@ class PGAgent(Agent):
         Destroy (clean-up) the agent objects that are use on CARLA
         :return:
         """
+        self._episode += 1
+        if self._episode % 100 == 0:
+            state = {
+                'iteration': self._episode,
+                'state_dict': self._policy.state_dict()
+            }
+            print ("Saved")
+            torch.save(state, str(self._episode) + '.pth')
         pass
 
 
