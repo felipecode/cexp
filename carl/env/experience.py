@@ -34,60 +34,57 @@ class Experience(object):
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
         """
 
-        try:
-            # save all the experiment parameters to be used later
-            self._exp_params = exp_params
-            # carla recorder mode save the full carla logs to do some replays
-            if self._exp_params['carla_recording']:
-                client.start_recorder('env_{}_number_{}_batch_{:0>4d}.log'.format(self._exp_params['env_name'],
-                                                                                  self._exp_params['env_number'],
-                                                                                  self._exp_params['exp_number']))
-            # this parameter sets all the sensor threads and the main thread into saving data
-            self._save_data = save_data
-            # Start objects that are going to be created
-            self.world = None
-            self._ego_actor = None
-            self._instanced_sensors = []
-            # set the client object connected to the
-            self._client = client
-            # We also set the town name to be used
-            self._town_name = exp_params['town_name']
 
-            self._vehicle_model = vehicle_model
-            # if data is being saved we create the writer object
-            if self._save_data:
-                # if we are going to save, we keep track of a dictionary with all the data
-                self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
-                                      exp_params['exp_number'])
-                self._environment_data = {'sensor_data': None,
-                                          'measurements': None,
-                                          'ego_controls': None,
-                                          'scenario_controls': None}
-            else:
-                self._writer = None
-            # Sensor interface, a buffer that contains all the read sensors
-            self._sensor_interface = SensorInterface()
-            # Load the world
-            self._load_world()
-            # Set the actor pool so the scenarios can prepare themselves when needed
-            CarlaActorPool.set_world(self.world)
-            # Set the world for the global data provider
-            CarlaDataProvider.set_world(self.world)
-            # We instance the ego actor object
-            _, self._route = interpolate_trajectory(self.world, route)
+        # save all the experiment parameters to be used later
+        self._exp_params = exp_params
+        # carla recorder mode save the full carla logs to do some replays
+        if self._exp_params['carla_recording']:
+            client.start_recorder('env_{}_number_{}_batch_{:0>4d}.log'.format(self._exp_params['env_name'],
+                                                                              self._exp_params['env_number'],
+                                                                              self._exp_params['exp_number']))
+        # this parameter sets all the sensor threads and the main thread into saving data
+        self._save_data = save_data
+        # Start objects that are going to be created
+        self.world = None
+        self._ego_actor = None
+        self._instanced_sensors = []
+        # set the client object connected to the
+        self._client = client
+        # We also set the town name to be used
+        self._town_name = exp_params['town_name']
 
-            self._spawn_ego_car(self._route[0][0])
-            # We setup all the instanced sensors
-            self._setup_sensors(sensors, self._ego_actor)
+        self._vehicle_model = vehicle_model
+        # if data is being saved we create the writer object
+        if self._save_data:
+            # if we are going to save, we keep track of a dictionary with all the data
+            self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
+                                  exp_params['exp_number'])
+            self._environment_data = {'sensor_data': None,
+                                      'measurements': None,
+                                      'ego_controls': None,
+                                      'scenario_controls': None}
+        else:
+            self._writer = None
+        # Sensor interface, a buffer that contains all the read sensors
+        self._sensor_interface = SensorInterface()
+        # Load the world
+        self._load_world()
+        # Set the actor pool so the scenarios can prepare themselves when needed
+        CarlaActorPool.set_world(self.world)
+        # Set the world for the global data provider
+        CarlaDataProvider.set_world(self.world)
+        # We instance the ego actor object
+        _, self._route = interpolate_trajectory(self.world, route)
 
-            # Data for building the master scenario
-            self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
-            #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
-            self._list_scenarios = [self._master_scenario]
+        self._spawn_ego_car(self._route[0][0])
+        # We setup all the instanced sensors
+        self._setup_sensors(sensors, self._ego_actor)
 
-        except:
+        # Data for building the master scenario
+        self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
+        #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
+        self._list_scenarios = [self._master_scenario]
 
-            client.stop_recorder()
 
 
     def tick_scenarios(self):
