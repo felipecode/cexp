@@ -75,8 +75,10 @@ class Experience(object):
         CarlaDataProvider.set_world(self.world)
         # We instance the ego actor object
         _, self._route = interpolate_trajectory(self.world, route)
-
-        self._spawn_ego_car(self._route[0][0])
+        # elevate the z transform to avoid spawning problems
+        elevate_transform = self._route[0][0]
+        elevate_transform.location.z += 0.5
+        self._spawn_ego_car(elevate_transform)
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
 
