@@ -14,7 +14,7 @@ class Agent(object):
         :return: control
         """
         pass
-    # TODO TRY A SIMPLE THREAD FOR EXECUTION HERE
+
     def _run_step_batch(self, input_data_vec):
 
         controls_vec = []
@@ -60,7 +60,6 @@ class Agent(object):
         return state_vec
 
     def sensors(self):
-
         sensors_vec = []
         return sensors_vec
 
@@ -91,6 +90,7 @@ class Agent(object):
         """
 
         environment.add_sensors(self.sensors())
+        print ("add sensors")
         # You reset the scenario with and pass the make reward functions that are going to be used on the training.
         state, reward = environment.reset(self._make_state_batch, self._make_reward_batch)
         # Start the rewards and state vectors used
@@ -101,6 +101,7 @@ class Agent(object):
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             state, reward = environment.run_step(controls)
+            print (" Run Step")
 
             # TODO check the posible sizes mismatches here
             self.add_value(reward_batch, reward)

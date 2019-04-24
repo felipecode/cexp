@@ -22,7 +22,7 @@ class Writer(object):
         """
 
         if "SRL_DATASET_PATH" not in os.environ:
-            raise  ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
+            raise  ValueError("SRL_DATASET_PATH not defined, set the place where the dataset is going to be saved")
 
         root_path = os.environ["SRL_DATASET_PATH"]
 

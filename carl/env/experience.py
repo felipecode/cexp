@@ -81,19 +81,20 @@ class Experience(object):
         self._spawn_ego_car(elevate_transform)
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
+        self._count = 0
 
         # Data for building the master scenario
-        self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
+        #self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
-        self._list_scenarios = [self._master_scenario]
+        #self._list_scenarios = [self._master_scenario]
 
 
 
     def tick_scenarios(self):
-
+        pass
         # We tick the scenarios to get them started
-        for scenario in self._list_scenarios:
-            scenario.scenario.scenario_tree.tick_once()
+        #for scenario in self._list_scenarios:
+        #    scenario.scenario.scenario_tree.tick_once()
 
 
     def tick_scenarios_control(self, controls):
@@ -104,9 +105,9 @@ class Experience(object):
         GameTime.on_carla_tick(self.timestamp)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
-        for scenario in self._list_scenarios:  #
-            scenario.scenario.scenario_tree.tick_once()
-            controls = scenario.change_control(controls)
+        #for scenario in self._list_scenarios:  #
+        #    scenario.scenario.scenario_tree.tick_once()
+        #    controls = scenario.change_control(controls)
 
         self._environment_data['ego_controls'] = controls
 
@@ -119,9 +120,11 @@ class Experience(object):
 
 
     def tick_world(self):
-
+        self._count +=1
         self.world.tick()
+        print ("WORLD TICK")
         self.timestamp = self.world.wait_for_tick()
+        print (" WAIT FOR TICK")
         if self._save_data:
              self._writer.save_experience(self.world, self._environment_data)
 
@@ -129,10 +132,10 @@ class Experience(object):
         """
             The master scenario tests if the route is still running for this experiment
         """
-        if self._master_scenario is None:
-            raise ValueError('You should not run a route without a master scenario')
+        #if self._master_scenario is None:
+        #    raise ValueError('You should not run a route without a master scenario')
 
-        return self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.RUNNING
+        return self._count > 100
 
     """
         FUNCTIONS FOR BUILDING 
@@ -231,7 +234,7 @@ class Experience(object):
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
-        settings.synchronous_mode = False
+        settings.synchronous_mode = True
         self.world.apply_settings(settings)
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
@@ -250,11 +253,11 @@ class Experience(object):
         Remove and destroy all actors
         """
         self._client.stop_recorder()
-        if self._save_data:
-            self._writer.save_summary(record_route_statistics_default(self._master_scenario,
-                                                                      self._exp_params['env_name'] + '_' +
-                                                                      str(self._exp_params['env_number']) + '_' +
-                                                                      str(self._exp_params['exp_number'])))
+        #if self._save_data:
+        #    self._writer.save_summary(record_route_statistics_default(self._master_scenario,
+        #                                                              self._exp_params['env_name'] + '_' +
+        #                                                              str(self._exp_params['env_number']) + '_' +
+        #                                                              str(self._exp_params['exp_number'])))
 
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):

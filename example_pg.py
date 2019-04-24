@@ -17,13 +17,13 @@ if __name__ == '__main__':
               'save_data': False,
               'batch_size': 1,
               'remove_wrong_data': False,
-              'non_rendering_mode': True,
-              'carla_recording': True
+              'non_rendering_mode': False,
+              'carla_recording': False
               }
     # TODO for now batch size is one
     number_of_iterations = 10000
     # The idea is that the agent class should be completely independent
-    agent = PGAgent('8100.pth')
+    agent = PGAgent()
     # this could be joined
     env_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
                                                                                                # to load CARLA and the scenarios are made
@@ -36,7 +36,7 @@ if __name__ == '__main__':
         # by taking the output from the experience.
         # I need a mechanism to test the rewards so I can test the policy gradient strategy
         states, rewards = agent.unroll(env)
-        agent.reinforce(rewards)
+        #agent.reinforce(rewards)
 
         # TODO change this to average length
         running_reward = (running_reward * 0.99) + (len(rewards[0]) * 0.01)

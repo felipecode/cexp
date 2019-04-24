@@ -152,10 +152,12 @@ class Environment(object):
         # Run the loop for all the experiments on the batch.
         # update all scenarios
         for i in range(len(self._exp_list)):
+            print ("Exp ", i)
             exp = self._exp_list[i]
             control = control_vec[i]
             control = exp.tick_scenarios_control(control)
             exp.apply_control(control)
+            print ("tick world")
             exp.tick_world()
 
         return self.StateFunction(self._exp_list), \

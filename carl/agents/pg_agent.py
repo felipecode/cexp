@@ -107,6 +107,8 @@ class PGAgent(Agent):
         self._iteration = 0
         self._episode = 0
 
+
+
     def run_step(self, state):
         # Select an action (0 or 1) by running policy model and choosing based on the probabilities in state
         state = torch.from_numpy(state).type(torch.FloatTensor)
@@ -171,6 +173,11 @@ class PGAgent(Agent):
     def make_state(self, exp):
         # state is divided in three parts, the speed, the angle_error, the high level command
         # Get the closest waypoint
+        spectator = exp.world.get_spectator()
+        ego_trans = exp._ego_actor.get_transform()
+        spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
+                                                carla.Rotation(pitch=-90)))
+
         waypoint, _ = self._get_current_wp_direction(exp._ego_actor.get_transform().location, exp._route)
         norm, angle = compute_magnitude_angle(waypoint.location, exp._ego_actor.get_transform().location,
                                               exp._ego_actor.get_transform().rotation.yaw)

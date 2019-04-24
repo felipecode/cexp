@@ -37,7 +37,7 @@ class CARL(object):
         self.client_timeout = 25.0
         # The os environment file
         if "SRL_DATASET_PATH" not in os.environ and params['save_dataset']:
-            raise ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
+            raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset is going to be saved")
         self._params = params
 
         # uninitialized experiences vector
@@ -48,12 +48,12 @@ class CARL(object):
 
     def start(self):
         # TODO: this setup is hardcoded for Batch_size == 1
-        free_port = find_free_port()
+        #free_port = find_free_port()
         # Starting the carla simulators
-        for env in self._environment_batch:
-            env.reset(port=free_port)
+        #for env in self._environment_batch:
+        #    env.reset(port=free_port)
         # setup world and client assuming that the CARLA server is up and running
-        self._client_vec = [carla.Client('localhost', free_port)]
+        self._client_vec = [carla.Client('localhost', 2000)]
         self._client_vec[0].set_timeout(self.client_timeout)
         # Create the configuration dictionary of the exp batch to pass to all experiements
         exp_params = {
