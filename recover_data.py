@@ -1,12 +1,9 @@
 import logging
-# TODO AFTER  MODNAY
 from carl.carl import CARL
 from carl.agents.npc_agent import NPCAgent
 from carl.env.environment import NoDataGenerated
 
 ###
-# TODO MAKE SCENARIO ASSIGMENT DETERMINISTIC
-
 if __name__ == '__main__':
 
     # A single loop being made
