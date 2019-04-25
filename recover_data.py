@@ -27,7 +27,7 @@ if __name__ == '__main__':
     # Here some docker was set
     env_batch.start(no_server=True)  # no carla server mode.
 
-    for env in env_batch:  # OPTION TO MAKE IT DETERMINISTIC FOR DATA RECOVERING.
+    for env in env_batch:
         # it can be personalized to return different types of data.
         print ("recovering ", env)
         try:
