@@ -22,7 +22,7 @@ class CARL(object):
     It contains the instanced env files that can be iterated to have instanced experiments to get
     """
 
-    def __init__(self, jsonfile, params, iterations_to_execute, batch_size):
+    def __init__(self, jsonfile, params, iterations_to_execute, batch_size, sequential=False):
 
         self._batch_size = batch_size  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
@@ -45,16 +45,22 @@ class CARL(object):
         # Starting the number of iterations that are going to be ran.
         self._iterations_to_execute = iterations_to_execute
         self._client_vec = None
+        # if the loading of environments will be sequential or random.
+        self._sequential = sequential
 
-    def start(self):
+    def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
-        free_port = find_free_port()
-        # Starting the carla simulators
-        for env in self._environment_batch:
-            env.reset(port=free_port)
-        # setup world and client assuming that the CARLA server is up and running
-        self._client_vec = [carla.Client('localhost', free_port)]
-        self._client_vec[0].set_timeout(self.client_timeout)
+        if no_server:
+            self._client_vec = []
+        else:
+            free_port = find_free_port()
+            # Starting the carla simulators
+            for env in self._environment_batch:
+                env.reset(port=free_port)
+            # setup world and client assuming that the CARLA server is up and running
+            self._client_vec = [carla.Client('localhost', free_port)]
+            self._client_vec[0].set_timeout(self.client_timeout)
+
         # Create the configuration dictionary of the exp batch to pass to all experiements
         exp_params = {
             'batch_size': self._batch_size,
@@ -82,7 +88,17 @@ class CARL(object):
         if self._experiences is None:
             raise ValueError("You are trying to iterate over an not started experience batch, run the start method ")
 
-        return iter([random.choice(self._experiences) for _ in range(self._iterations_to_execute)])
+        if self._sequential:
+            if self._iterations_to_execute > len(self._experiences):
+                final_iterations = len(self._experiences)
+                print ("WARNING: more iterations than environments were set on CARL. Setting the number to "
+                       "the actual number of experiences")
+            else:
+                final_iterations = self._iterations_to_execute
+            return iter([self._experiences[i] for i in range(final_iterations)])
+        else:
+            return iter([random.choice(self._experiences) for _ in range(self._iterations_to_execute)])
+
 
     def __len__(self):
         return self._iterations_to_execute

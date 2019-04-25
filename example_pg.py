@@ -11,10 +11,10 @@ if __name__ == '__main__':
     # A single loop being made
     json = 'database/straight_routes.json'
     # Dictionary with the necessary params related to the execution not the model itself.
-    params = {'save_dataset': True,
+    # TODO PARAMS NEED TO FOLLOW SOME SKELETON
+    params = {'save_dataset': False,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
-              'save_data': False,
               'batch_size': 1,
               'remove_wrong_data': False,
               'non_rendering_mode': True,

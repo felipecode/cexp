@@ -32,7 +32,7 @@ class Writer(object):
         self._latest_id = 0
         # path for the writter for this specific batch
         self._full_path = os.path.join(root_path, dataset_name, env_name,
-                                       str(env_number) + '_' + str(batch_number))
+                                       str(env_number), str(batch_number))
         # base path, for writting the metadata for the environment
         self._base_path = os.path.join(root_path, dataset_name, env_name)
 

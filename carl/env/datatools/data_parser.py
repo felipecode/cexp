@@ -1,108 +1,96 @@
 import glob
 import os
+import re
+import json
+
+def tryint(s):
+    try:
+        return int(s)
+    except:
+        return s
+
+def alphanum_key(s):
+    """ Turn a string into a list of string and number chunks.
+        "z23a" -> ["z", 23, "a"]
+    """
+    return [tryint(c) for c in re.split('([0-9]+)', s) ]
+
+def sort_nicely(l):
+    """ Sort the given list in the way that humans expect.
+    """
+    l.sort(key=alphanum_key)
+
+
 
 """ Parse the data that was already written """
 
 
-def parse_sensor():
-
-    #### asf
-
-    pass
-
-
-
-def parse_experience(path, metadata_dict):
-    measurements_list = glob.glob(os.path.join(path, 'measurement*'))
-    sort_nicely(measurements_list)
-
-    if len(measurements_list) == 0:
-        raise ValueError("Episode does not have measurements, probably something is wrong.")
-
-    # A simple count to keep track how many measurements were added this episode.
-    experience_data_dictorionary = {}
-
-    for sensor in metadata_dict[]
-        # TODO start the dictionary with the sensors.
-    count_added_measurements = 0
-
-    for measurement in measurements_list[:-3]:
-
-        data_point_number = measurement.split('_')[-1].split('.')[0]
-
-        with open(measurement) as f:
-            measurement_data = json.load(f)
-
-        # depending on the configuration file, we eliminated the kind of measurements
-        # that are not going to be used for this experiment
-        # We extract the interesting subset from the measurement dict
-
-        speed = data_parser.get_speed(measurement_data)
-
-        directions = measurement_data['directions']
-        final_measurement = self._get_final_measurement(speed, measurement_data, 0,
-                                                        directions,
-                                                        available_measurements_dict)
-
-
-        for sensors in metadata_dict['sensor_list']:
-
-            parse_sensor
-
-            if self.is_measurement_partof_experiment(final_measurement):
-                float_dicts.append(final_measurement)
-                rgb = 'CameraRGB_' + data_point_number + '.png'
-                sensor_data_names.append(os.path.join(episode.split('/')[-1], rgb))
-                count_added_measurements += 1
-
-            # We do measurements for the left side camera
-            # We convert the speed to KM/h for the augmentation
-
-            # We extract the interesting subset from the measurement dict
-
-            final_measurement = self._get_final_measurement(speed, measurement_data, -30.0,
-                                                            directions,
-                                                            available_measurements_dict)
-
-            if self.is_measurement_partof_experiment(final_measurement):
-                float_dicts.append(final_measurement)
-                rgb = 'LeftAugmentationCameraRGB_' + data_point_number + '.png'
-                sensor_data_names.append(os.path.join(episode.split('/')[-1], rgb))
-                count_added_measurements += 1
-
-            # We do measurements augmentation for the right side cameras
-
-            final_measurement = self._get_final_measurement(speed, measurement_data, 30.0,
-                                                            directions,
-                                                            available_measurements_dict)
-
-            if self.is_measurement_partof_experiment(final_measurement):
-                float_dicts.append(final_measurement)
-                rgb = 'RightAugmentationCameraRGB_' + data_point_number + '.png'
-                sensor_data_names.append(os.path.join(episode.split('/')[-1], rgb))
-                count_added_measurements += 1
-
-    # Check how many hours were actually added
-
-
-    return experience_data_dictorionary
-
-
+def get_number_executions(environments_path):
     """
-    last_data_point_number = measurements_list[-4].split('_')[-1].split('.')[0]
-    # print("last and float dicts len", last_data_point_number, count_added_measurements)
-    number_of_hours_pre_loaded += (float(count_added_measurements / 10.0) / 3600.0)
-    # print(" Added ", ((float(count_added_measurements) / 10.0) / 3600.0))
-    print(" Loaded ", number_of_hours_pre_loaded, " hours of data")
-    
-    # Make the path to save the pre loaded datasets
-    
-    
-    if not os.path.exists('_preloads'):
-        os.mkdir('_preloads')
-        # If there is a name we saved the preloaded data
-    if self.preload_name is not None:
-        np.save(os.path.join('_preloads', self.preload_name), [sensor_data_names, float_dicts])
-    
-    return sensor_data_names, float_dicts
+    List all the environments that
+
+    :param path:
+    :return:
     """
+
+    number_executions = {}
+    envs_list = glob.glob(os.path.join(environments_path, '*'))
+    for env in envs_list:
+        number_executions.update({env:len(glob.glob(os.path.join(env,'*')))})
+
+    return number_executions
+
+
+def parse_measurements(measurement):
+    with open(measurement) as f:
+        measurement_data = json.load(f)
+    return measurement_data
+
+
+def parse_environment(path, metadata_dict):
+
+    # We start on the root folder, We want to list all the episodes
+    experience_list = glob.glob(os.path.join(path, '*'))
+
+    sensors_types = metadata_dict['sensors']
+    print ("Sensor types")
+
+    # TODO probably add more metadata
+    # the experience number
+    exp_vec = []
+    for exp in experience_list:
+
+        batch_list = glob.glob(os.path.join(exp, '*'))
+
+        batch_vec = []
+        for batch in batch_list:
+            if 'summary.json' not in os.listdir(batch):
+                print (" Episode not finished skiping...")  #TODO this is a debug message on my logging system YET TO BE MADE
+                continue
+
+            measurements_list = glob.glob(os.path.join(batch, 'measurement*'))
+            sort_nicely(measurements_list)
+            sensors_lists = {}
+            for sen_type in sensors_types:
+                sensor_l = glob.glob(os.path.join(batch, sen_type + '*'))
+                sort_nicely(sensor_l)
+                sensors_lists.update({sen_type: sensor_l})
+            data_point_vec = []
+            for i in range(len(measurements_list)):
+
+                data_point = {}
+
+                data_point.update({'measurements':parse_measurements(measurements_list[i])})
+
+                for sen_type in sensors_types:
+                    data_point.update({sen_type:sensors_lists[sen_type][i]})
+
+                data_point_vec.append(data_point)
+
+            batch_vec.append(data_point_vec)
+
+        exp_vec.append(batch_vec)
+
+    return exp_vec
+
+

@@ -2,6 +2,7 @@ import logging
 # TODO AFTER  MODNAY
 from carl.carl import CARL
 from carl.agents.npc_agent import NPCAgent
+from carl.env.environment import NoDataGenerated
 
 ###
 # TODO MAKE SCENARIO ASSIGMENT DETERMINISTIC
@@ -9,35 +10,40 @@ from carl.agents.npc_agent import NPCAgent
 if __name__ == '__main__':
 
     # A single loop being made
-    json = 'database/test.json'
+    json = 'database/straight_routes.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
-              'save_data': True,
               'batch_size': 1,
-              'remove_wrong_data': True
+              'remove_wrong_data': False,
+              'non_rendering_mode': False,
+              'carla_recording': True
               }
     # TODO for now batch size is one
-    number_of_iterations = 10
+    number_of_iterations = 123
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-
-    exp_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
-                                                                                   # to load CARLA and the scenarios are made
+    # THe experience is built, the files necessary
+    env_batch = CARL(json, params, number_of_iterations, params['batch_size'], sequential=True)
     # Here some docker was set
-    exp_batch.start(no_server =True)  # no carla server mode.
+    env_batch.start(no_server=True)  # no carla server mode.
 
-    for exp in exp_batch:
+    for env in env_batch:  # OPTION TO MAKE IT DETERMINISTIC FOR DATA RECOVERING.
         # it can be personalized to return different types of data.
-        env_data = exp.get_data()  # returns a basically a way to read all the data properly
-        # for now it basically returns a big vector containing all the
-        for data_point in env_data:
-            pass
-            #env_data[['measurements']  -> has all the measurements
-            #env_data['rgb'] --> You can access the sensors directly by their ids.
+        print ("recovering ", env)
+        try:
+            env_data = env.get_data()  # returns a basically a way to read all the data properly
+        except NoDataGenerated:
+            print (" No data generate for episode ", env)
+        else:
+            # for now it basically returns a big vector containing all the
+            print ("PRINTING DATA POINTS")
 
+            for data_point in env_data:
+                print("################################")
+                print (data_point)
 
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)

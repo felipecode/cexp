@@ -3,9 +3,15 @@ import logging
 import os
 
 from carl.env.experience import Experience
+import carl.env.datatools.data_parser as parser
 
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
 
+
+# define the exception for non existent data
+class NoDataGenerated(Exception):
+   """Base class for other exceptions"""
+   pass
 """
 The environment class encapsulates the experience all the scenarios that the policy is going to execute
 as well as a communication channel with the CARLA servers.
@@ -18,6 +24,7 @@ class Environment(object):
     number_of_executions = {}
 
     def __init__(self, name, client_vec, env_config, env_params):
+
         # We keep these configuration files so we can reset the environment
         self._env_config = env_config
         print (self._env_config)
@@ -50,6 +57,15 @@ class Environment(object):
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
+        # update the number of executions to match the folder
+        if self._save_data and not Environment.number_of_executions:
+            if "SRL_DATASET_PATH" not in os.environ:
+                raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset was saved before")
+            Environment.number_of_executions = parser.get_number_executions(os.path.join(os.environ["SRL_DATASET_PATH"],
+                                                                            self._package_name))
+
+    def __str__(self):
+        return self._environment_name
 
     def _cleanup(self):
         """
@@ -108,32 +124,26 @@ class Environment(object):
         logging.debug("Started Environment %s" % self._environment_name)
 
         return StateFunction(self._exp_list), \
-               RewardFunction(self._exp_list)
+                 RewardFunction(self._exp_list)
+
 
 
     # TODO USE THIS GET DATA DIRECTLY
-    def get_data(self):   # TODO: The data you might want for an environment is needed
+    def get_data(self):
         # Each environment can have a reference datapoint , where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
         # It is always save in the SRL path
-        package_name = self._package_name
-
-        # We should save the entire dataset in the memory
-
-        if "SRL_DATASET_PATH" not in os.environ:
-            raise ValueError("SRL DATASET not defined, set the place where the dataset was saved before")
-
-        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], package_name, self._environment_name)
-
+        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
         # If the metadata does not exist the environment does not have a reference data.
-        if os.path.exists(os.path.join(root_path, 'metadata.json')):
-            raise ValueError("The data is not generated yet")
+        if not os.path.exists(os.path.join(root_path, 'metadata.json')):  # TODO FIX THE METADATA JSON
+            raise NoDataGenerated("The data is not generated yet")
+
         # Read the metadata telling the sensors that exist
         with open(os.path.join(root_path, 'metadata.json'), 'r') as f:
             metadata_dict = json.loads(f.read())
 
-        full_episode_data_dict = data_parser.parse_episode(root_path, metadata_dict)
+        full_episode_data_dict = parser.parse_environment(root_path, metadata_dict)
 
         return full_episode_data_dict
 
@@ -160,6 +170,8 @@ class Environment(object):
 
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)
+
+
 
     """ interface methods """
     """
