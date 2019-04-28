@@ -62,6 +62,14 @@ def parse_routes_file(route_filename):
     return list_route_descriptions
 
 
+def parse_weather(exp_weather):
+    """
+    Depending on the given weather create the according weather object
+    :param exp_weather:
+    :return:
+    """
+
+
 def parse_exp_vec(exp_vec):
     """
 
@@ -113,7 +121,10 @@ def parse_exp_vec(exp_vec):
         else:
             possible_scenarios = None
 
+
+
         exp_vec_parsed[exp_name].update({'scenarios': possible_scenarios})
+        exp_vec_parsed[exp_name].update({''})
 
         exp_vec_parsed[exp_name].update({'vehicle_model': exp_dict['vehicle_model']})
         exp_vec_parsed[exp_name].update({'town_name': exp_dict['town_name']})

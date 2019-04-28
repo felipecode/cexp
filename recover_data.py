@@ -7,7 +7,7 @@ from carl.env.environment import NoDataGenerated
 if __name__ == '__main__':
 
     # A single loop being made
-    json = 'database/straight_routes.json'
+    json = 'database/town01_empty.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'docker_name': 'carlalatest:latest',
