@@ -77,7 +77,7 @@ class CARL(object):
         #TODO add file joining on the beginning. ( ADDING MANY ExP DESC FILES )
         print(parserd_exp_dict)
         # For all the experiences on the file.
-        for exp_name in self._json['exps'].keys():
+        for exp_name in self._json['envs'].keys():
             # Instance an experience.
             exp = Environment(exp_name, self._client_vec, parserd_exp_dict[exp_name], exp_params)
             # add the additional sensors ( The ones not provided by the policy )
