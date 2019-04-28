@@ -13,6 +13,7 @@ if __name__ == '__main__':
     json = 'database/sample_json.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
+              'delete_data': True
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'save_data': True,

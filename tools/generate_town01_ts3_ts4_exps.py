@@ -1,6 +1,10 @@
-
 import json
 import os
+
+
+
+
+
 
 if __name__ == '__main__':
 
@@ -94,6 +98,8 @@ if __name__ == '__main__':
 
 
         new_json["envs"].update({'route'+str(env_number):env_dict })
+
+    # For the case of Ts3 and 4 you have to test if the route really has the scenario
 
 
     with open(filename, 'w') as fo:

@@ -9,7 +9,7 @@ if __name__ == '__main__':
     filename = os.path.join(root_route_file_position, 'straight_routes.json')
 
     # For each of the routes to be evaluated.
-    new_json = {"exps": {},
+    new_json = {"envs": {},
                 "additional_sensors": [],
                 "package_name": "straights"}   # TODO change exps to envs
     for env_number in range(16):
@@ -27,7 +27,7 @@ if __name__ == '__main__':
         }
 
 
-        new_json["exps"].update({'route'+str(env_number):env_dict })
+        new_json["envs"].update({'route'+str(env_number):env_dict })
 
 
     with open(filename, 'w') as fo:

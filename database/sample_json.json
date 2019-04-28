@@ -25,7 +25,9 @@
         },
         "scenarios": {
           "file": "None",
-          "route_independent": "Background"
+          "route_independent": "Background",
+          "avoid_dynamic_crossing":,
+          "bike at intersection"
         },
         "town_name": "Town01",
         "vehicle_model": "vehicle.lincoln.mkz2017"

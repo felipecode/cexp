@@ -149,7 +149,7 @@ class Writer(object):
 
 
 
-    def delete_experience(self):
+    def delete(self):
         """
         If the experience was bad, following the scenarios criteria, we may want to delete it.
         :return:

@@ -81,7 +81,7 @@ class Experience(object):
         self._spawn_ego_car(elevate_transform)
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
-
+        # We set all the traffic lights to green to avoid having this traffic scenario.
         # Data for building the master scenario
         self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
@@ -251,10 +251,12 @@ class Experience(object):
         """
         self._client.stop_recorder()
         if self._save_data:
-            self._writer.save_summary(record_route_statistics_default(self._master_scenario,
+            route_statistics = record_route_statistics_default(self._master_scenario,
                                                                       self._exp_params['env_name'] + '_' +
                                                                       str(self._exp_params['env_number']) + '_' +
-                                                                      str(self._exp_params['exp_number'])))
+                                                                      str(self._exp_params['exp_number']))
+            self._writer.save_summary(route_statistics)
+            self._clean_bad_dataset(route_statistics)
 
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):
@@ -278,8 +280,12 @@ class Experience(object):
 
             self.world = None
 
-    def clean_bad_dataset(self):
+    def _clean_bad_dataset(self, route_statistics):
+        # TODO for now only deleting on failure.
+
         # Basically remove the folder associated with this exp if the status was not success,
         # or if did not achieve the correct ammount of points
-        pass
+        if route_statistics['result'] == 'FAILURE':
+            print ( "FAILED , DELETING")
+            self._writer.delete()
 

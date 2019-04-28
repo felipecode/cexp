@@ -1,6 +1,6 @@
 {
     "additional_sensors": [],
-    "exps": {
+    "envs": {
         "route0": {
             "route": {
                 "file": "straight_town01.xml",
