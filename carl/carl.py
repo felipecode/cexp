@@ -19,7 +19,7 @@ def find_free_port():
 class CARL(object):
     """
     THE main CARL module.
-    It contains the instanced env files that can be iterated to have instanced experiments to get
+    It contains the instanced env files that can be iterated to have instanced environments to get
     """
 
     def __init__(self, jsonfile, params, iterations_to_execute, batch_size, sequential=False):
@@ -40,8 +40,8 @@ class CARL(object):
             raise ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
         self._params = params
 
-        # uninitialized experiences vector
-        self._experiences = None
+        # uninitialized environments vector
+        self._environments = None
         # Starting the number of iterations that are going to be ran.
         self._iterations_to_execute = iterations_to_execute
         self._client_vec = None
@@ -61,8 +61,8 @@ class CARL(object):
             self._client_vec = [carla.Client('localhost', free_port)]
             self._client_vec[0].set_timeout(self.client_timeout)
 
-        # Create the configuration dictionary of the exp batch to pass to all experiements
-        exp_params = {
+        # Create the configuration dictionary of the exp batch to pass to all environments
+        env_params = {
             'batch_size': self._batch_size,
             'save_dataset': self._params['save_dataset'],
             'package_name': self._json['package_name'],
@@ -71,33 +71,33 @@ class CARL(object):
             'carla_recording': self._params['carla_recording']
         }
 
-        # We instantiate experience here using the recently connected client
-        self._experiences = []
-        parserd_exp_dict = parser.parse_exp_vec(self._json['exps'])
+        # We instantiate environments here using the recently connected client
+        self._environments = []
+        parserd_exp_dict = parser.parse_exp_vec(self._json['envs'])
         #TODO add file joining on the beginning. ( ADDING MANY ExP DESC FILES )
         print(parserd_exp_dict)
-        # For all the experiences on the file.
-        for exp_name in self._json['envs'].keys():
-            # Instance an experience.
-            exp = Environment(exp_name, self._client_vec, parserd_exp_dict[exp_name], exp_params)
+        # For all the environments on the file.
+        for env_name in self._json['envs'].keys():
+            # Instance an _environments.
+            env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
             # add the additional sensors ( The ones not provided by the policy )
-            exp.add_sensors(self._json['additional_sensors'])
-            self._experiences.append(exp)
+            env.add_sensors(self._json['additional_sensors'])
+            self._environments.append(env)
 
     def __iter__(self):
-        if self._experiences is None:
-            raise ValueError("You are trying to iterate over an not started experience batch, run the start method ")
+        if self._environments is None:
+            raise ValueError("You are trying to iterate over an not started carl object, run the start method ")
 
         if self._sequential:
-            if self._iterations_to_execute > len(self._experiences):
-                final_iterations = len(self._experiences)
+            if self._iterations_to_execute > len(self._environments):
+                final_iterations = len(self._environments)
                 print ("WARNING: more iterations than environments were set on CARL. Setting the number to "
-                       "the actual number of experiences")
+                       "the actual number of environments")
             else:
                 final_iterations = self._iterations_to_execute
-            return iter([self._experiences[i] for i in range(final_iterations)])
+            return iter([self._environments[i] for i in range(final_iterations)])
         else:
-            return iter([random.choice(self._experiences) for _ in range(self._iterations_to_execute)])
+            return iter([random.choice(self._environments) for _ in range(self._iterations_to_execute)])
 
 
     def __len__(self):
