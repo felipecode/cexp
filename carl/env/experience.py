@@ -84,7 +84,7 @@ class Experience(object):
         # We set all the traffic lights to green to avoid having this traffic scenario.
         self._reset_map()
         # Data for building the master scenario
-        self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
+        self._master_scenario = self._build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
         self._list_scenarios = [self._master_scenario]
 

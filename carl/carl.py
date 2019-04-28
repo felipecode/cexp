@@ -70,6 +70,9 @@ class CARL(object):
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording']
         }
+        # Add the start on number param for substitution and multi process collection.
+        if 'start_on_number' in self._params:
+            env_params.update({'start_on_number': self._params['start_on_number']})
 
         # We instantiate environments here using the recently connected client
         self._environments = []
@@ -98,7 +101,6 @@ class CARL(object):
             return iter([self._environments[i] for i in range(final_iterations)])
         else:
             return iter([random.choice(self._environments) for _ in range(self._iterations_to_execute)])
-
 
     def __len__(self):
         return self._iterations_to_execute
