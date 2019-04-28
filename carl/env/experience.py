@@ -82,6 +82,7 @@ class Experience(object):
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
         # We set all the traffic lights to green to avoid having this traffic scenario.
+        self._reset_map()
         # Data for building the master scenario
         self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
@@ -204,8 +205,19 @@ class Experience(object):
             self.world.tick()
             self.world.wait_for_tick()
 
+    def _reset_map(self):
+        """
+        We set all the traffic lights to green to avoid having this scenario.
 
-    def build_master_scenario(self, route, town_name):
+        """
+        for actor in self.world.get_actors():
+            if 'traffic_light' in actor.type_id:
+                actor.set_state(carla.TrafficLightState.Green)
+                actor.set_green_time(100000)
+
+
+
+    def _build_master_scenario(self, route, town_name):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
