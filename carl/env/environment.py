@@ -76,9 +76,6 @@ class Environment(object):
         Remove and destroy all actors
         """
         for exp in self._exp_list:
-            if self._env_params['save_dataset'] and self._env_params['remove_wrong_data']:
-                # We clean
-                exp.clean_bad_dataset()
             exp.cleanup()
 
         if self._environment_name in Environment.number_of_executions:
@@ -112,7 +109,8 @@ class Environment(object):
                 'env_number': Environment.number_of_executions[self._environment_name],
                 'exp_number': i,
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
-                'carla_recording': self._env_params['carla_recording']
+                'carla_recording': self._env_params['carla_recording'],
+                'remove_wrong_data': self._env_params['remove_wrong_data']
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, exp_params, save_data=self._save_data))

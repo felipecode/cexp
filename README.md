@@ -3,7 +3,14 @@
 
 This  repository serves for collecting experience at CARLA using the scenarios
 platform of the CARLA challenge. It allows easy data collection in a policy "unroll" interface used
-in Reinforcement Learning
+in Reinforcement Learning. The same interface allows easy data collection and benchmarking
+of agents. In this repository we center ourselves in something central that is an 
+experience. 
+
+( Do a VIDEO )
+
+#C-EX 
+
 
 #### Getting Started
 
@@ -49,6 +56,12 @@ Add the CARLA API to your PYTHONPATH:
 
 Use py_trees 0.8.3  not the latest versions
 
+
+
+#### Modes
+
+The CARL interface to carla has several modes that can be used
+so that 
 
 
 
