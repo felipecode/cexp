@@ -13,11 +13,13 @@ if __name__ == '__main__':
     json = 'database/town01_empty.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
-              'delete_data': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
-              'remove_wrong_data': True
+              'remove_wrong_data': True,
+              'non_rendering_mode': False,
+
+              'carla_recording': True
               }
     # TODO for now batch size is one
     number_of_iterations = 10

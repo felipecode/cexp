@@ -1,7 +1,7 @@
 import argparse
 import time
 import logging
-import subprocess
+import os
 import multiprocessing
 
 from carla.client import make_carla_client
@@ -37,20 +37,10 @@ def collect_loop(args):
             logging.error(error)
             time.sleep(1)
 
-def execute_collector(args):
+def execute_collector(json_file, params, number_iteerations):
     p = multiprocessing.Process(target=collect_loop,
-                                args=(args,))
+                                args=(json_file, params, number_iteerations,))
     p.start()
-
-# open a carla docker with the container_name
-def open_carla(port, town_name, gpu, container_name):
-    sp = subprocess.Popen(
-        ['docker', 'run', '--rm', '-d', '-p',
-         str(port) + '-' + str(port + 2) + ':' + str(port) + '-' + str(port + 2),
-         '--runtime=nvidia', '-e', 'NVIDIA_VISIBLE_DEVICES=' + str(gpu), container_name,
-         '/bin/bash', 'CarlaUE4.sh', '/Game/Maps/' + town_name, '-windowed',
-         '-benchmark', '-fps=10', '-world-port=' + str(port)], shell=False,
-        stdout=subprocess.PIPE)
 
 
 if __name__ == '__main__':
@@ -77,6 +67,10 @@ if __name__ == '__main__':
         type=int,
         help=' the first episode')
     argparser.add_argument(
+        '-d', '--delete-wrong',
+        action="store_true",
+        help=' the first episode')
+    argparser.add_argument(
         '-j', '--json-config',
         help=' path to the json configuration file',
         required=True)
@@ -88,16 +82,21 @@ if __name__ == '__main__':
         required=True)
 
 
+
     args = argparser.parse_args()
 
-    town_name = 'Town0' + str(args.town_name)
 
     for i in range(args.number_collectors):
-        port = 2000 + i * 3
         gpu = str(int(i / args.carlas_per_gpu))
-        collector_args = Arguments(port, args.number_episodes,
-                                   args.start_episode + (args.number_episodes) * (i),
-                                   args.data_path,
-                                   args.data_configuration_name)
-        execute_collector(collector_args)
-        open_carla(port, town_name, gpu, args.container_name)
+        # A single loop being made
+        json_file = os.path.join('database', args.json_config)
+        # Dictionary with the necessary params related to the execution not the model itself.
+        params = {'save_dataset': True,
+                  'docker_name': args.containere_name,
+                  'gpu': gpu,
+                  'batch_size': 1,  # TODO for now batch size is 1
+                  'remove_wrong_data': args.delete_wrong,
+                  'start_episode': args.start_episode + (args.number_episodes) * (i)
+                  }
+
+        execute_collector(json_file, params, args.number_episodes)

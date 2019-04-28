@@ -268,7 +268,8 @@ class Experience(object):
                                                                       str(self._exp_params['env_number']) + '_' +
                                                                       str(self._exp_params['exp_number']))
             self._writer.save_summary(route_statistics)
-            self._clean_bad_dataset(route_statistics)
+            if self._exp_params['remove_wrong_data']:
+                self._clean_bad_dataset(route_statistics)
 
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):
