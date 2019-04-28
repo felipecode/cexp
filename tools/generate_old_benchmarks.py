@@ -55,7 +55,7 @@ if __name__ == '__main__':
             w_set = weather_sets[w_set_name]
             new_json = {"envs": {},
                         "additional_sensors": sensors,
-                        "package_name": 'nocrash_' + name_dict[w_set][town_name] + '_empty' }
+                        "package_name": 'nocrash_' + name_dict[w_set_name][town_name] + '_empty' }
 
             for weather in w_set:
 
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
                     new_json["envs"].update({weather + '_route' + str(env_number).zfill(5)})
 
-            filename = os.path.join(root_route_file_position, 'nocrash_' + name_dict[w_set][town_name] + '_empty')
+            filename = os.path.join(root_route_file_position, 'nocrash_' + name_dict[w_set_name][town_name] + '_empty')
 
             with open(filename, 'w') as fo:
                 # with open(os.path.join(root_route_file_position, 'all_towns_traffic_scenarios3_4.json'), 'w') as fo:
