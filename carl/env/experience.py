@@ -5,8 +5,7 @@ from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
-from srunner.challenge.utils.route_manipulation import interpolate_trajectory, clean_route
-
+from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
 from carl.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
 from carl.env.scorer import record_route_statistics_default
@@ -66,7 +65,7 @@ class Experience(object):
         else:
             self._writer = None
         # Sensor interface, a buffer that contains all the read sensors
-        self._sensor_interface = SensorInterface()
+        self._sensor_interface = SensorInterface(number_threads_barrier=len(sensors))
         # Load the world
         self._load_world()
         # Set the actor pool so the scenarios can prepare themselves when needed
@@ -82,11 +81,12 @@ class Experience(object):
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
         # We set all the traffic lights to green to avoid having this traffic scenario.
-        self._reset_map()
+
         # Data for building the master scenario
-        self._master_scenario = self._build_master_scenario(self._route, exp_params['town_name'])
+        self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
         self._list_scenarios = [self._master_scenario]
+        # Synch object
 
 
 
@@ -118,13 +118,23 @@ class Experience(object):
         self._environment_data['scenario_controls'] = controls
         self._ego_actor.apply_control(controls)
 
+        if self._exp_params['debug']:
+            spectator = self.world.get_spectator()
+            ego_trans = self._ego_actor.get_transform()
+            spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
+                                                    carla.Rotation(pitch=-90)))
+
 
     def tick_world(self):
 
+        if self._save_data:
+            print ("wAiTinG to Save data")
+            self._sensor_interface.wait_sensors_written(self._writer)
+            self._writer.save_experience(self.world, self._environment_data)
+
         self.world.tick()
         self.timestamp = self.world.wait_for_tick()
-        if self._save_data:
-             self._writer.save_experience(self.world, self._environment_data)
+
 
     def is_running(self):
         """
@@ -168,6 +178,7 @@ class Experience(object):
                     bp.set_attribute('image_size_x', str(sensor_spec['width']))
                     bp.set_attribute('image_size_y', str(sensor_spec['height']))
                     bp.set_attribute('fov', str(sensor_spec['fov']))
+                    bp.set_attribute('sensor_tick', "0.05")
                     sensor_location = carla.Location(x=sensor_spec['x'], y=sensor_spec['y'],
                                                      z=sensor_spec['z'])
                     sensor_rotation = carla.Rotation(pitch=sensor_spec['pitch'],
@@ -180,6 +191,7 @@ class Experience(object):
                     bp.set_attribute('upper_fov', '15')
                     bp.set_attribute('lower_fov', '-30')
                     bp.set_attribute('points_per_second', '500000')
+                    bp.set_attribute('sensor_tick', "0.05")
                     sensor_location = carla.Location(x=sensor_spec['x'], y=sensor_spec['y'],
                                                      z=sensor_spec['z'])
                     sensor_rotation = carla.Rotation(pitch=sensor_spec['pitch'],
@@ -194,6 +206,7 @@ class Experience(object):
                 sensor_transform = carla.Transform(sensor_location, sensor_rotation)
                 sensor = self.world.spawn_actor(bp, sensor_transform,
                                                 vehicle)
+
             # setup callback
             sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
                                    writer=self._writer))
@@ -205,19 +218,8 @@ class Experience(object):
             self.world.tick()
             self.world.wait_for_tick()
 
-    def _reset_map(self):
-        """
-        We set all the traffic lights to green to avoid having this scenario.
 
-        """
-        for actor in self.world.get_actors():
-            if 'traffic_light' in actor.type_id:
-                actor.set_state(carla.TrafficLightState.Green)
-                actor.set_green_time(100000)
-
-
-
-    def _build_master_scenario(self, route, town_name):
+    def build_master_scenario(self, route, town_name):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
@@ -243,7 +245,7 @@ class Experience(object):
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
-        settings.synchronous_mode = False
+        settings.synchronous_mode = True
         self.world.apply_settings(settings)
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):
@@ -262,15 +264,6 @@ class Experience(object):
         Remove and destroy all actors
         """
         self._client.stop_recorder()
-        if self._save_data:
-            route_statistics = record_route_statistics_default(self._master_scenario,
-                                                                      self._exp_params['env_name'] + '_' +
-                                                                      str(self._exp_params['env_number']) + '_' +
-                                                                      str(self._exp_params['exp_number']))
-            self._writer.save_summary(route_statistics)
-            if self._exp_params['remove_wrong_data']:
-                self._clean_bad_dataset(route_statistics)
-
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):
             if self._instanced_sensors[i] is not None:
@@ -278,6 +271,17 @@ class Experience(object):
                 self._instanced_sensors[i].destroy()
                 self._instanced_sensors[i] = None
         self._instanced_sensors = []
+        #  We stop the sensors first to avoid problems
+        if self._save_data:
+            route_statistics = record_route_statistics_default(self._master_scenario,
+                                                               self._exp_params['env_name'] + '_' +
+                                                               str(self._exp_params['env_number']) + '_' +
+                                                               str(self._exp_params['exp_number']))
+            self._writer.save_summary(route_statistics)
+            if self._exp_params['remove_wrong_data']:
+                self._clean_bad_dataset(route_statistics)
+
+
 
         CarlaActorPool.cleanup()
         CarlaDataProvider.cleanup()

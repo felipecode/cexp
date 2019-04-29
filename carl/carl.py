@@ -16,13 +16,15 @@ def find_free_port():
         return s.getsockname()[1]
 
 
+# TODO SET A DEBUG MODE ON THE INITIALIZATION
+
 class CARL(object):
     """
     THE main CARL module.
     It contains the instanced env files that can be iterated to have instanced environments to get
     """
 
-    def __init__(self, jsonfile, params, iterations_to_execute, batch_size, sequential=False):
+    def __init__(self, jsonfile, params, iterations_to_execute, batch_size, sequential=False, debug=False):
 
         self._batch_size = batch_size  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
@@ -47,16 +49,21 @@ class CARL(object):
         self._client_vec = None
         # if the loading of environments will be sequential or random.
         self._sequential = sequential
+        # set the debug mode
+        self._debug = debug
 
     def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
         if no_server:
             self._client_vec = []
         else:
-            free_port = find_free_port()
-            # Starting the carla simulators
-            for env in self._environment_batch:
-                env.reset(port=free_port)
+            if not self._debug:
+                free_port = find_free_port()
+                # Starting the carla simulators
+                for env in self._environment_batch:
+                    env.reset(port=free_port)
+            else:
+                free_port = 2000  # This is just a test mode where CARLA is already up.
             # setup world and client assuming that the CARLA server is up and running
             self._client_vec = [carla.Client('localhost', free_port)]
             self._client_vec[0].set_timeout(self.client_timeout)
@@ -68,7 +75,8 @@ class CARL(object):
             'package_name': self._json['package_name'],
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
-            'carla_recording': self._params['carla_recording']
+            'carla_recording': self._params['carla_recording'],
+            'debug': self._debug
         }
 
         # Add the start on number param for substitution and multi process collection.

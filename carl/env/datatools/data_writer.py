@@ -38,7 +38,14 @@ class Writer(object):
 
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
+    """
+        # We set this synch variable that will be set when all sensors are ready
+        self._ready_to_for_next_point = False
 
+    def ready(self):
+        # Set that the iteration is ready for the next point
+        self._ready_to_for_next_point = True
+    """
 
     def _build_measurements(self, world):
 
@@ -115,6 +122,9 @@ class Writer(object):
         # Are completely independent now.
         self._write_json_measurements(self._build_measurements(world), experience_data['ego_controls'],
                                       experience_data['scenario_controls'])
+
+
+        # Before we increment we make sure everyone made their writting
         self._latest_id += 1
 
 

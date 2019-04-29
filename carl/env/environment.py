@@ -110,7 +110,8 @@ class Environment(object):
                 'exp_number': i,
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
                 'carla_recording': self._env_params['carla_recording'],
-                'remove_wrong_data': self._env_params['remove_wrong_data']
+                'remove_wrong_data': self._env_params['remove_wrong_data'],
+                'debug': self._env_params['debug']
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, exp_params, save_data=self._save_data))

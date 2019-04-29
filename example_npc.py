@@ -16,9 +16,8 @@ if __name__ == '__main__':
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
-              'remove_wrong_data': True,
+              'remove_wrong_data': False,
               'non_rendering_mode': False,
-
               'carla_recording': True
               }
     # TODO for now batch size is one
@@ -26,7 +25,7 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
+    env_batch = CARL(json, params, number_of_iterations, params['batch_size'], debug=True)  # THe experience is built, the files necessary
                                                                                  # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()

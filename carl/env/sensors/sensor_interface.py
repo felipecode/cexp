@@ -5,6 +5,7 @@ import os
 import time
 from threading import Thread
 
+from threading import Lock
 import carla
 
 from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
@@ -168,7 +169,6 @@ class CallBack(object):
     def __init__(self, tag, sensor, data_provider, writer=None):
         self._tag = tag
         self._data_provider = data_provider
-
         self._data_provider.register_sensor(tag, sensor)
         self._writer = writer
 
@@ -187,26 +187,23 @@ class CallBack(object):
 
     # Parsing CARLA physical Sensors
     def _parse_image_cb(self, image, tag, writer):
-        if writer is not None:
-            writer.write_image(image, tag)
+
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
         array = copy.deepcopy(array)  # TODO IS THIS NEEDED  ?
         array = np.reshape(array, (image.height, image.width, 4))
         array = array[:, :, :3]
         array = array[:, :, ::-1]
-        self._data_provider.update_sensor(tag, array, image.frame_number)
+        self._data_provider.update_sensor(image, tag, array, image.frame_number, writer)
 
     def _parse_lidar_cb(self, lidar_data, tag, writer):
-        if writer is not None:
-            writer.write_lidar(lidar_data, tag)
+
         points = np.frombuffer(lidar_data.raw_data, dtype=np.dtype('f4'))
         points = copy.deepcopy(points)
         points = np.reshape(points, (int(points.shape[0] / 3), 3))
-        self._data_provider.update_sensor(tag, points, lidar_data.frame_number)
+        self._data_provider.update_sensor(lidar_data, tag, points, lidar_data.frame_number, writer)
 
     def _parse_gnss_cb(self, gnss_data, tag, writer=None):
-        if writer is not None:
-            writer.write_gnss(gnss_data, tag)
+
         array = np.array([gnss_data.latitude,
                           gnss_data.longitude,
                           gnss_data.altitude], dtype=np.float32)
@@ -220,10 +217,14 @@ class CallBack(object):
 
 
 class SensorInterface(object):
-    def __init__(self):
+    def __init__(self, number_threads_barrier=None):
         self._sensors_objects = {}
         self._data_buffers = {}
         self._timestamps = {}
+        self._written = {}
+        self._number_sensors = number_threads_barrier
+        self._lock = Lock()
+
 
     def register_sensor(self, tag, sensor):
         if tag in self._sensors_objects:
@@ -233,17 +234,48 @@ class SensorInterface(object):
         self._data_buffers[tag] = None
         self._timestamps[tag] = -1
 
-    def update_sensor(self, tag, data, timestamp):
+    def update_sensor(self, raw, tag, data, timestamp, writer):
         if tag not in self._sensors_objects:
             raise ValueError("The sensor with tag [{}] has not been created!".format(tag))
         self._data_buffers[tag] = data
         self._timestamps[tag] = timestamp
+        # While all sensors are not ready we cannot way synchronization
+        self._synchronize_write(writer, tag, raw)
 
     def all_sensors_ready(self):
         for key in self._sensors_objects.keys():
             if self._data_buffers[key] is None:
                 return False
+        # Sensors are ready initialize written as 0
+        if not self._written:
+            for key in self._sensors_objects.keys():
+                self._written[key] = 0
         return True
+
+    def wait_sensors_written(self, writer):
+        unsynchronized = True
+        while unsynchronized:
+            unsynchronized = False
+            for tag in self._written.keys():
+                if self._written[tag] !=  writer._latest_id+1:
+                    unsynchronized= True
+
+            time.sleep(0.01)
+
+    def _synchronize_write(self, writer, tag, raw):
+        """
+        Synchronize to check if all sensors have been written.
+        """
+        if not self.all_sensors_ready():
+            return
+        self._lock.acquire()
+        if writer is not None and self._written[tag] > writer._latest_id:
+            self._lock.release()
+            return
+        if writer is not None:
+            writer.write_image(raw, tag)
+        self._written[tag] += 1
+        self._lock.release()
 
     def get_data(self):
         data_dict = {}
