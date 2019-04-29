@@ -74,7 +74,7 @@ if __name__ == '__main__':
                         "weather_profile": weather
                     }
 
-                    new_json["envs"].update({weather + '_route' + str(env_number).zfill(5)})
+                    new_json["envs"].update({weather + '_route' + str(env_number).zfill(5): env_dict})
 
             filename = os.path.join(root_route_file_position, 'nocrash_' + name_dict[w_set_name][town_name] + '_empty')
 

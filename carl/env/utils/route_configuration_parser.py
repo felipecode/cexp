@@ -68,6 +68,37 @@ def parse_weather(exp_weather):
     :param exp_weather:
     :return:
     """
+    if exp_weather == 'ClearNoon':
+        return carla.WeatherParameters.ClearNoon
+    elif exp_weather == 'CloudyNoon':
+        return carla.WeatherParameters.CloudyNoon
+    elif exp_weather == 'WetNoon':
+        return carla.WeatherParameters.WetNoon
+    elif exp_weather == 'WetCloudyNoon':
+        return carla.WeatherParameters.WetCloudyNoon
+    elif exp_weather == 'MidRainyNoon':
+        return carla.WeatherParameters.MidRainyNoon
+    elif exp_weather == 'HardRainNoon':
+        return carla.WeatherParameters.HardRainNoon
+    elif exp_weather == 'SoftRainNoon':
+        return carla.WeatherParameters.SoftRainNoon
+    elif exp_weather == 'ClearSunset':
+        return carla.WeatherParameters.ClearSunset
+    elif exp_weather == 'CloudySunset':
+        return carla.WeatherParameters.CloudySunset
+    elif exp_weather == 'WetSunset':
+        return carla.WeatherParameters.WetSunset
+    elif exp_weather == 'WetCloudySunset':
+        return carla.WeatherParameters.WetCloudySunset
+    elif exp_weather == 'MidRainSunset':
+        return carla.WeatherParameters.MidRainSunset
+    elif exp_weather == 'HardRainSunset':
+        return carla.WeatherParameters.HardRainSunset
+    elif exp_weather == 'SoftRainSunset':
+        return carla.WeatherParameters.SoftRainSunset
+    else:
+        raise ValueError("Invalid weather on the configuration json file")
+
 
 
 def parse_exp_vec(exp_vec):
@@ -124,7 +155,7 @@ def parse_exp_vec(exp_vec):
 
 
         exp_vec_parsed[exp_name].update({'scenarios': possible_scenarios})
-        exp_vec_parsed[exp_name].update({''})
+        exp_vec_parsed[exp_name].update({'weather': })
 
         exp_vec_parsed[exp_name].update({'vehicle_model': exp_dict['vehicle_model']})
         exp_vec_parsed[exp_name].update({'town_name': exp_dict['town_name']})
