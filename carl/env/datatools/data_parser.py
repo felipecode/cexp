@@ -76,7 +76,7 @@ def parse_environment(path, metadata_dict):
                 sensor_l = glob.glob(os.path.join(batch, sensor['type'] + '*'))
                 sort_nicely(sensor_l)
                 sensors_lists.update({sensor['type']: sensor_l})
-            
+
             data_point_vec = []
             for i in range(len(measurements_list)):
 
@@ -84,8 +84,8 @@ def parse_environment(path, metadata_dict):
 
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
 
-                for sen_type in sensors_types:
-                    data_point.update({sen_type: sensors_lists[sen_type][i]})
+                for sensor in sensors_types:
+                    data_point.update({sensor['type']: sensors_lists[sensor['type']][i]})
 
                 data_point_vec.append(data_point)
 
