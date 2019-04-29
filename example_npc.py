@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CARL(json, params, number_of_iterations, params['batch_size'], debug=True)  # THe experience is built, the files necessary
+    env_batch = CARL(json, params, number_of_iterations, params['batch_size'], debug=False)  # THe experience is built, the files necessary
                                                                                  # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
