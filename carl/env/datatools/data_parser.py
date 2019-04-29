@@ -75,7 +75,7 @@ def parse_environment(path, metadata_dict):
             for sen_type in sensors_types:
                 print (sen_type)
                 print (batch)
-                sensor_l = glob.glob(os.path.join(batch, sen_type + '*'))
+                sensor_l = glob.glob(os.path.join(batch, sen_type['type'] + '*'))
                 sort_nicely(sensor_l)
                 sensors_lists.update({sen_type: sensor_l})
             data_point_vec = []
