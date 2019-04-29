@@ -4,7 +4,7 @@ import os
 
 if __name__ == '__main__':
 
-    root_route_file_position = '/network/home/codevilf/experience_database_generator/database/nocrash'
+    root_route_file_position = 'database/nocrash'
     # root_route_file_position = 'srunner/challenge/'
     #filename_town01 = os.path.join(root_route_file_position, 'Town01_navigation.json')
 
