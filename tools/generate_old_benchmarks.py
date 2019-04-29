@@ -26,12 +26,12 @@ if __name__ == '__main__':
 
 
     # Weathers to be generated later
-    weather_sets = {'training': ["Clear Noon",
-                                  "Wet Noon",
-                                  "Hard Rain Noon",
-                                   "Clear Sunset"],
-                    'new_weather':  ["Wet Sunset",
-                                    "Soft Rain Sunset"]
+    weather_sets = {'training': ["ClearNoon",
+                                  "WetNoon",
+                                  "HardRainNoon",
+                                   "ClearSunset"],
+                    'new_weather':  ["WetSunset",
+                                    "SoftRainSunset"]
                     }
 
 
