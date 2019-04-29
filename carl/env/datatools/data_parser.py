@@ -77,6 +77,7 @@ def parse_environment(path, metadata_dict):
                 sort_nicely(sensor_l)
                 sensors_lists.update({sensor['type']: sensor_l})
 
+            print (sensors_lists)
             data_point_vec = []
             for i in range(len(measurements_list)):
 
