@@ -81,10 +81,10 @@ def parse_environment(path, metadata_dict):
             for i in range(len(measurements_list)):
 
                 data_point = {}
-
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
-
+                print ('iter ', i)
                 for sensor in sensors_types:
+                    print ('update ', sensors_lists[sensor['type']][i])
                     data_point.update({sensor['type']: sensors_lists[sensor['type']][i]})
 
                 data_point_vec.append(data_point)
