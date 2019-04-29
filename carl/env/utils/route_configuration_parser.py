@@ -158,7 +158,7 @@ def parse_exp_vec(exp_vec):
         if 'weather_profile' in exp_dict:
             exp_vec_parsed[exp_name].update({'weather_profile': parse_weather(exp_dict['weather_profile'])})
         else:
-            exp_vec_parsed[exp_name].update({'weather_profile': carla.WeatherParameters.ClearNoon})
+            exp_vec_parsed[exp_name].update({'weather_profile': carla.WeatherParameters.MidRainyNoon})
 
         exp_vec_parsed[exp_name].update({'vehicle_model': exp_dict['vehicle_model']})
         exp_vec_parsed[exp_name].update({'town_name': exp_dict['town_name']})

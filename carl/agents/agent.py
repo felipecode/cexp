@@ -69,6 +69,7 @@ class Agent(object):
 
         pass
 
+
     def reset(self):
         """
         Destroy (clean-up) the agent

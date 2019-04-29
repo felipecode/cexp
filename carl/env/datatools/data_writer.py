@@ -47,12 +47,13 @@ class Writer(object):
         self._ready_to_for_next_point = True
     """
 
-    def _build_measurements(self, world):
+    def _build_measurements(self, world, previous):
 
         measurements = {"ego_actor": {},
                         "opponents": {},   # Todo add more information on demand, now just ego actor
                         "lane": {}
                         }
+        measurements.update(previous)
         # All the actors present we save their information
         for actor in world.get_actors():
             if 'vehicle' in actor.type_id:
@@ -120,8 +121,11 @@ class Writer(object):
 
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
-        self._write_json_measurements(self._build_measurements(world), experience_data['ego_controls'],
-                                      experience_data['scenario_controls'])
+        # We join the building of the measurements with some extra data that was calculated
+        self._write_json_measurements(self._build_measurements(world, experience_data['exp_measurements']),
+                                      experience_data['ego_controls'],
+                                      experience_data['scenario_controls'],
+                                     )
 
 
         # Before we increment we make sure everyone made their writting

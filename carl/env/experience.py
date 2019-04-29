@@ -1,4 +1,6 @@
 import carla
+import math
+import numpy as np
 import py_trees
 
 from srunner.scenariomanager.timer import GameTime, TimeOut
@@ -10,7 +12,7 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 from carl.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
 from carl.env.scorer import record_route_statistics_default
 
-
+from agents.navigation.local_planner import RoadOption
 from carl.env.datatools.data_writer import Writer
 
 from carl.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
@@ -23,6 +25,24 @@ def convert_transform_to_location(transform_vec):
 
     return location_vec
 
+def distance_vehicle(waypoint, vehicle_position):
+
+    dx = waypoint.location.x - vehicle_position.x
+    dy = waypoint.location.y - vehicle_position.y
+
+    return math.sqrt(dx * dx + dy * dy)
+
+def get_forward_speed(vehicle):
+        """ Convert the vehicle transform directly to forward speed """
+
+        velocity = vehicle.get_velocity()
+        transform = vehicle.get_transform()
+        vel_np = np.array([velocity.x, velocity.y, velocity.z])
+        pitch = np.deg2rad(transform.rotation.pitch)
+        yaw = np.deg2rad(transform.rotation.yaw)
+        orientation = np.array([np.cos(pitch) * np.cos(yaw), np.cos(pitch) * np.sin(yaw), np.sin(pitch)])
+        speed = np.dot(vel_np, orientation)
+        return speed
 
 class Experience(object):
     # TODO ADD CARLA RECORDER FLAG PROPERLY
@@ -58,8 +78,8 @@ class Experience(object):
             # if we are going to save, we keep track of a dictionary with all the data
             self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
                                   exp_params['exp_number'])
-            self._environment_data = {'sensor_data': None,
-                                      'measurements': None,
+            self._environment_data = {
+                                      'exp_measurements': None,  # The exp measurements are specific of the experience
                                       'ego_controls': None,
                                       'scenario_controls': None}
         else:
@@ -81,7 +101,7 @@ class Experience(object):
         # We setup all the instanced sensors
         self._setup_sensors(sensors, self._ego_actor)
         # We set all the traffic lights to green to avoid having this traffic scenario.
-
+        self._reset_map()
         # Data for building the master scenario
         self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
@@ -126,6 +146,14 @@ class Experience(object):
 
 
     def tick_world(self):
+        # Save all the measurements that are interesting
+        # TODO this may go to another function
+
+        _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location, self._route)
+        self._environment_data['exp_measurements'] = {
+            'directions': directions,
+            'forward_speed': get_forward_speed(self._ego_actor)
+        }
 
         if self._save_data:
             print ("wAiTinG to Save data")
@@ -218,6 +246,44 @@ class Experience(object):
             self.world.tick()
             self.world.wait_for_tick()
 
+    def _get_current_wp_direction(self, vehicle_position, route):
+
+        # for the current position and orientation try to get the closest one from the waypoints
+        closest_id = 0
+        closest_waypoint = None
+        min_distance = 100000
+        for index in range(len(route)):
+
+            waypoint = route[index][0]
+
+            computed_distance = distance_vehicle(waypoint, vehicle_position)
+            if computed_distance < min_distance:
+                min_distance = computed_distance
+                closest_id = index
+                closest_waypoint = waypoint
+
+        direction = route[closest_id][1]
+        if direction == RoadOption.LEFT:
+            direction = 3.0
+        elif direction == RoadOption.RIGHT:
+            direction = 4.0
+        elif direction == RoadOption.STRAIGHT:
+            direction = 5.0
+        else:
+            direction = 2.0
+
+        return closest_waypoint, direction
+
+
+    def _reset_map(self):
+        """
+        We set all the traffic lights to green to avoid having this scenario.
+
+        """
+        for actor in self.world.get_actors():
+            if 'traffic_light' in actor.type_id:
+                actor.set_state(carla.TrafficLightState.Green)
+                actor.set_green_time(100000)
 
     def build_master_scenario(self, route, town_name):
         # We have to find the target.
@@ -246,6 +312,7 @@ class Experience(object):
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
         settings.synchronous_mode = True
+        self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
 
     def build_scenario_instances(self, scenario_definition_vec, town_name):

@@ -1,0 +1,44 @@
+{
+    "additional_sensors": [
+        {
+            "fov": 100,
+            "height": 600,
+            "id": "rgb",
+            "pitch": -15.0,
+            "roll": 0.0,
+            "type": "sensor.camera.rgb",
+            "width": 800,
+            "x": 2.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "z": 1.4
+        }
+    ],
+    "envs": {
+        "SoftRainSunset_route00000": {
+            "route": {
+                "file": "Town02_navigation.xml",
+                "id": 0
+            },
+            "scenarios": {
+                "file": "None"
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "SoftRainSunset"
+        },
+      "WetNoon_route00024": {
+            "route": {
+                "file": "Town01_navigation.xml",
+                "id": 24
+            },
+            "scenarios": {
+                "file": "None"
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        }
+    },
+    "package_name": "sample_benchmark"
+}

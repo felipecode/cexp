@@ -41,6 +41,8 @@ class NPCAgent(Agent):
 
     def run_step(self, state):
         control = self._agent.run_step()
+
+
         return control
 
     def reinforce(self, rewards):

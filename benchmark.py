@@ -20,10 +20,8 @@ def benchmark(json_file, params, number_iterations, agent):
         states, rewards = agent.unroll(env)
         # if the agent is already un
         summary = env.get_summary()
+        #
 
 
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
-
-    # Should return the resulting benchmark
-    return

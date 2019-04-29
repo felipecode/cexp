@@ -27,7 +27,6 @@ class Environment(object):
 
         # We keep these configuration files so we can reset the environment
         self._env_config = env_config
-        print (self._env_config)
         self._env_params = env_params
         self._batch_size = env_params['batch_size']
         # if the data is going to be saved for this environment
@@ -106,6 +105,7 @@ class Environment(object):
                 'env_name': self._environment_name,
                 'package_name': self._package_name,
                 'town_name': self._town_name,
+                'weather_profile': self._env_config['weather_profile'],
                 'env_number': Environment.number_of_executions[self._environment_name],
                 'exp_number': i,
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
@@ -128,7 +128,6 @@ class Environment(object):
 
         return StateFunction(self._exp_list), \
                  RewardFunction(self._exp_list)
-
 
 
     # TODO USE THIS GET DATA DIRECTLY
@@ -160,7 +159,13 @@ class Environment(object):
         # if no exp is running then the environment is already done
         return False
 
+    # TODO we can make this extra data pretier.
     def run_step(self, control_vec):
+        """
+        Run an step on the simulation using the agent control
+        :param control_vec:
+        :return:
+        """
 
         # Run the loop for all the experiments on the batch.
         # update all scenarios
@@ -170,6 +175,7 @@ class Environment(object):
             control = exp.tick_scenarios_control(control)
             exp.apply_control(control)
             exp.tick_world()
+
 
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)

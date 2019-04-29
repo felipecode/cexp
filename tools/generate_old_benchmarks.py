@@ -43,7 +43,6 @@ if __name__ == '__main__':
                                  'Town02': 'newweathertown'
 
                  }
-
     }
 
     # TODO add generation of the other posibilities ( Non-empty)
@@ -76,7 +75,7 @@ if __name__ == '__main__':
 
                     new_json["envs"].update({weather + '_route' + str(env_number).zfill(5): env_dict})
 
-            filename = os.path.join(root_route_file_position, 'nocrash_' + name_dict[w_set_name][town_name] + '_empty')
+            filename = os.path.join(root_route_file_position, 'nocrash_' + name_dict[w_set_name][town_name] + '_empty.json')
 
             with open(filename, 'w') as fo:
                 # with open(os.path.join(root_route_file_position, 'all_towns_traffic_scenarios3_4.json'), 'w') as fo:
