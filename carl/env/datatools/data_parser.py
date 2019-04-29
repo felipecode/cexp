@@ -48,7 +48,7 @@ def parse_measurements(measurement):
 
 
 def parse_environment(path, metadata_dict):
-
+    print (" path to parse ")
     # We start on the root folder, We want to list all the episodes
     experience_list = glob.glob(os.path.join(path, '*'))
 
@@ -71,7 +71,9 @@ def parse_environment(path, metadata_dict):
             measurements_list = glob.glob(os.path.join(batch, 'measurement*'))
             sort_nicely(measurements_list)
             sensors_lists = {}
+            print (sensors_types)
             for sen_type in sensors_types:
+                print (sen_type)
                 sensor_l = glob.glob(os.path.join(batch, sen_type + '*'))
                 sort_nicely(sensor_l)
                 sensors_lists.update({sen_type: sensor_l})
@@ -80,7 +82,7 @@ def parse_environment(path, metadata_dict):
 
                 data_point = {}
 
-                data_point.update({'measurements':parse_measurements(measurements_list[i])})
+                data_point.update({'measurements': parse_measurements(measurements_list[i])})
 
                 for sen_type in sensors_types:
                     data_point.update({sen_type:sensors_lists[sen_type][i]})
