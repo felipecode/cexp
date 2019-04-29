@@ -25,10 +25,7 @@ if __name__ == '__main__':
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
         }
-
-
         new_json["envs"].update({'route'+str(env_number):env_dict })
-
 
     with open(filename, 'w') as fo:
         # with open(os.path.join(root_route_file_position, 'all_towns_traffic_scenarios3_4.json'), 'w') as fo:
