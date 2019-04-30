@@ -1,9 +1,6 @@
 import sys
 import glob
-try:
-    sys.path.append(glob.glob('cexp')[0])
-except IndexError:
-    pass # Add the  CEXP folder
+
 import logging
 import traceback
 
