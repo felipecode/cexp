@@ -1,6 +1,7 @@
 import traceback
 from cexp.cexp import CEXP
 
+# TODO make this to log things somehow
 
 def main_cex(json_file, params, number_iterations, agent, sequential, debug):
 
