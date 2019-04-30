@@ -1,5 +1,5 @@
 
-from carl.agents.agent import Agent
+from cexp.agents.agent import Agent
 import carla
 
 class DummyAgent(Agent):

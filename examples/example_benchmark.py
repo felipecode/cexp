@@ -1,11 +1,14 @@
 import logging
 
-from carl.carl import CARL
-from carl.agents.npc_agent import NPCAgent
+from cexp.agents import CARL
+from cexp.agents.npc_agent import NPCAgent
 
 
 # This is an example of simple benchmark. Lets see how to add a good summary to it.
 
+# TODO ADD THE REPETION SOMEHOW TO THE GENERAL PARAMETERS
+
+# THE REPETITION CAN BE TRANSLATED AS BATCH SIZE IF POSSIBLE
 
 if __name__ == '__main__':
 

@@ -1,7 +1,7 @@
 import logging
 
-from carl.carl import CARL
-from carl.agents.pg_agent import PGAgent
+from cexp.agents import CARL
+from cexp.agents.pg_agent import PGAgent
 
 ###
 # TODO MAKE SCENARIO ASSIGMENT DETERMINISTIC

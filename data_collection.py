@@ -1,14 +1,13 @@
 import logging
 
-from carl.carl import CARL
-from carl.agents.npc_agent import NPCAgent
+from cexp.agents import CARL
+from cexp.agents.npc_agent import NPCAgent
 
 # TODO ADD the posibility to configure what goes in and what goes out
 ###
 # TODO MAKE SCENARIO ASSIGMENT DETERMINISTIC ( IS IT DONE ??)
 
 def collect_data(json_file, params, number_iterations):
-
 
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()

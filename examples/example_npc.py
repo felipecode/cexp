@@ -1,8 +1,8 @@
 import logging
 import traceback
 
-from carl.carl import CARL
-from carl.agents.npc_agent import NPCAgent
+from cexp.cexp import CEXP
+from cexp.agents.npc_agent import NPCAgent
 
 # TODO ADD the posibility to configure what goes in and what goes out
 ###
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CARL(json, params, number_of_iterations, params['batch_size'], debug=False)  # THe experience is built, the files necessary
+    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], debug=False)  # THe experience is built, the files necessary
                                                                                  # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
@@ -43,9 +43,9 @@ if __name__ == '__main__':
             env.stop()
             break
         except:
-            traceback.print()
+            traceback.print_exc()
             # Just try again
             env.stop()
-            print (" EXPERIMENT BROKE trying again.")
+            print (" ENVIRONMENT BROKE trying again.")
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)

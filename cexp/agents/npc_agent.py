@@ -1,5 +1,5 @@
 
-from carl.agents.agent import Agent
+from cexp.agents.agent import Agent
 
 from agents.navigation.basic_agent import BasicAgent
 

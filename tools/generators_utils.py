@@ -4,7 +4,7 @@ import os
 import math
 import carla
 
-import carl.env.utils.route_configuration_parser as parser
+import cexp.env.utils.route_configuration_parser as parser
 
 
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory

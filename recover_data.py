@@ -1,7 +1,7 @@
 import logging
-from carl.carl import CARL
-from carl.agents.npc_agent import NPCAgent
-from carl.env.environment import NoDataGenerated
+from cexp.agents import CARL
+from cexp.agents.npc_agent import NPCAgent
+from cexp.env.environment import NoDataGenerated
 
 ###
 if __name__ == '__main__':

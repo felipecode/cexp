@@ -5,9 +5,9 @@ import random
 import os
 from contextlib import closing
 
-from carl.env.server_manager import ServerManagerDocker
-from carl.env.environment import Environment
-import carl.env.utils.route_configuration_parser as parser
+from agents.env.server_manager import ServerManagerDocker
+from agents.env.environment import Environment
+import agents.env.utils.route_configuration_parser as parser
 
 
 def find_free_port():
@@ -18,9 +18,9 @@ def find_free_port():
 
 # TODO SET A DEBUG MODE ON THE INITIALIZATION
 
-class CARL(object):
+class CEXP(object):
     """
-    THE main CARL module.
+    THE main CEXP module.
     It contains the instanced env files that can be iterated to have instanced environments to get
     """
 
@@ -98,7 +98,7 @@ class CARL(object):
 
     def __iter__(self):
         if self._environments is None:
-            raise ValueError("You are trying to iterate over an not started carl object, run the start method ")
+            raise ValueError("You are trying to iterate over an not started cexp object, run the start method ")
 
         if self._sequential:
             if self._iterations_to_execute > len(self._environments):
