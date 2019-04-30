@@ -17,7 +17,7 @@
     "envs": {
         "SoftRainSunset_route00000": {
             "route": {
-                "file": "Town02_navigation.xml",
+                "file": "nocrash/Town02_navigation.xml",
                 "id": 0
             },
             "scenarios": {
@@ -29,7 +29,7 @@
         },
       "WetNoon_route00024": {
             "route": {
-                "file": "Town01_navigation.xml",
+                "file": "nocrash/Town01_navigation.xml",
                 "id": 24
             },
             "scenarios": {

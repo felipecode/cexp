@@ -1,4 +1,5 @@
 import logging
+import traceback
 
 from carl.carl import CARL
 from carl.agents.npc_agent import NPCAgent
@@ -31,10 +32,20 @@ if __name__ == '__main__':
     env_batch.start()
 
     for env in env_batch:
-        # The policy selected to run this experience vector (The class basically) This policy can also learn, just
-        # by taking the output from the experience.
-        # I need a mechanism to test the rewards so I can test the policy gradient strategy
-        states, rewards = agent.unroll(env)
-        agent.reinforce(rewards)
+
+        try:
+            # The policy selected to run this experience vector (The class basically) This policy can also learn, just
+            # by taking the output from the experience.
+            # I need a mechanism to test the rewards so I can test the policy gradient strategy
+            states, rewards = agent.unroll(env)
+            agent.reinforce(rewards)
+        except KeyboardInterrupt:
+            env.stop()
+            break
+        except:
+            traceback.print()
+            # Just try again
+            env.stop()
+            print (" EXPERIMENT BROKE trying again.")
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)

@@ -10,6 +10,8 @@ from carla.tcp import TCPConnectionError
 from collect import collect
 
 
+# TODO I have a problem with respect to where to put files
+
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
 
 
@@ -44,6 +46,11 @@ if __name__ == '__main__':
         type=int,
         help=' the number of episodes per collector used')
     argparser.add_argument(
+        '-b', '--batch_size',
+        default=200,
+        type=int,
+        help=' the batch size for the execution')
+    argparser.add_argument(
         '-g', '--carlas_per_gpu',
         default=3,
         type=int,
@@ -69,7 +76,6 @@ if __name__ == '__main__':
         required=True)
 
 
-
     args = argparser.parse_args()
 
 
@@ -86,4 +92,4 @@ if __name__ == '__main__':
                   'start_episode': args.start_episode + (args.number_episodes) * (i)
                   }
 
-        execute_collector(json_file, params, args.number_episodes)
+        execute(json_file, params, args.number_episodes, args.process)
