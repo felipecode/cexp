@@ -15,6 +15,21 @@
         }
     ],
     "envs": {
+            "WetSunset_route00024": {
+            "route": {
+                "file": "Town01_navigation.xml",
+                "id": 24
+            },
+            "scenarios": {
+                "background_activity": {
+                    "vehicle.*": 20,
+                    "walker.*": 50
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetSunset"
+        },
         "SoftRainSunset_route00000": {
             "route": {
                 "file": "nocrash/Town02_navigation.xml",

@@ -1,5 +1,5 @@
 
-#### CARL CARLA Reinforcement Learning Framework
+#### C-EX CARLA Reinforcement Learning Framework
 
 This  repository serves for collecting experience at CARLA using the scenarios
 platform of the CARLA challenge. It allows easy data collection in a policy "unroll" interface used
@@ -64,4 +64,9 @@ The CARL interface to carla has several modes that can be used
 so that 
 
 
+### 
+
+BENCHMARK CORL 2017
+
+BENCHMARK NOCRASH 
 

@@ -45,6 +45,9 @@ def get_forward_speed(vehicle):
         speed = np.dot(vel_np, orientation)
         return speed
 
+# TODO is scenario mutually exclusive ??
+
+
 class Experience(object):
     # TODO ADD CARLA RECORDER FLAG PROPERLY
     def __init__(self, client, vehicle_model, route, sensors, exp_params, save_data=False):
