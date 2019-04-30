@@ -2,6 +2,7 @@ import argparse
 import time
 import logging
 import os
+import glob
 import multiprocessing
 
 from cexp.agents.npc_agent import NPCAgent
