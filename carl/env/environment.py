@@ -180,6 +180,18 @@ class Environment(object):
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)
 
+    # TODO: the concept of batch vs the concept of repetition
+    def get_summary(self):
+
+        # If the environment is still running there is no summary yet
+        if self.is_running():
+            return None
+
+        all_exp_summary = []
+        for exp in self._exp_list:
+            all_exp_summary.append(exp.get_summary())
+        return all_exp_summary
+
 
 
     """ interface methods """

@@ -25,7 +25,6 @@
           "id": 2
         },
         "scenarios": {
-          "file": "None",
           "route_independent": "Background",
           "avoid_dynamic_crossing":,
           "bike at intersection"

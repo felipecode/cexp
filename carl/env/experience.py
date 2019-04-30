@@ -7,6 +7,7 @@ from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
+from srunner.scenarios.background_activity import BackgroundActivity
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
 from carl.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
@@ -106,7 +107,9 @@ class Experience(object):
         self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
         #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
         self._list_scenarios = [self._master_scenario]
-        # Synch object
+        # Route statistics, when the route is finished there will be route statistics on this object. and nothing else
+        self._route_statistics = None
+
 
 
 
@@ -285,6 +288,7 @@ class Experience(object):
                 actor.set_state(carla.TrafficLightState.Green)
                 actor.set_green_time(100000)
 
+    # TODO MASTER SCEENARIO TIMEOUT CALCULATION.
     def build_master_scenario(self, route, town_name):
         # We have to find the target.
         # we also have to convert the route to the expected format
@@ -315,16 +319,44 @@ class Experience(object):
         self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
 
-    def build_scenario_instances(self, scenario_definition_vec, town_name):
+    # Todo make a scenario builder class
+    def _build_background(self, background_definition):
+        scenario_configuration = ScenarioConfiguration()
+        scenario_configuration.route = None
+        scenario_configuration.town = self._town_name
+        # TODO walkers are not supported yeet, wait for carla 0.9.6
+        model = 'vehicle.*'
+        transform = carla.Transform()
+        autopilot = True
+        random = True
 
-        # TODO FOR NOW THERE IS NO SCENARIOS, JUST ROUTE,
+        actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
+                                                              background_definition['vehicle.*'])
+        scenario_configuration.other_actors = [actor_configuration_instance]
+
+        return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
+                                  timeout=300, debug_mode=False)
+
+    def build_scenario_instances(self, scenario_definition_vec):
+
         """
             Based on the parsed route and possible scenarios, build all the scenario classes.
         :param scenario_definition_vec: the dictionary defining the scenarios
         :param town: the town where scenarios are going to be
         :return:
         """
-        pass
+        list_instanced_scenarios = []
+        for scenario_name in  scenario_definition_vec:
+            # The BG activity encapsulates several scenarios that contain vehicles going arround
+            if scenario_name == 'background_activity':  # BACKGROUNBD ACTIVITY SPECIAL CASE
+
+                background_definition = scenario_definition_vec[scenario_name]
+                list_instanced_scenarios.append(self._build_background(background_definition))
+
+
+    def get_summary(self):
+
+        return self._route_statistics
 
     def cleanup(self, ego=True):
         """
@@ -340,15 +372,14 @@ class Experience(object):
         self._instanced_sensors = []
         #  We stop the sensors first to avoid problems
         if self._save_data:
-            route_statistics = record_route_statistics_default(self._master_scenario,
+            self._route_statistics = record_route_statistics_default(self._master_scenario,
                                                                self._exp_params['env_name'] + '_' +
                                                                str(self._exp_params['env_number']) + '_' +
                                                                str(self._exp_params['exp_number']))
-            self._writer.save_summary(route_statistics)
+
+            self._writer.save_summary(self._route_statistics)
             if self._exp_params['remove_wrong_data']:
-                self._clean_bad_dataset(route_statistics)
-
-
+                self._clean_bad_dataset(self._route_statistics)
 
         CarlaActorPool.cleanup()
         CarlaDataProvider.cleanup()
