@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '..')  # Add the  CEXP folder
+sys.path.insert(0, '../')  # Add the  CEXP folder
 import logging
 import traceback
 
