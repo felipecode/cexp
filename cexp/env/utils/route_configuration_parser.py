@@ -120,9 +120,8 @@ def parse_exp_vec(exp_vec):
     full_loaded_route_files = {}
     # keep track also the loaded scenario files.
     # Read all the dicts
-    print (exp_vec)
-    routes_root_path = os.path.join('/', *os.path.realpath(__file__).split('/')[:-4], 'database/routes')
-    print (routes_root_path)
+    routes_root_path = os.path.join('/', *os.path.realpath(__file__).split('/')[:-4], 'database')
+
     for exp_name in exp_vec.keys():
         exp_dict = exp_vec[exp_name]
         # add the exp name as a reference to the dict

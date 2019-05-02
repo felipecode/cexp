@@ -147,3 +147,19 @@ def record_route_statistics_default(master_scenario, exp_name):
                           }
 
     return current_statistics
+
+
+def export_score(score_vec, configuration):
+
+    """
+    Receives a vec of dictionary as well as the configuration json
+    :param score_vec:
+    :return:
+    """
+
+    # This function actually depends on the user, for now lets get the overall route score and infraction score.
+
+    # It should
+    pass
+
+
