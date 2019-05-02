@@ -49,7 +49,6 @@ def get_forward_speed(vehicle):
 
 
 class Experience(object):
-    # TODO ADD CARLA RECORDER FLAG PROPERLY
     def __init__(self, client, vehicle_model, route, sensors, exp_params, save_data=False):
         """
         The experience is like a instance of the environment
@@ -162,7 +161,6 @@ class Experience(object):
         }
 
         if self._save_data:
-            print ("wAiTinG to Save data")
             self._sensor_interface.wait_sensors_written(self._writer)
             self._writer.save_experience(self.world, self._environment_data)
 

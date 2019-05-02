@@ -1,6 +1,6 @@
 import logging
 
-from cexp.agents import CARL
+from cexp.cexp import CEXP
 from cexp.agents.npc_agent import NPCAgent
 
 
@@ -13,9 +13,9 @@ from cexp.agents.npc_agent import NPCAgent
 if __name__ == '__main__':
 
     # A single loop being made
-    json = 'database/town01_empty.json'
+    json_file = 'database/sample_benchmark.json'
     # Dictionary with the necessary params related to the execution not the model itself.
-    params = {'save_dataset': True,
+    params = {'save_dataset': False,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
 
-    env_batch = CARL(json_file, params, number_iterations,
+    env_batch = CEXP(json_file, params, number_of_iterations,
                      params['batch_size'], sequential=True)  # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
     # Here some docker was set
