@@ -2,9 +2,11 @@ import json
 import carla
 import socket
 import random
+import collections
 import os
 from contextlib import closing
 
+from cexp.env.utils.general import sort_nicely_dict
 from cexp.env.server_manager import ServerManagerDocker
 from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
@@ -15,8 +17,6 @@ def find_free_port():
         s.bind(('', 0))
         return s.getsockname()[1]
 
-
-# TODO SET A DEBUG MODE ON THE INITIALIZATION
 
 class CEXP(object):
     """
@@ -85,8 +85,8 @@ class CEXP(object):
 
         # We instantiate environments here using the recently connected client
         self._environments = []
-        parserd_exp_dict = parser.parse_exp_vec(self._json['envs'])
-        #TODO add file joining on the beginning. ( ADDING MANY ExP DESC FILES )
+        parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(sort_nicely_dict(self._json['envs'].items())))
+
         print(parserd_exp_dict)
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():

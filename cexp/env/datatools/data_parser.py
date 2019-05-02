@@ -1,24 +1,9 @@
 import glob
 import os
-import re
 import json
 
-def tryint(s):
-    try:
-        return int(s)
-    except:
-        return s
+from cexp.env.utils.general import sort_nicely
 
-def alphanum_key(s):
-    """ Turn a string into a list of string and number chunks.
-        "z23a" -> ["z", 23, "a"]
-    """
-    return [tryint(c) for c in re.split('([0-9]+)', s) ]
-
-def sort_nicely(l):
-    """ Sort the given list in the way that humans expect.
-    """
-    l.sort(key=alphanum_key)
 
 
 
@@ -48,12 +33,11 @@ def parse_measurements(measurement):
 
 
 def parse_environment(path, metadata_dict):
-    print (" path to parse ")
+
     # We start on the root folder, We want to list all the episodes
     experience_list = glob.glob(os.path.join(path, '*'))
 
     sensors_types = metadata_dict['sensors']
-    print ("Sensor types")
 
     # TODO probably add more metadata
     # the experience number
@@ -71,7 +55,6 @@ def parse_environment(path, metadata_dict):
             measurements_list = glob.glob(os.path.join(batch, 'measurement*'))
             sort_nicely(measurements_list)
             sensors_lists = {}
-            print (sensors_types)
             for sensor in sensors_types:
                 sensor_l = glob.glob(os.path.join(batch, sensor['id'] + '*'))
                 sort_nicely(sensor_l)
@@ -82,9 +65,8 @@ def parse_environment(path, metadata_dict):
 
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
-                print ('iter ', i)
+
                 for sensor in sensors_types:
-                    print ('update ', sensors_lists[sensor['id']][i])
                     data_point.update({sensor['id']: sensors_lists[sensor['id']][i]})
 
                 data_point_vec.append(data_point)

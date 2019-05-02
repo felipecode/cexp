@@ -93,7 +93,6 @@ class Environment(object):
         self._sensor_desc_vec += sensors
 
     def reset(self, StateFunction, RewardFunction):
-        print ("reseting ", self._environment_name)
         if len(self._exp_list) > 0:
             self.stop()
         # set the state and reward functions to be used on this episode
@@ -130,7 +129,6 @@ class Environment(object):
                  RewardFunction(self._exp_list)
 
 
-    # TODO USE THIS GET DATA DIRECTLY
     def get_data(self):
         # Each environment can have a reference datapoint , where the data is already collected. That can go
         # Directly to the json where the data is collected.
@@ -138,7 +136,7 @@ class Environment(object):
         # It is always save in the SRL path
         root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
         # If the metadata does not exist the environment does not have a reference data.
-        if not os.path.exists(os.path.join(root_path, 'metadata.json')):  # TODO FIX THE METADATA JSON
+        if not os.path.exists(os.path.join(root_path, 'metadata.json')):
             raise NoDataGenerated("The data is not generated yet")
 
         # Read the metadata telling the sensors that exist
