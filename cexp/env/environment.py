@@ -115,6 +115,8 @@ class Environment(object):
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, exp_params, save_data=self._save_data))
 
+        print ("env exp list")
+        print (self._exp_list)
         if self._environment_name in Environment.number_of_executions:  # if it is the first time we execute this env
             # we use one of the experiments to build the metadata
             self._exp_list[0]._writer.save_metadata(self, self._exp_list[0]._instanced_sensors)

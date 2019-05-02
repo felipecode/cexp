@@ -1,6 +1,6 @@
 import logging
-
-from cexp.agents import CARL
+import traceback
+from cexp.cexp import CEXP
 from cexp.agents.pg_agent import PGAgent
 
 ###
@@ -25,17 +25,30 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = PGAgent('8100.pth')
     # this could be joined
-    env_batch = CARL(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
+    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
                                                                                                # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
     count_episode_number = 0
     running_reward = 10
     for env in env_batch:
-        # The policy selected to run this experience vector (The class basically) This policy can also learn, just
-        # by taking the output from the experience.
-        # I need a mechanism to test the rewards so I can test the policy gradient strategy
-        states, rewards = agent.unroll(env)
+
+
+        try:
+            # The policy selected to run this experience vector (The class basically) This policy can also learn, just
+            # by taking the output from the experience.
+            # I need a mechanism to test the rewards so I can test the policy gradient strategy
+            states, rewards = agent.unroll(env)
+        except KeyboardInterrupt:
+            env.stop()
+            break
+        except:
+            traceback.print_exc()
+            # Just try again
+            env.stop()
+            continue
+            print (" ENVIRONMENT BROKE trying again.")
+
         agent.reinforce(rewards)
 
         # TODO change this to average length

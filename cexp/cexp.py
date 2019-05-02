@@ -87,7 +87,6 @@ class CEXP(object):
         self._environments = []
         parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(sort_nicely_dict(self._json['envs'].items())))
 
-        print(parserd_exp_dict)
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
             # Instance an _environments.
@@ -107,6 +106,7 @@ class CEXP(object):
                        "the actual number of environments")
             else:
                 final_iterations = self._iterations_to_execute
+
             return iter([self._environments[i] for i in range(final_iterations)])
         else:
             return iter([random.choice(self._environments) for _ in range(self._iterations_to_execute)])
