@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # A single loop being made
     json = 'database/town01_empty.json'
     # Dictionary with the necessary params related to the execution not the model itself.
-    params = {'save_dataset': False,
+    params = {'save_dataset': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
