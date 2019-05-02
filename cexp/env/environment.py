@@ -107,13 +107,14 @@ class Environment(object):
                 'weather_profile': self._env_config['weather_profile'],
                 'env_number': Environment.number_of_executions[self._environment_name],
                 'exp_number': i,
+                'save_data': self._save_data,
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
                 'carla_recording': self._env_params['carla_recording'],
                 'remove_wrong_data': self._env_params['remove_wrong_data'],
                 'debug': self._env_params['debug']
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
-                                             self._sensor_desc_vec, exp_params, save_data=self._save_data))
+                                             self._sensor_desc_vec, self._scenarios, exp_params))
 
         if self._save_data and self._environment_name in Environment.number_of_executions:  # if it is the first time we execute this env
             # we use one of the experiments to build the metadata
@@ -127,7 +128,6 @@ class Environment(object):
 
         return StateFunction(self._exp_list), \
                  RewardFunction(self._exp_list)
-
 
     def get_data(self):
         # Each environment can have a reference datapoint , where the data is already collected. That can go

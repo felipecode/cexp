@@ -29,7 +29,7 @@ if __name__ == '__main__':
     agent = NPCAgent()
 
     env_batch = CEXP(json_file, params, number_of_iterations,
-                     params['batch_size'], sequential=True)  # THe experience is built, the files necessary
+                     params['batch_size'], sequential=True, debug=True)  # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
@@ -39,6 +39,7 @@ if __name__ == '__main__':
         # if the agent is already un
         summary = env.get_summary()
         #
+        print (summary)
 
 
 

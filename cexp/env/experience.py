@@ -49,7 +49,7 @@ def get_forward_speed(vehicle):
 
 
 class Experience(object):
-    def __init__(self, client, vehicle_model, route, sensors, exp_params, save_data=False):
+    def __init__(self, client, vehicle_model, route, sensors, scenario_definitions, exp_params):
         """
         The experience is like a instance of the environment
          contains all the objects (vehicles, sensors) and scenarios of the the current experience
@@ -65,9 +65,11 @@ class Experience(object):
                                                                               self._exp_params['env_number'],
                                                                               self._exp_params['exp_number']))
         # this parameter sets all the sensor threads and the main thread into saving data
-        self._save_data = save_data
+        self._save_data = exp_params['save_data']
         # Start objects that are going to be created
         self.world = None
+        # Scenario definitions to perform the scenario building
+        self.scenario_definitions = scenario_definitions
         self._ego_actor = None
         self._instanced_sensors = []
         # set the client object connected to the
@@ -92,6 +94,7 @@ class Experience(object):
         # Load the world
         self._load_world()
         # Set the actor pool so the scenarios can prepare themselves when needed
+        CarlaActorPool.set_client(client)
         CarlaActorPool.set_world(self.world)
         # Set the world for the global data provider
         CarlaDataProvider.set_world(self.world)
@@ -107,8 +110,8 @@ class Experience(object):
         self._reset_map()
         # Data for building the master scenario
         self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
-        #self._build_other_scenarios = None  # Building the other scenario. # TODO for now there is no other scenario
-        self._list_scenarios = [self._master_scenario]
+        other_scenarios = self.build_scenario_instances(scenario_definitions)
+        self._list_scenarios = [self._master_scenario] + other_scenarios
         # Route statistics, when the route is finished there will be route statistics on this object. and nothing else
         self._route_statistics = None
 
@@ -133,14 +136,15 @@ class Experience(object):
         for scenario in self._list_scenarios:  #
             scenario.scenario.scenario_tree.tick_once()
             controls = scenario.change_control(controls)
-
-        self._environment_data['ego_controls'] = controls
+        if self._save_data:
+            self._environment_data['ego_controls'] = controls
 
         return controls
 
     def apply_control(self, controls):
 
-        self._environment_data['scenario_controls'] = controls
+        if self._save_data:
+            self._environment_data['scenario_controls'] = controls
         self._ego_actor.apply_control(controls)
 
         if self._exp_params['debug']:
@@ -154,13 +158,12 @@ class Experience(object):
         # Save all the measurements that are interesting
         # TODO this may go to another function
 
-        _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location, self._route)
-        self._environment_data['exp_measurements'] = {
-            'directions': directions,
-            'forward_speed': get_forward_speed(self._ego_actor)
-        }
-
         if self._save_data:
+            _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location, self._route)
+            self._environment_data['exp_measurements'] = {
+                'directions': directions,
+                'forward_speed': get_forward_speed(self._ego_actor)
+            }
             self._sensor_interface.wait_sensors_written(self._writer)
             self._writer.save_experience(self.world, self._environment_data)
 
@@ -334,7 +337,6 @@ class Experience(object):
         actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
                                                               background_definition['vehicle.*'])
         scenario_configuration.other_actors = [actor_configuration_instance]
-
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
                                   timeout=300, debug_mode=False)
 
@@ -347,13 +349,16 @@ class Experience(object):
         :return:
         """
         list_instanced_scenarios = []
-        for scenario_name in  scenario_definition_vec:
+        if scenario_definition_vec is None:
+            return list_instanced_scenarios
+        for scenario_name in scenario_definition_vec:
             # The BG activity encapsulates several scenarios that contain vehicles going arround
             if scenario_name == 'background_activity':  # BACKGROUNBD ACTIVITY SPECIAL CASE
 
                 background_definition = scenario_definition_vec[scenario_name]
                 list_instanced_scenarios.append(self._build_background(background_definition))
 
+        return list_instanced_scenarios
 
     def get_summary(self):
 

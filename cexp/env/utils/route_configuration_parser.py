@@ -144,12 +144,14 @@ def parse_exp_vec(exp_vec):
 
         # check the scenarios files (They can be in more than one file) and load the corresponding scenario.
 
-        if exp_dict['scenarios']['file'] != "None":
-            scenarios_file = parse_annotations_file(exp_dict['scenarios']['file'])
+        if 'file' in exp_dict['scenarios'] and exp_dict['scenarios']['file'] != "None":
+            parse_annotations_file(exp_dict['scenarios']['file'])
 
-            possible_scenarios, existent_triggers = scan_route_for_scenarios(read_routes['trajectory'], scenarios_file)
-        else:
+            #TODO scenario file  reading is not currently implemented
+            #possible_scenarios, existent_triggers = scan_route_for_scenarios(read_routes['trajectory'], scenarios_file)
             possible_scenarios = None
+        else:
+            possible_scenarios = exp_dict['scenarios']  # The scenarios are here directly
 
 
 
