@@ -121,7 +121,7 @@
     "envs": {
         "route0": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 0
             },
             "scenarios": {
@@ -132,7 +132,7 @@
         },
         "route1": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 1
             },
             "scenarios": {
@@ -143,7 +143,7 @@
         },
         "route10": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 10
             },
             "scenarios": {
@@ -154,7 +154,7 @@
         },
         "route11": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 11
             },
             "scenarios": {
@@ -165,7 +165,7 @@
         },
         "route12": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 12
             },
             "scenarios": {
@@ -176,7 +176,7 @@
         },
         "route13": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 13
             },
             "scenarios": {
@@ -187,7 +187,7 @@
         },
         "route14": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 14
             },
             "scenarios": {
@@ -198,7 +198,7 @@
         },
         "route15": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 15
             },
             "scenarios": {
@@ -209,7 +209,7 @@
         },
         "route16": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 16
             },
             "scenarios": {
@@ -220,7 +220,7 @@
         },
         "route17": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 17
             },
             "scenarios": {
@@ -231,7 +231,7 @@
         },
         "route18": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 18
             },
             "scenarios": {
@@ -242,7 +242,7 @@
         },
         "route19": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 19
             },
             "scenarios": {
@@ -253,7 +253,7 @@
         },
         "route2": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 2
             },
             "scenarios": {
@@ -264,7 +264,7 @@
         },
         "route20": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 20
             },
             "scenarios": {
@@ -275,7 +275,7 @@
         },
         "route21": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 21
             },
             "scenarios": {
@@ -286,7 +286,7 @@
         },
         "route22": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 22
             },
             "scenarios": {
@@ -297,7 +297,7 @@
         },
         "route23": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 23
             },
             "scenarios": {
@@ -308,7 +308,7 @@
         },
         "route24": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 24
             },
             "scenarios": {
@@ -319,7 +319,7 @@
         },
         "route25": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 25
             },
             "scenarios": {
@@ -330,7 +330,7 @@
         },
         "route26": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 26
             },
             "scenarios": {
@@ -341,7 +341,7 @@
         },
         "route27": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 27
             },
             "scenarios": {
@@ -352,7 +352,7 @@
         },
         "route28": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 28
             },
             "scenarios": {
@@ -363,7 +363,7 @@
         },
         "route29": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 29
             },
             "scenarios": {
@@ -374,7 +374,7 @@
         },
         "route3": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 3
             },
             "scenarios": {
@@ -385,7 +385,7 @@
         },
         "route30": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 30
             },
             "scenarios": {
@@ -396,7 +396,7 @@
         },
         "route31": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 31
             },
             "scenarios": {
@@ -407,7 +407,7 @@
         },
         "route4": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 4
             },
             "scenarios": {
@@ -418,7 +418,7 @@
         },
         "route5": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 5
             },
             "scenarios": {
@@ -429,7 +429,7 @@
         },
         "route6": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 6
             },
             "scenarios": {
@@ -440,7 +440,7 @@
         },
         "route7": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 7
             },
             "scenarios": {
@@ -451,7 +451,7 @@
         },
         "route8": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 8
             },
             "scenarios": {
@@ -462,7 +462,7 @@
         },
         "route9": {
             "route": {
-                "file": "routes_town01.xml",
+                "file": "routes/routes_town01.xml",
                 "id": 9
             },
             "scenarios": {
