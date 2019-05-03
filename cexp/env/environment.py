@@ -84,7 +84,7 @@ class Environment(object):
 
     def stop(self):
         self._cleanup()
-        self.__init__(self._environment_name, self._client_vec, self._env_config, self._env_params)
+        #self.__init__(self._environment_name, self._client_vec, self._env_config, self._env_params)
 
     def add_sensors(self, sensors):
         if not isinstance(sensors, list):
@@ -183,9 +183,11 @@ class Environment(object):
 
         # If the environment is still running there is no summary yet
         if self.is_running():
+            print (" STILL RUNNING ")
             return None
 
         all_exp_summary = []
+
         for exp in self._exp_list:
             all_exp_summary.append(exp.get_summary())
         return all_exp_summary

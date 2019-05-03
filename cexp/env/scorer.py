@@ -1,3 +1,4 @@
+import os
 from srunner.scenariomanager.traffic_events import TrafficEventType
 import py_trees
 
@@ -139,7 +140,7 @@ def record_route_statistics_default(master_scenario, exp_name):
     return_message += "\n=================================="
 
     current_statistics = {'exp_name': exp_name,
-                          'score_composed': score_composed,
+                          'score_composed': final_score,
                           'score_route': score_route,
                           'score_penalty': score_penalty,
                           'result': result,
@@ -149,17 +150,50 @@ def record_route_statistics_default(master_scenario, exp_name):
     return current_statistics
 
 
-def export_score(score_vec, configuration):
+def export_score(score_vec, file_name):
 
     """
     Receives a vec of dictionary as well as the configuration json
     :param score_vec:
     :return:
     """
+    #TODO mechanism to add more information to this
+
+    # TODO add the exp number ( NUmber of times it was made) and the e
+
+    # TODO ADD ALSO a step , different marks for the experience.
+
+    sum_route_score = 0
+    sum_route_completed = 0
+    sum_infractions = 0
+    sum_final_score = 0
+    #'score_composed': 0.0, 'score_route': 100.0, 'score_penalty': 0.0
+    for score in score_vec:
+        sum_final_score += score['score_composed']
+        sum_infractions += score['score_penalty']
+        sum_route_completed += float(score['score_route'] > 95.0)*100
+        sum_route_score += score['score_route']
+
+    # Number of runs
+    number_of_runs = len(score_vec)
+
+
 
     # This function actually depends on the user, for now lets get the overall route score and infraction score.
 
-    # It should
-    pass
+    filename_csv = os.path.join( file_name.split('.')[0] + '.csv')
 
+    csv_outfile = open(filename_csv, 'w')
+
+    # TODO the header should maybe be written before
+    csv_outfile.write("score_composed,score_penalty,score_route_completed,score_route\n")
+
+    csv_outfile.write("%f,%f,%f,%f\n"
+                      % (sum_final_score/number_of_runs,
+                         sum_infractions/number_of_runs,
+                         sum_route_completed/number_of_runs,
+                         sum_route_score/number_of_runs)
+                      )
+
+    csv_outfile.close()
 
