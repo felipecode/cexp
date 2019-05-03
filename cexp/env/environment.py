@@ -146,6 +146,9 @@ class Environment(object):
         full_episode_data_dict = parser.parse_environment(root_path, metadata_dict)
 
         return full_episode_data_dict
+    def get_path(self):
+
+        return  os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
 
     def is_running(self):
         """
