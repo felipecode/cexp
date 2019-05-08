@@ -12,6 +12,7 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
 from cexp.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
 from cexp.env.scorer import record_route_statistics_default
+from cexp.env.scenario_identification import identify_scenario
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
@@ -160,7 +161,8 @@ class Experience(object):
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location, self._route)
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
-                'forward_speed': get_forward_speed(self._ego_actor)
+                'forward_speed': get_forward_speed(self._ego_actor),
+                'scenario': identify_scenario(self._ego_actor)
             }
             self._sensor_interface.wait_sensors_written(self._writer)
             self._writer.save_experience(self.world, self._environment_data)
@@ -258,9 +260,7 @@ class Experience(object):
         closest_waypoint = None
         min_distance = 100000
         for index in range(len(route)):
-
             waypoint = route[index][0]
-
             computed_distance = distance_vehicle(waypoint, vehicle_position)
             if computed_distance < min_distance:
                 min_distance = computed_distance
@@ -326,7 +326,7 @@ class Experience(object):
         scenario_configuration = ScenarioConfiguration()
         scenario_configuration.route = None
         scenario_configuration.town = self._town_name
-        # TODO walkers are not supported yeet, wait for carla 0.9.6
+        # TODO walkers are not supported yet, wait for carla 0.9.6
         model = 'vehicle.*'
         transform = carla.Transform()
         autopilot = True
