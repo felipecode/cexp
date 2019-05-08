@@ -1,0 +1,28 @@
+{
+  "additional_sensors": [],
+  "envs": {
+    "S0_route00000": {
+      "route": {
+        "file": "straight_town01.xml",
+        "id": 0
+      },
+      "scenarios": {
+        "file": "None"
+      },
+      "town_name": "Town01",
+      "vehicle_model": "vehicle.lincoln.mkz2017"
+    },
+    "S1-2_route00000": {
+      "route": {
+        "file": "routes_town01.xml",
+        "id": 6
+      },
+      "scenarios": {
+        "file": "None"
+      },
+      "town_name": "Town01",
+      "vehicle_model": "vehicle.lincoln.mkz2017"
+    }
+  },
+  "package_name": "test_case"
+}

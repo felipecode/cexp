@@ -153,6 +153,7 @@ def record_route_statistics_default(master_scenario, exp_name):
 def export_score(score_vec, file_name):
 
     """
+
     Receives a vec of dictionary as well as the configuration json
     :param score_vec:
     :return:

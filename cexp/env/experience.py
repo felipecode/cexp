@@ -116,8 +116,6 @@ class Experience(object):
         self._route_statistics = None
 
 
-
-
     def tick_scenarios(self):
 
         # We tick the scenarios to get them started

@@ -1,16 +1,32 @@
 # TODO Might require optimization since it has to be computed on every iteration
 
-def identify_scenario(exp):
+
+
+
+def distance_to_intersection(vehicle, wmap, resolution=0.1):
+
+
+    total_distance = 0
+    # TODO computational cost may be an issue keep track of the current waypoint.
+    reference_waypoint = wmap.get_waypoint(vehicle.get_transform().location)
+    while not reference_waypoint.is_junction():
+        reference_waypoint = reference_waypoint.next(resolution)
+        total_distance += resolution
+
+    return total_distance
+
+
+def identify_scenario(ego_actor):
 
     """
     Returns the scenario for this specific point or trajectory
 
-    S0: Lane Following
-    S1: Intersection
-    S2: Traffic Light Stopping
-    S3: Lead Vehicle Following
-    S4: Control Loss (TS1)
-    S5: Pedestrian Crossing ( TS3)
+    S0: Lane Following - S0_lane_following
+    S1: Intersection - S1_intersection
+    S2: Traffic Light/ before intersection - S2_before_intersection
+    S3: Lead Vehicle Following - S3_lead_vehicle
+    S4: Control Loss (TS1) - S4_control_loss
+    S5: Pedestrian Crossing (TS3) - S5_pedestrian_crossing
     S6: Bike Crossing (TS4)
     S7: Vehicles crossing on red light (TS7-8-9)
     Complex Towns Scenarios
@@ -18,9 +34,25 @@ def identify_scenario(exp):
     S9: Roundabout
     S10: Different kinds of intersections with different angles
 
+
     :param exp:
     :return:
+
+    We can have for now
     """
+
+    # TODO for now only for scenarios 0-2
+
+    if distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > 2:
+        # For now far away from an intersection means that it is a simple lane following
+        return 'S0_lane_following'
+    elif distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > 0.5:
+
+        # S2  Check if it is directly affected by the next intersection
+        return 'S2_before_intersection'
+    else:  # Then it is
+
+        return 'S1_intersection'
 
 
     #S0 direction equal lane following
@@ -29,13 +61,12 @@ def identify_scenario(exp):
     # S1 Direction equal to STRAIGHT LEFT OR RIGHT
     # TODO: mighth need to increase the size of the direction .
 
-    # S2  Check if affect by traffic light and traffic lights are not active .
-
     # S3 Check distance to a lead vehile if it is smaller than threshold , and it is on the same lane.
 
 
 
     # S4 - S5 -S6 S7 : Check if the scenario is affecting. However when the scenario is over we cannot do anything.
+    # Use pytrees to directly get the state of the scenario
 
 
     if exp._town_name != 'Town01' or exp._town_name != 'Town02':
