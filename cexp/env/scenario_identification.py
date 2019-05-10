@@ -9,6 +9,8 @@ def distance_to_intersection(vehicle, wmap, resolution=0.1):
     total_distance = 0
     # TODO computational cost may be an issue keep track of the current waypoint.
     reference_waypoint = wmap.get_waypoint(vehicle.get_transform().location)
+    print ("reference")
+    print (reference_waypoint)
     while not reference_waypoint.is_intersection:
         reference_waypoint = reference_waypoint.next(resolution)
         total_distance += resolution
