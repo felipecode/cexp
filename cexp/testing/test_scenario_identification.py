@@ -31,7 +31,9 @@ if __name__ == '__main__':
         time.sleep(150)
 
 
-    world = carla.Client('localhost', 6666)
+    client = carla.Client('localhost', 6666)
+
+    world = client.load_world('Town01')
 
 
     test_distance_intersection_speed(world)
