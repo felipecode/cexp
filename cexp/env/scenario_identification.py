@@ -4,10 +4,10 @@
 
 
 def distance_to_intersection(vehicle, wmap, resolution=0.1):
-
+    # TODO heavy function, takes 70MS this can be reduced.
 
     total_distance = 0
-    # TODO computational cost may be an issue keep track of the current waypoint.
+
     reference_waypoint = wmap.get_waypoint(vehicle.get_transform().location)
 
     while not reference_waypoint.is_intersection:

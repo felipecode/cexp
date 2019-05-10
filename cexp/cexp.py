@@ -17,7 +17,7 @@ class CEXP(object):
     It contains the instanced env files that can be iterated to have instanced environments to get
     """
 
-    def __init__(self, jsonfile, params, iterations_to_execute, batch_size, sequential=False, debug=False):
+    def __init__(self, jsonfile, params, iterations_to_execute, batch_size, sequential=False, port=None):
 
         self._batch_size = batch_size  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
@@ -42,21 +42,21 @@ class CEXP(object):
         self._client_vec = None
         # if the loading of environments will be sequential or random.
         self._sequential = sequential
-        # set the debug mode
-        self._debug = debug
+        # set a fixed port to be looked into
+        self._port = port
 
     def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
         if no_server:
             self._client_vec = []
         else:
-            if not self._debug:
+            if self._port is None:
                 free_port = find_free_port()
                 # Starting the carla simulators
                 for env in self._environment_batch:
                     env.reset(port=free_port)
             else:
-                free_port = 2000  # This is just a test mode where CARLA is already up.
+                free_port = self._port  # This is just a test mode where CARLA is already up.
             # setup world and client assuming that the CARLA server is up and running
             self._client_vec = [carla.Client('localhost', free_port)]
             self._client_vec[0].set_timeout(self.client_timeout)
@@ -69,7 +69,7 @@ class CEXP(object):
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording'],
-            'debug': self._debug
+            'debug': self._port is not None
         }
 
         # Add the start on number param for substitution and multi process collection.

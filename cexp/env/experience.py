@@ -350,7 +350,7 @@ class Experience(object):
             return list_instanced_scenarios
         for scenario_name in scenario_definition_vec:
             # The BG activity encapsulates several scenarios that contain vehicles going arround
-            if scenario_name == 'background_activity':  # BACKGROUNBD ACTIVITY SPECIAL CASE
+            if scenario_name == 'background_activity':  # BACKGROUND ACTIVITY SPECIAL CASE
 
                 background_definition = scenario_definition_vec[scenario_name]
                 list_instanced_scenarios.append(self._build_background(background_definition))
