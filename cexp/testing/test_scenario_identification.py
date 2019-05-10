@@ -16,6 +16,8 @@ def test_distance_intersection_speed(world, N=20):
     count = 0
     for point in spawn_points[:N]:
         vehicle = world.try_spawn_actor(blueprint, point)
+        if vehicle is None:
+            continue
         print("Spawn pont %d distance %f " %(count, distance_to_intersection(vehicle, world.get_map(), resolution=0.1)))
         count += 1
 
