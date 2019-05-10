@@ -43,7 +43,8 @@ def test_identification(world, N=100):
         vehicle = world.try_spawn_actor(blueprint, point)
         if vehicle is None:
             continue
-        print("Spawn pont %d distance %f scenario %s " %(count, distance_to_intersection(vehicle, world.get_map(), resolution=0.1),
+        print("Spawn pont %d distance %f scenario %s " %(count, distance_to_intersection(vehicle, world.get_map(),
+                                                                                         resolution=0.1),
                                                          identify_scenario(vehicle)))
         count += 1
 
