@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # this could be joined
     env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], port=int(arguments.port))
                                                                 # THe experience is built, the files necessary
-                                                                 # to load CARLA and the scenarios are made
+                                                                # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
 
