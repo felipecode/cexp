@@ -13,6 +13,8 @@ from cexp.agents.npc_agent import NPCAgent
 
 if __name__ == '__main__':
 
+    # TODO ADD SOME ARGS ( SIMPLE SET OF ARGS )
+
     # A single loop being made
     json = 'database/test_every_scenario.json'
     # Dictionary with the necessary params related to the execution not the model itself.
@@ -29,7 +31,7 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], debug=False)  # THe experience is built, the files necessary
+    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], port=None)  # THe experience is built, the files necessary
                                                                                  # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
