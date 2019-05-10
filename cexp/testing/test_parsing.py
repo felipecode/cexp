@@ -3,7 +3,6 @@ import json
 import glob
 import cexp.env.datatools.data_parser as parser
 
-
 if __name__ == '__main__':
 
     jsonfile = 'database/sample_benchmark.json'

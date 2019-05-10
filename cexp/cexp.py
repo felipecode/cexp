@@ -1,21 +1,14 @@
 import json
 import carla
-import socket
 import random
 import collections
 import os
-from contextlib import closing
 
 from cexp.env.utils.general import sort_nicely_dict
-from cexp.env.server_manager import ServerManagerDocker
+from cexp.env.server_manager import ServerManagerDocker, find_free_port
 from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
 
-
-def find_free_port():
-    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
-        s.bind(('', 0))
-        return s.getsockname()[1]
 
 
 class CEXP(object):
