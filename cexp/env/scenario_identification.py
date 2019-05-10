@@ -12,7 +12,7 @@ def distance_to_intersection(vehicle, wmap, resolution=0.1):
     print ("reference")
     print (reference_waypoint)
     while not reference_waypoint.is_intersection:
-        reference_waypoint = reference_waypoint.next(resolution)
+        reference_waypoint = reference_waypoint.next(resolution)[0]
         print ("next reference")
         print (reference_waypoint)
         total_distance += resolution
