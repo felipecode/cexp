@@ -13,7 +13,8 @@ def check_test_server(port):
     # Check if a server is open at some port
 
     try:
-        _ = carla.Client(host='localhost', port=port)
+        client = carla.Client(host='localhost', port=port)
+        client.get_server_version()
         return True
     except:
         return False
