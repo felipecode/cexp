@@ -1,9 +1,14 @@
 from cexp.env.server_manager import ServerManagerDocker, find_free_port
 import carla
 
-def start_test_server(port=6666):
+def start_test_server(port=6666, gpu=0 ,docker_name='carlalatest:latest'):
 
-    docker_server = ServerManagerDocker()
+    params = {
+              'docker_name': docker_name,
+              'gpu': gpu
+              }
+
+    docker_server = ServerManagerDocker(params)
     docker_server.reset(port=port)
 
 

@@ -25,6 +25,7 @@ def test_distance_intersection_speed(world, N=20):
 if __name__ == '__main__':
     # PORT 6666 is the default port for testing server
 
+
     if not check_test_server(6666):
         start_test_server(6666)
         print (" WAITING FOR DOCKER TO BE STARTED")
