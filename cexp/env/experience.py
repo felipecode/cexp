@@ -162,6 +162,7 @@ class Experience(object):
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
                 'forward_speed': get_forward_speed(self._ego_actor),
+                # TODO add not on every iterations, identify evry second or half second.
                 'scenario': identify_scenario(self._ego_actor)
             }
             self._sensor_interface.wait_sensors_written(self._writer)
