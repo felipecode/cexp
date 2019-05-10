@@ -23,6 +23,8 @@ def test_exp():
 
 #TODO the fact that it does not use orientation may create bugs.
 # TODO READ THE FULL TRANSFORM ON THE ROUTE READING
+
+
 def calculate_distance(location , waypoint1):
 
        dx = float(waypoint1['x']) - location.x
@@ -57,7 +59,7 @@ def find_closest_route_trip(trigger_position, coarse_trajectory):
     return coarse_trajectory[(min_distance_position-1):(min_distance_position+1)]
 
 
-# TODO : also add the town01
+# TODO : also add the town01 ??
 
 def scenario_route_generator(routes_file, scenarios_tag, scenario_name, number_of_routes):
 

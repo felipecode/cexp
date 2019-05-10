@@ -10,7 +10,7 @@ def test_distance_intersection_speed(world, N=20):
     # I will spawn N vehicles
 
     blueprint_library = world.get_blueprint_library()
-    spawn_points = world.get_spawn_points()
+    spawn_points = world.get_map().get_spawn_points()
     blueprint = random.choice(blueprint_library.filter('vehicle*'))
     capture = time.time()
     count = 0
@@ -29,7 +29,6 @@ if __name__ == '__main__':
     if not check_test_server(6666):
         start_test_server(6666)
         print (" WAITING FOR DOCKER TO BE STARTED")
-        time.sleep(150)
 
 
     client = carla.Client('localhost', 6666)

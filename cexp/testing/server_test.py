@@ -3,8 +3,7 @@ import carla
 
 def start_test_server(port=6666, gpu=0 ,docker_name='carlalatest:latest'):
 
-    params = {
-              'docker_name': docker_name,
+    params = {'docker_name': docker_name,
               'gpu': gpu
               }
 
