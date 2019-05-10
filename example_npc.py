@@ -1,5 +1,6 @@
 import sys
 import glob
+import argparse
 
 import logging
 import traceback
@@ -13,7 +14,14 @@ from cexp.agents.npc_agent import NPCAgent
 
 if __name__ == '__main__':
 
-    # TODO ADD SOME ARGS ( SIMPLE SET OF ARGS )
+    description = ("CARLA AD Challenge evaluation: evaluate your Agent in CARLA scenarios\n")
+
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument('--port', default=None, help='Port for an already existent server')
+
+    arguments = parser.parse_args()
+
 
     # A single loop being made
     json = 'database/test_every_scenario.json'
@@ -26,12 +34,13 @@ if __name__ == '__main__':
               'non_rendering_mode': False,
               'carla_recording': True
               }
+
     # TODO for now batch size is one
     number_of_iterations = 10
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], port=None)  # THe experience is built, the files necessary
+    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], port=arguments.port)  # THe experience is built, the files necessary
                                                                                  # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
