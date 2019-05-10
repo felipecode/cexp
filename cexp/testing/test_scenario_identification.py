@@ -64,3 +64,4 @@ if __name__ == '__main__':
     world = client.load_world('Town01')
 
     test_distance_intersection_speed(world)
+    test_identification(world)
