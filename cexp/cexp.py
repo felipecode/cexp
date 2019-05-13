@@ -5,7 +5,7 @@ import collections
 import os
 
 from cexp.env.utils.general import sort_nicely_dict
-from cexp.env.server_manager import ServerManagerDocker, find_free_port
+from cexp.env.server_manager import ServerManagerDocker, find_free_port, start_test_server, check_test_server
 from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
 
@@ -65,11 +65,13 @@ class CEXP(object):
             self._client_vec = []
         else:
             if self._port is None:
-                free_port = find_free_port()
                 # Starting the carla simulators
                 for env in self._environment_batch:
+                    free_port = find_free_port()
                     env.reset(port=free_port)
             else:
+                if not check_test_server(self._port):
+                    self._environment_batch[0].reset(port=self._port)
                 free_port = self._port  # This is just a test mode where CARLA is already up.
             # setup world and client assuming that the CARLA server is up and running
             self._client_vec = [carla.Client('localhost', free_port)]

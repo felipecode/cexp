@@ -3,7 +3,7 @@ import random
 import traceback
 
 from cexp.env.scenario_identification import distance_to_intersection, identify_scenario
-from cexp.testing.server_test import start_test_server, check_test_server
+from cexp.env.server_manager import start_test_server, check_test_server
 
 from cexp.cexp import CEXP
 from cexp.agents.npc_agent import NPCAgent

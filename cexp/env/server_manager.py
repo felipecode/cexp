@@ -7,7 +7,7 @@ import random
 import string
 import subprocess
 import time
-
+import carla
 
 import socket
 from contextlib import closing
@@ -17,6 +17,7 @@ def find_free_port():
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
         s.bind(('', 0))
         return s.getsockname()[1]
+
 
 
 class ServerManager(object):
@@ -112,3 +113,28 @@ class ServerManagerDocker(ServerManager):
     def stop(self):
         exec_command = ['docker', 'kill', '{}'.format(self._docker_id)]
         self._proc = subprocess.Popen(exec_command)
+
+
+
+
+def start_test_server(port=6666, gpu=0, docker_name='carlalatest:latest'):
+
+    params = {'docker_name': docker_name,
+              'gpu': gpu
+              }
+
+    docker_server = ServerManagerDocker(params)
+    docker_server.reset(port=port)
+
+
+
+def check_test_server(port):
+
+    # Check if a server is open at some port
+
+    try:
+        client = carla.Client(host='localhost', port=port)
+        client.get_server_version()
+        return True
+    except:
+        return False
