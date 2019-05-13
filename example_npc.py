@@ -42,11 +42,10 @@ if __name__ == '__main__':
     env_batch = CEXP(json, params=params, iterations_to_execute=number_of_iterations, port=int(arguments.port))
                                                                 # THe experience is built, the files necessary
                                                                 # to load CARLA and the scenarios are made
+
     # Here some docker was set
     env_batch.start()
-
     for env in env_batch:
-
         try:
             # The policy selected to run this experience vector (The class basically) This policy can also learn, just
             # by taking the output from the experience.

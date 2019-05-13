@@ -37,9 +37,9 @@ if __name__ == '__main__':
     tasks = {'empty': { 'Town01': None,
                         'Town02': None
                         },
-             'regular': { 'Town01': {'background_activity': {"vehicle.*": 20,
+             'regular': {'Town01': {'background_activity': {"vehicle.*": 20,
                                                             "walker.*": 50}} ,
-                          'Town02': {'background_activity': {"vehicle.*": 15,
+                         'Town02': {'background_activity': {"vehicle.*": 15,
                                                               "walker.*": 50}}
 
              },

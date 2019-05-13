@@ -141,8 +141,8 @@ if __name__ == '__main__':
 
 
     print (scenario_route_generator(
-           '/network/home/codevilf/experience_database_generator/database/routes/routes_town01.xml',
-           '/network/home/codevilf/experience_database_generator/database/scenarios/all_towns_traffic_scenarios1_3_4.json',
+           'experience_database_generator/database/routes/routes_town01.xml',
+           'experience_database_generator/database/scenarios/all_towns_traffic_scenarios1_3_4.json',
            'Scenario3',
            10)
     )
