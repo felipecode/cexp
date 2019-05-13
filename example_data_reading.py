@@ -1,5 +1,5 @@
 import logging
-from cexp.agents import CARL
+from cexp.agents import CEXP
 from cexp.agents.npc_agent import NPCAgent
 from cexp.env.environment import NoDataGenerated
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     agent = NPCAgent()
     # this could be joined
     # THe experience is built, the files necessary
-    env_batch = CARL(json, params, number_of_iterations, params['batch_size'], sequential=True)
+    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], sequential=True)
     # Here some docker was set
     env_batch.start(no_server=True)  # no carla server mode.
 

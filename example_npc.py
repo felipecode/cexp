@@ -22,7 +22,6 @@ if __name__ == '__main__':
 
     arguments = parser.parse_args()
 
-
     # A single loop being made
     json = 'database/test_every_scenario.json'
     # Dictionary with the necessary params related to the execution not the model itself.
@@ -40,7 +39,7 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], port=int(arguments.port))
+    env_batch = CEXP(json, params=params, iterations_to_execute=number_of_iterations, port=int(arguments.port))
                                                                 # THe experience is built, the files necessary
                                                                 # to load CARLA and the scenarios are made
     # Here some docker was set

@@ -9,6 +9,8 @@ from cexp.env.server_manager import ServerManagerDocker, find_free_port
 from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
 
+#
+
 
 
 class CEXP(object):
@@ -17,13 +19,26 @@ class CEXP(object):
     It contains the instanced env files that can be iterated to have instanced environments to get
     """
 
-    def __init__(self, jsonfile, params, iterations_to_execute, batch_size, sequential=False, port=None):
+    _default_params = {'save_dataset': False,
+                       'docker_name': None,
+                       'gpu': 0,
+                       'batch_size': 1,
+                       'remove_wrong_data': False,
+                       'non_rendering_mode': False,
+                       'carla_recording': True
+                      }
 
-        self._batch_size = batch_size  # How many CARLAs are going to be ran.
+    def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False, port=None):
+        if params is None:
+            self._params = CEXP._default_params
+        else:
+            self._params = params
+
+        self._batch_size = self._params['batch_size']  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
         self._environment_batch = []
         for i in range(self._batch_size):
-            self._environment_batch.append(ServerManagerDocker(params))
+            self._environment_batch.append(ServerManagerDocker(self._params))
 
         # Read the json file being
         with open(jsonfile, 'r') as f:
@@ -31,9 +46,8 @@ class CEXP(object):
         # The timeout for waiting for the server to start.
         self.client_timeout = 25.0
         # The os environment file
-        if "SRL_DATASET_PATH" not in os.environ and params['save_dataset']:
+        if "SRL_DATASET_PATH" not in os.environ and self._params['save_dataset']:
             raise ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
-        self._params = params
 
         # uninitialized environments vector
         self._environments = None
