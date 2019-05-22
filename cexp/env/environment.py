@@ -170,6 +170,7 @@ class Environment(object):
 
         # Run the loop for all the experiments on the batch.
         # update all scenarios
+        # TODO there is no loop
         for i in range(len(self._exp_list)):
             exp = self._exp_list[i]
             control = control_vec[i]

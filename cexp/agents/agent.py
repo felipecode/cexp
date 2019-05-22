@@ -16,7 +16,7 @@ class Agent(object):
         pass
     # TODO TRY A SIMPLE THREAD FOR EXECUTION HERE
     def _run_step_batch(self, input_data_vec):
-
+        # TODO ELIMINATE this For make the inference inside and code the angent to make it
         controls_vec = []
         for input_data in input_data_vec:
             controls_vec.append(self.run_step(input_data))
@@ -99,8 +99,10 @@ class Agent(object):
         state_batch = [[]] * environment._batch_size
 
         while environment.is_running():
+
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
+            # Experiment on the batch.
             state, reward = environment.run_step(controls)
 
             # TODO check the posible sizes mismatches here
