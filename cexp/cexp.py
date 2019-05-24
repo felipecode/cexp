@@ -73,6 +73,8 @@ class CEXP(object):
                     free_port = find_free_port()
                     env.reset(port=free_port)
             else:
+                # We convert it to integers
+                self._port = int(self._port)
                 if not check_test_server(self._port):
                     self._environment_batch[0].reset(port=self._port)
                 free_port = self._port  # This is just a test mode where CARLA is already up.
