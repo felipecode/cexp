@@ -25,3 +25,15 @@ def benchmark(json_file, params, number_iterations, agent):
 
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+
+
+
+# Some main, if it is not generated generate.
+
+
+
+
+# Run like
+
+# python3 benchmark -b CoRL2017 -a agent -c configuration
+#

@@ -73,7 +73,11 @@ if __name__ == "__main__":
         type=int,
         default=1
     )
-
+    parser.add_argument(
+        '--dataset',
+        help=' the json configuration file name',
+        default=None
+    )
 
     args = parser.parse_args()
     path = args.path
@@ -99,7 +103,7 @@ if __name__ == "__main__":
     right_camera_name = 'rgb_right'
 
     # A single loop being made
-    json = 'database/town01_empty.json'
+    jsonfile = args.dataset
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'docker_name': 'carlalatest:latest',
@@ -113,7 +117,7 @@ if __name__ == "__main__":
     number_of_iterations = 123
     # this could be joined
     # THe experience is built, the files necessary
-    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'], sequential=True)
+    env_batch = CEXP(jsonfile, params, number_of_iterations, sequential=True)
     # Here some docker was set
     env_batch.start(no_server=True)  # no carla server mode.
     # count, we count the environments that are read
@@ -128,13 +132,14 @@ if __name__ == "__main__":
         except NoDataGenerated:
             print("No data generate for episode ", env)
         else:
-            count_exp = 0
+
             for exp in env_data:
-                print("    Exp: ", count_exp)
-                count_batch = 0
-                for batch in exp:
-                    print("      Batch: ", count_batch)
-                    for data_point in batch:
+                print("    Exp: ", exp[1])
+
+                for batch in exp[0]:
+                    print("      Batch: ", batch[1])
+                    for data_point in batch[0]:
+                        print (data_point)
                         rgb_center = scipy.ndimage.imread(data_point[central_camera_name])[:,:,:3]
                         rgb_left = scipy.ndimage.imread(data_point[left_camera_name])[:,:,:3]
                         rgb_right = scipy.ndimage.imread(data_point[right_camera_name])[:,:,:3]
@@ -144,14 +149,14 @@ if __name__ == "__main__":
                             screen.start_screen([rgb_center.shape[1], rgb_center.shape[0]], [3, 1], 1)
 
                         status = {'speed': forward_speed(data_point['measurements']['ego_actor']),
-                                  'directions': 2.0}
+                                  'directions': 2.0,
+                                  'scenario': data_point['measurements']['scenario']}
 
                         screen.plot_camera_steer(rgb_left, screen_position=[0, 0])
                         screen.plot_camera_steer(rgb_center, control=None,
                                                  screen_position=[1, 0], status=status)
                         screen.plot_camera_steer(rgb_right, screen_position=[2, 0])
-                    count_batch += 1
-                count_exp += 1
+
 
 
             print("################################")

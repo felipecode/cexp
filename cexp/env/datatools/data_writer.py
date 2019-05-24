@@ -4,6 +4,7 @@
 import os
 import json
 import shutil
+import numpy as np
 
 from google.protobuf.json_format import MessageToJson, MessageToDict
 
@@ -68,8 +69,6 @@ class Writer(object):
                      }
                     )
 
-
-
         # Add other actors and lane information
         # general actor info
         # type_id
@@ -101,9 +100,9 @@ class Writer(object):
         with open(os.path.join(self._full_path, 'measurements_' + str(self._latest_id).zfill(6) + '.json'), 'w') as fo:
             jsonObj = {}
             jsonObj.update(measurements)
-            jsonObj.update({'steer': control.steer})
-            jsonObj.update({'throttle': control.throttle})
-            jsonObj.update({'brake': control.brake})
+            jsonObj.update({'steer': np.nan_to_num(control.steer)})
+            jsonObj.update({'throttle': np.nan_to_num(control.throttle)})
+            jsonObj.update({'brake': np.nan_to_num(control.brake)})
             jsonObj.update({'hand_brake': control.hand_brake})
             jsonObj.update({'reverse': control.reverse})
             jsonObj.update({'steer_noise': scenario_control.steer})
@@ -126,7 +125,6 @@ class Writer(object):
                                       experience_data['ego_controls'],
                                       experience_data['scenario_controls'],
                                      )
-
 
         # Before we increment we make sure everyone made their writting
         self._latest_id += 1

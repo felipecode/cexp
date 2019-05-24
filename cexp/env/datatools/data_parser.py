@@ -42,10 +42,12 @@ def parse_environment(path, metadata_dict):
     # TODO probably add more metadata
     # the experience number
     exp_vec = []
+    print (" EXPERIENCE LIST ", experience_list)
     for exp in experience_list:
 
         batch_list = glob.glob(os.path.join(exp, '[0-9]'))
 
+        print(" BATCH LIST ", batch_list)
         batch_vec = []
         for batch in batch_list:
             if 'summary.json' not in os.listdir(batch):
@@ -71,9 +73,10 @@ def parse_environment(path, metadata_dict):
 
                 data_point_vec.append(data_point)
 
-            batch_vec.append(data_point_vec)
+            batch_vec.append((data_point_vec, batch.split('/')[-1]))
 
-        exp_vec.append(batch_vec)
+        # It is a tuple with the data and the data folder name
+        exp_vec.append((batch_vec, exp.split('/')[-1]))
 
     return exp_vec
 

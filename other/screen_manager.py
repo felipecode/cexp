@@ -244,8 +244,6 @@ class ScreenManager(object):
             sensor_data = np.squeeze(sensor_data)
 
 
-
-
         self.set_array(sensor_data, screen_position)
 
         if control is not None:
@@ -261,7 +259,7 @@ class ScreenManager(object):
                                  (10, initial_y_pos),
                                  screen_position)
 
-            self.paint_on_screen(int(size_x / 8), 'BRAKE',(128, 0, 0),
+            self.paint_on_screen(int(size_x / 8), 'BRAKE', (128, 0, 0),
                                  (150, initial_y_pos),
                                  screen_position)
 
@@ -283,7 +281,9 @@ class ScreenManager(object):
                                  (int(size_x / 1.5), int(size_y / 10)),
                                  screen_position)
 
-
+            self.paint_on_screen(int(size_x / 5), "Scenario: %s" % status['scenario'], (64, 255, 64),
+                                 (int(size_x / 1.5), int(size_y / 5)),
+                                 screen_position)
 
         self._render_iter += 1
 
