@@ -35,6 +35,7 @@ if __name__ == '__main__':
               }
 
     # TODO for now batch size is one
+
     number_of_iterations = 10
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
