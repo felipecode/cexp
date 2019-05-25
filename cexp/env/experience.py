@@ -3,6 +3,7 @@ import math
 import numpy as np
 import py_trees
 import traceback
+import logging
 
 from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
@@ -138,6 +139,8 @@ class Experience(object):
             traceback.print_exc()
             if self._save_data:
                 self._clean_bad_dataset()
+            # Re raise the exception
+            raise r
 
 
 
@@ -217,7 +220,10 @@ class Experience(object):
         """
         # If ego_vehicle already exists, just update location
         # Otherwise spawn ego vehicle
-        self._ego_actor = CarlaActorPool.request_new_actor(self._vehicle_model, start_transform, hero=True)
+        self._ego_actor = CarlaActorPool.request_new_actor(self._vehicle_model, start_transform,
+                                                           hero=True)
+
+        logging.debug("Created Ego Vehicle")
 
     def _setup_sensors(self, sensors, vehicle):
         """
@@ -413,6 +419,7 @@ class Experience(object):
         if ego and self._ego_actor is not None:
             self._ego_actor.destroy()
             self._ego_actor = None
+            logging.debug("Removed Ego Vehicle")
 
         if self.world is not None:
             settings = self.world.get_settings()

@@ -14,6 +14,19 @@ from cexp.agents.NPCAgent import NPCAgent
 
 if __name__ == '__main__':
 
+    # We start by adding the logging output to be to the screen.
+
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
+
+
+
     description = ("CARLA AD Challenge evaluation: evaluate your Agent in CARLA scenarios\n")
 
     parser = argparse.ArgumentParser(description=description)
