@@ -5,7 +5,7 @@ import os
 import glob
 import multiprocessing
 
-from cexp.agents.npc_agent import NPCAgent
+from cexp.agents.NPCAgent import NPCAgent
 
 from carla.client import make_carla_client
 from carla.tcp import TCPConnectionError

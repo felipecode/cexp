@@ -1,7 +1,7 @@
 import logging
 
 from cexp.cexp import CEXP
-from cexp.agents.npc_agent import NPCAgent
+from cexp.agents.NPCAgent import NPCAgent
 
 
 # This is an example of simple benchmark. Lets see how to add a good summary to it.

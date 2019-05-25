@@ -6,7 +6,7 @@ import logging
 import traceback
 
 from cexp.cexp import CEXP
-from cexp.agents.npc_agent import NPCAgent
+from cexp.agents.NPCAgent import NPCAgent
 
 # TODO ADD the posibility to configure what goes in and what goes out
 ###

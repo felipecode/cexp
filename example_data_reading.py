@@ -1,6 +1,6 @@
 import logging
 from cexp.agents import CEXP
-from cexp.agents.npc_agent import NPCAgent
+from cexp.agents.NPCAgent import NPCAgent
 from cexp.env.environment import NoDataGenerated
 
 ###
