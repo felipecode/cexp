@@ -97,8 +97,9 @@ class Policy(nn.Module):
 
 class PGAgent(Agent):
 
-    def __init__(self, checkpoint_number=None):
-
+    def setup(self, config_file_path):
+        # TODO this should actually point to a configuration file
+        checkpoint_number = config_file_path
         self._policy = Policy()
         if checkpoint_number is not None:
             checkpoint = torch.load(checkpoint_number)

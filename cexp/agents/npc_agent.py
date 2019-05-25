@@ -13,10 +13,11 @@ from agents.navigation.basic_agent import BasicAgent
 
 class NPCAgent(Agent):
 
-    def __init__(self):
+    def setup(self, config_file_path):
 
         self.route_assigned = False
         self._agent = None
+
 
     def make_state(self, exp):
         if not self._agent:

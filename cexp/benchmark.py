@@ -4,8 +4,7 @@ import sys
 import importlib
 import argparse
 
-from cexp.agents import CEXP
-from cexp.agents.npc_agent import NPCAgent
+from cexp.cexp import CEXP
 
 
 # TODO ADD the posibility to configure what goes in and what goes out ( OUput format)
@@ -29,7 +28,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
         # CARLA full carla 2019 in all its glory
     else:
         # We try to find the benchmark directly
-        json_file = benchmark_name + '.json'
+        json_file = benchmark_name
 
     params = {'save_dataset': save_dataset,
               'docker_name': docker_image,
