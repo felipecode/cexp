@@ -18,7 +18,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
 
     if benchmark_name == 'CoRL2017':
         # This case is the full benchmark in all its glory
-        # We activate the generation
+        # TODO We activate the generation automatically
         pass
     elif  benchmark_name == 'NoCrash':
         # This is
@@ -69,28 +69,3 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     return summary_list
 
 
-
-# Some main, if it is not generated generate.
-
-if __name__ == '__main__':
-
-    description = ("CARLA AD Challenge evaluation: evaluate your Agent in CARLA scenarios\n")
-
-    parser = argparse.ArgumentParser(description=description)
-
-    parser.add_argument('--port', default=None, help='Port for an already existent server')
-
-    arguments = parser.parse_args()
-
-
-    parser.add_argument('--agent', default=None, help='Port for an already existent server')
-
-    arguments = parser.parse_args()
-
-
-
-
-# Run like
-
-# python3 benchmark -b CoRL2017 -a agent -c configuration
-#

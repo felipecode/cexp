@@ -92,10 +92,6 @@ class ServerManagerDocker(ServerManager):
         self._docker_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(64))
         # temporary config file
 
-        #exec_command = "docker run --name {} -p {}-{}:{}-{} --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 " \
-        #               "carlasim/carla:{} /bin/bash CarlaUE4.sh > -world-port={} -benchmark -fps=20 /dev/null".format(
-        #    self._docker_id, port, port+2, port, port+2, self._docker_string, port)
-
         my_env = os.environ.copy()
         my_env["NV_GPU"] = str(self._gpu)
         self._proc = subprocess.Popen(['docker', 'run', '--name', self._docker_id,'--rm', '-d', '-p',

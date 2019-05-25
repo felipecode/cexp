@@ -2,6 +2,7 @@ import carla
 import math
 import numpy as np
 import py_trees
+import traceback
 
 from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
@@ -104,31 +105,40 @@ class Experience(object):
                                       'scenario_controls': None}
         else:
             self._writer = None
-        # Sensor interface, a buffer that contains all the read sensors
-        self._sensor_interface = SensorInterface(number_threads_barrier=len(sensors))
-        # Load the world
-        self._load_world()
-        # Set the actor pool so the scenarios can prepare themselves when needed
-        CarlaActorPool.set_client(client)
-        CarlaActorPool.set_world(self.world)
-        # Set the world for the global data provider
-        CarlaDataProvider.set_world(self.world)
-        # We instance the ego actor object
-        _, self._route = interpolate_trajectory(self.world, route)
-        # elevate the z transform to avoid spawning problems
-        elevate_transform = self._route[0][0]
-        elevate_transform.location.z += 0.5
-        self._spawn_ego_car(elevate_transform)
-        # We setup all the instanced sensors
-        self._setup_sensors(sensors, self._ego_actor)
-        # We set all the traffic lights to green to avoid having this traffic scenario.
-        self._reset_map()
-        # Data for building the master scenario
-        self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
-        other_scenarios = self.build_scenario_instances(scenario_definitions)
-        self._list_scenarios = [self._master_scenario] + other_scenarios
-        # Route statistics, when the route is finished there will be route statistics on this object. and nothing else
-        self._route_statistics = None
+        # We try running all the necessary initalization, if we fail we clean the
+        try:
+            # Sensor interface, a buffer that contains all the read sensors
+            self._sensor_interface = SensorInterface(number_threads_barrier=len(sensors))
+            # Load the world
+            self._load_world()
+            # Set the actor pool so the scenarios can prepare themselves when needed
+            CarlaActorPool.set_client(client)
+            CarlaActorPool.set_world(self.world)
+            # Set the world for the global data provider
+            CarlaDataProvider.set_world(self.world)
+            # We instance the ego actor object
+            _, self._route = interpolate_trajectory(self.world, route)
+            # elevate the z transform to avoid spawning problems
+            elevate_transform = self._route[0][0]
+            elevate_transform.location.z += 0.5
+            self._spawn_ego_car(elevate_transform)
+            # We setup all the instanced sensors
+            self._setup_sensors(sensors, self._ego_actor)
+            # We set all the traffic lights to green to avoid having this traffic scenario.
+            self._reset_map()
+            # Data for building the master scenario
+            self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
+            other_scenarios = self.build_scenario_instances(scenario_definitions)
+            self._list_scenarios = [self._master_scenario] + other_scenarios
+            # Route statistics, when the route is finished there will
+            # be route statistics on this object. and nothing else
+            self._route_statistics = None
+        except RuntimeError as r:
+            # We clean the dataset if there is any exception on creation
+            traceback.print_exc()
+            if self._save_data:
+                self._clean_bad_dataset()
+
 
 
     def tick_scenarios(self):
@@ -325,11 +335,6 @@ class Experience(object):
 
     def _load_world(self):
         # A new world can only be loaded in async mode
-        if self.world is not None:
-            settings = self.world.get_settings()
-            settings.synchronous_mode = False
-            settings.no_rendering_mode = False
-            self.world.apply_settings(settings)
         self.world = self._client.load_world(self._town_name)
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
@@ -399,7 +404,8 @@ class Experience(object):
         if self._save_data:
             self._writer.save_summary(self._route_statistics)
             if self._exp_params['remove_wrong_data']:
-                self._clean_bad_dataset(self._route_statistics)
+                if self._route_statistics['result'] == 'FAILURE':
+                    self._clean_bad_dataset()
 
         CarlaActorPool.cleanup()
         CarlaDataProvider.cleanup()
@@ -415,12 +421,11 @@ class Experience(object):
 
             self.world = None
 
-    def _clean_bad_dataset(self, route_statistics):
+    def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.
 
         # Basically remove the folder associated with this exp if the status was not success,
         # or if did not achieve the correct ammount of points
-        if route_statistics['result'] == 'FAILURE':
-            print ( "FAILED , DELETING")
-            self._writer.delete()
+        print ( "FAILED , DELETING")
+        self._writer.delete()
 
