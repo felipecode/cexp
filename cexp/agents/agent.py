@@ -7,7 +7,17 @@ execute. It should implement the run_step function
 
 class Agent(object):
 
+    def __init__(self, path_to_conf_file=None):
+        # agent's initialization
+        self.setup(path_to_conf_file)
 
+    def setup(self, path_to_config):
+        """
+        overwritte
+        :param path_to_config:
+        :return:
+        """
+        pass
     def run_step(self, input_data):
         """
         Execute one step of navigation. Must be implemented

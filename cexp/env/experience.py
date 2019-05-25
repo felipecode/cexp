@@ -46,7 +46,21 @@ def get_forward_speed(vehicle):
         speed = np.dot(vel_np, orientation)
         return speed
 
-# TODO is scenario mutually exclusive ??
+# TODO is scenario mutually exclusive ?? FOR NOW YES
+
+
+"""
+    def estimate_route_timeout(self, route):
+        route_length = 0.0  # in meters
+
+        prev_point = route[0][0]
+        for current_point, _ in route[1:]:
+            dist = current_point.location.distance(prev_point.location)
+            route_length += dist
+            prev_point = current_point
+
+        return int(self.SECONDS_GIVEN_PER_METERS * route_length)
+"""
 
 
 class Experience(object):
@@ -179,7 +193,8 @@ class Experience(object):
         if self._master_scenario is None:
             raise ValueError('You should not run a route without a master scenario')
 
-        return self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.RUNNING
+        return self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.RUNNING \
+                or self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.INVALID
 
     """
         FUNCTIONS FOR BUILDING 
@@ -292,7 +307,7 @@ class Experience(object):
                 actor.set_green_time(100000)
 
     # TODO MASTER SCEENARIO TIMEOUT CALCULATION.
-    def build_master_scenario(self, route, town_name):
+    def build_master_scenario(self, route, town_name, timeout=300):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
@@ -305,7 +320,8 @@ class Experience(object):
         master_scenario_configuration.trigger_point = self._ego_actor.get_transform()
         CarlaDataProvider.register_actor(self._ego_actor)
 
-        return MasterScenario(self.world, self._ego_actor, master_scenario_configuration)
+        return MasterScenario(self.world, self._ego_actor, master_scenario_configuration,
+                              timeout=timeout)
 
     def _load_world(self):
         # A new world can only be loaded in async mode
