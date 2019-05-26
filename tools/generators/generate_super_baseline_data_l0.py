@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
                     env_dict = {
                         "route": {
-                            "file": town_name,
+                            "file": 'corl2017/' + town_name,
                             "id": env_number
                         },
                         "scenarios": None,
