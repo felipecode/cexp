@@ -25,7 +25,9 @@ if __name__ == '__main__':
     parser.add_argument('-g', '--gpu', default=None, help='The gpu number to be used')
 
 
+    parser.add_argument('--port', default=None, help='Port for an already existent server')
+
     args = parser.parse_args()
 
-    benchmark(args.benchmark, args.docker, args.gpu, args.agent, args.config)
+    benchmark(args.benchmark, args.docker, args.gpu, args.agent, args.config, port=args.port)
 

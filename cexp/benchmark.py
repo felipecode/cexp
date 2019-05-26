@@ -53,7 +53,7 @@ def summary_csv(summary_list, json_filename, agent_name):
 
 
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
-              batch_size=1, number_repetions=1, save_dataset=False):
+              batch_size=1, number_repetions=1, save_dataset=False, port=None):
 
     # Test if the benchmark is the list of available benchmarks
 
@@ -82,7 +82,8 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
               }
 
     # this could be joined
-    env_batch = CEXP(json_file, params, iterations_to_execute=10000, sequential=True)
+    env_batch = CEXP(json_file, params, iterations_to_execute=10000,
+                     sequential=True, port=port)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
     # Here some docker was set
@@ -104,10 +105,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             summary = env.get_summary()
             print (summary)
             summary_list.append(summary)
-            #
-
-
-
 
     return summary_list
 
