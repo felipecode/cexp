@@ -103,8 +103,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             _, _ = agent.unroll(env)
             # if the agent is already un
             summary = env.get_summary()
-            print (summary)
-            summary_list.append(summary)
+            summary_list.append(summary[0])
 
     summary_csv(summary_list, json_file, agent_module.__name__)
     return summary_list
