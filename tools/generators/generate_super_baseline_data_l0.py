@@ -99,7 +99,7 @@ if __name__ == '__main__':
                             "file": 'corl2017/' + town_name,
                             "id": env_number
                         },
-                        "scenarios": None,
+                        "scenarios": {"file": "None"},
                         "town_name": "Town01",
                         "vehicle_model": "vehicle.lincoln.mkz2017",
                         "weather_profile": weather
