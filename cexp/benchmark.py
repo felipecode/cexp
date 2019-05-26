@@ -106,6 +106,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             print (summary)
             summary_list.append(summary)
 
+    summary_csv(summary_list, json_file, agent_module.__name__)
     return summary_list
 
 
