@@ -393,6 +393,13 @@ class Experience(object):
         """
         Remove and destroy all actors
         """
+        for scenario in self._list_scenarios:
+            # Reset scenario status for proper cleanup
+            scenario.scenario.terminate()
+            # Do not call del here! Directly enforce the actor removal
+            scenario.remove_all_actors()
+            scenario = None
+
         self._client.stop_recorder()
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):
@@ -422,11 +429,9 @@ class Experience(object):
             logging.debug("Removed Ego Vehicle")
 
         if self.world is not None:
-            settings = self.world.get_settings()
-            settings.synchronous_mode = False
-            self.world.apply_settings(settings)
 
             self.world = None
+
 
     def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.

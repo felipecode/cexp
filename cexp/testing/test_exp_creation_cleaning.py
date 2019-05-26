@@ -13,6 +13,11 @@ import carla
 
 
 
+def create_route():
+
+
+    return route
+
 
 
 if __name__ == '__main__':
@@ -30,10 +35,14 @@ if __name__ == '__main__':
 
     #test_distance_intersection_speed(world)
 
+    exp_params = {
+
+    }
+
 
     # TEST 1 Create wrong experiment, no file is created
 
-    Experience(client, )
+    Experience(client,"vehicle.lincoln.mkz2017", , None, None, )
 
 
     #def __init__(self, client, vehicle_model, route, sensors, scenario_definitions, exp_params):
