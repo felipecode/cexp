@@ -23,7 +23,7 @@ def parse_results_summary(summary):
     return result_dictionary
 
 def summary_csv(summary_list, json_filename, agent_name):
-    filename = os.path.join('result_' + json_filename[:-4] + '_' + agent_name + '.csv')
+    filename = 'result_' + json_filename.split('/')[-1][:-4] + '_' + agent_name + '.csv'
     csv_outfile = open(filename, 'w')
 
     csv_outfile.write("%s,%s\n"
