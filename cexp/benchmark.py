@@ -22,8 +22,10 @@ def parse_results_summary(summary):
 
     return result_dictionary
 
+
 def summary_csv(summary_list, json_filename, agent_name):
-    filename = 'result_' + json_filename.split('/')[-1][:-4] + '_' + agent_name + '.csv'
+
+    filename = 'result_' + json_filename.split('/')[-1][:-5] + '_' + agent_name + '.csv'
     csv_outfile = open(filename, 'w')
 
     csv_outfile.write("%s,%s\n"
@@ -41,9 +43,14 @@ def summary_csv(summary_list, json_filename, agent_name):
         for metric in final_dictionary.keys():
             final_dictionary[metric] += results[metric]
 
+    first_time = True
     for metric in final_dictionary.keys():
         final_dictionary[metric] /= len(summary_list)
-        csv_outfile.write("%f" % (final_dictionary[metric]))
+        if first_time:
+            csv_outfile.write("%f" % (final_dictionary[metric]))
+            first_time = False
+        else:
+            csv_outfile.write(",%f" % (final_dictionary[metric]))
 
     csv_outfile.write("\n")
 
