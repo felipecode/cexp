@@ -62,22 +62,8 @@ def summary_csv(summary_list, json_filename, agent_name):
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
               batch_size=1, number_repetions=1, save_dataset=False, port=None):
 
-    # Test if the benchmark is the list of available benchmarks
 
-    if benchmark_name == 'CoRL2017':
-        # This case is the full benchmark in all its glory
-        # TODO We activate the generation automatically
-        pass
-    elif benchmark_name == 'NoCrash':
-        # This is
-        pass
-
-    elif benchmark_name == 'CARLA_AD_2019_VALIDATION':
-        pass
-        # CARLA full carla 2019 in all its glory
-    else:
-        # We try to find the benchmark directly
-        json_file = benchmark_name
+    json_file = benchmark_name
 
     params = {'save_dataset': save_dataset,
               'docker_name': docker_image,
