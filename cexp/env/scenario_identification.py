@@ -57,7 +57,7 @@ def identify_scenario(ego_actor):
 
         # S2  Check if it is directly affected by the next intersection
         return 'S2_before_intersection'
-    
+
     else:  # Then it is
 
         return 'S1_intersection'

@@ -36,7 +36,7 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/test_every_scenario.json'
+    json = 'database/dataset_l0.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'docker_name': 'carlalatest:latest',
