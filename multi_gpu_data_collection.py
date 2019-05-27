@@ -1,3 +1,4 @@
+import traceback
 import argparse
 import time
 import logging
@@ -6,9 +7,12 @@ import glob
 import multiprocessing
 
 from cexp.agents.NPCAgent import NPCAgent
+from cexp.cexp import CEXP
 
 from carla.client import make_carla_client
 from carla.tcp import TCPConnectionError
+
+
 
 from collect import collect
 try:
@@ -24,17 +28,27 @@ def collect_data(json_file, params, number_iterations):
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CARL(json_file, params, number_iterations, params['batch_size'])  # THe experience is built, the files necessary
-                                                                                 # to load CARLA and the scenarios are made
+    env_batch = CEXP(json_file, params=params, iterations_to_execute=number_iterations)
+    # THe experience is built, the files necessary
+    # to load CARLA and the scenarios are made
+
     # Here some docker was set
     env_batch.start()
-
     for env in env_batch:
-        # The policy selected to run this experience vector (The class basically) This policy can also learn, just
-        # by taking the output from the experience.
-        # I need a mechanism to test the rewards so I can test the policy gradient strategy
-        states, rewards = agent.unroll(env)
-        agent.reinforce(rewards)
+        try:
+            # The policy selected to run this experience vector (The class basically) This policy can also learn, just
+            # by taking the output from the experience.
+            # I need a mechanism to test the rewards so I can test the policy gradient strategy
+            states, rewards = agent.unroll(env)
+            agent.reinforce(rewards)
+        except KeyboardInterrupt:
+            env.stop()
+            break
+        except:
+            traceback.print_exc()
+            # Just try again
+            env.stop()
+            print(" ENVIRONMENT BROKE trying again.")
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
@@ -53,6 +67,7 @@ def execute_collector(json_file, params, number_iteerations):
     p = multiprocessing.Process(target=collect_loop,
                                 args=(json_file, params, number_iteerations,))
     p.start()
+
 
 
 if __name__ == '__main__':
@@ -110,9 +125,9 @@ if __name__ == '__main__':
         params = {'save_dataset': True,
                   'docker_name': args.containere_name,
                   'gpu': gpu,
-                  'batch_size': 1,  # TODO for now batch size is 1
+                  'batch_size': 1,
                   'remove_wrong_data': args.delete_wrong,
                   'start_episode': args.start_episode + (args.number_episodes) * (i)
                   }
 
-        execute(json_file, params, args.number_episodes, args.process)
+        collect_data(json_file, params, args.number_episodes)

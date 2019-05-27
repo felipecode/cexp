@@ -75,6 +75,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
               }
 
     # this could be joined
+    # TODO massive tests on CEXPs on continuing from where it started
     env_batch = CEXP(json_file, params, iterations_to_execute=10000,
                      sequential=True, port=port)
     # THe experience is built, the files necessary
@@ -97,6 +98,8 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             # if the agent is already un
             summary = env.get_summary()
             summary_list.append(summary[0])
+            # TODO we have to be able to continue from were it stopped
+            # TODO integrate with the recorder
 
     summary_csv(summary_list, json_file, agent_module.__name__)
     return summary_list
