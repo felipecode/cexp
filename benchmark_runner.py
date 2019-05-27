@@ -22,7 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--config', default=None, help='The benchmark ALIAS or full'
                                                                'path to the json file')
 
-    parser.add_argument('-g', '--gpu', default=None, help='The gpu number to be used')
+    parser.add_argument('-g', '--gpu', default="0", help='The gpu number to be used')
 
     parser.add_argument('--port', default=None, help='Port for an already existent server')
 
