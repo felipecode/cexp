@@ -277,12 +277,12 @@ class ScreenManager(object):
 
                 self.paint_on_screen(int(size_x / 8), text, (0, 255, 0), direction_pos, screen_position)
 
-            self.paint_on_screen(int(size_x / 5), "Direction: %.2f" % status['directions'], (64, 255, 64),
-                                 (int(size_x / 1.5), int(size_y / 10)),
+            self.paint_on_screen(int(size_x / 10), "Direction: %.2f" % status['directions'], (64, 255, 64),
+                                 (int(size_x / 4.0), int(size_y / 10)),
                                  screen_position)
 
-            self.paint_on_screen(int(size_x / 5), "Scenario: %s" % status['scenario'], (64, 255, 64),
-                                 (int(size_x / 1.5), int(size_y / 5)),
+            self.paint_on_screen(int(size_x / 10), "Scenario: %s" % status['scenario'].split('_')[0], (64, 255, 64),
+                                 (int(size_x / 4.0), int(size_y / 5)),
                                  screen_position)
 
         self._render_iter += 1

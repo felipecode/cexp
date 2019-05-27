@@ -1,10 +1,12 @@
 # TODO Might require optimization since it has to be computed on every iteration
 
 
-
+LANE_FOLLOW_DISTANCE = 5.0  # If further than this distance then it is lane following
 
 def distance_to_intersection(vehicle, wmap, resolution=0.1):
     # TODO heavy function, takes 70MS this can be reduced.
+
+    # Add a cutting p
 
     total_distance = 0
 
@@ -13,8 +15,12 @@ def distance_to_intersection(vehicle, wmap, resolution=0.1):
     while not reference_waypoint.is_intersection:
         reference_waypoint = reference_waypoint.next(resolution)[0]
         total_distance += resolution
+        # There is a maximun distance so this function goes faster.
+        if total_distance > LANE_FOLLOW_DISTANCE:
+            return total_distance
 
     return total_distance
+
 
 
 def identify_scenario(ego_actor):
@@ -44,13 +50,14 @@ def identify_scenario(ego_actor):
 
     # TODO for now only for scenarios 0-2
 
-    if distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > 2:
+    if distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > 5:
         # For now far away from an intersection means that it is a simple lane following
         return 'S0_lane_following'
-    elif distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > 0.5:
+    elif distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > 1:
 
         # S2  Check if it is directly affected by the next intersection
         return 'S2_before_intersection'
+    
     else:  # Then it is
 
         return 'S1_intersection'

@@ -138,8 +138,10 @@ if __name__ == "__main__":
 
                 for batch in exp[0]:
                     print("      Batch: ", batch[1])
-                    for data_point in batch[0]:
-                        print (data_point)
+                    step = 0  # Add the size
+                    while step < len(batch[0]):
+
+                        data_point = batch[0][step]
                         rgb_center = scipy.ndimage.imread(data_point[central_camera_name])[:,:,:3]
                         rgb_left = scipy.ndimage.imread(data_point[left_camera_name])[:,:,:3]
                         rgb_right = scipy.ndimage.imread(data_point[right_camera_name])[:,:,:3]
@@ -156,6 +158,7 @@ if __name__ == "__main__":
                         screen.plot_camera_steer(rgb_center, control=None,
                                                  screen_position=[1, 0], status=status)
                         screen.plot_camera_steer(rgb_right, screen_position=[2, 0])
+                        step += step_size
 
 
 
