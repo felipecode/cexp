@@ -40,10 +40,17 @@ def check_folder(env_name, number_episodes):
     """
 
     path = os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark', env_name)
-
     # List number of folders check if match expected
 
-    assert len(os.listdir(path)) == number_episodes
+    environments_count = 0
+    for filename in os.listdir(path):
+        try:
+            int_filename = int(filename)
+            environments_count += 1
+        except:
+            pass
+
+    assert environments_count == number_episodes
 
 
 def check_dataset(number_episode_dics):

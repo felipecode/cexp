@@ -28,7 +28,16 @@ class CEXP(object):
                        'carla_recording': True
                       }
 
-    def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False, port=None):
+    def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
+                 port=None, unavailable_envs=None):
+        """
+
+        :param jsonfile:
+        :param params:
+        :param iterations_to_execute:
+        :param sequential:
+        :param port:
+        """
         if params is None:
             self._params = CEXP._default_params
         else:
@@ -58,6 +67,8 @@ class CEXP(object):
         self._sequential = sequential
         # set a fixed port to be looked into
         self._port = port
+
+        # Start experiment  ?
 
     def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
@@ -103,6 +114,8 @@ class CEXP(object):
 
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
+            # if there is
+
             # Instance an _environments.
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
             # add the additional sensors ( The ones not provided by the policy )
