@@ -116,9 +116,6 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
 
 
-
-
-
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
               batch_size=1, number_repetions=1, save_dataset=False, port=None,
               agent_checkpoint_name=None):
@@ -137,6 +134,8 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     """
     # TODO this looks weird
     json_file = benchmark_name
+    if agent_checkpoint_name is None:
+        agent_checkpoint_name = agent_module.__name__
 
     params = {'save_dataset': save_dataset,
               'docker_name': docker_image,
@@ -167,8 +166,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
 
     # if there is no name for the checkpoint we set it as the agent module name
-    if agent_checkpoint_name is None:
-        agent_checkpoint_name = agent_module.__name__
 
     summary_list = []
 
