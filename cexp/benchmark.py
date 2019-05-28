@@ -85,26 +85,32 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
     with open(json_filename, 'r') as f:
         json_file = json.loads(f.read())
     # if it doesnt exist we add the file
-    if not os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
-                                       agent_checkpoint_name + '_benchmark_summary.csv')):
+    filename = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
+                                       agent_checkpoint_name + '_benchmark_summary.csv')
+    if not os.path.exists(filename):
 
         csv_outfile = open(filename, 'w')
 
         csv_outfile.write("%s,%s,%s\n"
                           % ('rep', 'episodes_completion', 'episodes_fully_completed'))
 
+        csv_outfile.close()
 
 
     else:
-        repetition_number = check_benchmarked_episodes(json_filename, agent_checkpoint_name)[]
+        repetition_number = check_benchmarked_episodes(json_filename, agent_checkpoint_name)[environment_name]
 
 
+    results = parse_results_summary(summary)
 
-    final_dictionary = {
-        'episodes_completion': 0,
-        'episodes_fully_completed': 0
-    }
+    for metric_result in results.keys():
 
+        csv_outfile = open(filename, 'w')
+
+        csv_outfile.write("%f,%f,%f\n"
+                          % (float(repetition_number), results[metric_result], results[metric_result]))
+
+        csv_outfile.close()
 
 
 
@@ -114,7 +120,8 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
 
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
-              batch_size=1, number_repetions=1, save_dataset=False, port=None, agent_checkpoint_name=None):
+              batch_size=1, number_repetions=1, save_dataset=False, port=None,
+              agent_checkpoint_name=None):
 
     """
     :param benchmark_name:
@@ -128,7 +135,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     :param port:
     :return:
     """
-
+    # TODO this looks weird
     json_file = benchmark_name
 
     params = {'save_dataset': save_dataset,
@@ -141,10 +148,12 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
               }
 
     # this could be joined
-    # TODO massive tests on CEXPs on continuing from where it started
+
     env_batch = CEXP(json_file, params, iterations_to_execute=10000,
-                     sequential=True, port=port)
+                     sequential=True, port=port, tested_envs_dict=check_benchmarked_episodes(json_file,
+                                                                                             agent_checkpoint_name))
     # THe experience is built, the files necessary
+
     # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()

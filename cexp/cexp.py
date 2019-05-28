@@ -29,7 +29,7 @@ class CEXP(object):
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
-                 port=None, unavailable_envs=None):
+                 port=None, tested_envs_dict=None):
         """
 
         :param jsonfile:
