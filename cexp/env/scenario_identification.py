@@ -14,9 +14,6 @@ def angle_between_transforms(location1, location2, location3):
     vec_dots = np.dot(v_1, v_2)
     cos_wp = vec_dots / abs((np.linalg.norm(v_1) * np.linalg.norm(v_2)))
     angle_wp = math.acos(min(1.0, cos_wp))  # COS can't be larger than 1, it can happen due to float imprecision
-
-    print ("Road angle ", angle_wp)
-
     return angle_wp
 
 LANE_FOLLOW_DISTANCE = 25.0  # If further than this distance then it is lane following
