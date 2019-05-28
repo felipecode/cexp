@@ -54,7 +54,6 @@ def identify_scenario(ego_actor):
         # For now far away from an intersection means that it is a simple lane following
         return 'S0_lane_following'
     elif distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > 1.0:
-
         # S2  Check if it is directly affected by the next intersection
         return 'S2_before_intersection'
 
