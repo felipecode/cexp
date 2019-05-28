@@ -63,7 +63,7 @@ class Environment(object):
             if 'start_on_number' in self._env_params:
                 Environment.number_of_executions = self._env_params['start_on_number']
 
-            else: # if we dont make the experience start on a certain number it continues after the last created
+            else:  # if we dont make the experience start on a certain number it continues after the last created
                 Environment.number_of_executions = parser.get_number_executions(os.path.join(os.environ["SRL_DATASET_PATH"],
                                                                             self._package_name))
 

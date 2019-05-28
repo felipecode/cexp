@@ -1,7 +1,7 @@
 # TODO Might require optimization since it has to be computed on every iteration
 
 
-LANE_FOLLOW_DISTANCE = 15.0  # If further than this distance then it is lane following
+LANE_FOLLOW_DISTANCE = 25.0  # If further than this distance then it is lane following
 
 def distance_to_intersection(vehicle, wmap, resolution=0.1):
     # TODO heavy function, takes 70MS this can be reduced.

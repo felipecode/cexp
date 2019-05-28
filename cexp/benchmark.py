@@ -1,5 +1,6 @@
 import os
 import logging
+import json
 import sys
 import importlib
 import argparse
@@ -21,6 +22,27 @@ def parse_results_summary(summary):
     }
 
     return result_dictionary
+
+
+def check_benchmarked_episodes(json_filename):
+
+    """ return a dict with each environment and how many times it has been benchmarked """
+
+    with open(json_filename, 'r') as f:
+        json_file = json.loads(f.read())
+
+    if not os.path.exists(os.environ["SRL_DATASET_PATH"], json_file['package_name']):
+        return {}  # return empty dictionary no case was benchmarked
+
+
+    for env_name in json_file.keys():
+        path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
+                            'benchmark_summary.csv')
+        if os.path.exists(path):
+            return
+
+
+
 
 
 def summary_csv(summary_list, json_filename, agent_name):
@@ -92,11 +114,14 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
 
     summary_list = []
+
     for rep in range(number_repetions):
         for env in env_batch:
             _, _ = agent.unroll(env)
             # if the agent is already un
             summary = env.get_summary()
+            # Add partial summary to allow continuation
+            add_summary(summary)
             summary_list.append(summary[0])
             # TODO we have to be able to continue from were it stopped
             # TODO integrate with the recorder
