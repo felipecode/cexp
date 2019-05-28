@@ -1,5 +1,23 @@
 # TODO Might require optimization since it has to be computed on every iteration
 
+# Functions usefull for scenario identification
+
+
+import numpy as np
+import math
+from agents.tools.misc import vector
+
+def angle_between_transforms(location1, location2, location3):
+    v_1 = vector(location1,location2)
+    v_2 = vector(location2,location3)
+
+    vec_dots = np.dot(v_1, v_2)
+    cos_wp = vec_dots / abs((np.linalg.norm(v_1) * np.linalg.norm(v_2)))
+    angle_wp = math.acos(min(1.0, cos_wp))  # COS can't be larger than 1, it can happen due to float imprecision
+
+    print ("Road angle ", angle_wp)
+
+    return angle_wp
 
 LANE_FOLLOW_DISTANCE = 25.0  # If further than this distance then it is lane following
 
@@ -23,14 +41,31 @@ def distance_to_intersection(vehicle, wmap, resolution=0.1):
 
 
 
-def identify_scenario(ego_actor):
+def get_current_road_angle(vehicle, wmap, resolution=0.1):
+
+    # Add a cutting p
+
+    reference_waypoint = wmap.get_waypoint(vehicle.get_transform().location)
+
+    next_waypoint = reference_waypoint.next(resolution)[0]
+
+    yet_another_waypoint = next_waypoint.next(resolution)[0]
+
+    return angle_between_transforms(reference_waypoint.transform.location,
+                                    next_waypoint.transform.location,
+                                    yet_another_waypoint.transform.location)
+
+
+def identify_scenario(distance_intersection, road_angle):
 
     """
     Returns the scenario for this specific point or trajectory
 
-    S0: Lane Following - S0_lane_following
+    S0: Lane Following -Straight - S0_lane_following
     S1: Intersection - S1_intersection
     S2: Traffic Light/ before intersection - S2_before_intersection
+    S3: Lane Following - Curve - S3_lane_following_curve
+
     S3: Lead Vehicle Following - S3_lead_vehicle
     S4: Control Loss (TS1) - S4_control_loss
     S5: Pedestrian Crossing (TS3) - S5_pedestrian_crossing
@@ -50,10 +85,11 @@ def identify_scenario(ego_actor):
 
     # TODO for now only for scenarios 0-2
 
-    if distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > LANE_FOLLOW_DISTANCE:
+    if distance_intersection > LANE_FOLLOW_DISTANCE:
         # For now far away from an intersection means that it is a simple lane following
+
         return 'S0_lane_following'
-    elif distance_to_intersection(ego_actor, ego_actor.get_world().get_map()) > 1.0:
+    elif distance_intersection> 1.0:
         # S2  Check if it is directly affected by the next intersection
         return 'S2_before_intersection'
 

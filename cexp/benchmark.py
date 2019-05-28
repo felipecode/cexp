@@ -31,7 +31,7 @@ def check_benchmarked_episodes(json_filename, agent_checkpoint_name):
     with open(json_filename, 'r') as f:
         json_file = json.loads(f.read())
 
-    if not os.path.exists(os.environ["SRL_DATASET_PATH"], json_file['package_name']):
+    if not os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'])):
         return {}  # return empty dictionary no case was benchmarked
 
 

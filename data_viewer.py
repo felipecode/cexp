@@ -152,7 +152,8 @@ if __name__ == "__main__":
 
                         status = {'speed': forward_speed(data_point['measurements']['ego_actor']),
                                   'directions': 2.0,
-                                  'scenario': data_point['measurements']['scenario']}
+                                  'distance_intersection': data_point['measurements']['distance_intersection'],
+                                  'road_angle': data_point['measurements']['road_angle']}
 
                         screen.plot_camera_steer(rgb_left, screen_position=[0, 0])
                         screen.plot_camera_steer(rgb_center, control=None,

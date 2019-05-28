@@ -14,7 +14,7 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
 from cexp.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
 from cexp.env.scorer import record_route_statistics_default
-from cexp.env.scenario_identification import identify_scenario
+from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
@@ -183,14 +183,14 @@ class Experience(object):
     def tick_world(self):
         # Save all the measurements that are interesting
         # TODO this may go to another function
-
+        # TODO maybe add not on every iterations, identify evry second or half second.
         if self._save_data:
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location, self._route)
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
                 'forward_speed': get_forward_speed(self._ego_actor),
-                # TODO add not on every iterations, identify evry second or half second.
-                'scenario': identify_scenario(self._ego_actor)
+                'distance_intersection': distance_to_intersection(self._ego_actor, self._ego_actor.get_world().get_map()),
+                'road_angle': get_current_road_angle(self._ego_actor, self._ego_actor.get_world().get_map())
             }
             self._sensor_interface.wait_sensors_written(self._writer)
             self._writer.save_experience(self.world, self._environment_data)
