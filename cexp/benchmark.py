@@ -25,28 +25,40 @@ def parse_results_summary(summary):
 
 
 def read_benchmark_summary(benchmark_csv):
+    """
+        Make a dict of the benchmark csv were the keys are the environment names
 
-    f = open(benchmark_csv, "rU")
+    :param benchmark_csv:
+    :return:
+    """
+
+    # If the file does not exist, return None,None, to point out that data is missing
+    if not os.path.exists(benchmark_csv):
+        return None
+
+    f = open(benchmark_csv, "r")
     header = f.readline()
     header = header.split(',')
     header[-1] = header[-1][:-2]
     f.close()
 
-    data_matrix = np.loadtxt(benchmark_csv, delimiter=",", skiprows=1)
-    summary_dict = {}
+
+    data_matrix = np.loadtxt(open(benchmark_csv, "rb"), delimiter=",", skiprows=1)
+    control_results_dic = {}
+    count = 0
 
     if len(data_matrix) == 0:
         return None
-
     if len(data_matrix.shape) == 1:
         data_matrix = np.expand_dims(data_matrix, axis=0)
 
-    count = 0
-    for _ in header:
-        summary_dict.update({header[count]: data_matrix[:, count]})
+    for env_name in data_matrix[:, 0]:
+
+        control_results_dic.update({env_name: data_matrix[count, 1:]})
         count += 1
 
-    return summary_dict
+
+    return control_results_dic
 
 
 def check_benchmarked_environments(json_filename, agent_checkpoint_name):
@@ -130,7 +142,10 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
     else:
 
-        repetition_number = check_benchmarked_environments(json_filename, agent_checkpoint_name)[environment_name]
+        env_experiments = check_benchmarked_environments(json_filename, agent_checkpoint_name)[environment_name]
+        print (" Recovering the repetition from env exp")
+        print (env_experiments)
+        repetition_number = len(env_experiments[env_experiments.keys[0]])
 
     # parse the summary for this episode
     results = parse_results_summary(summary)
@@ -207,9 +222,8 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             summary = env.get_summary()
             # Add partial summary to allow continuation
             add_summary(env._environment_name, summary[0], json_file, agent_checkpoint_name)
+
             summary_list.append(summary[0])
-            # TODO we have to be able to continue from were it stopped
-            # TODO integrate with the recorder
 
     summary_csv(summary_list, json_file, agent_module.__name__)
 
