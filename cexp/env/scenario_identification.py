@@ -84,9 +84,9 @@ def identify_scenario(distance_intersection, road_angle):
 
     if distance_intersection > LANE_FOLLOW_DISTANCE:
         # For now far away from an intersection means that it is a simple lane following
-
         return 'S0_lane_following'
-    elif distance_intersection> 1.0:
+
+    elif distance_intersection > 1.0:
         # S2  Check if it is directly affected by the next intersection
         return 'S2_before_intersection'
 

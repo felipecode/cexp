@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
     #test_distance_intersection_speed(world)
     # The idea is that the agent class should be completely independent
-    test_1_collect()
+    #test_1_collect()
     test_1_benchmark()
     # this could be joined
     # THe experience is built, the files necessary

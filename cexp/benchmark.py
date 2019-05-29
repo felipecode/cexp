@@ -134,6 +134,10 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     """
     # TODO this looks weird
     json_file = benchmark_name
+
+    module_name = os.path.basename(agent_class_path).split('.')[0]
+    sys.path.insert(0, os.path.dirname(agent_class_path))
+    agent_module = importlib.import_module(module_name)
     if agent_checkpoint_name is None:
         agent_checkpoint_name = agent_module.__name__
 
@@ -156,12 +160,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()
-
-    # take the path to the class and instantiate an agent.
-
-    module_name = os.path.basename(agent_class_path).split('.')[0]
-    sys.path.insert(0, os.path.dirname(agent_class_path))
-    agent_module = importlib.import_module(module_name)
+    # take the path to the class and instantiate an agent
 
     agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
 
