@@ -7,7 +7,7 @@ from cexp.env.scenario_identification import distance_to_intersection, identify_
 from cexp.env.server_manager import start_test_server, check_test_server
 
 from cexp.cexp import CEXP
-from cexp.benchmark import benchmark
+from cexp.benchmark import benchmark, check_benchmarked_environments
 from cexp.agents.NPCAgent import NPCAgent
 
 import carla
@@ -62,6 +62,19 @@ def check_dataset(number_episode_dics):
         check_folder(env_name, number_episode_dics[env_name])
 
 
+def check_benchmark_file(benchmark_name , expected_episodes):
+    benchmark_dict = check_benchmarked_environments(benchmark_name)
+
+    benchmarked_episodes = 0
+
+    for env_benchmarked in benchmark_dict.keys():
+
+        benchmarked_episodes += len(benchmark_dict[env_benchmarked])
+
+
+    return benchmarked_episodes
+
+
 # TEST 1 Create the entire dataset and them check if the folder has one experiment per environment
 def test_1_collect():
 
@@ -99,11 +112,12 @@ def test_1_benchmark():
 
 
 
+
 # TEST 2 Squential benchmark, run one episode fail and continue
 
-#def test_2_benchmark():
-
-
+def test_2_benchmark():
+    # Benchmark the full dataset, test the output file
+    benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=5555)
 
 # TEST 3  Random adding and many problems
 
@@ -120,6 +134,7 @@ if __name__ == '__main__':
     #test_distance_intersection_speed(world)
     # The idea is that the agent class should be completely independent
     #test_1_collect()
+    # Auto Cleanup
     test_1_benchmark()
     # this could be joined
     # THe experience is built, the files necessary

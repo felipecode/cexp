@@ -3,6 +3,7 @@ import logging
 import json
 import sys
 import importlib
+import shutil
 import numpy as np
 
 from cexp.cexp import CEXP
@@ -150,7 +151,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
     for metric_result in results.keys():
 
-        csv_outfile = open(filename, 'w')
+        csv_outfile = open(filename, 'a')
 
         csv_outfile.write("%s,%f,%f,%f\n"
                           % (environment_name, float(repetition_number), results[metric_result], results[metric_result]))
@@ -228,6 +229,11 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     return summary_list
 
 
+
+def benchmark_cleanup(package_name, agent_checkpoint_name):
+
+    shutil.rmtree(os.environ["SRL_DATASET_PATH"], package_name,
+                  agent_checkpoint_name)
 
 
 """
