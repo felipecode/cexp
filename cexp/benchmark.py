@@ -3,7 +3,7 @@ import logging
 import json
 import sys
 import importlib
-import argparse
+import numpy as np
 
 from cexp.cexp import CEXP
 
@@ -24,9 +24,39 @@ def parse_results_summary(summary):
     return result_dictionary
 
 
-def check_benchmarked_episodes(json_filename, agent_checkpoint_name):
+def read_benchmark_summary(benchmark_csv):
 
-    """ return a dict with each environment and how many times it has been benchmarked """
+    f = open(benchmark_csv, "rU")
+    header = f.readline()
+    header = header.split(',')
+    header[-1] = header[-1][:-2]
+    f.close()
+
+    data_matrix = np.loadtxt(benchmark_csv, delimiter=",", skiprows=1)
+    summary_dict = {}
+
+    if len(data_matrix) == 0:
+        return None
+
+    if len(data_matrix.shape) == 1:
+        data_matrix = np.expand_dims(data_matrix, axis=0)
+
+    count = 0
+    for _ in header:
+        summary_dict.update({header[count]: data_matrix[:, count]})
+        count += 1
+
+    return summary_dict
+
+
+def check_benchmarked_environments(json_filename, agent_checkpoint_name):
+
+    """ return a dict with each environment that has a vector of dicts of results
+
+        The len of each environment is the number of times this environment has been benchmarked.
+     """
+
+    benchmarked_environments = {}
 
     with open(json_filename, 'r') as f:
         json_file = json.loads(f.read())
@@ -34,12 +64,13 @@ def check_benchmarked_episodes(json_filename, agent_checkpoint_name):
     if not os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'])):
         return {}  # return empty dictionary no case was benchmarked
 
-
     for env_name in json_file.keys():
         path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
                             agent_checkpoint_name + '_benchmark_summary.csv')
         if os.path.exists(path):
-            return
+            benchmarked_environments.update({env_name: read_benchmark_summary(path)})
+
+    return benchmarked_environments
 
 
 
@@ -59,7 +90,7 @@ def summary_csv(summary_list, json_filename, agent_name):
     }
     # TODO add repetitions directly ( They are missing )
     for summary in summary_list:
-
+        print (summary)
         results = parse_results_summary(summary)
 
         for metric in final_dictionary.keys():
@@ -78,6 +109,7 @@ def summary_csv(summary_list, json_filename, agent_name):
 
     csv_outfile.close()
 
+
 def add_summary(environment_name, summary, json_filename, agent_checkpoint_name):
     # The rep is now zero, but if the benchmark already started we change that
     repetition_number = 0
@@ -91,24 +123,24 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
         csv_outfile = open(filename, 'w')
 
-        csv_outfile.write("%s,%s,%s\n"
-                          % ('rep', 'episodes_completion', 'episodes_fully_completed'))
+        csv_outfile.write("%s,%s,%s,%s\n"
+                          % ('environment_name', 'rep', 'episodes_completion', 'episodes_fully_completed'))
 
         csv_outfile.close()
 
-
     else:
-        repetition_number = check_benchmarked_episodes(json_filename, agent_checkpoint_name)[environment_name]
 
+        repetition_number = check_benchmarked_environments(json_filename, agent_checkpoint_name)[environment_name]
 
+    # parse the summary for this episode
     results = parse_results_summary(summary)
 
     for metric_result in results.keys():
 
         csv_outfile = open(filename, 'w')
 
-        csv_outfile.write("%f,%f,%f\n"
-                          % (float(repetition_number), results[metric_result], results[metric_result]))
+        csv_outfile.write("%s,%f,%f,%f\n"
+                          % (environment_name, float(repetition_number), results[metric_result], results[metric_result]))
 
         csv_outfile.close()
 
@@ -153,7 +185,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     # this could be joined
 
     env_batch = CEXP(json_file, params, iterations_to_execute=10000,
-                     sequential=True, port=port, tested_envs_dict=check_benchmarked_episodes(json_file,
+                     sequential=True, port=port, tested_envs_dict=check_benchmarked_environments(json_file,
                                                                                              agent_checkpoint_name))
     # THe experience is built, the files necessary
 
@@ -174,7 +206,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             # if the agent is already un
             summary = env.get_summary()
             # Add partial summary to allow continuation
-            add_summary(env._environment_name, summary, json_file, agent_checkpoint_name)
+            add_summary(env._environment_name, summary[0], json_file, agent_checkpoint_name)
             summary_list.append(summary[0])
             # TODO we have to be able to continue from were it stopped
             # TODO integrate with the recorder
