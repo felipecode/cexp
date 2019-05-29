@@ -85,9 +85,6 @@ def check_benchmarked_environments(json_filename, agent_checkpoint_name):
     return benchmarked_environments
 
 
-
-
-
 def summary_csv(summary_list, json_filename, agent_name):
 
     filename = 'result_' + json_filename.split('/')[-1][:-5] + '_' + agent_name + '.csv'
@@ -142,9 +139,10 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
     else:
 
-        env_experiments = check_benchmarked_environments(json_filename, agent_checkpoint_name)[environment_name]
+        summary_exps = check_benchmarked_environments(json_filename, agent_checkpoint_name)
         print (" Recovering the repetition from env exp")
-        print (env_experiments)
+        print (summary_exps)
+        env_experiments = summary_exps[environment_name]
         repetition_number = len(env_experiments[env_experiments.keys[0]])
 
     # parse the summary for this episode
