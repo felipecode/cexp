@@ -19,7 +19,6 @@ except IndexError:
 
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
 def collect_data(json_file, params, number_iterations, eliminated_environments):
-
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
@@ -48,22 +47,11 @@ def collect_data(json_file, params, number_iterations, eliminated_environments):
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
-def collect_loop(args):
-    while True:
-        try:
-            with make_carla_client(args.host, args.port) as client:
-                collect(client, args)
-                break
 
-        except TCPConnectionError as error:
-            logging.error(error)
-            time.sleep(1)
-
-def execute_collector(json_file, params, number_iteerations):
-    p = multiprocessing.Process(target=collect_loop,
-                                args=(json_file, params, number_iteerations,))
+def execute_collector(json_file, params, number_iterations, eliminated_environments):
+    p = multiprocessing.Process(target=collect_data,
+                                args=(json_file, params, number_iterations, eliminated_environments,))
     p.start()
-
 
 
 def get_eliminated_environments(json_file, start_position, end_position):
@@ -145,7 +133,8 @@ if __name__ == '__main__':
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
-                  'remove_wrong_data': args.delete_wrong
+                  'remove_wrong_data': args.delete_wrong,
+                  'non_rendering_mode': False
                   }
 
         if i == args.number_collectors-1 and not environments_per_collector.is_integer():
@@ -158,4 +147,4 @@ if __name__ == '__main__':
                                                               int(environments_per_collector) * (i),
                                                               int(environments_per_collector) * (i+1) + extra_env)
 
-        collect_data(json_file, params, args.number_episodes, eliminated_environments)
+        execute_collector(json_file, params, args.number_episodes, eliminated_environments)
