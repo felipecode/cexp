@@ -118,6 +118,7 @@ class CEXP(object):
                 continue  # All the repetitions of the environment have been made
             # We have the options to eliminate some events from execution.
             if env_name in self._eliminated_environments:
+                print (" ELIMINATED ", env_name)
                 continue
             # Instance an _environments.
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)

@@ -285,7 +285,7 @@ class ScreenManager(object):
                                  (int(size_x / 4.0), int(size_y / 5)),
                                  screen_position)
 
-            self.paint_on_screen(int(size_x / 10), "RoadCurve: %.4f" % status['road_angle'], (64, 255, 64),
+            self.paint_on_screen(int(size_x / 10), "RoadCurve: %.5f" % status['road_angle'], (64, 255, 64),
                                  (int(size_x / 4.0), int(size_y / 3)),
                                  screen_position)
 
