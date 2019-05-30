@@ -10,8 +10,6 @@ import multiprocessing
 from cexp.agents.NPCAgent import NPCAgent
 from cexp.cexp import CEXP
 import sys
-
-from collect import collect
 try:
     sys.path.append(glob.glob('PythonAPI')[0])
 except IndexError:
