@@ -49,11 +49,11 @@ if __name__ == '__main__':
 
     # TODO for now batch size is one
 
-    number_of_iterations = 200
+    number_of_iterations = 400
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CEXP(json, params=params, iterations_to_execute=number_of_iterations, port=arguments.port)
+    env_batch = CEXP(json, params=params, sequential=True, iterations_to_execute=number_of_iterations, port=arguments.port)
                                                                 # THe experience is built, the files necessary
                                                                 # to load CARLA and the scenarios are made
 
