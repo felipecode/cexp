@@ -134,7 +134,8 @@ if __name__ == '__main__':
                   'gpu': gpu,
                   'batch_size': 1,
                   'remove_wrong_data': args.delete_wrong,
-                  'non_rendering_mode': False
+                  'non_rendering_mode': False,
+                  'carla_recording': False
                   }
 
         if i == args.number_collectors-1 and not environments_per_collector.is_integer():
