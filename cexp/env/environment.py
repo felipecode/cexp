@@ -60,11 +60,8 @@ class Environment(object):
         if self._save_data and not Environment.number_of_executions:
             if "SRL_DATASET_PATH" not in os.environ:
                 raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset was saved before")
-            if 'start_on_number' in self._env_params:
-                Environment.number_of_executions = self._env_params['start_on_number']
 
-            else:  # if we dont make the experience start on a certain number it continues after the last created
-                Environment.number_of_executions = parser.get_number_executions(os.path.join(os.environ["SRL_DATASET_PATH"],
+            Environment.number_of_executions = parser.get_number_executions(os.path.join(os.environ["SRL_DATASET_PATH"],
                                                                             self._package_name))
 
     def __str__(self):

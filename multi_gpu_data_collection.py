@@ -45,6 +45,8 @@ def collect_data(json_file, params, number_iterations, eliminated_environments):
             env.stop()
             print(" ENVIRONMENT BROKE trying again.")
 
+    env_batch.cleanup()
+
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 
@@ -124,6 +126,7 @@ if __name__ == '__main__':
     environments_per_collector = len(json_dict['envs'])/args.number_collectors
     if environments_per_collector < 1.0:
         raise ValueError(" Too many collectors")
+
 
     for i in range(args.number_collectors):
         gpu = str(int(i / args.carlas_per_gpu))

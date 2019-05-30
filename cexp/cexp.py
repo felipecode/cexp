@@ -3,6 +3,7 @@ import carla
 import random
 import collections
 import os
+import subprocess
 
 from cexp.env.utils.general import sort_nicely_dict
 from cexp.env.server_manager import ServerManagerDocker, find_free_port, start_test_server, check_test_server
@@ -115,10 +116,11 @@ class CEXP(object):
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
             if self._check_env_finished(self._json['envs'][env_name], env_name):
+                print(" Env finished")
                 continue  # All the repetitions of the environment have been made
             # We have the options to eliminate some events from execution.
             if env_name in self._eliminated_environments:
-                print (" ELIMINATED ", env_name)
+                print(" ELIMINATED ", env_name)
                 continue
             # Instance an _environments.
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
@@ -133,8 +135,8 @@ class CEXP(object):
         if self._sequential:
             if self._iterations_to_execute > len(self._environments):
                 final_iterations = len(self._environments)
-                print ("WARNING: more iterations than environments were set on CARL. Setting the number to "
-                       "the actual number of environments")
+                print("WARNING: more iterations than environments were set on CARL. Setting the number to "
+                      "the actual number of environments")
             else:
                 final_iterations = self._iterations_to_execute
 
@@ -145,6 +147,14 @@ class CEXP(object):
     def __len__(self):
         return self._iterations_to_execute
 
+    def __del__(self):
+        self.cleanup()
+
+    def cleanup(self):
+        if self._port is  not None:
+            subprocess.call(['docker', 'stop', _environment_batch[0]._docker_id])
+
+
     def _check_env_finished(self, env_json_dict, env_name):
 
         # If the field repetitions is not on the json file it means we are going to repeat add infinitum
@@ -152,7 +162,11 @@ class CEXP(object):
             return False
         # We check how many time this environment rpeated
         total_repetitions = env_json_dict['repetitions']
+        print (Environment.number_of_executions)
         if env_name in Environment.number_of_executions:
             if Environment.number_of_executions[env_name] >= total_repetitions:
                 return False
+        else:
+            return False
+
         return True
