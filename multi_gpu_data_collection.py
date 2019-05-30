@@ -42,6 +42,7 @@ def collect_data(json_file, params, number_iterations, eliminated_environments):
         except:
             traceback.print_exc()
             # Just try again
+            agent.reset()
             env.stop()
             print(" ENVIRONMENT BROKE trying again.")
 
