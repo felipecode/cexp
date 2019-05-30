@@ -128,7 +128,6 @@ if __name__ == '__main__':
 
 
     args = argparser.parse_args()
-
     json_file = os.path.join('database', args.json_config)
 
     with open(json_file, 'r') as f:
@@ -143,7 +142,7 @@ if __name__ == '__main__':
         # A single loop being made
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
-                  'docker_name': args.containere_name,
+                  'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
                   'remove_wrong_data': args.delete_wrong
@@ -155,10 +154,8 @@ if __name__ == '__main__':
             extra_env = 0
 
         # we list all the possible environments
-
         eliminated_environments = get_eliminated_environments(json_file,
                                                               int(environments_per_collector) * (i),
                                                               int(environments_per_collector) * (i+1) + extra_env)
-
 
         collect_data(json_file, params, args.number_episodes, eliminated_environments)
