@@ -75,7 +75,6 @@ class Environment(object):
             exp.cleanup()
         # make the sensor vec empty
         self._exp_list = []
-
         # Remove all the existent sensors
         self._sensor_desc_vec = []
 
@@ -94,15 +93,10 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-
-
-
-
-
-
     def reset(self, StateFunction, RewardFunction):
         if len(self._exp_list) > 0:
             self.stop()
+
         # set the state and reward functions to be used on this episode
         self.StateFunction = StateFunction
         self.RewardFunction = RewardFunction
@@ -154,9 +148,10 @@ class Environment(object):
         full_episode_data_dict = parser.parse_environment(root_path, metadata_dict)
 
         return full_episode_data_dict
+
     def get_path(self):
 
-        return  os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
+        return os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
 
     def is_running(self):
         """
@@ -199,7 +194,6 @@ class Environment(object):
             return None
 
         all_exp_summary = []
-
         for exp in self._exp_list:
             all_exp_summary.append(exp.get_summary())
         return all_exp_summary

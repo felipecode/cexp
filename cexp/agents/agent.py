@@ -100,10 +100,9 @@ class Agent(object):
          unroll a full episode for the agent. This produces an state and reward vectors
          that are defined by the agent, that can be used directly for learning.
         """
-
-        environment.add_sensors(self.sensors())
         # You reset the scenario with and pass the make reward functions that are going to be used on the training.
         state, reward = environment.reset(self._make_state_batch, self._make_reward_batch)
+        environment.add_sensors(self.sensors())
         # Start the rewards and state vectors used
         reward_batch = [[]] * environment._batch_size
         state_batch = [[]] * environment._batch_size
