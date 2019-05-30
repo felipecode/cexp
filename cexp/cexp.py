@@ -29,7 +29,7 @@ class CEXP(object):
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
-                 port=None, eliminated_envs=None):
+                 port=None, eliminated_environments=None):
         """
 
         :param jsonfile:
@@ -69,11 +69,10 @@ class CEXP(object):
         # set a fixed port to be looked into
         self._port = port
         # add eliminated environments
-        if eliminated_envs is None:
-            self._eliminated_envs = {}
+        if eliminated_environments is None:
+            self._eliminated_environments = {}
         else:
-            self._eliminated_envs = eliminated_envs
-        # Start experiment  ?
+            self._eliminated_environments = eliminated_environments
 
     def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
@@ -109,7 +108,6 @@ class CEXP(object):
             'debug': self._port is not None
         }
 
-
         # We instantiate environments here using the recently connected client
         self._environments = []
         parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(sort_nicely_dict(self._json['envs'].items())))
@@ -119,7 +117,7 @@ class CEXP(object):
             if self._check_env_finished(self._json['envs'][env_name], env_name):
                 continue  # All the repetitions of the environment have been made
             # We have the options to eliminate some events from execution.
-            if env_name in self._eliminated_envs:
+            if env_name in self._eliminated_environments:
                 continue
             # Instance an _environments.
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
@@ -146,7 +144,6 @@ class CEXP(object):
     def __len__(self):
         return self._iterations_to_execute
 
-
     def _check_env_finished(self, env_json_dict, env_name):
 
         # If the field repetitions is not on the json file it means we are going to repeat add infinitum
@@ -157,5 +154,4 @@ class CEXP(object):
         if env_name in Environment.number_of_executions:
             if Environment.number_of_executions[env_name] >= total_repetitions:
                 return False
-
         return True
