@@ -166,7 +166,7 @@ class Writer(object):
         """
         shutil.rmtree(self._full_path)
 
-        if len(os.listdir(self._full_path)) == 0:
+        if len(os.listdir(self._base_path)) == 0:
             shutil.rmtree(self._base_path)
 
 
