@@ -29,13 +29,14 @@ class CEXP(object):
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
-                 port=None, tested_envs_dict=None):
+                 port=None, eliminated_envs=None):
         """
 
         :param jsonfile:
         :param params:
         :param iterations_to_execute:
         :param sequential:
+        :param eliminated_envs: list of the environments that are not going to be used
         :param port:
         """
         if params is None:
@@ -67,7 +68,11 @@ class CEXP(object):
         self._sequential = sequential
         # set a fixed port to be looked into
         self._port = port
-
+        # add eliminated environments
+        if eliminated_envs is None:
+            self._eliminated_envs = {}
+        else:
+            self._eliminated_envs = eliminated_envs
         # Start experiment  ?
 
     def start(self, no_server=False):
@@ -104,9 +109,6 @@ class CEXP(object):
             'debug': self._port is not None
         }
 
-        # Add the start on number param for substitution and multi process collection.
-        if 'start_on_number' in self._params:
-            env_params.update({'start_on_number': self._params['start_on_number']})
 
         # We instantiate environments here using the recently connected client
         self._environments = []
@@ -114,8 +116,11 @@ class CEXP(object):
 
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
-            # if there is
-
+            if self._check_env_finished(self._json['envs'][env_name], env_name):
+                continue  # All the repetitions of the environment have been made
+            # We have the options to eliminate some events from execution.
+            if env_name in self._eliminated_envs:
+                continue
             # Instance an _environments.
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
             # add the additional sensors ( The ones not provided by the policy )
@@ -142,3 +147,15 @@ class CEXP(object):
         return self._iterations_to_execute
 
 
+    def _check_env_finished(self, env_json_dict, env_name):
+
+        # If the field repetitions is not on the json file it means we are going to repeat add infinitum
+        if 'repetitions' not in env_json_dict:
+            return False
+        # We check how many time this environment rpeated
+        total_repetitions = env_json_dict['repetitions']
+        if env_name in Environment.number_of_executions:
+            if Environment.number_of_executions[env_name] >= total_repetitions:
+                return False
+
+        return True

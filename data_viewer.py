@@ -11,6 +11,7 @@ import re
 
 import time
 from cexp.cexp import CEXP
+from cexp.env.scenario_identification import identify_scenario
 from cexp.env.environment import NoDataGenerated
 #import seaborn as sns
 from other.screen_manager import ScreenManager
@@ -153,7 +154,10 @@ if __name__ == "__main__":
                         status = {'speed': forward_speed(data_point['measurements']['ego_actor']),
                                   'directions': 2.0,
                                   'distance_intersection': data_point['measurements']['distance_intersection'],
-                                  'road_angle': data_point['measurements']['road_angle']}
+                                  'road_angle': data_point['measurements']['road_angle'],
+                                  'scenario': identify_scenario(data_point['measurements']['distance_intersection'],
+                                                                data_point['measurements']['road_angle'])
+                                  }
 
                         screen.plot_camera_steer(rgb_left, screen_position=[0, 0])
                         screen.plot_camera_steer(rgb_center, control=None,

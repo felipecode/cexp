@@ -30,17 +30,12 @@ def distance_to_intersection(vehicle, wmap, resolution=0.1):
     while not reference_waypoint.is_intersection:
         reference_waypoint = reference_waypoint.next(resolution)[0]
         total_distance += resolution
-        # There is a maximun distance so this function goes faster.
-        if total_distance > LANE_FOLLOW_DISTANCE:
-            return total_distance
 
     return total_distance
 
 
 
-def get_current_road_angle(vehicle, wmap, resolution=0.1):
-
-    # Add a cutting p
+def get_current_road_angle(vehicle, wmap, resolution=0.01):
 
     reference_waypoint = wmap.get_waypoint(vehicle.get_transform().location)
 

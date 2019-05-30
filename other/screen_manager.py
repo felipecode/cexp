@@ -281,8 +281,16 @@ class ScreenManager(object):
                                  (int(size_x / 4.0), int(size_y / 10)),
                                  screen_position)
 
-            self.paint_on_screen(int(size_x / 10), "Distance: %f" % status['distance_intersection'], (64, 255, 64),
+            self.paint_on_screen(int(size_x / 10), "Distance: %.2f" % status['distance_intersection'], (64, 255, 64),
                                  (int(size_x / 4.0), int(size_y / 5)),
+                                 screen_position)
+
+            self.paint_on_screen(int(size_x / 10), "RoadCurve: %.4f" % status['road_angle'], (64, 255, 64),
+                                 (int(size_x / 4.0), int(size_y / 3)),
+                                 screen_position)
+
+            self.paint_on_screen(int(size_x / 10), "Scenario: %s" % status['scenario'].split('_')[0], (64, 255, 64),
+                                 (int(size_x / 4.0), int(size_y / 2)),
                                  screen_position)
 
         self._render_iter += 1

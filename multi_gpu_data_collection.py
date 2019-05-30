@@ -4,10 +4,12 @@ import time
 import logging
 import os
 import glob
+import json
 import multiprocessing
 
 from cexp.agents.NPCAgent import NPCAgent
 from cexp.cexp import CEXP
+import sys
 
 from carla.client import make_carla_client
 from carla.tcp import TCPConnectionError
@@ -23,12 +25,13 @@ except IndexError:
 # TODO I have a problem with respect to where to put files
 
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
-def collect_data(json_file, params, number_iterations):
+def collect_data(json_file, params, number_iterations, eliminated_environments):
 
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
     # this could be joined
-    env_batch = CEXP(json_file, params=params, iterations_to_execute=number_iterations)
+    env_batch = CEXP(json_file, params=params, iterations_to_execute=number_iterations,
+                     eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
 
@@ -68,6 +71,23 @@ def execute_collector(json_file, params, number_iteerations):
                                 args=(json_file, params, number_iteerations,))
     p.start()
 
+
+
+def get_eliminated_environments(json_file, start_position, end_position):
+
+    """
+    List all the episodes BUT the range between start end position.
+    """
+    with open(json_file, 'r') as f:
+        json_dict = json.loads(f.read())
+
+    count = 0
+    eliminated_environments_list = []
+    for env_name in json_dict['envs'].keys():
+        if count < start_position or count >= end_position:
+            eliminated_environments_list.append(env_name)
+        count += 1
+    return eliminated_environments_list
 
 
 if __name__ == '__main__':
@@ -116,18 +136,36 @@ if __name__ == '__main__':
 
     args = argparser.parse_args()
 
+    json_file = os.path.join('database', args.json_config)
+
+    with open(json_file, 'r') as f:
+        json_dict = json.loads(f.read())
+
+    environments_per_collector = len(json_dict['envs'])/args.number_collectors
+    if environments_per_collector < 1.0:
+        raise ValueError(" Too many collectors")
 
     for i in range(args.number_collectors):
         gpu = str(int(i / args.carlas_per_gpu))
         # A single loop being made
-        json_file = os.path.join('database', args.json_config)
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
                   'docker_name': args.containere_name,
                   'gpu': gpu,
                   'batch_size': 1,
-                  'remove_wrong_data': args.delete_wrong,
-                  'start_episode': args.start_episode + (args.number_episodes) * (i)
+                  'remove_wrong_data': args.delete_wrong
                   }
 
-        collect_data(json_file, params, args.number_episodes)
+        if i == args.number_collectors-1 and not environments_per_collector.is_integer():
+            extra_env = 1
+        else:
+            extra_env = 0
+
+        # we list all the possible environments
+
+        eliminated_environments = get_eliminated_environments(json_file,
+                                                              int(environments_per_collector) * (i),
+                                                              int(environments_per_collector) * (i+1) + extra_env)
+
+
+        collect_data(json_file, params, args.number_episodes, eliminated_environments)
