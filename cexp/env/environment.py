@@ -76,6 +76,11 @@ class Environment(object):
         """
         for exp in self._exp_list:
             exp.cleanup()
+        # make the sensor vec empty
+        self._exp_list = []
+
+        # Remove all the existent sensors
+        self._sensor_desc_vec = []
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
@@ -91,6 +96,12 @@ class Environment(object):
             raise ValueError(" Sensors added to the environment should be a list of dictionaries")
 
         self._sensor_desc_vec += sensors
+
+
+
+
+
+
 
     def reset(self, StateFunction, RewardFunction):
         if len(self._exp_list) > 0:
