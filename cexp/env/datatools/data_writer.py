@@ -159,15 +159,15 @@ class Writer(object):
 
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
-
-
     def delete(self):
         """
         If the experience was bad, following the scenarios criteria, we may want to delete it.
         :return:
         """
-
         shutil.rmtree(self._full_path)
+
+        if len(os.listdir(self._full_path)) == 0:
+            shutil.rmtree(self._base_path)
 
 
     """

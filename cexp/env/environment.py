@@ -85,7 +85,6 @@ class Environment(object):
 
     def stop(self):
         self._cleanup()
-        #self.__init__(self._environment_name, self._client_vec, self._env_config, self._env_params)
 
     def add_sensors(self, sensors):
         if not isinstance(sensors, list):
@@ -117,8 +116,9 @@ class Environment(object):
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, self._scenarios, exp_params))
+        # if it is the first time we execute this env
+        if self._save_data and self._environment_name in Environment.number_of_executions:
 
-        if self._save_data and self._environment_name in Environment.number_of_executions:  # if it is the first time we execute this env
             # we use one of the experiments to build the metadata
             self._exp_list[0]._writer.save_metadata(self, self._exp_list[0]._instanced_sensors)
 
