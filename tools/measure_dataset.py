@@ -19,6 +19,10 @@ if __name__ == '__main__':
 
     parser.add_argument('--json', default='database/dataset_l0.json',
                         help='path to the json file')
+    parser.add_argument('--remove', action='store_true',
+                        help='remove empty ')
+
+
 
     args = parser.parse_args()
 
@@ -54,20 +58,26 @@ if __name__ == '__main__':
         except NoDataGenerated:
             print("No data generate for episode ", env)
         else:
-
+            not_empty = False
             for exp in env_data:
                 print("    Exp: ", exp[1])
+
 
                 for batch in exp[0]:
                     print("      Batch: ", batch[1])
 
                     if len(batch[0]) > 0:
+                        not_empty = True
                         total_episodes += 1
+
 
                     # Now we count the ammount of data we have for this batch
                     total_hours += (len(batch[0])/10)/3600
 
                     print("         Size: ", len(batch[0]))
+
+            if not not_empty and args.remove:
+                env.remove_data()
 
     print ("####################")
     print ("DATASET has ", total_episodes, " episodes and ", total_hours, " hours of data")

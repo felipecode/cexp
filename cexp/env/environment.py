@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import shutil
 
 from cexp.env.experience import Experience
 import cexp.env.datatools.data_parser as parser
@@ -148,6 +149,17 @@ class Environment(object):
         full_episode_data_dict = parser.parse_environment(root_path, metadata_dict)
 
         return full_episode_data_dict
+
+    def remove_data(self):
+        """
+            Remove all data from this specific environment
+        """
+        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
+        # If the metadata does not exist the environment does not have a reference data.
+        if not os.path.exists(os.path.join(root_path, 'metadata.json')):
+            raise NoDataGenerated("The data is not generated yet")
+
+        shutil.rmtree(root_path)
 
     def get_path(self):
 
