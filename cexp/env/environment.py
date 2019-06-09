@@ -194,7 +194,6 @@ class Environment(object):
             exp.apply_control(control)
             exp.tick_world()
 
-
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)
 

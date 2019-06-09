@@ -42,7 +42,7 @@ def check_folder(env_name, number_episodes):
         and if they are complete.
     """
 
-    path = os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark', env_name)
+    path = os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark2', env_name)
     # List number of folders check if match expected
 
     environments_count = 0

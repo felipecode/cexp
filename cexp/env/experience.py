@@ -106,7 +106,8 @@ class Experience(object):
                                       'ego_controls': None,
                                       'scenario_controls': None}
         else:
-            self._writer = None
+            self._writer = Writer(exp_params['package_name'], exp_params['env_name'],
+                                  None, None)
         # We try running all the necessary initalization, if we fail we clean the
         try:
             # Sensor interface, a buffer that contains all the read sensors

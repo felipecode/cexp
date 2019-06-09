@@ -37,8 +37,14 @@ class Writer(object):
         # base path, for writting the metadata for the environment
         self._base_path = os.path.join(root_path, dataset_name, env_name)
 
-        if not os.path.exists(self._full_path):
-            os.makedirs(self._full_path)
+        if env_name is None:
+            if not os.path.exists(self._base_path):
+                os.makedirs(self._base_path)
+        else:
+            if not os.path.exists(self._full_path):
+                os.makedirs(self._full_path)
+
+
     """
         # We set this synch variable that will be set when all sensors are ready
         self._ready_to_for_next_point = False
