@@ -94,7 +94,7 @@ class ServerManagerDocker(ServerManager):
 
         my_env = os.environ.copy()
         my_env["NV_GPU"] = str(self._gpu)
-        logging.debug("Docker command %s" % ''.join(['docker', 'run', '--name', self._docker_id,'--rm', '-d', '-p',
+        logging.debug("Docker command %s" % ' '.join(['docker', 'run', '--name', self._docker_id,'--rm', '-d', '-p',
                                str(port)+'-'+str(port+2)+':'+str(port)+'-'+str(port+2),
                                '--runtime=nvidia', '-e', 'NVIDIA_VISIBLE_DEVICES='+str(self._gpu), self._docker_name,
                                '/bin/bash', 'CarlaUE4.sh',
