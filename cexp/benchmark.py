@@ -236,7 +236,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
 
     #summary_csv( json_file, agent_module.__name__)
 
-    # Here we return only the calculated summaries from the summary list
+    # Here we return only the calculated summaries on this iterations, there maybe more
 
     return summary_list
 

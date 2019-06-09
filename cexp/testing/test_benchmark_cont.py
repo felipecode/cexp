@@ -2,6 +2,7 @@
 import time
 import random
 import logging
+import sys
 import traceback
 
 from cexp.env.scenario_identification import distance_to_intersection, identify_scenario

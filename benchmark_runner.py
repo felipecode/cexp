@@ -4,6 +4,15 @@ from cexp.benchmark import benchmark
 from tools.generators.generate_corl_exps import generate_corl2017_config_file
 from tools.generators.generate_no_crash_exps import generate_nocrash_config_file
 
+def produce_corl2017_csv():
+    pass
+
+def produce_nocrash_csv():  # Maybe leave just like the empty task here.
+    pass
+
+
+
+
 if __name__ == '__main__':
     # Run like
 
@@ -51,4 +60,10 @@ if __name__ == '__main__':
 
 
     benchmark(args.benchmark, args.docker, args.gpu, args.agent, args.config, port=args.port)
+
+
+
+
+    # if CoRL2017
+
 
