@@ -77,66 +77,25 @@ def check_benchmark_file(benchmark_name , expected_episodes):
     return benchmarked_episodes
 
 
-# TEST 1 Create the entire dataset and them check if the folder has one experiment per environment
-def test_1_collect():
 
-    # Collect the full dataset sequential
-    # Expected one episode per
 
-    env_batch = CEXP(JSONFILE, params, iterations_to_execute=10, sequential=True, port=5555)
-
-    env_batch.start()
-    for env in env_batch:
-        try:
-            # The policy selected to run this experience vector (The class basically) This policy can also learn, just
-            # by taking the output from the experience.
-            # I need a mechanism to test the rewards so I can test the policy gradient strategy
-            _, _ = agent.unroll(env)
-
-        except KeyboardInterrupt:
-            env.stop()
-            break
-        except:
-            traceback.print_exc()
-            # Just try again
-            env.stop()
-            print(" ENVIRONMENT BROKE trying again.")
-
-    test_dict = {}
-    for env in environments_dict_base:
-        test_dict.update({env:1})
-    check_dataset(test_dict)
+def test_1_benchmark():
+    # Benchmark the full dataset, test the output file
+    benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=5555)
+    check_benchmark_file(JSONFILE, AGENT_NAME, 3)
 
 
 def test_2_collect():
     # Do four runs of
-    # Collect the full dataset sequential
-    # Expected one episode per
+    pass
 
-    env_batch = CEXP(JSONFILE, params, iterations_to_execute=6, sequential=False, port=5555)
 
-    env_batch.start()
-    for env in env_batch:
-        try:
-            # The policy selected to run this experience vector (The class basically) This policy can also learn, just
-            # by taking the output from the experience.
-            # I need a mechanism to test the rewards so I can test the policy gradient strategy
-            _, _ = agent.unroll(env)
+# TEST 2 Squential benchmark, run one episode fail and continue
 
-        except KeyboardInterrupt:
-            env.stop()
-            break
-        except:
-            traceback.print_exc()
-            # Just try again
-            env.stop()
-            print(" ENVIRONMENT BROKE trying again.")
-
-    test_dict = {}
-    for env in environments_dict_base:
-        test_dict.update({env:1})
-    check_dataset(test_dict)
-
+def test_2_benchmark():
+    # Benchmark the full dataset again now it should have 6 episodes two of each
+    benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=5555)
+    check_benchmark_file(JSONFILE, AGENT_NAME, 6)
 
 # TEST 3  Random adding and many problems
 
@@ -154,7 +113,7 @@ if __name__ == '__main__':
     # The idea is that the agent class should be completely independent
     #test_1_collect()
     # Auto Cleanup
-    test_2_collect()
+    test_1_benchmark()
     # this could be joined
     # THe experience is built, the files necessary
 
