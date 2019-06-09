@@ -153,7 +153,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
         csv_outfile = open(filename, 'w')
 
         csv_outfile.write("%s,%s,%s\n"
-                          % ('rep', 'episodes_completion', 'episodes_fully_completed'))
+                          % ('rep', 'episode_completion', 'result'))
 
         csv_outfile.close()
 
@@ -169,15 +169,15 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
     print (" Parsed Results")
     print (results)
 
+    csv_outfile = open(filename, 'a')
+    csv_outfile.write("%f" % float(repetition_number) )
+
     for metric_result in results.keys():
 
-        csv_outfile = open(filename, 'a')
+        csv_outfile.write(" %f" % results[metric_result])
 
-        csv_outfile.write("%f,%f,%f\n"
-                          % (float(repetition_number),
-                             results[metric_result], results[metric_result]))
-
-        csv_outfile.close()
+    csv_outfile.write("\n")
+    csv_outfile.close()
 
 
 
