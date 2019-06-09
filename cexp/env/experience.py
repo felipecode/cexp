@@ -85,7 +85,7 @@ class Experience(object):
         # Start objects that are going to be created
         self.world = None
         # You try to reconnect a few times.
-        self.MAX_CONNECTION_ATTEMPTS = 5
+        self.MAX_CONNECTION_ATTEMPTS = 7
         # Scenario definitions to perform the scenario building
         self.scenario_definitions = scenario_definitions
         self._ego_actor = None

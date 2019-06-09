@@ -3,6 +3,7 @@ import time
 import random
 import logging
 import sys
+import shutil
 import traceback
 
 from cexp.env.scenario_identification import distance_to_intersection, identify_scenario
@@ -79,7 +80,7 @@ def check_benchmark_file(benchmark_name , expected_episodes):
     return benchmarked_episodes
 
 
-
+# TEST a simple run of a benchmark
 
 def test_1_benchmark():
     # Benchmark the full dataset, test the output file
@@ -113,9 +114,11 @@ if __name__ == '__main__':
         print (" WAITING FOR DOCKER TO BE STARTED")
         start_test_server(4444)
 
-    #client = carla.Client('localhost', 4444)
-    #client.set_timeout(55.0)
-    #world = client.load_world('Town01')
+
+
+    if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark2')):
+        shutil.rmtree(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark2'))
+
 
     #test_distance_intersection_speed(world)
     # The idea is that the agent class should be completely independent

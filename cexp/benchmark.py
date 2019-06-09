@@ -166,6 +166,8 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
     # parse the summary for this episode
     results = parse_results_summary(summary)
+    print (" Parsed Results")
+    print (results)
 
     for metric_result in results.keys():
 
