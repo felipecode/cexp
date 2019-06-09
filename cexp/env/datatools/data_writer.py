@@ -37,7 +37,7 @@ class Writer(object):
         # base path, for writting the metadata for the environment
         self._base_path = os.path.join(root_path, dataset_name, env_name)
 
-        if env_name is None:
+        if env_number is None:
             if not os.path.exists(self._base_path):
                 os.makedirs(self._base_path)
         else:
