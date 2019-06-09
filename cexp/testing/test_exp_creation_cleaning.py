@@ -180,7 +180,8 @@ if __name__ == '__main__':
         start_test_server(6666, gpu=5)
 
     client = carla.Client('localhost', 6666)
-    client.set_timeout(25.0)
+    client.set_timeout(45.0)
+
 
     world = client.load_world('Town01')
 
