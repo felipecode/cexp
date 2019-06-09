@@ -83,7 +83,7 @@ def test_1_collect():
     # Collect the full dataset sequential
     # Expected one episode per
 
-    env_batch = CEXP(JSONFILE, params, iterations_to_execute=10, sequential=True, port=5555)
+    env_batch = CEXP(JSONFILE, params, iterations_to_execute=10, sequential=True, port=6666)
 
     env_batch.start()
     for env in env_batch:
@@ -113,7 +113,7 @@ def test_2_collect():
     # Collect the full dataset sequential
     # Expected one episode per
 
-    env_batch = CEXP(JSONFILE, params, iterations_to_execute=6, sequential=False, port=5555)
+    env_batch = CEXP(JSONFILE, params, iterations_to_execute=6, sequential=False, port=6666)
 
     env_batch.start()
     for env in env_batch:
@@ -143,11 +143,12 @@ def test_2_collect():
 if __name__ == '__main__':
     # PORT 6666 is the default port for testing server
 
-    #if not check_test_server(5555):
-    print (" WAITING FOR DOCKER TO BE STARTED")
-    start_test_server(5555, gpu=5)
+    if not check_test_server(6666):
+        print (" WAITING FOR DOCKER TO BE STARTED")
+        start_test_server(6666, gpu=5)
 
-    client = carla.Client('localhost', 5555)
+    client = carla.Client('localhost', 6666)
+    client.set_timeout(25.0)
 
     world = client.load_world('Town01')
 

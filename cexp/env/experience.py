@@ -3,6 +3,7 @@ import math
 import numpy as np
 import py_trees
 import traceback
+import time
 import logging
 
 from srunner.scenariomanager.timer import GameTime, TimeOut
@@ -85,6 +86,8 @@ class Experience(object):
         self._save_data = exp_params['save_data']
         # Start objects that are going to be created
         self.world = None
+        # You try to reconnect a few times.
+        self.MAX_CONNECTION_ATTEMPTS = 5
         # Scenario definitions to perform the scenario building
         self.scenario_definitions = scenario_definitions
         self._ego_actor = None
@@ -340,8 +343,20 @@ class Experience(object):
                               timeout=timeout)
 
     def _load_world(self):
-        # A new world can only be loaded in async mode
-        self.world = self._client.load_world(self._town_name)
+
+        # time continues
+        attempts = 0
+        while attempts < self.MAX_CONNECTION_ATTEMPTS:
+            try:
+                self.world = self._client.load_world(self._town_name)
+                break
+            except Exception:
+                attempts += 1
+                print('======[WARNING] The server is not ready [{}/{} attempts]!!'.format(attempts,
+                                                                      self.MAX_CONNECTION_ATTEMPTS))
+                time.sleep(2.0)
+                continue
+
         self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']

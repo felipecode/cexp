@@ -85,16 +85,11 @@ def test_1_benchmark():
     check_benchmark_file(JSONFILE, AGENT_NAME, 3)
 
 
-def test_2_collect():
-    # Do four runs of
-    pass
-
-
 # TEST 2 Squential benchmark, run one episode fail and continue
 
 def test_2_benchmark():
     # Benchmark the full dataset again now it should have 6 episodes two of each
-    benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=5555)
+    benchmark(JSONFILE, None, "6", 'cexp/agents/NPCAgent.py', None, port=5555)
     check_benchmark_file(JSONFILE, AGENT_NAME, 6)
 
 # TEST 3  Random adding and many problems
@@ -117,3 +112,4 @@ if __name__ == '__main__':
     # this could be joined
     # THe experience is built, the files necessary
 
+    test_2_benchmark()

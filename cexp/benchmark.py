@@ -85,8 +85,12 @@ def check_benchmarked_environments(json_filename, agent_checkpoint_name):
 
     return benchmarked_environments
 
+"""
+def summary_csv( json_filename, agent_name, agent_checkpoint_name):
 
-def summary_csv(summary_list, json_filename, agent_name):
+
+    with open(json_filename, 'r') as f:
+        json_file = json.loads(f.read())
 
     filename = 'result_' + json_filename.split('/')[-1][:-5] + '_' + agent_name + '.csv'
     csv_outfile = open(filename, 'w')
@@ -98,10 +102,16 @@ def summary_csv(summary_list, json_filename, agent_name):
         'episodes_completion': 0,
         'episodes_fully_completed': 0
     }
+
+
     # TODO add repetitions directly ( They are missing )
-    for summary in summary_list:
-        print (summary)
-        results = parse_results_summary(summary)
+    for env_name in json_file['envs'].keys():
+
+        path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
+                            agent_checkpoint_name + '_benchmark_summary.csv')
+        if not os.path.exists(path):
+            raise ValueError("Trying to get summary of unfinished benchmark")
+
 
         for metric in final_dictionary.keys():
             final_dictionary[metric] += results[metric]
@@ -118,7 +128,7 @@ def summary_csv(summary_list, json_filename, agent_name):
     csv_outfile.write("\n")
 
     csv_outfile.close()
-
+"""
 
 def add_summary(environment_name, summary, json_filename, agent_checkpoint_name):
     # The rep is now zero, but if the benchmark already started we change that
@@ -128,21 +138,21 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
         json_file = json.loads(f.read())
     # if it doesnt exist we add the file
     filename = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
+                                      environment_name,
                                        agent_checkpoint_name + '_benchmark_summary.csv')
     if not os.path.exists(filename):
 
         csv_outfile = open(filename, 'w')
 
-        csv_outfile.write("%s,%s,%s,%s\n"
-                          % ('environment_name', 'rep', 'episodes_completion', 'episodes_fully_completed'))
+        csv_outfile.write("%s,%s,%s\n"
+                          % ('rep', 'episodes_completion', 'episodes_fully_completed'))
 
         csv_outfile.close()
 
     else:
 
         summary_exps = check_benchmarked_environments(json_filename, agent_checkpoint_name)
-        print (" Recovering the repetition from env exp")
-        print (summary_exps)
+
         env_experiments = summary_exps[environment_name]
         repetition_number = len(env_experiments[env_experiments.keys[0]])
 
@@ -153,8 +163,9 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
         csv_outfile = open(filename, 'a')
 
-        csv_outfile.write("%s,%f,%f,%f\n"
-                          % (environment_name, float(repetition_number), results[metric_result], results[metric_result]))
+        csv_outfile.write("%f,%f,%f\n"
+                          % (float(repetition_number),
+                             results[metric_result], results[metric_result]))
 
         csv_outfile.close()
 
@@ -222,7 +233,9 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
 
         summary_list.append(summary[0])
 
-    summary_csv(summary_list, json_file, agent_module.__name__)
+    summary_csv( json_file, agent_module.__name__)
+
+    # Here we return only the calculated summaries from the summary list
 
     return summary_list
 
@@ -233,53 +246,3 @@ def benchmark_cleanup(package_name, agent_checkpoint_name):
     shutil.rmtree(os.environ["SRL_DATASET_PATH"], package_name,
                   agent_checkpoint_name)
 
-
-"""
-
-
-
-def write_header_control_summary(path, task):
-
-    filename = os.path.join(path + '_' + task + '.csv')
-
-    print (filename)
-
-    csv_outfile = open(filename, 'w')
-
-    csv_outfile.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n"
-                      % ('step', 'episodes_completion', 'intersection_offroad',
-                          'collision_pedestrians', 'collision_vehicles', 'episodes_fully_completed',
-                         'driven_kilometers', 'end_pedestrian_collision',
-                         'end_vehicle_collision',  'end_other_collision', 'intersection_otherlane' ))
-    csv_outfile.close()
-
-
-def write_data_point_control_summary(path, task, averaged_dict, step, pos):
-
-    filename = os.path.join(path + '_' + task + '.csv')
-
-    print (filename)
-
-    if not os.path.exists(filename):
-        raise ValueError("The filename does not yet exists")
-
-    csv_outfile = open(filename, 'a')
-
-    csv_outfile.write("%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"
-                      % (step,
-                         averaged_dict['episodes_completion'][pos][0],
-                         averaged_dict['intersection_offroad'][pos][0],
-                         averaged_dict['collision_pedestrians'][pos][0],
-                         averaged_dict['collision_vehicles'][pos][0],
-                         averaged_dict['episodes_fully_completed'][pos][0],
-                         averaged_dict['driven_kilometers'][pos],
-                         averaged_dict['end_pedestrian_collision'][pos][0],
-                         averaged_dict['end_vehicle_collision'][pos][0],
-                         averaged_dict['end_other_collision'][pos][0],
-                         averaged_dict['intersection_otherlane'][pos][0]))
-
-    csv_outfile.close()
-
-
-
-"""
