@@ -51,19 +51,18 @@ def get_forward_speed(vehicle):
 
 # TODO is scenario mutually exclusive ?? FOR NOW YES
 
+SECONDS_GIVEN_PER_METERS = 0.4
 
-"""
-    def estimate_route_timeout(self, route):
-        route_length = 0.0  # in meters
+def estimate_route_timeout( route):
+    route_length = 0.0  # in meters
 
-        prev_point = route[0][0]
-        for current_point, _ in route[1:]:
-            dist = current_point.location.distance(prev_point.location)
-            route_length += dist
-            prev_point = current_point
+    prev_point = route[0][0]
+    for current_point, _ in route[1:]:
+        dist = current_point.location.distance(prev_point.location)
+        route_length += dist
+        prev_point = current_point
 
-        return int(self.SECONDS_GIVEN_PER_METERS * route_length)
-"""
+    return int(SECONDS_GIVEN_PER_METERS * route_length)
 
 
 class Experience(object):

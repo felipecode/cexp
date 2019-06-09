@@ -109,13 +109,13 @@ if __name__ == '__main__':
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
-    #if not check_test_server(4444):
-    #    print (" WAITING FOR DOCKER TO BE STARTED")
-    #    start_test_server(4444)
+    if not check_test_server(4444):
+        print (" WAITING FOR DOCKER TO BE STARTED")
+        start_test_server(4444)
 
-    client = carla.Client('localhost', 4444)
-    client.set_timeout(55.0)
-    world = client.load_world('Town01')
+    #client = carla.Client('localhost', 4444)
+    #client.set_timeout(55.0)
+    #world = client.load_world('Town01')
 
     #test_distance_intersection_speed(world)
     # The idea is that the agent class should be completely independent
