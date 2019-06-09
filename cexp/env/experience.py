@@ -13,7 +13,6 @@ from srunner.scenarios.master_scenario import MasterScenario
 from srunner.scenarios.background_activity import BackgroundActivity
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
-from cexp.env.sensors.sensor_interface import SensorInterface, CANBusSensor, CallBack
 from cexp.env.scorer import record_route_statistics_default
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle
 
@@ -339,7 +338,7 @@ class Experience(object):
         CarlaDataProvider.register_actor(self._ego_actor)
 
         return MasterScenario(self.world, self._ego_actor, master_scenario_configuration,
-                              timeout=timeout)
+                              timeout=estimate_route_timeout(route))
 
     def _load_world(self):
 

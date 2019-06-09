@@ -72,12 +72,14 @@ class Environment(object):
         """
         Remove and destroy all actors
         """
+        # get all the exps to get the summary
+        self._latest_summary = []
         for exp in self._exp_list:
             exp.cleanup()
-        # make the sensor vec empty
+            self._latest_summary.append(exp.get_summary())
+
+        # make the exp vec empty
         self._exp_list = []
-        # Remove all the existent sensors
-        self._sensor_desc_vec = []
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
@@ -119,7 +121,6 @@ class Environment(object):
                                              self._sensor_desc_vec, self._scenarios, exp_params))
         # if it is the first time we execute this env
         if self._save_data and self._environment_name in Environment.number_of_executions:
-
             # we use one of the experiments to build the metadata
             self._exp_list[0]._writer.save_metadata(self, self._exp_list[0]._instanced_sensors)
 
@@ -205,10 +206,8 @@ class Environment(object):
             print (" STILL RUNNING ")
             return None
 
-        all_exp_summary = []
-        for exp in self._exp_list:
-            all_exp_summary.append(exp.get_summary())
-        return all_exp_summary
+        return self._latest_summary
+
 
 
 
