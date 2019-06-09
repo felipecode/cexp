@@ -140,6 +140,7 @@ def check_test_server(port):
     try:
         client = carla.Client(host='localhost', port=port)
         client.get_server_version()
+        del client
         return True
     except:
         return False
