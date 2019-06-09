@@ -143,11 +143,12 @@ def test_2_collect():
 if __name__ == '__main__':
     # PORT 6666 is the default port for testing server
 
-    if not check_test_server(5555):
-        print (" WAITING FOR DOCKER TO BE STARTED")
-        start_test_server(5555)
+    #if not check_test_server(5555):
+    print (" WAITING FOR DOCKER TO BE STARTED")
+    start_test_server(5555, gpu=5)
 
     client = carla.Client('localhost', 5555)
+
     world = client.load_world('Town01')
 
     #test_distance_intersection_speed(world)
