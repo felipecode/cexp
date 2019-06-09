@@ -3,6 +3,7 @@ import carla
 import random
 import collections
 import os
+import logging
 import subprocess
 
 from cexp.env.utils.general import sort_nicely_dict
@@ -92,6 +93,7 @@ class CEXP(object):
                 # We convert it to integers
                 self._port = int(self._port)
                 if not check_test_server(self._port):
+                    logging.debug("No Server online starting one !")
                     self._environment_batch[0].reset(port=self._port)
                 free_port = self._port  # This is just a test mode where CARLA is already up.
             # setup world and client assuming that the CARLA server is up and running
@@ -111,7 +113,8 @@ class CEXP(object):
 
         # We instantiate environments here using the recently connected client
         self._environments = []
-        parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(sort_nicely_dict(self._json['envs'].items())))
+        parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(
+                                    sort_nicely_dict(self._json['envs'].items())))
 
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
@@ -151,8 +154,7 @@ class CEXP(object):
         self.cleanup()
 
     def cleanup(self):
-        if self._port is  not None:
-            subprocess.call(['docker', 'stop', _environment_batch[0]._docker_id])
+        self._environment_batch[0].stop()
 
 
     def _check_env_finished(self, env_json_dict, env_name):

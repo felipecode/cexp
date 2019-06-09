@@ -103,10 +103,11 @@ class ServerManagerDocker(ServerManager):
 
         (out, err) = self._proc.communicate()
 
-        print("Going to communicate")
+        logging.debug(" Starting a docker server of id %s at port %d" % (self._docker_id, port))
         time.sleep(170)
 
     def stop(self):
+        logging.debug("Killed a docker of id %s " % self._docker_id)
         exec_command = ['docker', 'kill', '{}'.format(self._docker_id)]
         self._proc = subprocess.Popen(exec_command)
 
