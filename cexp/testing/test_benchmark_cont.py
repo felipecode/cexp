@@ -14,7 +14,7 @@ import carla
 import os
 
 
-JSONFILE = 'database/sample_benchmark.json'
+JSONFILE = 'database/sample_benchmark2.json'
 environments_dict_base = [
     'WetSunset_route00024',
     'SoftRainSunset_route00000',
@@ -102,6 +102,7 @@ if __name__ == '__main__':
         start_test_server(4444)
 
     client = carla.Client('localhost', 4444)
+    client.set_timeout(25.0)
     world = client.load_world('Town01')
 
     #test_distance_intersection_speed(world)

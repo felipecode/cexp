@@ -116,7 +116,26 @@ def test_2_collect():
     # Collect the full dataset sequential
     # Expected one episode per
 
-    env_batch = CEXP(JSONFILE, params, iterations_to_execute=6, sequential=False, port=6666)
+    env_batch = CEXP(JSONFILE, params, iterations_to_execute=3, sequential=False, port=6666)
+
+    env_batch.start()
+    for env in env_batch:
+        try:
+            # The policy selected to run this experience vector (The class basically) This policy can also learn, just
+            # by taking the output from the experience.
+            # I need a mechanism to test the rewards so I can test the policy gradient strategy
+            _, _ = agent.unroll(env)
+
+        except KeyboardInterrupt:
+            env.stop()
+            break
+        except:
+            traceback.print_exc()
+            # Just try again
+            env.stop()
+            print(" ENVIRONMENT BROKE trying again.")
+
+    env_batch = CEXP(JSONFILE, params, iterations_to_execute=3, sequential=False, port=6666)
 
     env_batch.start()
     for env in env_batch:
@@ -137,7 +156,7 @@ def test_2_collect():
 
     test_dict = {}
     for env in environments_dict_base:
-        test_dict.update({env:1})
+        test_dict.update({env:2})
     check_dataset(test_dict)
 
 
