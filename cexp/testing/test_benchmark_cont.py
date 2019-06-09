@@ -81,7 +81,7 @@ def check_benchmark_file(benchmark_name , expected_episodes):
 
 def test_1_benchmark():
     # Benchmark the full dataset, test the output file
-    benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=5555)
+    benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=4444)
     check_benchmark_file(JSONFILE, AGENT_NAME, 3)
 
 
@@ -89,7 +89,7 @@ def test_1_benchmark():
 
 def test_2_benchmark():
     # Benchmark the full dataset again now it should have 6 episodes two of each
-    benchmark(JSONFILE, None, "6", 'cexp/agents/NPCAgent.py', None, port=5555)
+    benchmark(JSONFILE, None, "6", 'cexp/agents/NPCAgent.py', None, port=4444)
     check_benchmark_file(JSONFILE, AGENT_NAME, 6)
 
 # TEST 3  Random adding and many problems
@@ -97,11 +97,11 @@ def test_2_benchmark():
 if __name__ == '__main__':
     # PORT 6666 is the default port for testing server
 
-    if not check_test_server(5555):
+    if not check_test_server(4444):
         print (" WAITING FOR DOCKER TO BE STARTED")
-        start_test_server(5555)
+        start_test_server(4444)
 
-    client = carla.Client('localhost', 5555)
+    client = carla.Client('localhost', 4444)
     world = client.load_world('Town01')
 
     #test_distance_intersection_speed(world)
