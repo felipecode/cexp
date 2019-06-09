@@ -211,7 +211,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
 
     env_batch = CEXP(json_file, params, iterations_to_execute=10000,
                      sequential=True, port=port)
-    # THe experience is built, the files necessary
 
     # to load CARLA and the scenarios are made
     # Here some docker was set
@@ -228,12 +227,14 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
         _, _ = agent.unroll(env)
         # if the agent is already un
         summary = env.get_summary()
+        logging.debug("Finished episode got summary ")
+        print (summary)
         # Add partial summary to allow continuation
         add_summary(env._environment_name, summary[0], json_file, agent_checkpoint_name)
 
         summary_list.append(summary[0])
 
-    summary_csv( json_file, agent_module.__name__)
+    #summary_csv( json_file, agent_module.__name__)
 
     # Here we return only the calculated summaries from the summary list
 

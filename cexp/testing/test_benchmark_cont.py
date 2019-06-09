@@ -1,6 +1,7 @@
 
 import time
 import random
+import logging
 import traceback
 
 from cexp.env.scenario_identification import distance_to_intersection, identify_scenario
@@ -97,12 +98,22 @@ def test_2_benchmark():
 if __name__ == '__main__':
     # PORT 6666 is the default port for testing server
 
+
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
+
     #if not check_test_server(4444):
     #    print (" WAITING FOR DOCKER TO BE STARTED")
     #    start_test_server(4444)
 
     client = carla.Client('localhost', 4444)
-    client.set_timeout(45.0)
+    client.set_timeout(55.0)
     world = client.load_world('Town01')
 
     #test_distance_intersection_speed(world)
