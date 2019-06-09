@@ -156,7 +156,7 @@ def test_2_collect():
 
     test_dict = {}
     for env in environments_dict_base:
-        test_dict.update({env:2})
+        test_dict.update({env: 2})
     check_dataset(test_dict)
 
 
@@ -174,18 +174,15 @@ if __name__ == '__main__':
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
-
     if not check_test_server(6666):
         print (" WAITING FOR DOCKER TO BE STARTED")
         start_test_server(6666, gpu=5)
 
     #client = carla.Client('localhost', 6666)
     #client.set_timeout(45.0)
-
-
     #world = client.load_world('Town01')
-
-    shutil.rmtree(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark'))
+    if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark')):
+        shutil.rmtree(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark'))
 
     #test_distance_intersection_speed(world)
     # The idea is that the agent class should be completely independent
