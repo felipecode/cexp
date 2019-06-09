@@ -97,9 +97,9 @@ def test_2_benchmark():
 if __name__ == '__main__':
     # PORT 6666 is the default port for testing server
 
-    if not check_test_server(4444):
-        print (" WAITING FOR DOCKER TO BE STARTED")
-        start_test_server(4444)
+    #if not check_test_server(4444):
+    #    print (" WAITING FOR DOCKER TO BE STARTED")
+    #    start_test_server(4444)
 
     client = carla.Client('localhost', 4444)
     client.set_timeout(45.0)
