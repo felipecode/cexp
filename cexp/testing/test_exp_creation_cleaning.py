@@ -135,6 +135,8 @@ def test_2_collect():
             env.stop()
             print(" ENVIRONMENT BROKE trying again.")
 
+    print ("REDOING ")
+    # Redo all
     env_batch = CEXP(JSONFILE, params, iterations_to_execute=3, sequential=True, port=6666)
 
     env_batch.start()

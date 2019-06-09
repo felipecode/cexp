@@ -165,7 +165,7 @@ class CEXP(object):
         # We check how many time this environment rpeated
         total_repetitions = env_json_dict['repetitions']
         print (Environment.number_of_executions)
-        if env_name in Environment.number_of_executions:
+        if env_name in Environment.number_of_executions.keys():
             if Environment.number_of_executions[env_name] >= total_repetitions:
                 return False
         else:

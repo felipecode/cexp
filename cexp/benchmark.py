@@ -131,6 +131,14 @@ def summary_csv( json_filename, agent_name, agent_checkpoint_name):
 """
 
 def add_summary(environment_name, summary, json_filename, agent_checkpoint_name):
+    """
+    Add summary file, if it exist writte another repetition.
+    :param environment_name:
+    :param summary:
+    :param json_filename:
+    :param agent_checkpoint_name:
+    :return:
+    """
     # The rep is now zero, but if the benchmark already started we change that
     repetition_number = 0
 
@@ -150,7 +158,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
         csv_outfile.close()
 
     else:
-
+        # Check the summary to get the repetition number
         summary_exps = check_benchmarked_environments(json_filename, agent_checkpoint_name)
 
         env_experiments = summary_exps[environment_name]
