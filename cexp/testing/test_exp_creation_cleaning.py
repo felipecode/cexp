@@ -1,7 +1,10 @@
 
 import time
 import random
+import logging
+import sys
 import traceback
+import shutil
 
 from cexp.env.scenario_identification import distance_to_intersection, identify_scenario
 from cexp.env.server_manager import start_test_server, check_test_server
@@ -143,6 +146,16 @@ def test_2_collect():
 if __name__ == '__main__':
     # PORT 6666 is the default port for testing server
 
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
+
+
     if not check_test_server(6666):
         print (" WAITING FOR DOCKER TO BE STARTED")
         start_test_server(6666, gpu=5)
@@ -151,6 +164,8 @@ if __name__ == '__main__':
     client.set_timeout(25.0)
 
     world = client.load_world('Town01')
+
+    shutil.rmtree(os.environ["SRL_DATASET_PATH"], 'sample_benchmark')
 
     #test_distance_intersection_speed(world)
     # The idea is that the agent class should be completely independent
