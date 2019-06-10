@@ -158,10 +158,10 @@ class CEXP(object):
                     execution_list += [self._environments[env_name]]*self._json['envs'][env_name]['repetitions']
 
             return iter(execution_list)
-
         # These two modes ignore the repetitions parameter and just keep executing.
         elif self._sequential:
-            return iter([self._environments[i%len(self._environments)] for i in range(self._iterations_to_execute)])
+            return iter([self._environments[self._environments.keys()[i % len(self._environments)]]
+                         for i in range(self._iterations_to_execute)])
         else:
             return iter([random.choice(self._environments) for _ in range(self._iterations_to_execute)])
 
