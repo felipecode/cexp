@@ -114,9 +114,11 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
         print (results)
 
         for metric in input_metrics.keys():
-
-            final_dictionary[metric] = sum(results[metric]) / len(json_file['envs'])
-
+            try:
+                final_dictionary[metric] = sum(results[metric]) / len(json_file['envs'])
+            except KeyError:  # To overcomme the bug on reading files csv
+                final_dictionary[metric] = sum(results[metric[:-1]]) / len(json_file['envs'])
+                
     outfile_name = benchmark_name.split('.')[-2] + '.csv'
     csv_outfile = open(outfile_name, 'w')
 
