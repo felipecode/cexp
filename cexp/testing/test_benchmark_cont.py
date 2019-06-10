@@ -119,8 +119,8 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
             except KeyError:  # To overcomme the bug on reading files csv
                 final_dictionary[metric] = sum(results[metric[:-1]]) / len(json_file['envs'])
 
-    outfile_name = benchmark_name.split('.')[-2] + '.csv'
-    print (" OUT FILE NAME ", outfile_name)
+    outfile_name = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
+                                benchmark_name.split('.')[-2].split('/')[-1] + '.csv')
     csv_outfile = open(outfile_name, 'w')
 
     csv_outfile.write("%s,%s,%s\n"
