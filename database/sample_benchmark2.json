@@ -29,7 +29,7 @@
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset",
-            "repetitions": 2
+            "repetitions": 3
         },
         "SoftRainSunset_route00000": {
             "route": {
@@ -42,7 +42,7 @@
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset",
-            "repetitions": 2
+            "repetitions": 3
         },
       "WetNoon_route00024": {
             "route": {
@@ -55,7 +55,7 @@
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon",
-            "repetitions": 2
+            "repetitions": 3
         }
     },
     "package_name": "sample_benchmark2"
