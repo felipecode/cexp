@@ -24,7 +24,8 @@ def get_number_executions(environments_path):
     for env in envs_list:
         print(" env ")
         print(len(os.listdir(env)))
-        number_executions.update({env: len(os.listdir(env))})
+        env_name = env.split('/')[-1]
+        number_executions.update({env_name: len(os.listdir(env))})
 
     # We should reduce the fact that we have the metadata
     return number_executions
