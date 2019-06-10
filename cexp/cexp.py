@@ -121,14 +121,14 @@ class CEXP(object):
 
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
-            if self._check_env_finished(self._json['envs'][env_name], env_name):
-                print(" Env finished")
-                continue
+            #if self._check_env_finished(self._json['envs'][env_name], env_name):
+            #    print(" Env finished")
+            #    continue
             # All the repetitions of the environment have been made
             # We have the options to eliminate some events from execution.
-            if env_name in self._eliminated_environments:
-                print(" ELIMINATED ", env_name)
-                continue
+            #if env_name in self._eliminated_environments:
+            #    print(" ELIMINATED ", env_name)
+            #    continue
             # Instance an _environments.
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
             # add the additional sensors ( The ones not provided by the policy )
@@ -174,8 +174,6 @@ class CEXP(object):
 
     def cleanup(self):
         self._environment_batch[0].stop()
-
-    def
 
     def _check_env_finished(self, env_json_dict, env_name):
 
