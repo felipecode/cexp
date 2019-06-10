@@ -27,7 +27,7 @@ def get_number_executions(environments_path):
         print (os.listdir(env))
         for file in os.listdir(env):
             print (file)
-            if os.path.isdir(file):
+            if os.path.isdir(os.path.join(env, file)):
                 dir_count += 1
 
         number_executions.update({env_name: dir_count})
