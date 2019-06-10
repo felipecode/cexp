@@ -31,7 +31,7 @@ class CEXP(object):
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
-                 port=None, execute_all=False):
+                 port=None, execute_all=False, eliminated_environments=None):
         """
 
         :param jsonfile:
@@ -74,10 +74,10 @@ class CEXP(object):
         # set a fixed port to be looked into
         self._port = port
         # add eliminated environments
-        #if eliminated_environments is None:
-        #    self._eliminated_environments = {}
-        #else:
-        #    self._eliminated_environments = eliminated_environments
+        if eliminated_environments is None:
+            self._eliminated_environments = {}
+        else:
+            self._eliminated_environments = eliminated_environments
 
     def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
@@ -126,9 +126,9 @@ class CEXP(object):
             #    continue
             # All the repetitions of the environment have been made
             # We have the options to eliminate some events from execution.
-            #if env_name in self._eliminated_environments:
-            #    print(" ELIMINATED ", env_name)
-            #    continue
+            if env_name in self._eliminated_environments:
+                print(" ELIMINATED ", env_name)
+                continue
             # Instance an _environments.
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
             # add the additional sensors ( The ones not provided by the policy )

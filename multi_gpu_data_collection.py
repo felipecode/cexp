@@ -153,7 +153,6 @@ if __name__ == '__main__':
                                                               int(environments_per_collector) * (i+1) + extra_env)
 
         print (" Collector ", i )
-        print (" Eliminated ", eliminated_environments)
 
 
         execute_collector(json_file, params, args.number_episodes, eliminated_environments)
