@@ -74,15 +74,12 @@ def check_benchmarked_environments(json_filename, agent_checkpoint_name):
     with open(json_filename, 'r') as f:
         json_file = json.loads(f.read())
 
-    print (" PATH SEARCHED ", os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name']))
-
     if not os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'])):
         return {}  # return empty dictionary no case was benchmarked
 
-    for env_name in json_file.keys():
+    for env_name in json_file['envs'].keys():
         path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
                             agent_checkpoint_name + '_benchmark_summary.csv')
-        print(path)
         if os.path.exists(path):
             benchmarked_environments.update({env_name: read_benchmark_summary(path)})
 
