@@ -159,10 +159,22 @@ def test_2_collect():
     test_dict = {}
     for env in environments_dict_base:
         test_dict.update({env: 2})
-    check_dataset(test_dict)
+
+    print(test_dict)
+    #check_dataset(test_dict)
+
+    del env_batch
+
+    print ( " NOW IT SHOULD HAVE NOT EXPS")
+
+    env_batch = CEXP(JSONFILE, params, execute_all=True, sequential=False, port=6666)
+    env_batch.start()
+
+    for env in env_batch:
+        print (env)
 
 
-# TEST 3  Random adding and many problems
+# TEST 3  Actually completing and doing all the episodes
 
 if __name__ == '__main__':
     # PORT 6666 is the default port for testing server
