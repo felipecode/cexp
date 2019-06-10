@@ -138,7 +138,6 @@ class CEXP(object):
     def __iter__(self):
         if self._environments is None:
             raise ValueError("You are trying to iterate over an not started cexp object, run the start method ")
-
         # This strategy of execution takes into considerion the env repetition and execute a certain number of times.from
 
         if self._execute_all:
@@ -149,6 +148,7 @@ class CEXP(object):
                     raise ValueError(" Setting to execute all but repetition information is not  on the json file")
 
                 if env_name in Environment.number_of_executions.keys():
+                    print (" EXEcutions ", env_name, " ", Environment.number_of_executions[env_name])
                     repetitions_rem = self._json['envs'][env_name]['repetitions'] -\
                                       Environment.number_of_executions[env_name]
                     execution_list += [self._environments[env_name]] * repetitions_rem
@@ -156,6 +156,7 @@ class CEXP(object):
                 else:
                     # We add all the repetitions to the execution list
                     execution_list += [self._environments[env_name]]*self._json['envs'][env_name]['repetitions']
+
             return iter(execution_list)
 
 

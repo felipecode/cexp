@@ -114,10 +114,6 @@ def test_2_construct():
 
 
 
-
-
-
-
 # TEST 3  Random adding and many problems
 
 if __name__ == '__main__':
