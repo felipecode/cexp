@@ -110,9 +110,11 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
             raise ValueError("Trying to get summary of unfinished benchmark")
 
         results = read_benchmark_summary(path)
+        print ( " REUSLTS  ")
+        print (results)
 
         for metric in input_metrics.keys():
-            final_dictionary[metric] += results[metric]/ len(json_file['envs'])
+            final_dictionary[metric] += results[metric] / len(json_file['envs'])
 
     outfile_name = benchmark_name.split('.')[-2] + '.csv'
     csv_outfile = open(outfile_name, 'w')
