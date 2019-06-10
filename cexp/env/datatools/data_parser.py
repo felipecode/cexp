@@ -21,9 +21,10 @@ def get_number_executions(environments_path):
     number_executions = {}
     envs_list = glob.glob(os.path.join(environments_path, '*'))
     for env in envs_list:
-        number_executions.update({env:len(glob.glob(os.path.join(env,'*')))})
+        number_executions.update({env: len(glob.glob(os.path.join(env, '*')))})
 
-    return number_executions
+    # We should reduce the fact that we have the metadata
+    return number_executions -1
 
 
 def parse_measurements(measurement):

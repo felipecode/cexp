@@ -58,7 +58,7 @@ class Environment(object):
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
         # update the number of executions to match the folder
-        if self._save_data and not Environment.number_of_executions:
+        if not Environment.number_of_executions:
             if "SRL_DATASET_PATH" not in os.environ:
                 raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset was saved before")
 
@@ -206,34 +206,5 @@ class Environment(object):
             return None
 
         return self._latest_summary
-
-
-
-
-    """ interface methods """
-    """
-    def get_sensor_data(self):
-
-        # Get the sensor data from the policy + the additional sensors data
-        sensor_data = self._sensor_interface.get_data()
-        if self._save_data:
-            pass
-            #TODO THIS COULD BE A SYNCH POINT, for synch mode that is not needed
-
-        return sensor_data
-
-    def get_summary(self):
-        # Compile the summary from all the executed scenarios.
-        # TODO THE POLICY WHICH EXECUTED THIS SCENARIO GOES INTO THE ANNOTATIONS OF IT
-        if not self.is_running():
-            return None
-
-        return None
-
-    def get_measurements_data(self):
-        # CHeck what kind of measurments can we get.
-        return self._writter._build_measurements(self.world)
-    """
-
 
 

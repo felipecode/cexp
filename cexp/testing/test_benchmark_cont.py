@@ -73,10 +73,9 @@ def check_benchmark_file(benchmark_name , expected_episodes):
     benchmarked_episodes = 0
 
     for env_benchmarked in benchmark_dict.keys():
-
         benchmarked_episodes += len(benchmark_dict[env_benchmarked])
 
-
+    print ("Benchmarked ", benchmarked_episodes, " episodes")
     return benchmarked_episodes
 
 
@@ -85,15 +84,13 @@ def check_benchmark_file(benchmark_name , expected_episodes):
 def test_1_benchmark():
     # Benchmark the full dataset, test the output file
     benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=4444)
-    check_benchmark_file(JSONFILE, AGENT_NAME, 3)
+    check_benchmark_file(JSONFILE, 3)
 
 
 # TEST 2 Squential benchmark, run one episode fail and continue
 
-def test_2_benchmark():
-    # Benchmark the full dataset again now it should have 6 episodes two of each
-    benchmark(JSONFILE, None, "6", 'cexp/agents/NPCAgent.py', None, port=4444)
-    check_benchmark_file(JSONFILE, AGENT_NAME, 6)
+
+
 
 # TEST 3  Random adding and many problems
 

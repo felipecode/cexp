@@ -31,7 +31,7 @@ class CEXP(object):
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
-                 port=None, eliminated_environments=None):
+                 port=None, execute_all=False):
         """
 
         :param jsonfile:
@@ -52,6 +52,9 @@ class CEXP(object):
         for i in range(self._batch_size):
             self._environment_batch.append(ServerManagerDocker(self._params))
 
+        # Executing
+        self._execute_all = execute_all
+
         # Read the json file being
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
@@ -71,10 +74,10 @@ class CEXP(object):
         # set a fixed port to be looked into
         self._port = port
         # add eliminated environments
-        if eliminated_environments is None:
-            self._eliminated_environments = {}
-        else:
-            self._eliminated_environments = eliminated_environments
+        #if eliminated_environments is None:
+        #    self._eliminated_environments = {}
+        #else:
+        #    self._eliminated_environments = eliminated_environments
 
     def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
@@ -112,7 +115,7 @@ class CEXP(object):
         }
 
         # We instantiate environments here using the recently connected client
-        self._environments = []
+        self._environments = {}
         parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(
                                     sort_nicely_dict(self._json['envs'].items())))
 
@@ -120,7 +123,8 @@ class CEXP(object):
         for env_name in self._json['envs'].keys():
             if self._check_env_finished(self._json['envs'][env_name], env_name):
                 print(" Env finished")
-                continue  # All the repetitions of the environment have been made
+                continue
+            # All the repetitions of the environment have been made
             # We have the options to eliminate some events from execution.
             if env_name in self._eliminated_environments:
                 print(" ELIMINATED ", env_name)
@@ -129,21 +133,36 @@ class CEXP(object):
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
             # add the additional sensors ( The ones not provided by the policy )
             env.add_sensors(self._json['additional_sensors'])
-            self._environments.append(env)
+            self._environments.update({env_name:env})
 
     def __iter__(self):
         if self._environments is None:
             raise ValueError("You are trying to iterate over an not started cexp object, run the start method ")
 
-        if self._sequential:
-            if self._iterations_to_execute > len(self._environments):
-                final_iterations = len(self._environments)
-                print("WARNING: more iterations than environments were set on CARL. Setting the number to "
-                      "the actual number of environments")
-            else:
-                final_iterations = self._iterations_to_execute
+        # This strategy of execution takes into considerion the env repetition and execute a certain number of times.from
 
-            return iter([self._environments[i] for i in range(final_iterations)])
+        if self._execute_all:
+            execution_list = []
+            for env_name in self._json['envs'].keys():
+                # We check the remaining necessary executions for each of the environments
+                if "repetitions" not in self._json['envs'][env_name]:
+                    raise ValueError(" Setting to execute all but repetition information is not  on the json file")
+
+                if env_name in Environment.number_of_executions.keys():
+                    repetitions_rem = self._json['envs'][env_name]['repetitions'] -\
+                                      Environment.number_of_executions[env_name]
+                    execution_list += [self._environments[env_name]] * repetitions_rem
+
+                else:
+                    # We add all the repetitions to the execution list
+                    execution_list += [self._environments[env_name]]*self._json['envs'][env_name]['repetitions']
+            return iter(execution_list)
+
+
+
+        # These two modes ignore the repetitions parameter and just keep executing.
+        elif self._sequential:
+            return iter([self._environments[i%len(self._environments)] for i in range(self._iterations_to_execute)])
         else:
             return iter([random.choice(self._environments) for _ in range(self._iterations_to_execute)])
 
@@ -156,6 +175,7 @@ class CEXP(object):
     def cleanup(self):
         self._environment_batch[0].stop()
 
+    def
 
     def _check_env_finished(self, env_json_dict, env_name):
 
