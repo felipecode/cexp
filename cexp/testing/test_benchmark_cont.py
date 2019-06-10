@@ -84,7 +84,7 @@ def check_benchmark_file(benchmark_name , expected_episodes):
 def test_1_benchmark():
     # Benchmark the full dataset, test the output file
     benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=4444)
-    check_benchmark_file(JSONFILE, 3)
+    check_benchmark_file(JSONFILE, 6)
 
 
 # TEST 2 Squential benchmark, run one episode fail and continue

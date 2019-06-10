@@ -184,7 +184,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
 
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
-              batch_size=1, number_repetions=1, save_dataset=False, port=None,
+              batch_size=1, save_dataset=False, port=None,
               agent_checkpoint_name=None):
 
     """
@@ -219,8 +219,8 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
 
     # this could be joined
 
-    env_batch = CEXP(json_file, params, iterations_to_execute=10000,
-                     sequential=True, port=port)
+    env_batch = CEXP(json_file, params, execute_all=True,
+                     sequential=False, port=port)
 
     # to load CARLA and the scenarios are made
     # Here some docker was set
