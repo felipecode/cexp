@@ -82,50 +82,6 @@ def check_benchmarked_environments(json_filename, agent_checkpoint_name):
 
     return benchmarked_environments
 
-"""
-def summary_csv( json_filename, agent_name, agent_checkpoint_name):
-
-
-    with open(json_filename, 'r') as f:
-        json_file = json.loads(f.read())
-
-    filename = 'result_' + json_filename.split('/')[-1][:-5] + '_' + agent_name + '.csv'
-    csv_outfile = open(filename, 'w')
-
-    csv_outfile.write("%s,%s\n"
-                      % ('episodes_completion', 'episodes_fully_completed'))
-
-    final_dictionary = {
-        'episodes_completion': 0,
-        'episodes_fully_completed': 0
-    }
-
-
-    # TODO add repetitions directly ( They are missing )
-    for env_name in json_file['envs'].keys():
-
-        path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
-                            agent_checkpoint_name + '_benchmark_summary.csv')
-        if not os.path.exists(path):
-            raise ValueError("Trying to get summary of unfinished benchmark")
-
-
-        for metric in final_dictionary.keys():
-            final_dictionary[metric] += results[metric]
-
-    first_time = True
-    for metric in final_dictionary.keys():
-        final_dictionary[metric] /= len(summary_list)
-        if first_time:
-            csv_outfile.write("%f" % (final_dictionary[metric]))
-            first_time = False
-        else:
-            csv_outfile.write(",%f" % (final_dictionary[metric]))
-
-    csv_outfile.write("\n")
-
-    csv_outfile.close()
-"""
 
 def add_summary(environment_name, summary, json_filename, agent_checkpoint_name):
     """
@@ -158,7 +114,8 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
         summary_exps = check_benchmarked_environments(json_filename, agent_checkpoint_name)
         print (summary_exps)
         env_experiments = summary_exps[environment_name]
-        repetition_number = len(env_experiments[env_experiments.keys[0]])
+        print (env_experiments)
+        repetition_number = len(env_experiments.keys())
 
     # parse the summary for this episode
     results = parse_results_summary(summary)
@@ -249,3 +206,47 @@ def benchmark_cleanup(package_name, agent_checkpoint_name):
     shutil.rmtree(os.environ["SRL_DATASET_PATH"], package_name,
                   agent_checkpoint_name)
 
+"""
+def summary_csv( json_filename, agent_name, agent_checkpoint_name):
+
+
+    with open(json_filename, 'r') as f:
+        json_file = json.loads(f.read())
+
+    filename = 'result_' + json_filename.split('/')[-1][:-5] + '_' + agent_name + '.csv'
+    csv_outfile = open(filename, 'w')
+
+    csv_outfile.write("%s,%s\n"
+                      % ('episodes_completion', 'episodes_fully_completed'))
+
+    final_dictionary = {
+        'episodes_completion': 0,
+        'episodes_fully_completed': 0
+    }
+
+
+    # TODO add repetitions directly ( They are missing )
+    for env_name in json_file['envs'].keys():
+
+        path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
+                            agent_checkpoint_name + '_benchmark_summary.csv')
+        if not os.path.exists(path):
+            raise ValueError("Trying to get summary of unfinished benchmark")
+
+
+        for metric in final_dictionary.keys():
+            final_dictionary[metric] += results[metric]
+
+    first_time = True
+    for metric in final_dictionary.keys():
+        final_dictionary[metric] /= len(summary_list)
+        if first_time:
+            csv_outfile.write("%f" % (final_dictionary[metric]))
+            first_time = False
+        else:
+            csv_outfile.write(",%f" % (final_dictionary[metric]))
+
+    csv_outfile.write("\n")
+
+    csv_outfile.close()
+"""
