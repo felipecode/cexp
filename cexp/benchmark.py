@@ -12,7 +12,6 @@ from cexp.cexp import CEXP
 # TODO ADD the posibility to configure what goes in and what goes out ( OUput format)
 ###
 
-
 # TODO look for the benchmark measurement from aidan
 
 def parse_results_summary(summary):
@@ -43,7 +42,6 @@ def read_benchmark_summary(benchmark_csv):
     header[-1] = header[-1][:-2]
     f.close()
 
-
     data_matrix = np.loadtxt(open(benchmark_csv, "rb"), delimiter=",", skiprows=1)
     control_results_dic = {}
     count = 0
@@ -57,7 +55,6 @@ def read_benchmark_summary(benchmark_csv):
 
         control_results_dic.update({env_name: data_matrix[count, 1:]})
         count += 1
-
 
     return control_results_dic
 
@@ -151,7 +148,6 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
     if not os.path.exists(filename):
 
         csv_outfile = open(filename, 'w')
-
         csv_outfile.write("%s,%s,%s\n"
                           % ('rep', 'episode_completion', 'result'))
 
@@ -174,11 +170,10 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
     for metric_result in results.keys():
 
-        csv_outfile.write(" %f" % results[metric_result])
+        csv_outfile.write(",%f" % results[metric_result])
 
     csv_outfile.write("\n")
     csv_outfile.close()
-
 
 
 
@@ -241,7 +236,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
         print (summary)
         # Add partial summary to allow continuation
         add_summary(env._environment_name, summary[0], json_file, agent_checkpoint_name)
-
         summary_list.append(summary[0])
 
     # Here we return only the calculated summaries on this iterations, there maybe more

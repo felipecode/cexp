@@ -1,6 +1,7 @@
 
 import time
 import random
+import json
 import logging
 import sys
 import shutil
@@ -10,7 +11,7 @@ from cexp.env.scenario_identification import distance_to_intersection, identify_
 from cexp.env.server_manager import start_test_server, check_test_server
 
 from cexp.cexp import CEXP
-from cexp.benchmark import benchmark, check_benchmarked_environments
+from cexp.benchmark import benchmark, check_benchmarked_environments, read_benchmark_summary
 from cexp.agents.NPCAgent import NPCAgent
 
 import carla
@@ -79,12 +80,61 @@ def check_benchmark_file(benchmark_name , expected_episodes):
     return benchmarked_episodes
 
 
+
+def summarize_benchmark(benchmark_name, agent_name, checkpoint):
+
+
+    final_dictionary = {
+        'episode_completion': 'episodes_completion',
+        'result':'episodes_fully_completed'
+    }
+
+    input_metrics = {
+        'episode_completion': 0,
+        'result': 0
+    }
+
+    agent_checkpoint_name = agent_name + '_' + str(checkpoint)
+
+    # go on each of the folders that you can find inside.
+
+    with open(benchmark_name, 'r') as f:
+        json_file = json.loads(f.read())
+
+    for env_name in json_file['envs'].keys():
+
+        path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
+                            agent_checkpoint_name + '_benchmark_summary.csv')
+        if not os.path.exists(path):
+            raise ValueError("Trying to get summary of unfinished benchmark")
+
+        results = read_benchmark_summary(path)
+
+        for metric in input_metrics.keys():
+            final_dictionary[metric] += results[metric]/ len(json_file['envs'])
+
+    outfile_name = benchmark_name + '_' + agent_name + '_' + str(checkpoint)
+    csv_outfile = open(outfile_name, 'w')
+
+    csv_outfile.write("%s,%s,%s\n"
+                      % ('step', 'episodes_completion', 'episodes_fully_completed'))
+    csv_outfile.write("%f" % (checkpoint))
+
+    for metric in final_dictionary.keys():
+
+        csv_outfile.write(",%f" % (final_dictionary[metric]))
+
+    csv_outfile.write("\n")
+
+    csv_outfile.close()
+
 # TEST a simple run of a benchmark
 
 def test_1_benchmark():
     # Benchmark the full dataset, test the output file
     benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=4444)
-    check_benchmark_file(JSONFILE, 6)
+
+    summarize_benchmark(JSONFILE, 'whatever', 5000)
 
 
 # TEST 2 Squential benchmark, run one episode fail and continue
