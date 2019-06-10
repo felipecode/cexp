@@ -11,7 +11,7 @@ from cexp.env.scenario_identification import distance_to_intersection, identify_
 from cexp.env.server_manager import start_test_server, check_test_server
 
 from cexp.cexp import CEXP
-from cexp.benchmark import benchmark, check_benchmarked_environments, read_benchmark_summary
+from cexp.benchmark import benchmark, check_benchmarked_environments, read_benchmark_summary_metric
 from cexp.agents.NPCAgent import NPCAgent
 
 import carla
@@ -109,7 +109,7 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
         if not os.path.exists(path):
             raise ValueError("Trying to get summary of unfinished benchmark")
 
-        results = read_benchmark_summary(path)
+        results = read_benchmark_summary_metric(path)
         print ( " REUSLTS  ")
         print (results)
 
