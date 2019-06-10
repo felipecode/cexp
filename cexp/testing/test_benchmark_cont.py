@@ -94,7 +94,7 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
         'result': 0
     }
 
-    agent_checkpoint_name = agent_name + '_' + str(checkpoint)
+    agent_checkpoint_name = agent_name
 
     # go on each of the folders that you can find inside.
 
