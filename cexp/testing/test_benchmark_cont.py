@@ -163,8 +163,8 @@ if __name__ == '__main__':
 
 
 
-    if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark2')):
-        shutil.rmtree(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark2'))
+    #if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark2')):
+    #    shutil.rmtree(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark2'))
 
 
     #test_distance_intersection_speed(world)
