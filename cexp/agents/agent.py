@@ -120,7 +120,7 @@ class Agent(object):
             self.add_value(reward_batch, reward)
             self.add_value(state_batch, state)
 
-        environment.stop()
         environment.record()
+        environment.stop()
 
         return state_batch, reward_batch

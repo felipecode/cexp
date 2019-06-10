@@ -77,7 +77,6 @@ class Environment(object):
         # make the exp vec empty
         self._exp_list = []
 
-
     def record(self):
         """
             record the results summary and set this as an executed example
