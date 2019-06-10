@@ -120,6 +120,7 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
                 final_dictionary[metric] = sum(results[metric[:-1]]) / len(json_file['envs'])
 
     outfile_name = benchmark_name.split('.')[-2] + '.csv'
+    print (" OUT FILE NAME ", outfile_name)
     csv_outfile = open(outfile_name, 'w')
 
     csv_outfile.write("%s,%s,%s\n"
