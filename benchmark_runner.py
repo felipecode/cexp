@@ -10,14 +10,32 @@ def produce_corl2017_csv():
 def produce_nocrash_csv():  # Maybe leave just like the empty task here.
     pass
 
+def do_no_crash_benchmarks(docker, gpu, agent, config, port):
+
+    # empty
+    conditions = ['training', 'newtown', 'newweathertown', 'newweather']
+
+    tasks = ['empty', 'regular', 'dense']
+
+    towns = {'training': 'Town01',
+             'newweather': 'Town01',
+             'newtown': 'Town02',
+             'newweathertown': 'Town02'}
+
+    for c in conditions:
+        for t in tasks:
+            benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[t] + '.json'
+            print (" STARTING BENCHMARK ", benchmark_file)
+            benchmark(args.benchmark, docker, gpu, agent, config, port=port)
+
 
 
 
 if __name__ == '__main__':
     # Run like
 
-    # python3 benchmark -b CoRL2017 -a agent -c configuration -d
-    #
+    # python3 benchmark -b CoRL2017 -a agent -d
+    # python3 benchmark -b NoCrash -a agent -d carlalatest:latest --port 4444
 
     description = ("Benchmark running")
 
@@ -48,9 +66,9 @@ if __name__ == '__main__':
         generate_corl2017_config_file()
         benchmark_file = 'corl2017_newweather_empty_Town01.json'
     elif args.benchmark == 'NoCrash':
-        # This is
+        # This is generated directly and benchmark is started
         generate_nocrash_config_file()
-        benchmark_file = 'nocrash_newtown_empty_Town02.json'
+        do_no_crash_benchmarks(args.docker, args.gpu, args.agent, args.config, args.port)
     elif args.benchmark == 'CARLA_AD_2019_VALIDATION':
         pass
         # CARLA full carla 2019
