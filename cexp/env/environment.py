@@ -57,7 +57,10 @@ class Environment(object):
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
+
+
         # update the number of executions to match the folder
+        print (" ENV ", Environment.number_of_executions)
         if not Environment.number_of_executions:
             if "SRL_DATASET_PATH" not in os.environ:
                 raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset was saved before")
