@@ -24,9 +24,12 @@ def get_number_executions(environments_path):
         env_name = env.split('/')[-1]
         # we first count the directories inside
         dir_count = 0
+        print (os.listdir(env))
         for file in os.listdir(env):
+            print (file)
             if os.path.isdir(file):
                 dir_count += 1
+
         number_executions.update({env_name: dir_count})
 
     # We should reduce the fact that we have the metadata
