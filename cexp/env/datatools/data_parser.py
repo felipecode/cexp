@@ -19,11 +19,8 @@ def get_number_executions(environments_path):
     """
 
     number_executions = {}
-    print(environments_path)
     envs_list = glob.glob(os.path.join(environments_path, '*'))
     for env in envs_list:
-        print(" env ")
-        print(len(os.listdir(env)))
         env_name = env.split('/')[-1]
         number_executions.update({env_name: len(os.listdir(env))})
 

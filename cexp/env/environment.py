@@ -56,13 +56,12 @@ class Environment(object):
         self.RewardFunction = None
 
         # update the number of executions to match the folder
-        print (" ENV ", Environment.number_of_executions)
-        #if not Environment.number_of_executions:
-        if "SRL_DATASET_PATH" not in os.environ:
-            raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset was saved before")
+        if not Environment.number_of_executions:
+            if "SRL_DATASET_PATH" not in os.environ:
+                raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset was saved before")
 
-        Environment.number_of_executions = parser.get_number_executions(os.path.join(os.environ["SRL_DATASET_PATH"],
-                                                                        self._package_name))
+            Environment.number_of_executions = parser.get_number_executions(os.path.join(os.environ["SRL_DATASET_PATH"],
+                                                                            self._package_name))
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})

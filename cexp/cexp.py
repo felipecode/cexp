@@ -159,8 +159,6 @@ class CEXP(object):
 
             return iter(execution_list)
 
-
-
         # These two modes ignore the repetitions parameter and just keep executing.
         elif self._sequential:
             return iter([self._environments[i%len(self._environments)] for i in range(self._iterations_to_execute)])
@@ -172,6 +170,7 @@ class CEXP(object):
 
     def __del__(self):
         self.cleanup()
+        Environment.number_of_executions = {}
 
     def cleanup(self):
         self._environment_batch[0].stop()
