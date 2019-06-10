@@ -86,7 +86,7 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
 
     final_dictionary = {
         'episode_completion': 'episodes_completion',
-        'result':'episodes_fully_completed'
+        'result': 'episodes_fully_completed'
     }
 
     input_metrics = {
@@ -113,7 +113,7 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
         for metric in input_metrics.keys():
             final_dictionary[metric] += results[metric]/ len(json_file['envs'])
 
-    outfile_name = benchmark_name + '_' + agent_name + '_' + str(checkpoint)
+    outfile_name = benchmark_name.split('.')[-2] + '.csv'
     csv_outfile = open(outfile_name, 'w')
 
     csv_outfile.write("%s,%s,%s\n"
@@ -133,8 +133,7 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
 def test_1_benchmark():
     # Benchmark the full dataset, test the output file
     benchmark(JSONFILE, None, "5", 'cexp/agents/NPCAgent.py', None, port=4444)
-
-    summarize_benchmark(JSONFILE, 'whatever', 5000)
+    summarize_benchmark(JSONFILE, 'NPCAgent', '')
 
 
 # TEST 2 Squential benchmark, run one episode fail and continue

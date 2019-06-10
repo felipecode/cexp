@@ -97,17 +97,15 @@ class Experience(object):
 
         self._vehicle_model = vehicle_model
         # if data is being saved we create the writer object
-        if self._save_data:
-            # if we are going to save, we keep track of a dictionary with all the data
-            self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
-                                  exp_params['exp_number'])
-            self._environment_data = {
-                                      'exp_measurements': None,  # The exp measurements are specific of the experience
-                                      'ego_controls': None,
-                                      'scenario_controls': None}
-        else:
-            self._writer = Writer(exp_params['package_name'], exp_params['env_name'],
-                                  None, None)
+            
+        # if we are going to save, we keep track of a dictionary with all the data
+        self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
+                              exp_params['exp_number'])
+        self._environment_data = {
+                                  'exp_measurements': None,  # The exp measurements are specific of the experience
+                                  'ego_controls': None,
+                                  'scenario_controls': None}
+
         # We try running all the necessary initalization, if we fail we clean the
         try:
             # Sensor interface, a buffer that contains all the read sensors

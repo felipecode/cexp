@@ -37,7 +37,6 @@ class Writer(object):
         # base path, for writting the metadata for the environment
         self._base_path = os.path.join(root_path, dataset_name, env_name)
 
-
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
 
@@ -177,7 +176,7 @@ class Writer(object):
     """
         functions called asynchronously by the thread to write the sensors
     """
-    # TODO, check for synch issues, should probably run on synch mode.
+
     def write_image(self, image, tag):
         image.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))
 
