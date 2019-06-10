@@ -160,7 +160,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
     else:
         # Check the summary to get the repetition number
         summary_exps = check_benchmarked_environments(json_filename, agent_checkpoint_name)
-
+        print (summary_exps)
         env_experiments = summary_exps[environment_name]
         repetition_number = len(env_experiments[env_experiments.keys[0]])
 

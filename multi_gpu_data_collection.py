@@ -89,7 +89,7 @@ if __name__ == '__main__':
         help=' the number of episodes per collector used')
     argparser.add_argument(
         '-b', '--batch_size',
-        default=200,
+        default=1,
         type=int,
         help=' the batch size for the execution')
     argparser.add_argument(
