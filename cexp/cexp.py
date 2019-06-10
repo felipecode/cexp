@@ -148,7 +148,7 @@ class CEXP(object):
                     raise ValueError(" Setting to execute all but repetition information is not  on the json file")
 
                 if env_name in Environment.number_of_executions.keys():
-                    print (" EXEcutions ", env_name, " ", Environment.number_of_executions[env_name])
+                    print (" Executions ", env_name, " ", Environment.number_of_executions[env_name])
                     repetitions_rem = self._json['envs'][env_name]['repetitions'] -\
                                       Environment.number_of_executions[env_name]
                     execution_list += [self._environments[env_name]] * repetitions_rem
@@ -163,7 +163,7 @@ class CEXP(object):
             return iter([self._environments[list(self._environments.keys())[i % len(self._environments)]]
                          for i in range(self._iterations_to_execute)])
         else:
-            return iter([random.choice(self._environments) for _ in range(self._iterations_to_execute)])
+            return iter([self._environments[random.choice(list(self._environments.keys()))] for _ in range(self._iterations_to_execute)])
 
     def __len__(self):
         return self._iterations_to_execute
