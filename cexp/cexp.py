@@ -139,7 +139,6 @@ class CEXP(object):
         if self._environments is None:
             raise ValueError("You are trying to iterate over an not started cexp object, run the start method ")
         # This strategy of execution takes into considerion the env repetition and execute a certain number of times.from
-
         if self._execute_all:
             execution_list = []
             for env_name in self._json['envs'].keys():

@@ -73,14 +73,21 @@ class Environment(object):
         """
         Remove and destroy all actors
         """
+
+        # make the exp vec empty
+        self._exp_list = []
+
+
+    def record(self):
+        """
+            record the results summary and set this as an executed example
+
+        """
         # get all the exps to get the summary
         self._latest_summary = []
         for exp in self._exp_list:
             exp.cleanup()
             self._latest_summary.append(exp.get_summary())
-
-        # make the exp vec empty
-        self._exp_list = []
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
