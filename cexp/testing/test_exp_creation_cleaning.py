@@ -136,6 +136,8 @@ def test_2_collect():
             print(" ENVIRONMENT BROKE trying again.")
 
     print ("REDOING ")
+
+    del env_batch
     # Redo all
     env_batch = CEXP(JSONFILE, params, iterations_to_execute=3, sequential=True, port=6666)
 
@@ -160,7 +162,7 @@ def test_2_collect():
     for env in environments_dict_base:
         test_dict.update({env: 2})
 
-    print(test_dict)
+
     #check_dataset(test_dict)
 
     del env_batch
