@@ -23,8 +23,8 @@ def get_number_executions(environments_path):
     envs_list = glob.glob(os.path.join(environments_path, '*'))
     for env in envs_list:
         print (" env ")
-        print (len(glob.glob(os.path.join(env, '*'))-1))
-        number_executions.update({env: len(glob.glob(os.path.join(env, '*'))-1)})
+        print (len(glob.glob(os.path.join(env, '*')))-1)
+        number_executions.update({env: len(glob.glob(os.path.join(env, '*')))-1})
 
     # We should reduce the fact that we have the metadata
     return number_executions
