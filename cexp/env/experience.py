@@ -97,7 +97,7 @@ class Experience(object):
 
         self._vehicle_model = vehicle_model
         # if data is being saved we create the writer object
-            
+
         # if we are going to save, we keep track of a dictionary with all the data
         self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
                               exp_params['exp_number'])

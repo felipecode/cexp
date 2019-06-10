@@ -105,6 +105,7 @@ def summarize_benchmark(benchmark_name, agent_name, checkpoint):
 
         path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
                             agent_checkpoint_name + '_benchmark_summary.csv')
+        print (" PATH ", path)
         if not os.path.exists(path):
             raise ValueError("Trying to get summary of unfinished benchmark")
 

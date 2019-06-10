@@ -28,8 +28,25 @@ def do_no_crash_benchmarks(docker, gpu, agent, config, port):
             print (" STARTING BENCHMARK ", benchmark_file)
             benchmark(args.benchmark, docker, gpu, agent, config, port=port)
 
+# Special case used on the MSN paper
 
+def do_no_crash_empty(docker, gpu, agent, config, port):
 
+    # empty
+    conditions = ['training', 'newtown', 'newweathertown', 'newweather']
+
+    #tasks = ['empty', 'regular', 'dense']
+
+    towns = {'training': 'Town01',
+             'newweather': 'Town01',
+             'newtown': 'Town02',
+             'newweathertown': 'Town02'}
+
+    for c in conditions:
+        t = 'empty'
+        benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[t] + '.json'
+        print (" STARTING BENCHMARK ", benchmark_file)
+        benchmark(args.benchmark, docker, gpu, agent, config, port=port)
 
 if __name__ == '__main__':
     # Run like
@@ -72,10 +89,13 @@ if __name__ == '__main__':
     elif args.benchmark == 'CARLA_AD_2019_VALIDATION':
         pass
         # CARLA full carla 2019
+    elif args.benchmark == 'NoCrash_empty':
+        # This is generated directly and benchmark is started
+        generate_nocrash_config_file()
+        do_no_crash_empty(args.docker, args.gpu, args.agent, args.config, args.port)
     else:
         # We try to find the benchmark directly
-        benchmark_file = args.benchmark,
-
+        benchmark_file = args.benchmark
 
     benchmark(args.benchmark, args.docker, args.gpu, args.agent, args.config, port=args.port)
 
