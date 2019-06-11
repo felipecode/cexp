@@ -80,7 +80,7 @@ def generate_nocrash_config_file():
 
                         env_dict = {
                             "route": {
-                                "file": town_sets[town_name],
+                                "file": 'nocrash/' + town_sets[town_name],
                                 "id": env_number
                             },
                             "scenarios": tasks[task_name][town_name],
