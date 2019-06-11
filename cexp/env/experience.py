@@ -179,7 +179,6 @@ class Experience(object):
             spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
                                                     carla.Rotation(pitch=-90)))
 
-
     def tick_world(self):
         # Save all the measurements that are interesting
         # TODO this may go to another function

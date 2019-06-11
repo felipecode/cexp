@@ -24,7 +24,7 @@ def do_no_crash_benchmarks(docker, gpu, agent, config, port):
 
     for c in conditions:
         for t in tasks:
-            benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[t] + '.json'
+            benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json'
             print (" STARTING BENCHMARK ", benchmark_file)
             benchmark(args.benchmark, docker, gpu, agent, config, port=port)
 
@@ -35,8 +35,6 @@ def do_no_crash_empty(docker, gpu, agent, config, port):
     # empty
     conditions = ['training', 'newtown', 'newweathertown', 'newweather']
 
-    #tasks = ['empty', 'regular', 'dense']
-
     towns = {'training': 'Town01',
              'newweather': 'Town01',
              'newtown': 'Town02',
@@ -44,7 +42,7 @@ def do_no_crash_empty(docker, gpu, agent, config, port):
 
     for c in conditions:
         t = 'empty'
-        benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[t] + '.json'
+        benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json'
         print (" STARTING BENCHMARK ", benchmark_file)
         benchmark(args.benchmark, docker, gpu, agent, config, port=port)
 
@@ -65,8 +63,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--benchmark', default=None, help='The benchmark ALIAS or full'
                                                                 'path to the json file')
 
-    parser.add_argument('-c', '--config', default=None, help='The benchmark ALIAS or full'
-                                                              'path to the json file')
+    parser.add_argument('-c', '--config', default=None, help='The path to the configuration file')
 
     parser.add_argument('-g', '--gpu', default="0", help='The gpu number to be used')
 
