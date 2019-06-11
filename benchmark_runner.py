@@ -26,7 +26,7 @@ def do_no_crash_benchmarks(docker, gpu, agent, config, port):
         for t in tasks:
             benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json'
             print (" STARTING BENCHMARK ", benchmark_file)
-            benchmark(args.benchmark, docker, gpu, agent, config, port=port)
+            benchmark(benchmark_file, docker, gpu, agent, config, port=port)
 
 # Special case used on the MSN paper
 
@@ -44,7 +44,7 @@ def do_no_crash_empty(docker, gpu, agent, config, port):
         t = 'empty'
         benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json'
         print (" STARTING BENCHMARK ", benchmark_file)
-        benchmark(args.benchmark, docker, gpu, agent, config, port=port)
+        benchmark(benchmark_file, docker, gpu, agent, config, port=port)
 
 if __name__ == '__main__':
     # Run like
@@ -93,8 +93,7 @@ if __name__ == '__main__':
     else:
         # We try to find the benchmark directly
         benchmark_file = args.benchmark
-
-    benchmark(args.benchmark, args.docker, args.gpu, args.agent, args.config, port=args.port)
+        benchmark(args.benchmark, args.docker, args.gpu, args.agent, args.config, port=args.port)
 
 
 
