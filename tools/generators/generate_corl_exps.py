@@ -94,7 +94,9 @@ def generate_corl2017_config_file():
                             "scenarios": tasks[task_name][town_name],
                             "town_name": town_name,
                             "vehicle_model": "vehicle.lincoln.mkz2017",
-                            "weather_profile": weather
+                            "weather_profile": weather,
+                            "repetitions": 1
+
                         }
 
                         new_json["envs"].update({weather + '_route' + str(env_number).zfill(5): env_dict})
