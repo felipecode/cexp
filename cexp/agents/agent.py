@@ -103,8 +103,9 @@ class Agent(object):
         # You reset the agent before you start any unroll process
         self.reset()
         # You reset the scenario with and pass the make reward functions that are going to be used on the training.
-        state, reward = environment.reset(self._make_state_batch, self._make_reward_batch)
         environment.add_sensors(self.sensors())
+        state, reward = environment.reset(self._make_state_batch, self._make_reward_batch)
+
         # Start the rewards and state vectors used
         reward_batch = [[]] * environment._batch_size
         state_batch = [[]] * environment._batch_size

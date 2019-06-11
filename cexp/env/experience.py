@@ -72,7 +72,6 @@ class Experience(object):
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
         """
 
-
         # save all the experiment parameters to be used later
         self._exp_params = exp_params
         # carla recorder mode save the full carla logs to do some replays
@@ -101,8 +100,7 @@ class Experience(object):
         # if we are going to save, we keep track of a dictionary with all the data
         self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
                               exp_params['exp_number'])
-        self._environment_data = {
-                                  'exp_measurements': None,  # The exp measurements are specific of the experience
+        self._environment_data = {'exp_measurements': None,  # The exp measurements are specific of the experience
                                   'ego_controls': None,
                                   'scenario_controls': None}
 
@@ -446,7 +444,6 @@ class Experience(object):
 
     def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.
-
         # Basically remove the folder associated with this exp if the status was not success,
         # or if did not achieve the correct ammount of points
         print ( "FAILED , DELETING")

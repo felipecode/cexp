@@ -127,7 +127,6 @@ class CEXP(object):
             # All the repetitions of the environment have been made
             # We have the options to eliminate some events from execution.
             if env_name in self._eliminated_environments:
-                print(" ELIMINATED ", env_name)
                 continue
             # Instance an _environments.
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
@@ -147,7 +146,6 @@ class CEXP(object):
                     raise ValueError(" Setting to execute all but repetition information is not  on the json file")
 
                 if env_name in Environment.number_of_executions.keys():
-                    print (" Executions ", env_name, " ", Environment.number_of_executions[env_name])
                     repetitions_rem = self._json['envs'][env_name]['repetitions'] -\
                                       Environment.number_of_executions[env_name]
                     execution_list += [self._environments[env_name]] * repetitions_rem

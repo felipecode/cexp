@@ -61,6 +61,8 @@ class HDMapReader(object):
     def stop(self):
         self._run_ps = False
 
+    def destroy(self):
+        self._run_ps = False
 
 class CANBusMeasurement(object):
     def __init__(self, data, frame_number):
@@ -106,9 +108,8 @@ class CANBusSensor(object):
         for wheel in vehicle_physics.wheels:
             wheels_list_dict.append(
                 {'tire_friction': wheel.tire_friction,
-                 'damping_rate': wheel.damping_rate,
-                 'steer_angle': wheel.steer_angle,
-                 'disable_steering': wheel.disable_steering
+                 'damping_rate': wheel.damping_rate
+                 #'disable_steering': wheel.disable_steering
 
                  }
             )
@@ -164,6 +165,8 @@ class CANBusSensor(object):
     def stop(self):
         self._run_ps = False
 
+    def destroy(self):
+        self._run_ps = False
 
 class CallBack(object):
     def __init__(self, tag, sensor, data_provider, writer=None):
@@ -207,13 +210,15 @@ class CallBack(object):
         array = np.array([gnss_data.latitude,
                           gnss_data.longitude,
                           gnss_data.altitude], dtype=np.float32)
-        self._data_provider.update_sensor(tag, array, gnss_data.frame_number)
+        self._data_provider.update_sensor(None, tag, array, gnss_data.frame_number, None)
 
     # The pseudo sensors already come properly parsed, so we can basically use a single function
     def _parse_pseudosensor(self, package, tag, writer=None):
         if writer is not None:
             writer.write_pseudo(package, tag)
-        self._data_provider.update_sensor(tag, package.data, package.frame_number)
+
+        self._data_provider.update_sensor(None, tag, package.data, package.frame_number, None)
+        #self._data_provider.update_sensor(tag, package.data, package.frame_number)
 
 
 class SensorInterface(object):
