@@ -1,4 +1,5 @@
 import argparse
+import os
 
 from cexp.benchmark import benchmark
 from tools.generators.generate_corl_exps import generate_corl2017_config_file
@@ -24,7 +25,7 @@ def do_no_crash_benchmarks(docker, gpu, agent, config, port):
 
     for c in conditions:
         for t in tasks:
-            benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json'
+            benchmark_file = os.path.join('database', 'nocrash', 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json')
             print (" STARTING BENCHMARK ", benchmark_file)
             benchmark(benchmark_file, docker, gpu, agent, config, port=port)
 
@@ -42,7 +43,7 @@ def do_no_crash_empty(docker, gpu, agent, config, port):
 
     for c in conditions:
         t = 'empty'
-        benchmark_file = 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json'
+        benchmark_file = os.path.join('database', 'nocrash', 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json')
         print (" STARTING BENCHMARK ", benchmark_file)
         benchmark(benchmark_file, docker, gpu, agent, config, port=port)
 
