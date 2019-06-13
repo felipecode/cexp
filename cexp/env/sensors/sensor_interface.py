@@ -103,6 +103,8 @@ class CANBusSensor(object):
     def __call__(self):
 
         """ We convert the vehicle physics information into a convenient dictionary """
+        # TODO if you need more physics we can just do it ONCE !
+        """
         vehicle_physics = self._vehicle.get_physics_control()
         wheels_list_dict = []
         for wheel in vehicle_physics.wheels:
@@ -124,25 +126,9 @@ class CANBusSensor(object):
             steering_curve.append({'x': point.x,
                                 'y': point.y
                                 })
-
+        """
         return {
-            'speed': self._get_forward_speed(),
-            'torque_curve': torque_curve,
-            'max_rpm': vehicle_physics.max_rpm,
-            'moi': vehicle_physics.moi,
-            'damping_rate_full_throttle': vehicle_physics.damping_rate_full_throttle,
-            'damping_rate_zero_throttle_clutch_disengaged':
-                vehicle_physics.damping_rate_zero_throttle_clutch_disengaged,
-            'use_gear_autobox': vehicle_physics.use_gear_autobox,
-            'clutch_strength': vehicle_physics.clutch_strength,
-            'mass': vehicle_physics.mass,
-            'drag_coefficient': vehicle_physics.drag_coefficient,
-            'center_of_mass': {'x': vehicle_physics.center_of_mass.x,
-                               'y': vehicle_physics.center_of_mass.x,
-                               'z': vehicle_physics.center_of_mass.x
-                               },
-            'steering_curve': steering_curve,
-            'wheels': wheels_list_dict
+            'speed': self._get_forward_speed()
         }
 
     @threaded

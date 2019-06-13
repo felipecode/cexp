@@ -199,32 +199,40 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
               'non_rendering_mode': False,
               'carla_recording': True
               }
-
-    # this could be joined
-
-    env_batch = CEXP(json_file, params, execute_all=True,
-                     sequential=False, port=port)
-
-    # to load CARLA and the scenarios are made
-    # Here some docker was set
-    env_batch.start()
-    # take the path to the class and instantiate an agent
-
-    agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
-
-    # if there is no name for the checkpoint we set it as the agent module name
-
+    env_batch = None
     summary_list = []
+    # this could be joined
+    while True:
+        try:
+            env_batch = CEXP(json_file, params, execute_all=True,
+                             sequential=False, port=port)
 
-    for env in env_batch:
-        _, _ = agent.unroll(env)
-        # if the agent is already un
-        summary = env.get_summary()
-        logging.debug("Finished episode got summary ")
-        print (summary)
-        # Add partial summary to allow continuation
-        add_summary(env._environment_name, summary[0], json_file, agent_checkpoint_name)
-        summary_list.append(summary[0])
+            # to load CARLA and the scenarios are made
+            # Here some docker was set
+            env_batch.start()
+            # take the path to the class and instantiate an agent
+
+            agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
+
+            # if there is no name for the checkpoint we set it as the agent module name
+
+            summary_list = []
+
+            for env in env_batch:
+                _, _ = agent.unroll(env)
+                # if the agent is already un
+                summary = env.get_summary()
+                logging.debug("Finished episode got summary ")
+                print (summary)
+                # Add partial summary to allow continuation
+                add_summary(env._environment_name, summary[0], json_file, agent_checkpoint_name)
+                summary_list.append(summary[0])
+
+            break
+        except KeyboardInterrupt:
+            break
+        except:
+            del env_batch
 
     # Here we return only the calculated summaries on this iterations, there maybe more
 
