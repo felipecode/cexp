@@ -314,10 +314,14 @@ class Experience(object):
         We set all the traffic lights to green to avoid having this scenario.
 
         """
-        for actor in self.world.get_actors():
-            if 'traffic_light' in actor.type_id:
-                actor.set_state(carla.TrafficLightState.Green)
-                actor.set_green_time(100000)
+        ### This was used for L0
+
+        #for actor in self.world.get_actors():
+        #    if 'traffic_light' in actor.type_id:
+        #        actor.set_state(carla.TrafficLightState.Green)
+        #        actor.set_green_time(100000)
+        pass
+        # TODO for now we are just randomizing the seeds and that is it
 
     # TODO MASTER SCEENARIO TIMEOUT CALCULATION.
     def build_master_scenario(self, route, town_name, timeout=300):

@@ -83,12 +83,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     path = args.path
 
-    # By setting episodes as all, it means that all episodes should be visualized
-    if args.episodes == 'all':
-        episodes_list = glob.glob(os.path.join(path, 'episode_*'))
-        sort_nicely(episodes_list)
-    else:
-        episodes_list = args.episodes
 
     first_time = True
     count = 0
