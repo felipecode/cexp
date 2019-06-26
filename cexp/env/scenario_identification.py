@@ -48,6 +48,19 @@ def get_current_road_angle(vehicle, wmap, resolution=0.01):
                                     yet_another_waypoint.transform.location)
 
 
+def get_distance_to_closest_vehicle_on_path(vehicle):
+
+    world = vehicle.get_world()
+
+    for actors in world:
+
+        if 'vehicle' in actors.get_type():
+
+            # TODO check if actors are fine.
+
+
+
+
 def identify_scenario(distance_intersection, road_angle):
 
     """
@@ -58,7 +71,11 @@ def identify_scenario(distance_intersection, road_angle):
     S2: Traffic Light/ before intersection - S2_before_intersection
     S3: Lane Following - Curve - S3_lane_following_curve
 
-    S3: Lead Vehicle Following - S3_lead_vehicle
+    S4: Lead Vehicle Following - S4_lead_vehicle
+    S5: Lead Vehicle Following - S5_lead_vehicle_following on curves ??
+    S6: Unsupervised strategy directly - S6_lead vehicle following before intersection?
+
+
     S4: Control Loss (TS1) - S4_control_loss
     S5: Pedestrian Crossing (TS3) - S5_pedestrian_crossing
     S6: Bike Crossing (TS4)

@@ -36,7 +36,7 @@ def record_route_statistics_default(master_scenario, exp_name):
             list_traffic_events.extend(node.list_traffic_events)
 
     list_collisions = []
-    list_red_lights = []
+    list_red_lights = []  # Here we can take the number of red lights
     list_wrong_way = []
     list_route_dev = []
     list_sidewalk_inv = []
@@ -143,12 +143,14 @@ def record_route_statistics_default(master_scenario, exp_name):
                           'score_composed': final_score,
                           'score_route': score_route,
                           'score_penalty': score_penalty,
+                          'number_red_lights': len(list_red_lights),
                           'result': result,
                           'help_text': return_message
                           }
 
     return current_statistics
 
+# TODO probably unused function.
 
 def export_score(score_vec, file_name):
 

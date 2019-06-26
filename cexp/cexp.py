@@ -4,10 +4,9 @@ import random
 import collections
 import os
 import logging
-import subprocess
 
 from cexp.env.utils.general import sort_nicely_dict
-from cexp.env.server_manager import ServerManagerDocker, find_free_port, start_test_server, check_test_server
+from cexp.env.server_manager import ServerManagerDocker, find_free_port, check_test_server
 from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
 
@@ -54,7 +53,6 @@ class CEXP(object):
 
         # Executing
         self._execute_all = execute_all
-
         # Read the json file being
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
@@ -121,10 +119,6 @@ class CEXP(object):
 
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
-            #if self._check_env_finished(self._json['envs'][env_name], env_name):
-            #    print(" Env finished")
-            #    continue
-            # All the repetitions of the environment have been made
             # We have the options to eliminate some events from execution.
             if env_name in self._eliminated_environments:
                 continue
@@ -136,8 +130,11 @@ class CEXP(object):
 
     def __iter__(self):
         if self._environments is None:
-            raise ValueError("You are trying to iterate over an not started cexp object, run the start method ")
-        # This strategy of execution takes into considerion the env repetition and execute a certain number of times.from
+            raise ValueError("You are trying to iterate over an not started cexp "
+                             "object, run the start method ")
+        # This strategy of execution takes into considerion the env repetition
+        #  and execute a certain number of times.from
+        # The environment itself is able to tell when the repetition is already made.
         if self._execute_all:
             execution_list = []
             for env_name in self._json['envs'].keys():
@@ -172,6 +169,7 @@ class CEXP(object):
     def cleanup(self):
         self._environment_batch[0].stop()
 
+    """
     def _check_env_finished(self, env_json_dict, env_name):
 
         # If the field repetitions is not on the json file it means we are going to repeat add infinitum
@@ -187,3 +185,4 @@ class CEXP(object):
             return False
 
         return True
+    """

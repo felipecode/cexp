@@ -51,7 +51,8 @@ class Environment(object):
         # the name of the package this env is into
         self._package_name = env_params['package_name']
         logging.debug("Instantiated Environment %s" % self._environment_name)
-        # functions defined by the policy to compute the adequate state and rewards based on CARLA data
+        # functions defined by the policy to compute the
+        # adequate state and rewards based on CARLA data
         self.StateFunction = None
         self.RewardFunction = None
 
@@ -143,7 +144,8 @@ class Environment(object):
                  RewardFunction(self._exp_list)
 
     def get_data(self):
-        # Each environment can have a reference datapoint , where the data is already collected. That can go
+        # Each environment can have a reference datapoint ,
+        #  where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
         # It is always save in the SRL path
@@ -195,7 +197,7 @@ class Environment(object):
 
         # Run the loop for all the experiments on the batch.
         # update all scenarios
-        # TODO there is no loop
+        # TODO there is no loop when using multibatch
         for i in range(len(self._exp_list)):
             exp = self._exp_list[i]
             control = control_vec[i]
@@ -213,7 +215,7 @@ class Environment(object):
         if self.is_running():
             print (" STILL RUNNING ")
             return None
-
-        return self._latest_summary
+        # This seems to be always a batch
+        return self._latest_summary[0]
 
 

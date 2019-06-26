@@ -12,13 +12,14 @@ from cexp.cexp import CEXP
 # TODO ADD the posibility to configure what goes in and what goes out ( OUput format)
 ###
 
-# TODO look for the benchmark measurement from aidan
 
 def parse_results_summary(summary):
 
     result_dictionary = {
         'episodes_completion': summary['score_route'],
-        'episodes_fully_completed': float(summary['result'] == 'SUCCESS')
+        'episodes_fully_completed': float(summary['result'] == 'SUCCESS'),
+        'infractions_score': summary['score_penalty'],
+        'number_red_lights': summary['number_red_lights']
     }
 
     return result_dictionary
@@ -128,15 +129,15 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
     with open(json_filename, 'r') as f:
         json_file = json.loads(f.read())
-    # if it doesnt exist we add the file
+    # if it doesnt exist we add the file, this is how we are writting.
     filename = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
-                                      environment_name,
-                                       agent_checkpoint_name + '_benchmark_summary.csv')
-    if not os.path.exists(filename):
+                            environment_name, agent_checkpoint_name + '_benchmark_summary.csv')
+    set_of_metrics = ['episode_completion', 'result', 'penalty', 'number_red_lights']
 
+    if not os.path.exists(filename):
         csv_outfile = open(filename, 'w')
-        csv_outfile.write("%s,%s,%s\n"
-                          % ('rep', 'episode_completion', 'result'))
+        csv_outfile.write("%s,%s,%s,%s,%s\n"
+                          % ('rep', 'episode_completion', 'result', 'penalty', 'number_red_lights'))
 
         csv_outfile.close()
 
@@ -155,8 +156,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
     csv_outfile = open(filename, 'a')
     csv_outfile.write("%f" % float(repetition_number) )
-
-    for metric_result in results.keys():
+    for metric_result in set_of_metrics:
 
         csv_outfile.write(",%f" % results[metric_result])
 
@@ -171,19 +171,19 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
               agent_checkpoint_name=None):
 
     """
-    :param benchmark_name:
-    :param docker_image:
-    :param gpu:
-    :param agent_class_path:
-    :param agent_params_path:
-    :param batch_size:
-    :param number_repetions:
-    :param save_dataset:
-    :param port:
+    Computes the benchmark for a given json file containing a certain number of experiences.
+
+    :param benchmark_name: the name of the json file used for the benchmark
+    :param docker_image: the docker image that is going to be created to perform the bench
+    :param gpu: the gpu number to be used
+    :param agent_class_path: the pointer to the agent that is going to be benchmarked
+    :param agent_params_path: the pointer to the params file of the agent
+    :param batch_size: number of repetions ( Simultaneous ) NOT IMPLEMENTED
+    :param number_repetions: number of repetitions necessary
+    :param save_dataset: if you are saving the data when benchmarking
+    :param port: the port, in this case expect the docker to not be initialized
     :return:
     """
-    # TODO this looks weird
-    json_file = benchmark_name
 
     module_name = os.path.basename(agent_class_path).split('.')[0]
     sys.path.insert(0, os.path.dirname(agent_class_path))
@@ -196,37 +196,35 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
               'gpu': gpu,
               'batch_size': batch_size,
               'remove_wrong_data': False,
-              'non_rendering_mode': False,
+              'non_rendering_mode': False,  # This could be added as a parameter
               'carla_recording': True
               }
     env_batch = None
     summary_list = []
     # this could be joined
     while True:
-        try:
-            env_batch = CEXP(json_file, params, execute_all=True,
+        try:  # We reattempt in case of failure of the benchmark
+            env_batch = CEXP(benchmark_name, params, execute_all=True,
                              sequential=False, port=port)
 
             # to load CARLA and the scenarios are made
             # Here some docker was set
             env_batch.start()
             # take the path to the class and instantiate an agent
-
             agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
-
             # if there is no name for the checkpoint we set it as the agent module name
 
             summary_list = []
 
             for env in env_batch:
                 _, _ = agent.unroll(env)
-                # if the agent is already un
+                # Just execute the environment. For this case the rewards doesnt matter.
                 summary = env.get_summary()
                 logging.debug("Finished episode got summary ")
                 print (summary)
                 # Add partial summary to allow continuation
-                add_summary(env._environment_name, summary[0], json_file, agent_checkpoint_name)
-                summary_list.append(summary[0])
+                add_summary(env._environment_name, summary, benchmark_name, agent_checkpoint_name)
+                summary_list.append(summary)
 
             break
         except KeyboardInterrupt:
