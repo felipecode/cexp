@@ -57,6 +57,7 @@ def get_distance_to_closest_vehicle_on_path(vehicle):
         if 'vehicle' in actors.get_type():
 
             # TODO check if actors are fine.
+            pass
 
 
 

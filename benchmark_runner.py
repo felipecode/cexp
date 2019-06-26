@@ -1,5 +1,7 @@
 import argparse
 import os
+import logging
+import sys
 
 from cexp.benchmark import benchmark
 from tools.generators.generate_corl_exps import generate_corl2017_config_file
@@ -48,6 +50,18 @@ def do_no_crash_empty(docker, gpu, agent, config, port):
         benchmark(benchmark_file, docker, gpu, agent, config, port=port)
 
 if __name__ == '__main__':
+
+
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
+
+
     # Run like
 
     # python3 benchmark -b CoRL2017 -a agent -d
