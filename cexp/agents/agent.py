@@ -1,4 +1,3 @@
-import numpy as np
 """
 The agent class is an interface to run experiences, the actual policy must inherit from agent in order to
 execute. It should implement the run_step function

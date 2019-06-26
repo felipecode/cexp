@@ -5,6 +5,7 @@ import sys
 import importlib
 import shutil
 import numpy as np
+import traceback
 
 from cexp.cexp import CEXP
 
@@ -230,6 +231,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
         except KeyboardInterrupt:
             break
         except:
+            traceback.print_exc()
             del env_batch
 
     # Here we return only the calculated summaries on this iterations, there maybe more
@@ -242,48 +244,3 @@ def benchmark_cleanup(package_name, agent_checkpoint_name):
 
     shutil.rmtree(os.environ["SRL_DATASET_PATH"], package_name,
                   agent_checkpoint_name)
-
-"""
-def summary_csv( json_filename, agent_name, agent_checkpoint_name):
-
-
-    with open(json_filename, 'r') as f:
-        json_file = json.loads(f.read())
-
-    filename = 'result_' + json_filename.split('/')[-1][:-5] + '_' + agent_name + '.csv'
-    csv_outfile = open(filename, 'w')
-
-    csv_outfile.write("%s,%s\n"
-                      % ('episodes_completion', 'episodes_fully_completed'))
-
-    final_dictionary = {
-        'episodes_completion': 0,
-        'episodes_fully_completed': 0
-    }
-
-
-    # TODO add repetitions directly ( They are missing )
-    for env_name in json_file['envs'].keys():
-
-        path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
-                            agent_checkpoint_name + '_benchmark_summary.csv')
-        if not os.path.exists(path):
-            raise ValueError("Trying to get summary of unfinished benchmark")
-
-
-        for metric in final_dictionary.keys():
-            final_dictionary[metric] += results[metric]
-
-    first_time = True
-    for metric in final_dictionary.keys():
-        final_dictionary[metric] /= len(summary_list)
-        if first_time:
-            csv_outfile.write("%f" % (final_dictionary[metric]))
-            first_time = False
-        else:
-            csv_outfile.write(",%f" % (final_dictionary[metric]))
-
-    csv_outfile.write("\n")
-
-    csv_outfile.close()
-"""
