@@ -138,7 +138,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
     # if it doesnt exist we add the file, this is how we are writting.
     filename = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
                             environment_name, agent_checkpoint_name + '_benchmark_summary.csv')
-    set_of_metrics = ['episodes_completion', 'result', 'penalty', 'number_red_lights']
+    set_of_metrics = ['episodes_completion', 'result', 'infractions_score', 'number_red_lights']
 
     if not os.path.exists(filename):
         csv_outfile = open(filename, 'w')
