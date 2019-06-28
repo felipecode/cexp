@@ -128,11 +128,6 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
     # The rep is now zero, but if the benchmark already started we change that
     repetition_number = 0
 
-    #'episodes_completion': summary['score_route'],
-    #'episodes_fully_completed': float(summary['result'] == 'SUCCESS'),
-    #'infractions_score': summary['score_penalty'],
-    #'number_red_lights': summary['number_red_lights'
-
     with open(json_filename, 'r') as f:
         json_file = json.loads(f.read())
     # if it doesnt exist we add the file, this is how we are writting.

@@ -149,13 +149,19 @@ class CEXP(object):
         if self._execute_all:
             execution_list = []
             for env_name in self._json['envs'].keys():
+                repetitions  = 1
                 # We check the remaining necessary executions for each of the environments
-                if "repetitions" not in self._json['envs'][env_name]:
+                if "repetitions" not in self._json['envs'][env_name] and not self.ignore_previous_execution:
                     raise ValueError(" Setting to execute all but repetition information is not  on the json file")
 
+
+                if "repetitions"  in self._json['envs'][env_name]:
+                    repetitions = self._json['envs'][env_name]['repetitions']
+
+
                 if env_name in Environment.number_of_executions.keys():
-                    repetitions_rem = self._json['envs'][env_name]['repetitions'] -\
-                                      Environment.number_of_executions[env_name]
+                    repetitions_rem = max(0, repetitions -\
+                                      Environment.number_of_executions[env_name])
                     execution_list += [self._environments[env_name]] * repetitions_rem
 
                 else:
