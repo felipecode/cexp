@@ -74,8 +74,7 @@ class Environment(object):
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
-        print (" Att creation of ", self._environment_name)
-        print (Environment.number_of_executions)
+
 
     def __str__(self):
         return self._environment_name
