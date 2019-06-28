@@ -193,7 +193,7 @@ class Experience(object):
             self._writer.save_experience(self.world, self._environment_data)
 
         self.world.tick()
-        self.timestamp = self.world.wait_for_tick()
+        #self.timestamp = self.world.wait_for_tick()
 
 
     def is_running(self):

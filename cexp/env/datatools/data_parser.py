@@ -11,6 +11,7 @@ from cexp.env.utils.general import sort_nicely
 
 
 def get_number_executions(environments_path):
+    # TODO i dont know if this is stable ....
     """
     List all the environments that
 

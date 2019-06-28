@@ -10,7 +10,12 @@ from cexp.env.server_manager import ServerManagerDocker, find_free_port, check_t
 from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
 
-#
+# I see now 4 execution, consumption modes:
+# TODO separate what creates the environment list from the actual environmental runner class
+# Execute a certain number of iterations sequentially or randomly
+# Consume the environments based on how many times they were already executed
+# Consume de environmens ignoring if they were executed already
+# Do an execution eliminating part of the environments used.
 
 
 
@@ -30,7 +35,9 @@ class CEXP(object):
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
-                 port=None, execute_all=False, eliminated_environments=None):
+                 port=None, execute_all=False, ignore_previous_execution=False,
+                 eliminated_environments=None):
+        # TODO data consumption and benchmarking differentiation is important.
         """
 
         :param jsonfile:
@@ -76,6 +83,9 @@ class CEXP(object):
             self._eliminated_environments = {}
         else:
             self._eliminated_environments = eliminated_environments
+        # setting to ignore all the previous experiments when executing envs
+        self.ignore_previous_execution = ignore_previous_execution
+
 
     def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
@@ -123,7 +133,8 @@ class CEXP(object):
             if env_name in self._eliminated_environments:
                 continue
             # Instance an _environments.
-            env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
+            env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params,
+                              ignore_previous=self.ignore_previous_execution)
             # add the additional sensors ( The ones not provided by the policy )
             env.add_sensors(self._json['additional_sensors'])
             self._environments.update({env_name: env})

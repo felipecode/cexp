@@ -24,7 +24,11 @@ class Environment(object):
     # We keep track here the number of times this class was executed.
     number_of_executions = {}
 
-    def __init__(self, name, client_vec, env_config, env_params):
+    def __init__(self, name, client_vec, env_config, env_params, ignore_previous=False):
+
+        # The ignore previous param is to avoid searching for executed iterations
+        # TODO this requires more testing
+        # TODO this may create expendable execution files
 
         # We keep these configuration files so we can reset the environment
         self._env_config = env_config
@@ -38,7 +42,8 @@ class Environment(object):
         self._client_vec = client_vec
         # The route is already specified
         self._route = env_config['route']
-        # An experience is associate with a certain town name ( THat is also associated with scenarios and a route)
+        # An experience is associate with a certain town name
+        #  ( THat is also associated with scenarios and a route)
         self._town_name = env_config['town_name']
         # Thee scenarios that are going to be associated with this route.
         self._scenarios = env_config['scenarios']
@@ -60,8 +65,11 @@ class Environment(object):
         if not Environment.number_of_executions:
             if "SRL_DATASET_PATH" not in os.environ:
                 raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset was saved before")
-
-            Environment.number_of_executions = parser.get_number_executions(os.path.join(os.environ["SRL_DATASET_PATH"],
+            if ignore_previous:
+                Environment.number_of_executions = {}
+            else:
+                Environment.number_of_executions = parser.get_number_executions(
+                                                    os.path.join(os.environ["SRL_DATASET_PATH"],
                                                                             self._package_name))
         # create the environment
         if self._environment_name not in Environment.number_of_executions:

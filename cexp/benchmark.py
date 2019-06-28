@@ -153,7 +153,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
         print (summary_exps)
         env_experiments = summary_exps[environment_name]
         print (env_experiments)
-        repetition_number = len(env_experiments.keys())
+        repetition_number   = len(env_experiments.keys())
 
     # parse the summary for this episode
     results = parse_results_summary(summary)
