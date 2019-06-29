@@ -229,11 +229,13 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
 
             break
         except KeyboardInterrupt:
+            del env_batch
             break
         except:
             traceback.print_exc()
             del env_batch
 
+    del env_batch
     # Here we return only the calculated summaries on this iterations, there maybe more
 
     return summary_list
