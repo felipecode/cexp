@@ -30,6 +30,7 @@ def do_no_crash_benchmarks(docker, gpu, agent, config, port):
             benchmark_file = os.path.join('database', 'nocrash', 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json')
             print (" STARTING BENCHMARK ", benchmark_file)
             benchmark(benchmark_file, docker, gpu, agent, config, port=port)
+            print (" FINISHED ")
 
 # Special case used on the MSN paper
 
@@ -48,18 +49,12 @@ def do_no_crash_empty(docker, gpu, agent, config, port):
         benchmark_file = os.path.join('database', 'nocrash', 'nocrash_' + c + '_' + t + '_' + towns[c] + '.json')
         print (" STARTING BENCHMARK ", benchmark_file)
         benchmark(benchmark_file, docker, gpu, agent, config, port=port)
+        print (" FINISHED ")
 
 if __name__ == '__main__':
 
 
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
 
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    root.addHandler(handler)
 
 
     # Run like
@@ -85,6 +80,17 @@ if __name__ == '__main__':
     parser.add_argument('--port', default=None, help='Port for an already existent server')
 
     args = parser.parse_args()
+
+    # Set mode as debug mode
+    if args.debug:
+        root = logging.getLogger()
+        root.setLevel(logging.DEBUG)
+
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        root.addHandler(handler)
 
     # Test if the benchmark is the list of available benchmarks
 

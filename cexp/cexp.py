@@ -154,10 +154,8 @@ class CEXP(object):
                 if "repetitions" not in self._json['envs'][env_name] and not self.ignore_previous_execution:
                     raise ValueError(" Setting to execute all but repetition information is not  on the json file")
 
-
                 if "repetitions"  in self._json['envs'][env_name]:
                     repetitions = self._json['envs'][env_name]['repetitions']
-
 
                 if env_name in Environment.number_of_executions.keys():
                     repetitions_rem = max(0, repetitions -\
