@@ -79,6 +79,8 @@ if __name__ == '__main__':
 
     parser.add_argument('--port', default=None, help='Port for an already existent server')
 
+    parser.add_argument('--debug', action='store_true', help='Set debug mode')
+
     args = parser.parse_args()
 
     # Set mode as debug mode
