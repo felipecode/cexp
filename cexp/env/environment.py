@@ -76,7 +76,6 @@ class Environment(object):
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
 
-
     def __str__(self):
         return self._environment_name
 
@@ -231,6 +230,6 @@ class Environment(object):
         for exp in self._exp_list:
             exp._clean_bad_dataset()
 
-        self._exp_list[0].delete_env()
+        self._exp_list[0]._writer.delete_env()
 
 

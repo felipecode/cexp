@@ -58,7 +58,7 @@ def read_benchmark_summary(benchmark_csv):
         control_results_dic.update({env_name: data_matrix[count, 1:]})
         count += 1
 
-    return control_results_dic
+    return control_results_dic, header
 
 
 def read_benchmark_summary_metric(benchmark_csv):
@@ -111,9 +111,44 @@ def check_benchmarked_environments(json_filename, agent_checkpoint_name):
         path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
                             agent_checkpoint_name + '_benchmark_summary.csv')
         if os.path.exists(path):
-            benchmarked_environments.update({env_name: read_benchmark_summary(path)})
+            env_summary, _ = read_benchmark_summary(path)
+            benchmarked_environments.update({env_name: env_summary})
 
     return benchmarked_environments
+
+
+def check_benchmarked_episodes_metric(json_filename, agent_checkpoint_name):
+
+    """ return a dict with each metric from the header and
+
+        The len of each environment is the number of times this environment has been benchmarked.
+     """
+
+    benchmarked_metric_dict = {}
+
+    with open(json_filename, 'r') as f:
+        json_file = json.loads(f.read())
+
+    if not os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'])):
+        return {}  # return empty dictionary no case was benchmarked
+
+    for env_name in json_file['envs'].keys():
+        path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
+                            agent_checkpoint_name + '_benchmark_summary.csv')
+
+        if os.path.exists(path):
+            benchmark_env_results, header = read_benchmark_summary(path)
+            if not benchmarked_metric_dict:
+                # This is the first iteration, we use it to take the header.
+                for key in header:
+                    benchmarked_metric_dict.update({key:[]})
+
+            for info, key in zip(benchmark_env_results, header):
+                benchmarked_metric_dict[key].append(info)
+
+    return benchmarked_metric_dict
+
+
 
 
 def add_summary(environment_name, summary, json_filename, agent_checkpoint_name):
@@ -232,7 +267,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                 except:
                     # By any exception you have to delete the environment generated data
                     env.eliminate_data()
-
 
             del env_batch
             break
