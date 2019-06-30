@@ -99,6 +99,7 @@ class Agent(object):
          unroll a full episode for the agent. This produces an state and reward vectors
          that are defined by the agent, that can be used directly for learning.
         """
+
         # You reset the agent before you start any unroll process
         self.reset()
         # You reset the scenario with and pass the make reward functions that are going to be used on the training.

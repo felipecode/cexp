@@ -217,14 +217,19 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             summary_list = []
 
             for env in env_batch:
-                _, _ = agent.unroll(env)
-                # Just execute the environment. For this case the rewards doesnt matter.
-                summary = env.get_summary()
-                logging.debug("Finished episode got summary ")
-                print (summary)
-                # Add partial summary to allow continuation
-                add_summary(env._environment_name, summary, benchmark_name, agent_checkpoint_name)
-                summary_list.append(summary)
+                try:
+                    _, _ = agent.unroll(env)
+                    # Just execute the environment. For this case the rewards doesnt matter.
+                    summary = env.get_summary()
+                    logging.debug("Finished episode got summary ")
+                    print (summary)
+                    # Add partial summary to allow continuation
+                    add_summary(env._environment_name, summary, benchmark_name, agent_checkpoint_name)
+                    summary_list.append(summary)
+                except:
+                    # By any exception you have to delete the environment generated data
+                    env.eliminate_data()
+
 
             del env_batch
             break

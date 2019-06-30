@@ -19,6 +19,7 @@ as well as a communication channel with the CARLA servers.
 It also can have additional sensors that are environment related not policy related.
 """
 
+# TODO you should only report an episode in case of crash.
 
 class Environment(object):
     # We keep track here the number of times this class was executed.
@@ -83,7 +84,6 @@ class Environment(object):
         """
         Remove and destroy all actors
         """
-
         # make the exp vec empty
         self._exp_list = []
 
@@ -151,8 +151,8 @@ class Environment(object):
                  RewardFunction(self._exp_list)
 
     def get_data(self):
-        # Each environment can have a reference datapoint ,
-        #  where the data is already collected. That can go
+        # Each environment can have a reference datapoint,
+        # where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
         # It is always save in the SRL path
@@ -224,5 +224,12 @@ class Environment(object):
             return None
         # This seems to be always a batch
         return self._latest_summary[0]
+
+    def eliminate_data(self):
+        # An exception was caugth we basically delete everything
+
+        for exp in self._exp_list:
+            exp._clean_bad_dataset()
+
 
 
