@@ -138,6 +138,10 @@ def check_benchmarked_episodes_metric(json_filename, agent_checkpoint_name):
 
         if os.path.exists(path):
             benchmark_env_results, header = read_benchmark_summary(path)
+            print (header)
+            print (benchmark_env_results)ç
+
+            print (" Iter ")
             if not benchmarked_metric_dict:
                 # This is the first iteration, we use it to take the header.
                 for key in header:
