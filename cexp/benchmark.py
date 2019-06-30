@@ -146,8 +146,8 @@ def check_benchmarked_episodes_metric(json_filename, agent_checkpoint_name):
                 # This is the first iteration, we use it to take the header.
                 for key in header:
                     benchmarked_metric_dict.update({key:[]})
-
-            for info, key in zip(benchmark_env_results, header):
+            # TODO IT IS CONSIDERING A SINGLE REPETION
+            for info, key in zip(benchmark_env_results[0.0], header):
                 benchmarked_metric_dict[key].append(info)
 
     return benchmarked_metric_dict
