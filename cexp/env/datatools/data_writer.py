@@ -168,6 +168,10 @@ class Writer(object):
         """
         shutil.rmtree(self._full_path)
 
+    def delete_env(self):
+
+        shutil.rmtree(self._base_path)
+
         # TODO check this posible inconsistency
         #if len(os.listdir(self._full_path)) == 0:
         #    shutil.rmtree(self._base_path)

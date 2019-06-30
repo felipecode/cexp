@@ -23,7 +23,9 @@ class Agent(object):
         :return: control
         """
         pass
+
     # TODO TRY A SIMPLE THREAD FOR EXECUTION HERE
+
     def _run_step_batch(self, input_data_vec):
         # TODO ELIMINATE this For make the inference inside and code the angent to make it
         controls_vec = []
@@ -69,7 +71,6 @@ class Agent(object):
         return state_vec
 
     def sensors(self):
-
         sensors_vec = []
         return sensors_vec
 

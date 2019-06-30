@@ -226,6 +226,9 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     # Add partial summary to allow continuation
                     add_summary(env._environment_name, summary, benchmark_name, agent_checkpoint_name)
                     summary_list.append(summary)
+
+                except KeyboardInterrupt:
+                    break
                 except:
                     # By any exception you have to delete the environment generated data
                     env.eliminate_data()
