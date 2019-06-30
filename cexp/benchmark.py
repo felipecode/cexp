@@ -205,8 +205,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     # this could be joined
     while True:
         try:  # We reattempt in case of failure of the benchmark
-            env_batch = CEXP(benchmark_name, params, execute_all=True,
-                             sequential=False, port=port)
+            env_batch = CEXP(benchmark_name, params, execute_all=True, sequential=False, port=port)
 
             # to load CARLA and the scenarios are made
             # Here some docker was set
@@ -227,6 +226,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                 add_summary(env._environment_name, summary, benchmark_name, agent_checkpoint_name)
                 summary_list.append(summary)
 
+            del env_batch
             break
         except KeyboardInterrupt:
             del env_batch
@@ -235,7 +235,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             traceback.print_exc()
             del env_batch
 
-    del env_batch
     # Here we return only the calculated summaries on this iterations, there maybe more
 
     return summary_list

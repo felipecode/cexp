@@ -149,7 +149,7 @@ class CEXP(object):
         if self._execute_all:
             execution_list = []
             for env_name in self._json['envs'].keys():
-                repetitions  = 1
+                repetitions = 1
                 # We check the remaining necessary executions for each of the environments
                 if "repetitions" not in self._json['envs'][env_name] and not self.ignore_previous_execution:
                     raise ValueError(" Setting to execute all but repetition information is not  on the json file")
@@ -183,21 +183,3 @@ class CEXP(object):
 
     def cleanup(self):
         self._environment_batch[0].stop()
-
-    """
-    def _check_env_finished(self, env_json_dict, env_name):
-
-        # If the field repetitions is not on the json file it means we are going to repeat add infinitum
-        if 'repetitions' not in env_json_dict:
-            return False
-        # We check how many time this environment rpeated
-        total_repetitions = env_json_dict['repetitions']
-        print (Environment.number_of_executions)
-        if env_name in Environment.number_of_executions.keys():
-            if Environment.number_of_executions[env_name] >= total_repetitions:
-                return False
-        else:
-            return False
-
-        return True
-    """

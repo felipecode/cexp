@@ -105,7 +105,6 @@ def generate_corl2017_config_file():
                                                                    + task_name + '_' + town_name + '.json')
 
                 with open(filename, 'w') as fo:
-                    # with open(os.path.join(root_route_file_position, 'all_towns_traffic_scenarios3_4.json'), 'w') as fo:
                     fo.write(json.dumps(new_json, sort_keys=True, indent=4))
 
 
