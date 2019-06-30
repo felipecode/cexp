@@ -240,7 +240,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
               'carla_recording': True
               }
     env_batch = None
-    summary_list = []
     # this could be joined
     while True:
         try:  # We reattempt in case of failure of the benchmark
@@ -253,7 +252,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
             # if there is no name for the checkpoint we set it as the agent module name
 
-            summary_list = []
 
             for env in env_batch:
                 try:
@@ -264,7 +262,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     print (summary)
                     # Add partial summary to allow continuation
                     add_summary(env._environment_name, summary, benchmark_name, agent_checkpoint_name)
-                    summary_list.append(summary)
 
                 except KeyboardInterrupt:
                     break
@@ -279,11 +276,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             break
         except:
             traceback.print_exc()
-            del env_batch
 
-    # Here we return only the calculated summaries on this iterations, there maybe more
-
-    return summary_list
 
 
 
