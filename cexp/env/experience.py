@@ -454,6 +454,6 @@ class Experience(object):
         # TODO for now only deleting on failure.
         # Basically remove the folder associated with this exp if the status was not success,
         # or if did not achieve the correct ammount of points
-        print ( "FAILED , DELETING")
+        logging.debug( "FAILED , DELETING")
         self._writer.delete()
 

@@ -283,6 +283,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                 except KeyboardInterrupt:
                     break
                 except:
+                    traceback.print_exc()
                     # By any exception you have to delete the environment generated data
                     env.eliminate_data()
 
