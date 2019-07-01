@@ -61,20 +61,9 @@ class Environment(object):
         # adequate state and rewards based on CARLA data
         self.StateFunction = None
         self.RewardFunction = None
+        # ignore previous executions
+        self._ignore_previous = ignore_previous
 
-        # update the number of executions to match the folder
-        if not Environment.number_of_executions:
-            if "SRL_DATASET_PATH" not in os.environ:
-                raise ValueError("SRL_DATASET_PATH not defined, set the place where the dataset was saved before")
-            if ignore_previous:
-                Environment.number_of_executions = {}
-            else:
-                Environment.number_of_executions = parser.get_number_executions(
-                                                    os.path.join(os.environ["SRL_DATASET_PATH"],
-                                                                            self._package_name))
-        # create the environment
-        if self._environment_name not in Environment.number_of_executions:
-            Environment.number_of_executions.update({self._environment_name: 0})
 
     def __str__(self):
         return self._environment_name
@@ -111,7 +100,24 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-    def reset(self, StateFunction, RewardFunction):
+    def reset(self, StateFunction, RewardFunction, agent_name=''):
+
+        # update the number of executions to match the folder
+        if not Environment.number_of_executions:
+            if "SRL_DATASET_PATH" not in os.environ:
+                raise ValueError("SRL_DATASET_PATH not defined,"
+                                 " set the place where the dataset was saved before")
+            if self._ignore_previous:
+                Environment.number_of_executions = {}
+            else:
+                Environment.number_of_executions = parser.get_number_executions(agent_name,
+                                                    os.path.join(os.environ["SRL_DATASET_PATH"],
+                                                                            self._package_name))
+        # create the environment
+        if self._environment_name not in Environment.number_of_executions:
+            Environment.number_of_executions.update({self._environment_name: 0})
+
+
         if len(self._exp_list) > 0:
             self.stop()
 
@@ -134,7 +140,8 @@ class Environment(object):
                 'debug': self._env_params['debug']
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
-                                             self._sensor_desc_vec, self._scenarios, exp_params))
+                                             self._sensor_desc_vec, self._scenarios, exp_params,
+                                             agent_name))
         # if it is the first time we execute this env
         if self._save_data and self._environment_name in Environment.number_of_executions:
             # we use one of the experiments to build the metadata

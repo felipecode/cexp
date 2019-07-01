@@ -10,7 +10,7 @@ from cexp.env.utils.general import sort_nicely
 """ Parse the data that was already written """
 
 
-def get_number_executions(environments_path):
+def get_number_executions(agent_name, environments_path):
     # TODO i dont know if this is stable ....
     """
     List all the environments that
@@ -28,7 +28,8 @@ def get_number_executions(environments_path):
         print (os.listdir(env))
         for file in os.listdir(env):
             print (file)
-            if os.path.isdir(os.path.join(env, file)):
+            env_exec_name = os.path.join(env, file)
+            if os.path.isdir(env_exec_name) and env_exec_name.split('_')[-1] == agent_name:
                 dir_count += 1
 
         number_executions.update({env_name: dir_count})

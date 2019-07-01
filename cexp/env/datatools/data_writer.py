@@ -16,7 +16,7 @@ class Writer(object):
         directly on the sensor interface.
     """
 
-    def __init__(self, dataset_name, env_name, env_number, batch_number,
+    def __init__(self, dataset_name, env_name, env_number, batch_number, agent_name,
                  other_vehicles=False, road_information=False):
         """
             We have a certain name but also the number of thee environment  ( How many times this env was repeated)
@@ -33,7 +33,7 @@ class Writer(object):
         self._latest_id = 0
         # path for the writter for this specific batch
         self._full_path = os.path.join(root_path, dataset_name, env_name,
-                                       str(env_number), str(batch_number))
+                                       str(env_number) + '_' + agent_name, str(batch_number))
         # base path, for writting the metadata for the environment
         self._base_path = os.path.join(root_path, dataset_name, env_name)
 

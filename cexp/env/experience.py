@@ -65,7 +65,8 @@ def estimate_route_timeout( route):
 
 
 class Experience(object):
-    def __init__(self, client, vehicle_model, route, sensors, scenario_definitions, exp_params):
+    def __init__(self, client, vehicle_model, route, sensors, scenario_definitions,
+                 exp_params, agent_name):
         """
         The experience is like a instance of the environment
          contains all the objects (vehicles, sensors) and scenarios of the the current experience
@@ -99,7 +100,7 @@ class Experience(object):
 
         # if we are going to save, we keep track of a dictionary with all the data
         self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
-                              exp_params['exp_number'])
+                              exp_params['exp_number'], agent_name)
         self._environment_data = {'exp_measurements': None,  # The exp measurements are specific of the experience
                                   'ego_controls': None,
                                   'scenario_controls': None}
