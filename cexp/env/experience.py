@@ -348,6 +348,9 @@ class Experience(object):
         while attempts < self.MAX_CONNECTION_ATTEMPTS:
             try:
                 self.world = self._client.load_world(self._town_name)
+                logging.debug("=============================")
+                logging.debug("---------New Episode---------")
+                logging.debug("=============================")
                 break
             except Exception:
                 attempts += 1
@@ -356,12 +359,12 @@ class Experience(object):
                 time.sleep(2.0)
                 continue
 
-        self.timestamp = self.world.wait_for_tick()
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
         settings.synchronous_mode = True
         self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
+
 
     # Todo make a scenario builder class
     def _build_background(self, background_definition):

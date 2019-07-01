@@ -116,6 +116,22 @@ def check_benchmarked_environments(json_filename, agent_checkpoint_name):
 
     return benchmarked_environments
 
+def check_benchmark_finished(json_filename, agent_checkpoint_name):
+
+    with open(json_filename, 'r') as f:
+        json_file = json.loads(f.read())
+
+    if not os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'])):
+        return False  # return empty dictionary no case was benchmarked
+
+    for env_name in json_file['envs'].keys():
+        path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
+                            agent_checkpoint_name + '_benchmark_summary.csv')
+        if not os.path.exists(path):
+            return False
+
+    return True
+
 
 def check_benchmarked_episodes_metric(json_filename, agent_checkpoint_name):
 
