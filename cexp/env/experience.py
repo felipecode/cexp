@@ -133,6 +133,8 @@ class Experience(object):
             # Route statistics, when the route is finished there will
             # be route statistics on this object. and nothing else
             self._route_statistics = None
+            # We tick the world to have some starting points
+            self.tick_world()
         except RuntimeError as r:
             # We clean the dataset if there is any exception on creation
             traceback.print_exc()
@@ -285,7 +287,6 @@ class Experience(object):
         while not self._sensor_interface.all_sensors_ready():
             print(" waiting for one data reading from sensors...")
             self.world.tick()
-            self.world.wait_for_tick()
 
     def _get_current_wp_direction(self, vehicle_position, route):
 
