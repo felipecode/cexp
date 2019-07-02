@@ -9,6 +9,7 @@ class Agent(object):
     def __init__(self, path_to_conf_file=None):
         # agent's initialization
         self.setup(path_to_conf_file)
+        self._name = ''
 
     def setup(self, path_to_config):
         """
@@ -105,7 +106,8 @@ class Agent(object):
         # You reset the scenario with and pass the make reward functions
         #  that are going to be used on the training.
         environment.add_sensors(self.sensors())
-        state, reward = environment.reset(self._make_state_batch, self._make_reward_batch)
+        state, reward = environment.reset(self._make_state_batch, self._make_reward_batch,
+                                          self._name)
 
         # Start the rewards and state vectors used
         reward_batch = [[]] * environment._batch_size
