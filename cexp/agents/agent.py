@@ -9,7 +9,7 @@ class Agent(object):
     def __init__(self, path_to_conf_file=None):
         # agent's initialization
         self.setup(path_to_conf_file)
-        self._name = ''
+
 
     def setup(self, path_to_config):
         """

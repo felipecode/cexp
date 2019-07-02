@@ -231,7 +231,8 @@ class Environment(object):
         return self._latest_summary[0]
 
     def eliminate_data(self):
-        # An exception was caught we basically delete everything
+        # An exception was caught we basically delete everything that correspond to the
+        # executing agent.
 
         for exp in self._exp_list:
             exp._clean_bad_dataset()

@@ -36,6 +36,9 @@ class Writer(object):
                                        str(env_number) + '_' + agent_name, str(batch_number))
         # base path, for writting the metadata for the environment
         self._base_path = os.path.join(root_path, dataset_name, env_name)
+        # env full path
+        self._env_full_path = os.path.join(root_path, dataset_name, env_name,
+                                           str(env_number) + '_' + agent_name)
 
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
@@ -170,7 +173,7 @@ class Writer(object):
 
     def delete_env(self):
 
-        shutil.rmtree(self._base_path)
+        shutil.rmtree(self._env_full_path)
 
         # TODO check this posible inconsistency
         #if len(os.listdir(self._full_path)) == 0:
