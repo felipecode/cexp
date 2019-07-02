@@ -164,7 +164,7 @@ class CEXP(object):
 
                 else:
                     # We add all the repetitions to the execution list
-                    execution_list += [self._environments[env_name]]*self._json['envs'][env_name]['repetitions']
+                    execution_list += [self._environments[env_name]] * repetitions
 
             return iter(execution_list)
         # These two modes ignore the repetitions parameter and just keep executing.
