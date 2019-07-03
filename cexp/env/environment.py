@@ -216,6 +216,7 @@ class Environment(object):
             control = exp.tick_scenarios_control(control)
             exp.apply_control(control)
             exp.tick_world()
+            exp.save_experience()
 
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)

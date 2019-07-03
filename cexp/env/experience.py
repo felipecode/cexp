@@ -195,12 +195,14 @@ class Experience(object):
             'road_angle': get_current_road_angle(self._ego_actor,
                                                  self._ego_actor.get_world().get_map())
         }
+
+        self.world.tick()
+
+    def save_experience(self):
+
         if self._save_data:
             self._sensor_interface.wait_sensors_written(self._writer)
             self._writer.save_experience(self.world, self._environment_data)
-
-        self.world.tick()
-        #self.timestamp = self.world.wait_for_tick()
 
 
     def is_running(self):
