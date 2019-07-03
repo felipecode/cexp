@@ -156,7 +156,6 @@ def check_benchmarked_episodes_metric(json_filename, agent_checkpoint_name):
             benchmark_env_results, header = read_benchmark_summary(path)
             print (header)
             print (benchmark_env_results)
-
             print (" Iter ")
             if not benchmarked_metric_dict:
                 # This is the first iteration, we use it to take the header.
@@ -278,14 +277,18 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     logging.debug("Finished episode got summary ")
                     print (summary)
                     # Add partial summary to allow continuation
-                    add_summary(env._environment_name, summary, benchmark_name, agent_checkpoint_name)
+                    add_summary(env._environment_name, summary,
+                                benchmark_name, agent_checkpoint_name)
 
                 except KeyboardInterrupt:
                     break
-                except:
+                except Exception as e:
                     traceback.print_exc()
                     # By any exception you have to delete the environment generated data
                     env.eliminate_data()
+                    # And you have to try again so we retry everything and rebuild the CEXP
+                    # TODO maybe keep the docker
+                    raise e
 
             del env_batch
             break

@@ -237,6 +237,7 @@ class Environment(object):
         for exp in self._exp_list:
             exp._clean_bad_dataset()
 
-        self._exp_list[0]._writer.delete_env()
+        if len(self._exp_list) > 0:
+            self._exp_list[0]._writer.delete_env()
 
 
