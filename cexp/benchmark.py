@@ -155,17 +155,17 @@ def check_benchmarked_episodes_metric(json_filename, agent_checkpoint_name):
 
         if os.path.exists(path):
             benchmark_env_results, header = read_benchmark_summary(path)
-            #print (header)
-            #print (benchmark_env_results)
-            #print (" Iter ")
+            print (header)
+            print (benchmark_env_results)
+            print (" Iter ")
             if not benchmarked_metric_dict:
                 # This is the first iteration, we use it to take the header.
                 for key in header[1:]:
                     benchmarked_metric_dict.update({key:[]})
-            # TODO IT IS CONSIDERING A SINGLE REPETION
-            #benchmarked_metric_dict['rep'].append(0)
-            for info, key in zip(benchmark_env_results[0.0], header[1:]):
-                benchmarked_metric_dict[key].append(info)
+
+            for rep_key in benchmark_env_results.keys():
+                for info, key in zip(benchmark_env_results[rep_key], header[1:]):
+                    benchmarked_metric_dict[key].append(info)
 
     return benchmarked_metric_dict
 
