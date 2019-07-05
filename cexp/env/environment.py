@@ -76,6 +76,9 @@ class Environment(object):
         for exp in self._exp_list:
             exp.cleanup()
         self._exp_list = []
+        # we remove all the sensors everytime. No sensor addition on building time
+        self._sensor_desc_vec = []
+
 
     def record(self):
         """
