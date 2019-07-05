@@ -73,6 +73,8 @@ class Environment(object):
         Remove and destroy all actors
         """
         # make the exp vec empty
+        for exp in self._exp_list:
+            exp.cleanup()
         self._exp_list = []
 
     def record(self):
