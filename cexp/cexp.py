@@ -136,7 +136,7 @@ class CEXP(object):
             env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params,
                               ignore_previous=self.ignore_previous_execution)
             # add the additional sensors ( The ones not provided by the policy )
-            env.add_sensors(self._json['additional_sensors'])
+            #env.add_sensors(self._json['additional_sensors'])
             self._environments.update({env_name: env})
 
     def __iter__(self):
