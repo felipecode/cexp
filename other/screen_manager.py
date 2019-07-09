@@ -139,6 +139,7 @@ class ScreenManager(object):
 
 
         if no_display:
+            os.putenv('SDL_VIDEODRIVER', 'fbcon')
             os.environ["SDL_VIDEODRIVER"] = "dummy"
 
         self._resolution = resolution
@@ -196,8 +197,6 @@ class ScreenManager(object):
         final_position = (position[0] + self._resolution[0] * (scale * (screen_position[0])), \
                           position[1] + (self._resolution[1] * (scale * (screen_position[1]))))
 
-        # pygame.surfarray.array_colorkey(self._camera_surfaces[screen_number])
-        print (array)
         array = np.array(array)
         self._camera_surfaces[screen_position[0] * screen_position[1]].set_colorkey((255, 0, 255))
         pygame.surfarray.blit_array(self._camera_surfaces[screen_position[0] * screen_position[1]],
