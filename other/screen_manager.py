@@ -7,7 +7,7 @@ from random import randint
 
 import scipy
 import cv2
-
+from scipy.misc import imsave
 import pygame
 
 clock = pygame.time.Clock()
@@ -123,6 +123,7 @@ class ScreenManager(object):
         pygame.init()
         self.save_folder = save_folder
 
+
         self._wheel = cv2.imread('tools/wheel.png') #, cv2.IMREAD_UNCHANGED)
         self._wheel = self._wheel[:,:, ::-1]
 
@@ -150,6 +151,8 @@ class ScreenManager(object):
         self._wheel = cv2.resize(self._wheel, (new, int(new*ar)))
 
         size = (resolution[0] * aspect_ratio[0], resolution[1] * aspect_ratio[1])
+
+
 
         self._screen = pygame.display.set_mode((size[0] * scale, size[1] * scale),
                                                pygame.DOUBLEBUF)
@@ -192,7 +195,8 @@ class ScreenManager(object):
         final_position = (position[0] + self._resolution[0] * (scale * (screen_position[0])), \
                           position[1] + (self._resolution[1] * (scale * (screen_position[1]))))
 
-        print (array)
+        imsave('test'+ str(randint(0,100))+'.png',array)
+
         self._camera_surfaces[screen_position[0] * screen_position[1]].set_colorkey((255, 0, 255))
         self._camera_surfaces[screen_position[0] * screen_position[1]] = \
             pygame.surfarray.make_surface(array.swapaxes(0, 1).astype(np.uint8))
@@ -214,6 +218,7 @@ class ScreenManager(object):
         # print position
 
         wheel_surface = pygame.surface.Surface((rot_wheel.shape[1], rot_wheel.shape[0]), 0, 24).convert()
+
 
         wheel_surface.set_colorkey((0, 0, 0))
         pygame.surfarray.blit_array(wheel_surface, rot_wheel.swapaxes(0, 1))
@@ -300,7 +305,6 @@ class ScreenManager(object):
                                  (int(size_x / 4.0), int(size_y / 2)),
                                  screen_position)
 
-        self._render_iter += 1
 
         pygame.display.flip()
         if output_img is not None:
