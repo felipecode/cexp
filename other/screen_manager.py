@@ -137,7 +137,7 @@ class ScreenManager(object):
 
 
         if no_display:
-            os.environ["SDL_VIDEODRIVER"] = "offscreen"
+            os.environ["SDL_VIDEODRIVER"] = "dummy"
 
         self._resolution = resolution
 
