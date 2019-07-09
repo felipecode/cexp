@@ -312,3 +312,5 @@ class ScreenManager(object):
         pygame.display.flip()
         if output_img is not None:
             pygame.image.save(self._screen, output_img)
+
+

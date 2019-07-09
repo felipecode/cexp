@@ -7,6 +7,7 @@ import json
 import numpy as np
 import glob
 import re
+import shutil
 
 
 import time
@@ -21,6 +22,7 @@ from skimage import io
 import numpy as np
 
 
+import  subprocess
 
 ############################
 ##########################
@@ -55,6 +57,18 @@ def sort_nicely(l):
     """
     l.sort(key=alphanum_key)
 
+
+def make_video(folder_path, output_name):
+
+    # ffmpeg -f image2 -r 1/5 -i image%05d.png -vcodec mpeg4 -y movie.mp4
+
+    # '-r', '1/5'
+    subprocess.call(['ffmpeg', '-f', 'image2', '-i', os.path.join(folder_path, 'image%05d.png') ,
+                     '-vcodec', 'mpeg4', '-y', output_name + '.mp4'])
+
+    shutil.rmtree(folder_path)
+
+
 # ***** main loop *****
 if __name__ == "__main__":
 
@@ -80,10 +94,19 @@ if __name__ == "__main__":
         help=' the json configuration file name',
         default=None
     )
+    parser.add_argument(
+        '--make-videos',
+        help=' make videos from episodes',
+        action='store_true'
+    )
 
     args = parser.parse_args()
     path = args.path
 
+    # make the temporary folder for images if we make videos
+    if args.make_videos:
+        if os.path.exists('_tmp_img'):
+            os.mkdir('_tmp_img')
 
     first_time = True
     count = 0
@@ -135,6 +158,7 @@ if __name__ == "__main__":
                 for batch in exp[0]:
                     print("      Batch: ", batch[1])
                     step = 0  # Add the size
+                    count_images = 0
                     while step < len(batch[0]):
 
                         data_point = batch[0][step]
@@ -154,11 +178,21 @@ if __name__ == "__main__":
                                                                 data_point['measurements']['road_angle'])
                                   }
 
+                        # if we make video we set something for output image
+                        if args.make_videos:
+                            output_image = os.path.join('_tmp_img',
+                                           'image' + str(count_images).zfill(5) + '.png')
+                        else:
+                            output_image = None
+
                         screen.plot_camera_steer(rgb_left, screen_position=[0, 0])
                         screen.plot_camera_steer(rgb_center, control=None,
                                                  screen_position=[1, 0], status=status)
-                        screen.plot_camera_steer(rgb_right, screen_position=[2, 0])
+                        screen.plot_camera_steer(rgb_right, screen_position=[2, 0],
+                                                 output_img=output_image)
                         step += step_size
+                        count_images += 1
+
 
 
 
