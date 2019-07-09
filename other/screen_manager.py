@@ -3,7 +3,6 @@ import os
 import colorsys
 import math
 from random import randint
-from skimage import io
 
 
 import scipy
