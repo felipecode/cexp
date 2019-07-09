@@ -67,6 +67,7 @@ def make_video(folder_path, output_name):
                      '-vcodec', 'mpeg4', '-y', output_name + '.mp4'])
 
     shutil.rmtree(folder_path)
+    os.mkdir(folder_path)
 
 
 # ***** main loop *****
