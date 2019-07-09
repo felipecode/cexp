@@ -167,7 +167,7 @@ class ScreenManager(object):
         self._camera_surfaces = []
 
         for i in range(aspect_ratio[0] * aspect_ratio[1]):
-            camera_surface = pygame.surface.Surface(resolution, 0, 24).convert()
+            camera_surface = pygame.Surface(resolution, 0, 24).convert()
 
             self._camera_surfaces.append(camera_surface)
 
