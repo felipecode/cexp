@@ -197,11 +197,10 @@ class ScreenManager(object):
         final_position = (position[0] + self._resolution[0] * (scale * (screen_position[0])), \
                           position[1] + (self._resolution[1] * (scale * (screen_position[1]))))
 
-        array = np.nan_to_num(array)
-
+        print (array.shape)
         self._camera_surfaces[screen_position[0] * screen_position[1]].set_colorkey((255, 0, 255))
         self._camera_surfaces[screen_position[0] * screen_position[1]] = \
-            pygame.surfarray.make_surface(array.swapaxes(0, 1).astype(np.uint32))
+            pygame.surfarray.make_surface(array.swapaxes(0, 1).astype(np.uint8))
         #pygame.surfarray.blit_array(self._camera_surfaces[screen_position[0] * screen_position[1]],
         #                        array.swapaxes(0, 1).astype(np.uint32))
 
