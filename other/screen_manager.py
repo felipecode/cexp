@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import colorsys
 import math
 from random import randint
@@ -133,7 +134,11 @@ class ScreenManager(object):
     # take into consideration the resolution when ploting
     # TODO: Resize properly to fit the screen ( MAYBE THIS COULD BE DONE DIRECTLY RESIZING screen and keeping SURFACES)
 
-    def start_screen(self, resolution, aspect_ratio, scale=1):
+    def start_screen(self, resolution, aspect_ratio, scale=1, no_display=False):
+
+
+        if no_display:
+            os.environ["SDL_VIDEODRIVER"] = "dummy"
 
         self._resolution = resolution
 
@@ -147,7 +152,11 @@ class ScreenManager(object):
 
         size = (resolution[0] * aspect_ratio[0], resolution[1] * aspect_ratio[1])
 
-        self._screen = pygame.display.set_mode((size[0] * scale, size[1] * scale), pygame.DOUBLEBUF)
+
+
+        self._screen = pygame.display.set_mode((size[0] * scale, size[1] * scale),
+                                               pygame.DOUBLEBUF)
+
 
         # self._screen.set_alpha(None)
 
