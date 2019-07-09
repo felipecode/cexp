@@ -193,6 +193,9 @@ if __name__ == "__main__":
                         step += step_size
                         count_images += 1
 
+                    make_video('_tmp_img', 'env_'+ env +'exp_'+str(exp[1])
+                                                +'_batch_' + str(batch[1]))
+
 
 
 
