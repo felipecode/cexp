@@ -137,7 +137,6 @@ class ScreenManager(object):
 
 
         if no_display:
-            os.putenv('SDL_VIDEODRIVER', 'fbcon')
             os.environ["SDL_VIDEODRIVER"] = "dummy"
 
         self._resolution = resolution
@@ -152,12 +151,7 @@ class ScreenManager(object):
 
         size = (resolution[0] * aspect_ratio[0], resolution[1] * aspect_ratio[1])
 
-
-
-        self._screen = pygame.display.set_mode((size[0] * scale, size[1] * scale),
-                                               pygame.DOUBLEBUF)
-
-
+        self._screen = pygame.display.set_mode((size[0] * scale, size[1] * scale))
         # self._screen.set_alpha(None)
 
         pygame.display.set_caption("Human/Machine - Driving Software")
@@ -195,7 +189,6 @@ class ScreenManager(object):
         final_position = (position[0] + self._resolution[0] * (scale * (screen_position[0])), \
                           position[1] + (self._resolution[1] * (scale * (screen_position[1]))))
 
-        imsave('test'+ str(randint(0,100))+'.png',array)
 
         self._camera_surfaces[screen_position[0] * screen_position[1]].set_colorkey((255, 0, 255))
         self._camera_surfaces[screen_position[0] * screen_position[1]] = \
