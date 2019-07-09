@@ -197,9 +197,11 @@ class ScreenManager(object):
                           position[1] + (self._resolution[1] * (scale * (screen_position[1]))))
 
         # pygame.surfarray.array_colorkey(self._camera_surfaces[screen_number])
+        print (array)
+        print ( " HSHAHSHPE ", array.shape)
         self._camera_surfaces[screen_position[0] * screen_position[1]].set_colorkey((255, 0, 255))
         pygame.surfarray.blit_array(self._camera_surfaces[screen_position[0] * screen_position[1]],
-                                    array.swapaxes(0, 1))
+                                    array)
 
         camera_scale = pygame.transform.scale(self._camera_surfaces[screen_position[0] * screen_position[1]],
                                               (int(self._resolution[0] * scale), int(self._resolution[1] * scale)))
@@ -253,7 +255,6 @@ class ScreenManager(object):
             sensor_data = np.stack((sensor_data,) * 3, axis=2)
             sensor_data = np.squeeze(sensor_data)
 
-        print (sensor_data)
 
         self.set_array(sensor_data, screen_position)
 
