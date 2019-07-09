@@ -201,7 +201,7 @@ class ScreenManager(object):
         array = np.array(array)
         self._camera_surfaces[screen_position[0] * screen_position[1]].set_colorkey((255, 0, 255))
         pygame.surfarray.blit_array(self._camera_surfaces[screen_position[0] * screen_position[1]],
-                                    array.swapaxes(0, 1).astype(np.uint8))
+                                    array.swapaxes(0, 1).astype(np.uint32))
 
         camera_scale = pygame.transform.scale(self._camera_surfaces[screen_position[0] * screen_position[1]],
                                               (int(self._resolution[0] * scale), int(self._resolution[1] * scale)))
