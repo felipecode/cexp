@@ -3,6 +3,8 @@ import os
 import colorsys
 import math
 from random import randint
+from skimage import io
+
 
 import scipy
 import cv2
@@ -252,6 +254,7 @@ class ScreenManager(object):
             sensor_data = np.stack((sensor_data,) * 3, axis=2)
             sensor_data = np.squeeze(sensor_data)
 
+        print (sensor_data)
 
         self.set_array(sensor_data, screen_position)
 
