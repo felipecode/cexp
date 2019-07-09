@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     # make the temporary folder for images if we make videos
     if args.make_videos:
-        if os.path.exists('_tmp_img'):
+        if not os.path.exists('_tmp_img'):
             os.mkdir('_tmp_img')
 
     first_time = True
