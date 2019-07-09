@@ -153,7 +153,7 @@ class ScreenManager(object):
 
         pygame.display.set_mode((1, 1))
 
-        self._screen = pygame.Surface(resolution, 0, 24).convert()
+        self._screen = pygame.surface.Surface(size, 0, 24).convert()
         #pygame.display.set_mode((size[0] * scale, size[1] * scale))
         # self._screen.set_alpha(None)
 
@@ -162,7 +162,7 @@ class ScreenManager(object):
         self._camera_surfaces = []
 
         for i in range(aspect_ratio[0] * aspect_ratio[1]):
-            camera_surface = pygame.Surface(resolution, 0, 24).convert()
+            camera_surface = pygame.surface.Surface(resolution, 0, 24).convert()
 
             self._camera_surfaces.append(camera_surface)
 
