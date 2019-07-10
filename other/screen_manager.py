@@ -145,7 +145,7 @@ class ScreenManager(object):
         self._scale = scale
 
         ar = self._wheel.shape[1]/self._wheel.shape[0]
-        new = int(self._wheel.shape[0] / 4)
+        new = int(self._wheel.shape[0] / 10)
 
         self._wheel = cv2.resize(self._wheel, (new, int(new*ar)))
 
