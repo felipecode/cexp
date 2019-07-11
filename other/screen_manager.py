@@ -152,11 +152,11 @@ class ScreenManager(object):
 
         size = (resolution[0] * aspect_ratio[0], resolution[1] * aspect_ratio[1])
 
-        pygame.display.set_mode((1, 1))
+        #pygame.display.set_mode((1, 1))
 
-        self._screen = pygame.surface.Surface(size, 0, 24).convert()
-        #pygame.display.set_mode((size[0] * scale, size[1] * scale))
-        # self._screen.set_alpha(None)
+        #self._screen = pygame.surface.Surface(size, 0, 24).convert()
+        self._screen = pygame.display.set_mode((size[0] * scale, size[1] * scale))
+        #self._screen.set_alpha(None)
 
         pygame.display.set_caption("Human/Machine - Driving Software")
 
