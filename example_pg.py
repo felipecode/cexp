@@ -1,7 +1,7 @@
 import logging
 import traceback
 from cexp.cexp import CEXP
-from cexp.agents.pg_agent import PGAgent
+from cexp.agents.PGAgent import PGAgent
 
 ###
 # TODO MAKE SCENARIO ASSIGMENT DETERMINISTIC
