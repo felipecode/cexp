@@ -47,7 +47,6 @@ if __name__ == '__main__':
             # Just try again
             env.stop()
             continue
-            print (" ENVIRONMENT BROKE trying again.")
 
         agent.reinforce(rewards)
 
