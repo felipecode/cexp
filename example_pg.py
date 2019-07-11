@@ -23,7 +23,8 @@ if __name__ == '__main__':
     # TODO for now batch size is one
     number_of_iterations = 10000
     # The idea is that the agent class should be completely independent
-    agent = PGAgent('8100.pth')
+    # agent = PGAgent('8100.pth')
+    agent = PGAgent()
     # this could be joined
     env_batch = CEXP(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
                                                                                                # to load CARLA and the scenarios are made
