@@ -21,7 +21,8 @@ def draw_vbar_on(img, bar_intensity, x_pos, color=(0, 0, 255)):
         if bar_intensity > 0.0:
             y = initial_y_pos - i
             for j in range(10):
-                img[y, x_pos + j] = color
+                #img[y, x_pos + j] = color
+                img[x_pos + j, y] = color
 
 def get_vec_dist(x_dst, y_dst, x_src, y_src):
     vec = np.array([x_dst, y_dst] - np.array([x_src, y_src]))

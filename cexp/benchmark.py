@@ -151,13 +151,10 @@ def check_benchmarked_episodes_metric(json_filename, agent_checkpoint_name):
     for env_name in json_file['envs'].keys():
         path = os.path.join(os.environ["SRL_DATASET_PATH"],  json_file['package_name'], env_name,
                             agent_checkpoint_name + '_benchmark_summary.csv')
-        #print (" Testing PATH ", path)
 
         if os.path.exists(path):
             benchmark_env_results, header = read_benchmark_summary(path)
-            #print (header)
-            #print (benchmark_env_results)
-            #print (" Iter ")
+
             if not benchmarked_metric_dict:
                 # This is the first iteration, we use it to take the header.
                 for key in header[1:]:
@@ -201,15 +198,13 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
     else:
         # Check the summary to get the repetition number
         summary_exps = check_benchmarked_environments(json_filename, agent_checkpoint_name)
-        #print (summary_exps)
+
         env_experiments = summary_exps[environment_name]
-        #print (env_experiments)
-        repetition_number   = len(env_experiments.keys())
+
+        repetition_number = len(env_experiments.keys())
 
     # parse the summary for this episode
     results = parse_results_summary(summary)
-    print (" Parsed Results")
-    print (results)
 
     csv_outfile = open(filename, 'a')
     csv_outfile.write("%f" % float(repetition_number) )
@@ -276,7 +271,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     # Just execute the environment. For this case the rewards doesnt matter.
                     summary = env.get_summary()
                     logging.debug("Finished episode got summary ")
-                    print (summary)
                     # Add partial summary to allow continuation
                     add_summary(env._environment_name, summary,
                                 benchmark_name, agent_checkpoint_name)
