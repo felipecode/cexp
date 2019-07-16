@@ -11,7 +11,7 @@ from cexp.env.server_manager import start_test_server, check_test_server
 
 from cexp.cexp import CEXP
 from cexp.benchmark import benchmark, check_benchmarked_environments
-from cexp.agents.DummyAgent import DummyAgent
+from cexp.agents.NPCAgent import NPCAgent
 
 import carla
 import os
@@ -33,7 +33,7 @@ params = {'save_dataset': True,
           'carla_recording': False  # TODO testing
           }
 
-agent = DummyAgent()
+agent = NPCAgent()
 AGENT_NAME = 'NPCAgent'
 # The episodes to be checked must always be sequential
 
