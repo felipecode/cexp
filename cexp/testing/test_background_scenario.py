@@ -91,7 +91,7 @@ def test_background(number_vehicles, number_walkers):
     env_batch.start()
     env_count = 0
     for env in env_batch:
-
+        env.start()
         # We count the number of vehicles
         count_vehicles = 0
         count_walkers = 0
