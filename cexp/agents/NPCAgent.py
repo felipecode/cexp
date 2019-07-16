@@ -17,7 +17,6 @@ class NPCAgent(Agent):
         self.route_assigned = False
         self._agent = None
 
-
     # TODO we set the sensors here directly.
     def sensors(self):
         sensors = [{'type': 'sensor.camera.rgb',

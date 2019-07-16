@@ -96,15 +96,18 @@ def test_background(number_vehicles, number_walkers):
         # We count the number of vehicles
         count_vehicles = 0
         count_walkers = 0
-        for actor in env._exp_list[0].world.get_actors():
 
-            if 'vehicle' in actor.type_id:
-                count_vehicles += 1
-            if 'walker' in actor.type_id:
-                count_walkers += 1
+        print (env.get_data())
 
-        print (" count vehicles ", count_vehicles)
-        print (" count walker ", count_walkers)
+        #for actor in env._exp_list[0].world.get_actors():
+
+        #    if 'vehicle' in actor.type_id:
+        #        count_vehicles += 1
+        #    if 'walker' in actor.type_id:
+        #        count_walkers += 1
+
+        #print (" count vehicles ", count_vehicles)
+        #print (" count walker ", count_walkers)
 
 
 
