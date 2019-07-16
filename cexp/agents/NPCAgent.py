@@ -17,6 +17,27 @@ class NPCAgent(Agent):
         self.route_assigned = False
         self._agent = None
 
+
+    # TODO we set the sensors here directly.
+    def sensors(self):
+        sensors = [{'type': 'sensor.camera.rgb',
+                    'x': 2.0, 'y': 0.0,
+                    'z': 1.40, 'roll': 0.0,
+                    'pitch': -15.0, 'yaw': 0.0,
+                    'width': 800, 'height': 600,
+                    'fov': 100,
+                    'id': 'rgb'},
+                   {'type': 'sensor.can_bus',
+                    'reading_frequency': 25,
+                    'id': 'can_bus'
+                    },
+                   {'type': 'sensor.other.gnss',
+                    'x': 0.7, 'y': -0.4, 'z': 1.60,
+                    'id': 'GPS'}
+                   ]
+
+        return sensors
+
     def make_state(self, exp):
         if not self._agent:
             self._agent = BasicAgent(exp._ego_actor)
