@@ -11,7 +11,7 @@ from cexp.env.server_manager import start_test_server, check_test_server
 
 from cexp.cexp import CEXP
 from cexp.benchmark import benchmark, check_benchmarked_environments
-from cexp.agents.NPCAgent import NPCAgent
+from cexp.agents.DummyAgent import DummyAgent
 
 import carla
 import os
@@ -90,8 +90,10 @@ def test_background(number_vehicles, number_walkers):
 
     env_batch.start()
     env_count = 0
+    agent = DummyAgent()
     for env in env_batch:
-        env.start()
+
+        _,_ = agent.unroll(env)
         # We count the number of vehicles
         count_vehicles = 0
         count_walkers = 0
