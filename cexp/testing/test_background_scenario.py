@@ -130,7 +130,7 @@ if __name__ == '__main__':
     print (" First construction")
     vehicles = [20, 0, 0]
     walkers = [50, 0, 0]
-    test_background()
+    test_background(vehicles, walkers)
 
     # Auto Cleanup
     # this could be joined
