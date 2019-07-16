@@ -17,7 +17,7 @@ import carla
 import os
 
 
-JSONFILE = 'database/sample_benchmark.json'
+JSONFILE = 'database/sample_benchmark_background.json'
 environments_dict_base = [
     'WetSunset_route00024',
     'SoftRainSunset_route00000',
@@ -43,7 +43,7 @@ def check_folder(env_name, number_episodes):
         and if they are complete.
     """
 
-    path = os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark', env_name)
+    path = os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark_background', env_name)
     # List number of folders check if match expected
 
     environments_count = 0
@@ -123,11 +123,8 @@ if __name__ == '__main__':
         print (" WAITING FOR DOCKER TO BE STARTED")
         start_test_server(6666, gpu=5)
 
-
-
-    if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark')):
-        shutil.rmtree(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark'))
-
+    if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark_background')):
+        shutil.rmtree(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark_background'))
 
     # The idea is that the agent class should be completely independent
     print (" First construction")
