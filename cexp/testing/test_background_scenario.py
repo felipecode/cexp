@@ -33,7 +33,7 @@ params = {'save_dataset': True,
           'carla_recording': False  # TODO testing
           }
 
-agent = NPCAgent()
+agent = DummyAgent()
 AGENT_NAME = 'NPCAgent'
 # The episodes to be checked must always be sequential
 
@@ -90,7 +90,6 @@ def test_background(number_vehicles, number_walkers):
 
     env_batch.start()
     env_count = 0
-    agent = DummyAgent()
     for env in env_batch:
 
         _,_ = agent.unroll(env)
