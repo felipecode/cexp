@@ -64,7 +64,6 @@ class Environment(object):
         # ignore previous executions
         self._ignore_previous = ignore_previous
 
-
     def __str__(self):
         return self._environment_name
 
@@ -78,7 +77,6 @@ class Environment(object):
         self._exp_list = []
         # we remove all the sensors everytime. No sensor addition on building time
         self._sensor_desc_vec = []
-
 
     def record(self):
         """

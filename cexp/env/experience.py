@@ -157,7 +157,6 @@ class Experience(object):
         Here we tick the scenarios and also change the control based on the scenario properties
 
         """
-        #GameTime.on_carla_tick(self.timestamp)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
         for scenario in self._list_scenarios:  #
@@ -183,7 +182,7 @@ class Experience(object):
     def tick_world(self):
         # Save all the measurements that are interesting
         # TODO this may go to another function
-        # TODO maybe add not on every iterations, identify evry second or half second.
+        # TODO maybe add not on every iterations, identify every second or half second.
 
         _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                        self._route)
@@ -369,7 +368,7 @@ class Experience(object):
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
         settings.synchronous_mode = True
-        settings.fixed_delta_seconds=20
+        settings.fixed_delta_seconds = 20
         self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
 
@@ -380,6 +379,8 @@ class Experience(object):
         scenario_configuration.route = None
         scenario_configuration.town = self._town_name
         # TODO walkers are not supported yet, wait for carla 0.9.6
+        # TODO make background activity for walkers
+        print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
         model = 'vehicle.*'
         transform = carla.Transform()
         autopilot = True
