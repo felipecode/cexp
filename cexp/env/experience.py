@@ -52,14 +52,16 @@ def get_forward_speed(vehicle):
 
 SECONDS_GIVEN_PER_METERS = 0.4
 
-def estimate_route_timeout( route):
+def estimate_route_timeout(route):
     route_length = 0.0  # in meters
-
+    print (" INPUT ROUTE ", route)
     prev_point = route[0][0]
     for current_point, _ in route[1:]:
         dist = current_point.location.distance(prev_point.location)
         route_length += dist
         prev_point = current_point
+
+    print (" final time ", SECONDS_GIVEN_PER_METERS * route_length)
 
     return int(SECONDS_GIVEN_PER_METERS * route_length)
 
@@ -195,7 +197,7 @@ class Experience(object):
                                                  self._ego_actor.get_world().get_map())
         }
 
-        self.world.tick()
+        self.world.tick(self.world.get_snapshot().timestamp)
 
     def save_experience(self):
 
@@ -287,7 +289,7 @@ class Experience(object):
         # check that all sensors have initialized their data structure
         while not self._sensor_interface.all_sensors_ready():
             print(" waiting for one data reading from sensors...")
-            self.world.tick()
+            self.world.tick(self.world.get_snapshot().timestamp)
 
     def _get_current_wp_direction(self, vehicle_position, route):
 
@@ -330,7 +332,6 @@ class Experience(object):
         pass
         # TODO for now we are just randomizing the seeds and that is it
 
-    # TODO MASTER SCEENARIO TIMEOUT CALCULATION.
     def build_master_scenario(self, route, town_name, timeout=300):
         # We have to find the target.
         # we also have to convert the route to the expected format
@@ -338,7 +339,6 @@ class Experience(object):
         master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
         master_scenario_configuration.route = convert_transform_to_location(route)
         master_scenario_configuration.town = town_name
-        # TODO THIS NAME IS BIT WEIRD SINCE THE EGO VEHICLE  IS ALREADY THERE, IT IS MORE ABOUT THE TRANSFORM
         master_scenario_configuration.ego_vehicle = ActorConfigurationData('vehicle.lincoln.mkz2017',
                                                                            self._ego_actor.get_transform())
         master_scenario_configuration.trigger_point = self._ego_actor.get_transform()
