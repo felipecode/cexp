@@ -159,6 +159,8 @@ class Experience(object):
         Here we tick the scenarios and also change the control based on the scenario properties
 
         """
+
+        GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
         for scenario in self._list_scenarios:  #
@@ -197,7 +199,7 @@ class Experience(object):
                                                  self._ego_actor.get_world().get_map())
         }
 
-        self.world.tick(self.world.get_snapshot().timestamp)
+        self.world.tick()
 
     def save_experience(self):
 
@@ -289,7 +291,7 @@ class Experience(object):
         # check that all sensors have initialized their data structure
         while not self._sensor_interface.all_sensors_ready():
             print(" waiting for one data reading from sensors...")
-            self.world.tick(self.world.get_snapshot().timestamp)
+            self.world.tick()
 
     def _get_current_wp_direction(self, vehicle_position, route):
 
