@@ -9,7 +9,6 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from torch.distributions import Categorical
-#import pytrees
 import carla
 
 
@@ -18,6 +17,7 @@ from cexp.agents.agent import Agent
 from agents.navigation.local_planner import RoadOption
 
 
+# TODO make a nother repo for cexp agents
 
 # Hyperparameters
 learning_rate = 0.001
@@ -63,38 +63,152 @@ def _get_forward_speed(vehicle):
 
 # THe policy, inside the DDriver environment should be defined externally on the framework.
 
-
 class Policy(nn.Module):
-    def __init__(self):
-        super(Policy, self).__init__()
-        self.state_space = 2   # Basically is an error with respect to the central waypoint in angle, and the current speed
-        self.action_space = 7   # For the actions you can throttle, brake, steer left, steer right, do nothing.
+    def __init__(self, state_dim, action_dim, hidden_size=(128, 128), activation='tanh', log_std=0):
+        super().__init__()
+        self.is_disc_action = False
+        if activation == 'tanh':
+            self.activation = torch.tanh
+        elif activation == 'relu':
+            self.activation = torch.relu
+        elif activation == 'sigmoid':
+            self.activation = torch.sigmoid
 
-        self.l1 = nn.Linear(self.state_space, 128, bias=True)
-        self.l2 = nn.Linear(128, 256, bias=True)
-        self.l3 = nn.Linear(256, self.action_space, bias=True)
+        self.affine_layers = nn.ModuleList()
+        last_dim = state_dim
+        for nh in hidden_size:
+            self.affine_layers.append(nn.Linear(last_dim, nh))
+            last_dim = nh
 
-        self.gamma = gamma
+        self.action_mean = nn.Linear(last_dim, action_dim)
+        self.action_mean.weight.data.mul_(0.1)
+        self.action_mean.bias.data.mul_(0.0)
 
-        # Episode policy and reward history
-        self.policy_history = Variable(torch.Tensor())
-        self.reward_episode = []
-        # Overall reward and loss history
-        self.reward_history = []
-        self.loss_history = []
+        self.action_log_std = nn.Parameter(torch.ones(1, action_dim) * log_std)
 
     def forward(self, x):
-        model = torch.nn.Sequential(
-            self.l1,
-            nn.Dropout(p=0.6),
-            nn.ReLU(),
-            self.l2,
-            nn.Dropout(p=0.6),
-            nn.ReLU(),
-            self.l3,
-            nn.Softmax(dim=-1)
-        )
-        return model(x)
+        for affine in self.affine_layers:
+            x = self.activation(affine(x))
+        action_mean = self.action_mean(x)
+        action_log_std = self.action_log_std.expand_as(action_mean)
+        action_std = torch.exp(action_log_std)
+
+        return action_mean, action_log_std, action_std
+
+    def select_action(self, x):
+        action_mean, _, action_std = self.forward(x)
+        action = torch.normal(action_mean, action_std)
+        return action
+
+    def get_kl(self, x):
+        mean1, log_std1, std1 = self.forward(x)
+
+        mean0 = mean1.detach()
+        log_std0 = log_std1.detach()
+        std0 = std1.detach()
+        kl = log_std1 - log_std0 + (std0.pow(2) + (mean0 - mean1).pow(2)) / (2.0 * std1.pow(2)) - 0.5
+        return kl.sum(1, keepdim=True)
+
+    def get_log_prob(self, x, actions):
+        action_mean, action_log_std, action_std = self.forward(x)
+        return normal_log_density(actions, action_mean, action_log_std, action_std)
+
+    def get_fim(self, x):
+        mean, _, _ = self.forward(x)
+        cov_inv = self.action_log_std.exp().pow(-2).squeeze(0).repeat(x.size(0))
+        param_count = 0
+        std_index = 0
+        id = 0
+        for name, param in self.named_parameters():
+            if name == "action_log_std":
+                std_id = id
+                std_index = param_count
+            param_count += param.view(-1).shape[0]
+            id += 1
+        return cov_inv.detach(), mean, {'std_id': std_id, 'std_index': std_index}
+
+
+
+import torch.nn as nn
+import torch
+
+
+class Value(nn.Module):
+    def __init__(self, state_dim, hidden_size=(128, 128), activation='tanh'):
+        super().__init__()
+        if activation == 'tanh':
+            self.activation = torch.tanh
+        elif activation == 'relu':
+            self.activation = torch.relu
+        elif activation == 'sigmoid':
+            self.activation = torch.sigmoid
+
+        self.affine_layers = nn.ModuleList()
+        last_dim = state_dim
+        for nh in hidden_size:
+            self.affine_layers.append(nn.Linear(last_dim, nh))
+            last_dim = nh
+
+        self.value_head = nn.Linear(last_dim, 1)
+        self.value_head.weight.data.mul_(0.1)
+        self.value_head.bias.data.mul_(0.0)
+
+    def forward(self, x):
+        for affine in self.affine_layers:
+            x = self.activation(affine(x))
+
+        value = self.value_head(x)
+        return value
+
+
+
+
+
+
+def ppo_step(policy_net, value_net, optimizer_policy, optimizer_value, optim_value_iternum, states, actions,
+             returns, advantages, fixed_log_probs, clip_epsilon, l2_reg):
+
+    """
+
+    :param policy_net: The net policy net network.
+    :param value_net:
+    :param optimizer_policy:
+    :param optimizer_value:
+    :param optim_value_iternum:
+    :param states:
+    :param actions:
+    :param returns:
+    :param advantages:
+    :param fixed_log_probs:
+    :param clip_epsilon:
+    :param l2_reg:
+    :return:
+    """
+
+    """update critic"""
+    for _ in range(optim_value_iternum):
+        # Value prediction network predicts the values for the current state.
+        values_pred = value_net(states)
+        value_loss = (values_pred - returns).pow(2).mean()
+        # weight decay
+        for param in value_net.parameters():
+            value_loss += param.pow(2).sum() * l2_reg
+        optimizer_value.zero_grad()
+        value_loss.backward()
+        optimizer_value.step()
+
+    """update policy"""
+    log_probs = policy_net.get_log_prob(states, actions)
+    ratio = torch.exp(log_probs - fixed_log_probs)
+    surr1 = ratio * advantages
+    surr2 = torch.clamp(ratio, 1.0 - clip_epsilon, 1.0 + clip_epsilon) * advantages
+    policy_surr = -torch.min(surr1, surr2).mean()
+    optimizer_policy.zero_grad()
+    policy_surr.backward()
+    torch.nn.utils.clip_grad_norm_(policy_net.parameters(), 40)
+    optimizer_policy.step()
+
+
 
 
 class PPOAgent(Agent):
