@@ -294,7 +294,7 @@ class Experience(object):
         # check that all sensors have initialized their data structure
         while not self._sensor_interface.all_sensors_ready():
             print(" waiting for one data reading from sensors...")
-            self.world.tick()
+            self._sync(self.world.tick())
 
     def _get_current_wp_direction(self, vehicle_position, route):
 
