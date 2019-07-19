@@ -54,7 +54,6 @@ SECONDS_GIVEN_PER_METERS = 0.4
 
 def estimate_route_timeout(route):
     route_length = 0.0  # in meters
-    print (" INPUT ROUTE ", route)
     prev_point = route[0][0]
     for current_point, _ in route[1:]:
         dist = current_point.location.distance(prev_point.location)
@@ -199,7 +198,14 @@ class Experience(object):
                                                  self._ego_actor.get_world().get_map())
         }
 
-        self.world.tick()
+
+        self._sync(self.world.tick())
+
+    def _sync(self, frame):
+        while frame > self.world.get_snapshot().timestamp.frame:
+            pass
+        assert frame == self.world.get_snapshot().timestamp.frame
+        self.frame = frame
 
     def save_experience(self):
 
