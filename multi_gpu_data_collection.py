@@ -20,7 +20,63 @@ except IndexError:
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
 def collect_data(json_file, params, number_iterations, eliminated_environments):
     # The idea is that the agent class should be completely independent
-    agent = NPCAgent()
+
+    # TODO this has to go to a separate file and to be merged with package
+    agent = NPCAgent(
+        sensors_dict = [{'type': 'sensor.camera.rgb',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 0.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'rgb_central'},
+
+               {'type': 'sensor.camera.semantic_segmentation',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 0.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'labels_central'},
+               {'type': 'sensor.camera.rgb',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': -30.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'rgb_left'},
+
+               {'type': 'sensor.camera.semantic_segmentation',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': -30.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'labels_left'},
+               {'type': 'sensor.camera.rgb',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 30.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'rgb_right'},
+
+               {'type': 'sensor.camera.semantic_segmentation',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 30.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'labels_right'},
+                {'type': 'sensor.can_bus',
+                 'reading_frequency': 25,
+                 'id': 'can_bus'
+                 },
+                {'type': 'sensor.other.gnss',
+                 'x': 0.7, 'y': -0.4, 'z': 1.60,
+                 'id': 'GPS'}
+
+               ])
     # this could be joined
     env_batch = CEXP(json_file, params=params, iterations_to_execute=number_iterations,
                      eliminated_environments=eliminated_environments)
