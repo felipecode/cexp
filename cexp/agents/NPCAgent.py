@@ -1,4 +1,4 @@
-
+import logging
 from cexp.agents.agent import Agent
 
 from agents.navigation.basic_agent import BasicAgent
@@ -50,6 +50,8 @@ class NPCAgent(Agent):
 
     def run_step(self, state):
         control = self._agent.run_step()
+
+        logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
         return control
 
     def reinforce(self, rewards):

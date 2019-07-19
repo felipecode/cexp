@@ -2,7 +2,7 @@
 The agent class is an interface to run experiences, the actual policy must inherit from agent in order to
 execute. It should implement the run_step function
 """
-
+import logging
 
 class Agent(object):
 
@@ -115,6 +115,7 @@ class Agent(object):
         state_batch = [[]] * environment._batch_size
 
         while environment.is_running():
+            logging.debug(" Iteration, state len ", len(state))
 
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios

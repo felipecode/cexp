@@ -210,7 +210,6 @@ class Experience(object):
             self._sensor_interface.wait_sensors_written(self._writer)
             self._writer.save_experience(self.world, self._environment_data)
 
-
     def is_running(self):
         """
             The master scenario tests if the route is still running for this experiment
