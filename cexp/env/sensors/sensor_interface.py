@@ -253,7 +253,7 @@ class SensorInterface(object):
         while unsynchronized:
             unsynchronized = False
             for tag in self._written.keys():
-                if self._written[tag] !=  writer._latest_id+1:
+                if self._written[tag] <=  writer._latest_id:
                     unsynchronized= True
 
             time.sleep(0.01)
