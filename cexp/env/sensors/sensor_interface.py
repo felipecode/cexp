@@ -245,6 +245,7 @@ class SensorInterface(object):
 
     def wait_sensors_written(self, writer):
         unsynchronized = True
+        print (self._sensors_objects)
         while unsynchronized:
             unsynchronized = False
             for tag in self._written.keys():
