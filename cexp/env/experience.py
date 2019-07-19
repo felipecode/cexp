@@ -144,8 +144,6 @@ class Experience(object):
             # Re raise the exception
             raise r
 
-
-
     def tick_scenarios(self):
 
         # We tick the scenarios to get them started
@@ -156,7 +154,6 @@ class Experience(object):
     def tick_scenarios_control(self, controls):
         """
         Here we tick the scenarios and also change the control based on the scenario properties
-
         """
 
         #GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
