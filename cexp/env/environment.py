@@ -223,6 +223,7 @@ class Environment(object):
             print ( " SAVING EXP ! ")
             exp.save_experience()
 
+        print (" FINISHED TICKS")
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)
 

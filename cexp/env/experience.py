@@ -199,7 +199,6 @@ class Experience(object):
 
     def _sync(self, frame):
         while frame > self.world.get_snapshot().timestamp.frame:
-            print ( "WAITING SYNCH")
             pass
         assert frame == self.world.get_snapshot().timestamp.frame
         self.frame = frame
@@ -207,7 +206,9 @@ class Experience(object):
     def save_experience(self):
 
         if self._save_data:
+            print ("WAITING SENSORS")
             self._sensor_interface.wait_sensors_written(self._writer)
+            print (" SENSORS WRITTEN ")
             self._writer.save_experience(self.world, self._environment_data)
 
     def is_running(self):
