@@ -115,7 +115,6 @@ class Agent(object):
         state_batch = [[]] * environment._batch_size
 
         while environment.is_running():
-            logging.debug(" Iteration, state len ", len(state))
 
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
@@ -125,6 +124,8 @@ class Agent(object):
             # TODO check the posible sizes mismatches here
             self.add_value(reward_batch, reward)
             self.add_value(state_batch, state)
+
+
 
         environment.record()
         environment.stop()

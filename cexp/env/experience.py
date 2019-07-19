@@ -195,11 +195,11 @@ class Experience(object):
                                                  self._ego_actor.get_world().get_map())
         }
 
-
         self._sync(self.world.tick())
 
     def _sync(self, frame):
         while frame > self.world.get_snapshot().timestamp.frame:
+            print ( "WAITING SYNCH")
             pass
         assert frame == self.world.get_snapshot().timestamp.frame
         self.frame = frame
