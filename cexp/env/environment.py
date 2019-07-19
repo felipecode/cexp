@@ -220,6 +220,7 @@ class Environment(object):
             exp.apply_control(control)
             print (" TICKING WORLD")
             exp.tick_world()
+            print ( " SAVING EXP ! ")
             exp.save_experience()
 
         return self.StateFunction(self._exp_list), \
