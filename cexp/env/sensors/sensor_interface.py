@@ -246,6 +246,7 @@ class SensorInterface(object):
     def wait_sensors_written(self, writer):
         unsynchronized = True
         print (self._sensors_objects)
+        print (self._written)
         while unsynchronized:
             unsynchronized = False
             for tag in self._written.keys():
@@ -261,6 +262,7 @@ class SensorInterface(object):
         if not self.all_sensors_ready():
             return
         self._lock.acquire()
+        print (" Writting tag ", tag , " Written tag " ,self._written[tag])
         if writer is not None and self._written[tag] > writer._latest_id:
             self._lock.release()
             return
