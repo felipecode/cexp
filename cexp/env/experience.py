@@ -159,7 +159,7 @@ class Experience(object):
 
         """
 
-        GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
+        #GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
         for scenario in self._list_scenarios:  #
