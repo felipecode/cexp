@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     number_of_iterations = 400
     # The idea is that the agent class should be completely independent
-    agent = NPCAgent()
+    agent = NPCAgent(sensors_dict=None)
     # this could be joined
     env_batch = CEXP(json, params=params, iterations_to_execute=number_of_iterations, port=arguments.port)
                                                                 # THe experience is built, the files necessary
