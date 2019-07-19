@@ -206,9 +206,7 @@ class Experience(object):
     def save_experience(self):
 
         if self._save_data:
-            print ("WAITING SENSORS")
             self._sensor_interface.wait_sensors_written(self._writer)
-            print (" SENSORS WRITTEN ")
             self._writer.save_experience(self.world, self._environment_data)
 
     def is_running(self):

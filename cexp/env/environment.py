@@ -218,12 +218,9 @@ class Environment(object):
             control = control_vec[i]
             control = exp.tick_scenarios_control(control)
             exp.apply_control(control)
-            print (" TICKING WORLD")
             exp.tick_world()
-            print ( " SAVING EXP ! ")
             exp.save_experience()
 
-        print (" FINISHED TICKS")
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)
 
