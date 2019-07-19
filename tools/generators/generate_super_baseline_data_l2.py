@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     for w_set_name in weather_sets.keys():
         # get the actual set  from th name
-        w_set = weather_sets[w_set_name]
+        w_set = weather_sets[w_set_name]    
 
         for weather in w_set:
 
