@@ -78,7 +78,7 @@ def parse_environment(path, metadata_dict):
             data_point_vec = []
             #print (" Len measurements list ", len(measurements_list))
             for i in range(len(measurements_list)):
-
+                print (i)
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
                 #print (data_point)
