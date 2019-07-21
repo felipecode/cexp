@@ -79,16 +79,14 @@ def parse_environment(path, metadata_dict):
             data_point_vec = []
             #print (" Len measurements list ", len(measurements_list))
             for i in range(len(measurements_list)):
-                print (i)
-                print (sensors_lists)
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
-                #print (data_point)
-                #print (sensors_types)
-                #print ( "#######")
+
                 for sensor in sensors_types:
-                    #print (sensor)
-                    #print (sensors_lists[sensor['id']])
+                    # TODO can bus and GPS are not implemented a sensors yet
+                    if sensor['id'] == 'can_bus' or sensor['id'] == 'GPS':
+                        continue
+
                     data_point.update({sensor['id']: sensors_lists[sensor['id']][i]})
 
                 data_point_vec.append(data_point)
