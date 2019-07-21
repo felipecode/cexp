@@ -55,6 +55,7 @@ def parse_environment(path, metadata_dict):
     # TODO probably add more metadata
     # the experience number
     exp_vec = []
+    print ("SENSOR TYPES ", sensors_types)
     print (" EXPERIENCE LIST ", experience_list)
     for exp in experience_list:
 
@@ -79,6 +80,7 @@ def parse_environment(path, metadata_dict):
             #print (" Len measurements list ", len(measurements_list))
             for i in range(len(measurements_list)):
                 print (i)
+                print (sensors_lists)
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
                 #print (data_point)
