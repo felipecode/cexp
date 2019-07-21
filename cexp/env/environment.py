@@ -164,7 +164,8 @@ class Environment(object):
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
         # It is always save in the SRL path
-        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
+        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name,
+                                 self._environment_name)
         # If the metadata does not exist the environment does not have a reference data.
         if not os.path.exists(os.path.join(root_path, 'metadata.json')):
             raise NoDataGenerated("The data is not generated yet")
@@ -181,7 +182,8 @@ class Environment(object):
         """
             Remove all data from this specific environment
         """
-        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
+        root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name,
+                                 self._environment_name)
         # If the metadata does not exist the environment does not have a reference data.
         if not os.path.exists(os.path.join(root_path, 'metadata.json')):
             raise NoDataGenerated("The data is not generated yet")

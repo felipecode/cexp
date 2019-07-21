@@ -47,7 +47,8 @@ def parse_measurements(measurement):
 def parse_environment(path, metadata_dict):
 
     # We start on the root folder, We want to list all the episodes
-    experience_list = glob.glob(os.path.join(path, '[0-9]'))
+    # TODO this works only for single numbers
+    experience_list = glob.glob(os.path.join(path, '[0-9]*'))
 
     sensors_types = metadata_dict['sensors']
 
