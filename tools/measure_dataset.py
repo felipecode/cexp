@@ -63,7 +63,6 @@ if __name__ == '__main__':
                 print("    Exp: ", exp[1])
                 for batch in exp[0]:
                     print("      Batch: ", batch[1])
-
                     if len(batch[0]) > 0:
                         not_empty = True
                         total_episodes += 1
@@ -71,6 +70,7 @@ if __name__ == '__main__':
                     # Now we count the ammount of data we have for this batch
                     total_hours += (len(batch[0])/10)/3600
                     print("         Size: ", len(batch[0]))
+                    print ("Total Hours: ", total_hours)
 
             if not not_empty and args.remove:
                 env.remove_data()
