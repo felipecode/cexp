@@ -89,7 +89,6 @@ class CEXP(object):
 
     def start(self, no_server=False):
         # TODO: this setup is hardcoded for Batch_size == 1
-
         # TODO add here several server starts into a for
         # TODO for i in range(self._batch_size)
         if no_server:

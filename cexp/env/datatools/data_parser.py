@@ -55,13 +55,9 @@ def parse_environment(path, metadata_dict):
     # TODO probably add more metadata
     # the experience number
     exp_vec = []
-    print ("SENSOR TYPES ", sensors_types)
-    print (" EXPERIENCE LIST ", experience_list)
     for exp in experience_list:
 
         batch_list = glob.glob(os.path.join(exp, '[0-9]'))
-        print (" EXP  ", exp)
-        print(" BATCH LIST ", batch_list)
         batch_vec = []
         for batch in batch_list:
             if 'summary.json' not in os.listdir(batch):
@@ -77,7 +73,6 @@ def parse_environment(path, metadata_dict):
                 sensors_lists.update({sensor['id']: sensor_l})
 
             data_point_vec = []
-            #print (" Len measurements list ", len(measurements_list))
             for i in range(len(measurements_list)):
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
@@ -90,7 +85,6 @@ def parse_environment(path, metadata_dict):
                     data_point.update({sensor['id']: sensors_lists[sensor['id']][i]})
 
                 data_point_vec.append(data_point)
-
             batch_vec.append((data_point_vec, batch.split('/')[-1]))
 
         # It is a tuple with the data and the data folder name

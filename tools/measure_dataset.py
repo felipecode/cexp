@@ -26,7 +26,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'docker_name': 'carlalatest:latest',
@@ -40,7 +39,7 @@ if __name__ == '__main__':
     number_of_iterations = 9999
     # this could be joined
     # THe experience is built, the files necessary
-    env_batch = CEXP(args.json, params, number_of_iterations, sequential=True)
+    env_batch = CEXP(args.json, params, number_of_iterations, execute_all=True)
     # Here some docker was set
     env_batch.start(no_server=True)  # no carla server mode.
     # count, we count the environments that are read
