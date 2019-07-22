@@ -39,7 +39,8 @@ if __name__ == '__main__':
     number_of_iterations = 9999
     # this could be joined
     # THe experience is built, the files necessary
-    env_batch = CEXP(args.json, params, number_of_iterations, execute_all=True)
+    env_batch = CEXP(args.json, params, number_of_iterations, execute_all=True,
+                     ignore_previous_execution=True)
     # Here some docker was set
     env_batch.start(no_server=True)  # no carla server mode.
     # count, we count the environments that are read
