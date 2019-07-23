@@ -116,6 +116,7 @@ class Environment(object):
                 Environment.number_of_executions = parser.get_number_executions(agent_name,
                                                     os.path.join(os.environ["SRL_DATASET_PATH"],
                                                                             self._package_name))
+
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})

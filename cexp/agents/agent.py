@@ -8,8 +8,9 @@ class Agent(object):
 
     def __init__(self, path_to_conf_file=None):
         # agent's initialization
+
+        self._name = 'Agent'  # just in case the name is not used.
         self.setup(path_to_conf_file)
-        self._name='Agent'
 
 
     def setup(self, path_to_config):
