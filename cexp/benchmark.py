@@ -264,7 +264,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             # take the path to the class and instantiate an agent
             agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
             # if there is no name for the checkpoint we set it as the agent module name
-
             for env in env_batch:
                 try:
                     _, _ = agent.unroll(env)

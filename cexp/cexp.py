@@ -153,6 +153,8 @@ class CEXP(object):
         # The environment itself is able to tell when the repetition is already made.
         if self._execute_all:
             execution_list = []
+            print ("EXECUTIONS")
+            print (Environment.number_of_executions)
             for env_name in self._json['envs'].keys():
                 repetitions = 1
                 # We check the remaining necessary executions for each of the environments
@@ -161,6 +163,7 @@ class CEXP(object):
 
                 if "repetitions" in self._json['envs'][env_name]:
                     repetitions = self._json['envs'][env_name]['repetitions']
+
 
                 if env_name in Environment.number_of_executions.keys():
                     repetitions_rem = max(0, repetitions -\
