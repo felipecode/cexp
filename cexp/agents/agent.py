@@ -118,7 +118,6 @@ class Agent(object):
         while environment.is_running():
 
             controls = self._run_step_batch(state)
-            controls[0].throttle += 1.0
             # With this the experience runner also unroll all the scenarios
             # Experiment on the batch.
             state, reward = environment.run_step(controls)
