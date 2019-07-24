@@ -84,7 +84,7 @@ def collect_data(json_file, params, number_iterations, eliminated_environments):
     # to load CARLA and the scenarios are made
 
     # Here some docker was set
-    env_batch.start()
+    env_batch.start(agent_name=NPCAgent._name)
     for env in env_batch:
         try:
             # The policy selected to run this experience vector (The class basically) This policy can also learn, just

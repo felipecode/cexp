@@ -260,7 +260,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             env_batch = CEXP(benchmark_name, params, execute_all=True, sequential=False, port=port)
             # to load CARLA and the scenarios are made
             # Here some docker was set
-            env_batch.start()
+            env_batch.start(agent_name=agent_checkpoint_name)
             # take the path to the class and instantiate an agent
             agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
             # if there is no name for the checkpoint we set it as the agent module name

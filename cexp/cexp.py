@@ -87,10 +87,18 @@ class CEXP(object):
         self.ignore_previous_execution = ignore_previous_execution
 
 
-    def start(self, no_server=False):
+    def start(self, no_server=False, agent_name=None):
+        """
+
+        :param no_server:
+        :param agent_name: the name of an agent to check for previous executions.
+        :return:
+        """
         # TODO: this setup is hardcoded for Batch_size == 1
         # TODO add here several server starts into a for
         # TODO for i in range(self._batch_size)
+        if agent_name is not None:
+            Environment.check_for_executions(agent_name, self._json['package_name'])
         if no_server:
             self._client_vec = []
         else:
@@ -132,8 +140,7 @@ class CEXP(object):
             if env_name in self._eliminated_environments:
                 continue
             # Instance an _environments.
-            env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params,
-                              ignore_previous=self.ignore_previous_execution)
+            env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
             # add the additional sensors ( The ones not provided by the policy )
             self._environments.update({env_name: env})
 

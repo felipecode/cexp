@@ -25,7 +25,7 @@ class Environment(object):
     # We keep track here the number of times this class was executed.
     number_of_executions = {}
 
-    def __init__(self, name, client_vec, env_config, env_params, ignore_previous=False):
+    def __init__(self, name, client_vec, env_config, env_params):# ignore_previous=False):
 
         # The ignore previous param is to avoid searching for executed iterations
         # TODO this requires more testing
@@ -62,7 +62,24 @@ class Environment(object):
         self.StateFunction = None
         self.RewardFunction = None
         # ignore previous executions
-        self._ignore_previous = ignore_previous
+        #self._ignore_previous = ignore_previous
+        # update the number of executions to match the folder
+
+    @staticmethod
+    def check_for_executions(agent_name, package_name):
+        """
+            with this function we check for executions for the environment
+        :return:
+        """
+
+        if not Environment.number_of_executions:
+            if "SRL_DATASET_PATH" not in os.environ:
+                raise ValueError("SRL_DATASET_PATH not defined,"
+                                 " set the place where the dataset was saved before")
+            Environment.number_of_executions = \
+                parser.get_number_executions(agent_name, os.path.join(
+                                                            os.environ["SRL_DATASET_PATH"],
+                                                            package_name))
 
     def __str__(self):
         return self._environment_name
@@ -103,19 +120,8 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-    def reset(self, StateFunction, RewardFunction, agent_name=''):
 
-        # update the number of executions to match the folder
-        if not Environment.number_of_executions:
-            if "SRL_DATASET_PATH" not in os.environ:
-                raise ValueError("SRL_DATASET_PATH not defined,"
-                                 " set the place where the dataset was saved before")
-            if self._ignore_previous:
-                Environment.number_of_executions = {}
-            else:
-                Environment.number_of_executions = parser.get_number_executions(agent_name,
-                                                    os.path.join(os.environ["SRL_DATASET_PATH"],
-                                                                            self._package_name))
+    def reset(self, StateFunction, RewardFunction, agent_name=''):
 
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
