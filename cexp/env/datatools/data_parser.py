@@ -24,15 +24,8 @@ def get_number_executions(agent_name, environments_path):
         env_name = env.split('/')[-1]
         # we first count the directories inside
         dir_count = 0
-        print (os.listdir(env))
         for file in os.listdir(env):
-            print (file)
-            print (agent_name)
-            print ( "ENV EXEC")
             env_exec_name = os.path.join(env, file)
-            print ( " FILE ", '_'.join(file.split('_')[1:]))
-
-            print (env_exec_name)
             if os.path.isdir(env_exec_name) and '_'.join(file.split('_')[1:]) == agent_name:
                 dir_count += 1
 
