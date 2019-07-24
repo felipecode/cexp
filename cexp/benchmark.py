@@ -203,6 +203,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
         repetition_number = len(env_experiments.keys())
 
+    logging.debug("added summary for " + agent_checkpoint_name + '_benchmark_summary.csv')
     # parse the summary for this episode
     results = parse_results_summary(summary)
 
@@ -254,16 +255,15 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     env_batch = None
     # this could be joined
     while True:
-        try:  # We reattempt in case of failure of the benchmark
+        try:
+            # We reattempt in case of failure of the benchmark
             env_batch = CEXP(benchmark_name, params, execute_all=True, sequential=False, port=port)
-
             # to load CARLA and the scenarios are made
             # Here some docker was set
             env_batch.start()
             # take the path to the class and instantiate an agent
             agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
             # if there is no name for the checkpoint we set it as the agent module name
-
 
             for env in env_batch:
                 try:

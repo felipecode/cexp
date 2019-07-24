@@ -8,15 +8,7 @@ def generate_nocrash_config_file():
     # root_route_file_position = 'srunner/challenge/'
     #filename_town01 = os.path.join(root_route_file_position, 'Town01_navigation.json')
 
-    # The sensor information should be on get data
-    sensors = [{'type': 'sensor.camera.rgb',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': 0.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'rgb'}
-               ]
+
 
     # For each of the routes to be evaluated.
 
@@ -70,7 +62,6 @@ def generate_nocrash_config_file():
                 # get the actual set  from th name
                 w_set = weather_sets[w_set_name]
                 new_json = {"envs": {},
-                            "additional_sensors": sensors,
                             "package_name": 'nocrash_' + name_dict[w_set_name][town_name] + '_'
                                             + task_name + '_' + town_name}
 
