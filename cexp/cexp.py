@@ -164,7 +164,7 @@ class CEXP(object):
                 if "repetitions" in self._json['envs'][env_name]:
                     repetitions = self._json['envs'][env_name]['repetitions']
 
-
+                print (" Env name ", env_name)
                 if env_name in Environment.number_of_executions.keys():
                     repetitions_rem = max(0, repetitions -\
                                       Environment.number_of_executions[env_name])
