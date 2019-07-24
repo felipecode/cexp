@@ -156,7 +156,8 @@ class Experience(object):
         Here we tick the scenarios and also change the control based on the scenario properties
         """
 
-        #GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
+        GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
+        print (" TIME ", GameTime._current_game_time)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
         for scenario in self._list_scenarios:  #
