@@ -8,7 +8,7 @@ import numpy as np
 import traceback
 
 from cexp.cexp import CEXP
-
+from cexp.env.datatools.data_parser import read_benchmark_summary, read_benchmark_summary_metric
 
 # TODO ADD the posibility to configure what goes in and what goes out ( OUput format)
 ###
@@ -25,71 +25,6 @@ def parse_results_summary(summary):
 
     return result_dictionary
 
-
-def read_benchmark_summary(benchmark_csv):
-    """
-        Make a dict of the benchmark csv were the keys are the environment names
-
-    :param benchmark_csv:
-    :return:
-    """
-
-    # If the file does not exist, return None,None, to point out that data is missing
-    if not os.path.exists(benchmark_csv):
-        return None
-
-    f = open(benchmark_csv, "r")
-    header = f.readline()
-    header = header.split(',')
-    header[-1] = header[-1][:-2]
-    f.close()
-
-    data_matrix = np.loadtxt(open(benchmark_csv, "rb"), delimiter=",", skiprows=1)
-    control_results_dic = {}
-    count = 0
-
-    if len(data_matrix) == 0:
-        return None
-    if len(data_matrix.shape) == 1:
-        data_matrix = np.expand_dims(data_matrix, axis=0)
-
-    for env_name in data_matrix[:, 0]:
-
-        control_results_dic.update({env_name: data_matrix[count, 1:]})
-        count += 1
-
-    return control_results_dic, header
-
-
-def read_benchmark_summary_metric(benchmark_csv):
-    """
-        Make a dict of the benchmark csv were the keys are the environment names
-
-    :param benchmark_csv:
-    :return:
-    """
-
-    f = open(benchmark_csv, "rU")
-    header = f.readline()
-    header = header.split(',')
-    header[-1] = header[-1][:-2]
-    f.close()
-
-    data_matrix = np.loadtxt(benchmark_csv, delimiter=",", skiprows=1)
-    summary_dict = {}
-
-    if len(data_matrix) == 0:
-        return None
-
-    if len(data_matrix.shape) == 1:
-        data_matrix = np.expand_dims(data_matrix, axis=0)
-
-    count = 0
-    for _ in header:
-        summary_dict.update({header[count]: data_matrix[:, count]})
-        count += 1
-
-    return summary_dict
 
 
 def check_benchmarked_environments(json_filename, agent_checkpoint_name):
