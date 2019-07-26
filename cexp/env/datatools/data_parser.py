@@ -16,7 +16,6 @@ def read_benchmark_summary(benchmark_csv):
     """
 
     # If the file does not exist, return None,None, to point out that data is missing
-    print (" EXIST PATH ", benchmark_csv)
     if not os.path.exists(benchmark_csv):
         return None, None
 
@@ -88,11 +87,6 @@ def get_number_executions(agent_name, environments_path):
     envs_list = glob.glob(os.path.join(environments_path, '*'))
     for env in envs_list:
         env_name = env.split('/')[-1]
-        # we first count the directories inside
-        dir_count = 0
-
-        print ("env file ", env)
-        print (agent_name)
         # TODO this is clearly specific, some solution is needed for refactoring
         results, _ = read_benchmark_summary(os.path.join(env,
                                                          agent_name + '_benchmark_summary.csv')
