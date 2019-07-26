@@ -4,7 +4,7 @@ import json
 
 from cexp.env.utils.general import sort_nicely
 
-
+from cexp.benchmark import read_benchmark_summary
 
 
 """ Parse the data that was already written """
@@ -27,12 +27,18 @@ def get_number_executions(agent_name, environments_path):
 
         print ("env file ", env)
         print (agent_name)
+        # TODO this is clearly specific, some solution is needed for refactoring
+        results, _  = read_benchmark_summary(agent_name + '_benchmark_results.csv')
+        if results is None:
+            number_executions.update({env_name: 0})
+        else:
+            number_executions.update({env_name: len(results)})
 
-        for file in os.listdir(env):
-            env_exec_name = os.path.join(env, file)
-            print("     file ", '_'.join(file.split('_')[1:]))
-            if os.path.isdir(env_exec_name) and '_'.join(file.split('_')[1:]) == agent_name:
-                dir_count += 1
+        #for file in os.listdir(env):
+        #    env_exec_name = os.path.join(env, file)
+        #    print("     file ", '_'.join(file.split('_')[1:]))
+        #    if os.path.isdir(env_exec_name) and '_'.join(file.split('_')[1:]) == agent_name:
+        #        # it exist but it needs to have a summary !
 
         number_executions.update({env_name: dir_count})
 
