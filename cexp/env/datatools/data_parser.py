@@ -17,7 +17,7 @@ def read_benchmark_summary(benchmark_csv):
 
     # If the file does not exist, return None,None, to point out that data is missing
     if not os.path.exists(benchmark_csv):
-        return None
+        return None, None
 
     f = open(benchmark_csv, "r")
     header = f.readline()
@@ -30,7 +30,7 @@ def read_benchmark_summary(benchmark_csv):
     count = 0
 
     if len(data_matrix) == 0:
-        return None
+        return None, None
     if len(data_matrix.shape) == 1:
         data_matrix = np.expand_dims(data_matrix, axis=0)
 
