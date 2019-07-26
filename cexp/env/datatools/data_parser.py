@@ -16,6 +16,7 @@ def read_benchmark_summary(benchmark_csv):
     """
 
     # If the file does not exist, return None,None, to point out that data is missing
+    print (" EXIST PATH ", benchmark_csv)
     if not os.path.exists(benchmark_csv):
         return None, None
 
@@ -107,7 +108,6 @@ def get_number_executions(agent_name, environments_path):
         #    if os.path.isdir(env_exec_name) and '_'.join(file.split('_')[1:]) == agent_name:
         #        # it exist but it needs to have a summary !
 
-        number_executions.update({env_name: dir_count})
 
     # We should reduce the fact that we have the metadata
     return number_executions
