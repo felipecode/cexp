@@ -84,6 +84,7 @@ def collect_data(json_file, params, number_iterations, eliminated_environments):
     # to load CARLA and the scenarios are made
 
     # Here some docker was set
+    NPCAgent._name = '.'
     env_batch.start(agent_name=NPCAgent._name)
     for env in env_batch:
         try:
