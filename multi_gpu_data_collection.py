@@ -196,8 +196,9 @@ if __name__ == '__main__':
     gpu_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
     # we eliminate the ones not used
-    for el in args.eliminated_gpus:
-        del gpu_list[gpu_list.index(el)]
+    if args.eliminated_gpus is not None:
+        for el in args.eliminated_gpus:
+            del gpu_list[gpu_list.index(el)]
 
     print (" FINAL LIST", gpu_list)
     for i in range(args.number_collectors):
