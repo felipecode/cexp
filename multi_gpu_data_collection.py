@@ -180,7 +180,7 @@ if __name__ == '__main__':
         help='The name of the docker container used to collect data',
         required=True)
     argparser.add_argument(
-        '--ge',
+        '-ge',
         nargs='+',
         dest='eliminated_gpus',
         type=str)
@@ -208,7 +208,8 @@ if __name__ == '__main__':
 
     print ( " FINAL LIST", gpu_list)
     for i in range(args.number_collectors):
-        gpu = gpu_list[ len(gpu_list) % int(i / args.carlas_per_gpu)]
+        gpu = gpu_list[ len(gpu_list) % int(i / args.carlas_per_gpu + 1)]
+        print ( " GPU ", gpu)
         # A single loop being made
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
