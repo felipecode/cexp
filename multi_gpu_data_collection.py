@@ -92,7 +92,7 @@ def collect_data(json_file, params, number_iterations, eliminated_environments, 
             # by taking the output from the experience.
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
             states, rewards = agent.unroll(env)
-            print (" Collector ", collector_id, " Collecting for ", )
+            print (" Collector ", collector_id, " Collecting for ", env)
             agent.reinforce(rewards)
         except KeyboardInterrupt:
             env.stop()
