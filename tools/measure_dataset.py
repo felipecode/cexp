@@ -26,7 +26,8 @@ def get_envs_dict(json_filename):
 
         envs_dict.update({key:0})
 
-    return
+    print ( " Envs Dict ", envs_dict)
+    return envs_dict
 
 
 
