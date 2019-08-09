@@ -131,6 +131,11 @@ def get_eliminated_environments(json_file, start_position, end_position):
         count += 1
     return eliminated_environments_list
 
+def test_eliminated_environments_division():
+
+
+
+
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(
@@ -210,7 +215,8 @@ if __name__ == '__main__':
                                                               int(environments_per_collector) * (i),
                                                               int(environments_per_collector) * (i+1) + extra_env)
 
-        print (" Collector ", i, eliminated_environments)
+        print (" Collector ", i, "Start ",  int(environments_per_collector) * (i),
+               "End ", int(environments_per_collector) * (i+1) + extra_env)
 
 
         execute_collector(json_file, params, args.number_episodes, eliminated_environments)
