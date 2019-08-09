@@ -18,7 +18,7 @@ except IndexError:
 # TODO I have a problem with respect to where to put files
 
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
-def collect_data(json_file, params, number_iterations, eliminated_environments, collector_id):
+def collect_data(json_file, params, eliminated_environments, collector_id):
     # The idea is that the agent class should be completely independent
 
     # TODO this has to go to a separate file and to be merged with package
@@ -78,7 +78,7 @@ def collect_data(json_file, params, number_iterations, eliminated_environments, 
 
                ])
     # this could be joined
-    env_batch = CEXP(json_file, params=params, execute_all=number_iterations,
+    env_batch = CEXP(json_file, params=params, execute_all=True,
                      eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
@@ -109,10 +109,10 @@ def collect_data(json_file, params, number_iterations, eliminated_environments, 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 
-def execute_collector(json_file, params, number_iterations, eliminated_environments,
+def execute_collector(json_file, params, eliminated_environments,
                       collector_id):
     p = multiprocessing.Process(target=collect_data,
-                                args=(json_file, params, number_iterations,
+                                args=(json_file, params,
                                       eliminated_environments, collector_id,))
     p.start()
 
