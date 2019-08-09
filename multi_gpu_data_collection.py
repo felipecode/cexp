@@ -78,7 +78,6 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
 
                ])
     # this could be joined
-    exit(1)
     env_batch = CEXP(json_file, params=params, execute_all=True,
                      eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
