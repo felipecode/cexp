@@ -78,6 +78,7 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
 
                ])
     # this could be joined
+    exit(1)
     env_batch = CEXP(json_file, params=params, execute_all=True,
                      eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
@@ -191,7 +192,7 @@ if __name__ == '__main__':
 
     # Set GPUS to eliminate.
 
-    # we get all the gpu ( STANDARD 10, make variable)
+    # we get all the gpu (STANDARD 10, make variable)
 
     gpu_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
@@ -199,10 +200,14 @@ if __name__ == '__main__':
     for el in args.eliminated_gpus:
         del gpu_list[gpu_list.index(el)]
 
-    print ( " FINAL LIST", gpu_list)
+
+    print (" Total number of envs ", len(json_dict['envs']))
+    print (" Env per collector ", environments_per_collector)
+
+    print (" FINAL LIST", gpu_list)
     for i in range(args.number_collectors):
-        gpu = gpu_list[ i % len(gpu_list)]
-        print ( " GPU ", gpu)
+        gpu = gpu_list[i % len(gpu_list)]
+        print (" GPU ", gpu)
         # A single loop being made
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
@@ -226,6 +231,5 @@ if __name__ == '__main__':
 
         print (" Collector ", i, "Start ",  int(environments_per_collector) * (i),
                "End ", int(environments_per_collector) * (i+1) + extra_env)
-
 
         execute_collector(json_file, params, eliminated_environments, i)
