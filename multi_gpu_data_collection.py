@@ -228,4 +228,4 @@ if __name__ == '__main__':
                "End ", int(environments_per_collector) * (i+1) + extra_env)
 
 
-        execute_collector(json_file, params, args.number_episodes, eliminated_environments, i)
+        execute_collector(json_file, params, eliminated_environments, i)
