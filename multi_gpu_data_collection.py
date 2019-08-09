@@ -154,11 +154,6 @@ if __name__ == '__main__':
         type=int,
         help=' the batch size for the execution')
     argparser.add_argument(
-        '-g', '--carlas_per_gpu',
-        default=3,
-        type=int,
-        help=' number of gpus per carla')
-    argparser.add_argument(
         '-s', '--start_episode',
         default=0,
         type=int,
@@ -206,7 +201,7 @@ if __name__ == '__main__':
 
     print ( " FINAL LIST", gpu_list)
     for i in range(args.number_collectors):
-        gpu = gpu_list[len(gpu_list) % int(i / args.carlas_per_gpu + 1)]
+        gpu = gpu_list[ i % len(gpu_list)]
         print ( " GPU ", gpu)
         # A single loop being made
         # Dictionary with the necessary params related to the execution not the model itself.

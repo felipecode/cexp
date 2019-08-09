@@ -100,5 +100,8 @@ if __name__ == '__main__':
     print ("####################")
     print ("DATASET has ", total_episodes, " episodes and ", total_hours, " hours of data")
     print ("####################")
+    print (">>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<")
+    print ("####################")
     print ("ENVS USED")
     print (env_count_dict)
+    print ("####################")
