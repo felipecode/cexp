@@ -88,7 +88,7 @@ def generate_corl2017_config_file():
 
                         env_dict = {
                             "route": {
-                                "file": town_sets[town_name][task_name],
+                                "file": 'nocrash/' + town_sets[town_name][task_name],
                                 "id": env_number
                             },
                             "scenarios": tasks[task_name][town_name],
