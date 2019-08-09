@@ -189,20 +189,16 @@ if __name__ == '__main__':
     environments_per_collector = len(json_dict['envs'])/args.number_collectors
     if environments_per_collector < 1.0:
         raise ValueError(" Too many collectors")
+    if not environments_per_collector.is_integer():
+        raise ValueError(" Number of Collectors must divide the number of envs %d " % len(json_dict['envs']))
 
     # Set GPUS to eliminate.
-
     # we get all the gpu (STANDARD 10, make variable)
-
     gpu_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
     # we eliminate the ones not used
     for el in args.eliminated_gpus:
         del gpu_list[gpu_list.index(el)]
-
-
-    print (" Total number of envs ", len(json_dict['envs']))
-    print (" Env per collector ", environments_per_collector)
 
     print (" FINAL LIST", gpu_list)
     for i in range(args.number_collectors):
