@@ -78,7 +78,7 @@ def collect_data(json_file, params, number_iterations, eliminated_environments, 
 
                ])
     # this could be joined
-    env_batch = CEXP(json_file, params=params, iterations_to_execute=number_iterations,
+    env_batch = CEXP(json_file, params=params, execute_all=number_iterations,
                      eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
@@ -147,11 +147,7 @@ if __name__ == '__main__':
         default=1,
         type=int,
         help=' the number of collectors used')
-    argparser.add_argument(
-        '-e', '--number_episodes',
-        default=200,
-        type=int,
-        help=' the number of episodes per collector used')
+    # TODO add some general repetition
     argparser.add_argument(
         '-b', '--batch_size',
         default=1,
@@ -210,7 +206,7 @@ if __name__ == '__main__':
 
     print ( " FINAL LIST", gpu_list)
     for i in range(args.number_collectors):
-        gpu = gpu_list[ len(gpu_list) % int(i / args.carlas_per_gpu + 1)]
+        gpu = gpu_list[len(gpu_list) % int(i / args.carlas_per_gpu + 1)]
         print ( " GPU ", gpu)
         # A single loop being made
         # Dictionary with the necessary params related to the execution not the model itself.

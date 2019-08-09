@@ -18,6 +18,9 @@ import cexp.env.utils.route_configuration_parser as parser
 # Do an execution eliminating part of the environments used.
 
 
+# TODO the only execution mode is execute all. Things are controlled always on json
+# TODO randomness does not exist.
+
 
 class CEXP(object):
     """
@@ -153,13 +156,15 @@ class CEXP(object):
         # The environment itself is able to tell when the repetition is already made.
         if self._execute_all:
             execution_list = []
+            # TODO not working on execute all mode.
             print ("EXECUTIONS")
             print (Environment.number_of_executions)
-            for env_name in self._json['envs'].keys():
+            for env_name in self._environments.keys():
                 repetitions = 1
-                # We check the remaining necessary executions for each of the environments
-                if "repetitions" not in self._json['envs'][env_name] and not self.ignore_previous_execution:
-                    raise ValueError(" Setting to execute all but repetition information is not  on the json file")
+                # TODO check necessity
+                #  We check the remaining necessary executions for each of the environments
+                #if "repetitions" not in self._json['envs'][env_name] and not self.ignore_previous_execution:
+                #    raise ValueError(" Setting to execute all but repetition information is not  on the json file")
 
                 if "repetitions" in self._json['envs'][env_name]:
                     repetitions = self._json['envs'][env_name]['repetitions']

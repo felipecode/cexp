@@ -157,7 +157,6 @@ class Experience(object):
         """
 
         GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
-        print (" TIME ", GameTime._current_game_time)
         CarlaDataProvider.on_carla_tick()
         # update all scenarios
         for scenario in self._list_scenarios:  #
@@ -292,7 +291,7 @@ class Experience(object):
 
         # check that all sensors have initialized their data structure
         while not self._sensor_interface.all_sensors_ready():
-            print(" waiting for one data reading from sensors...")
+            logging.debug(" waiting for one data reading from sensors...")
             self._sync(self.world.tick())
 
     def _get_current_wp_direction(self, vehicle_position, route):
