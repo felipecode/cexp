@@ -1,4 +1,4 @@
-
+import json
 import argparse
 
 from cexp.cexp import CEXP
@@ -9,6 +9,25 @@ It can also be used to clean empty ones a posteriori
 Cleaning a priori is desired
 
 """
+
+
+
+def get_envs_dict(json_filename):
+    """
+    Returns an environment dictionary to count how many each env was experimented.
+    :return:
+    """
+
+    with open(json_filename, 'r') as f:
+        json_file = json.loads(f.read())
+
+    envs_dict = {}
+    for key  in json_file['envs'].keys():
+
+        envs_dict.update({key:0})
+
+    return
+
 
 
 if __name__ == '__main__':
@@ -36,15 +55,15 @@ if __name__ == '__main__':
               'carla_recording': True
               }
 
-    number_of_iterations = 9999
     # this could be joined
     # THe experience is built, the files necessary
-    env_batch = CEXP(args.json, params, number_of_iterations, execute_all=True,
+    env_batch = CEXP(args.json, params, execute_all=True,
                      ignore_previous_execution=True)
     # Here some docker was set
     env_batch.start(no_server=True)  # no carla server mode.
     # count, we count the environments that are read
-
+    env_count_dict = get_envs_dict(args.json)
+    # We also check the number of hours
     total_hours = 0
     total_episodes = 0
     for env in env_batch:
@@ -66,6 +85,8 @@ if __name__ == '__main__':
                     if len(batch[0]) > 0:
                         not_empty = True
                         total_episodes += 1
+                        env_count_dict[env._environment_name] += 1
+
 
                     # Now we count the ammount of data we have for this batch
                     total_hours += (len(batch[0])/10)/3600
@@ -78,3 +99,5 @@ if __name__ == '__main__':
     print ("####################")
     print ("DATASET has ", total_episodes, " episodes and ", total_hours, " hours of data")
     print ("####################")
+    print ("ENVS USED")
+    print (env_count_dict)
