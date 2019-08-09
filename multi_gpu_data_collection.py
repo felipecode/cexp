@@ -179,6 +179,11 @@ if __name__ == '__main__':
         default='carlalatest:latest',
         help='The name of the docker container used to collect data',
         required=True)
+    argparser.add_argument(
+        '--ge',
+        nargs='+',
+        dest='eliminated_gpus',
+        type=str)
 
 
     args = argparser.parse_args()
@@ -191,9 +196,19 @@ if __name__ == '__main__':
     if environments_per_collector < 1.0:
         raise ValueError(" Too many collectors")
 
+    # Set GPUS to eliminate.
 
+    # we get all the gpu ( STANDARD 10, make variable)
+
+    gpu_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+    # we eliminate the ones not used
+    for el in args.eliminated_gpus:
+        del gpu_list[gpu_list.index(el)]
+
+    print ( " FINAL LIST", gpu_list)
     for i in range(args.number_collectors):
-        gpu = str(int(i / args.carlas_per_gpu))
+        gpu = gpu_list[ len(gpu_list) % int(i / args.carlas_per_gpu)]
         # A single loop being made
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
