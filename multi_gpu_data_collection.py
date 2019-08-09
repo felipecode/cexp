@@ -18,7 +18,7 @@ except IndexError:
 # TODO I have a problem with respect to where to put files
 
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
-def collect_data(json_file, params, number_iterations, eliminated_environments):
+def collect_data(json_file, params, number_iterations, eliminated_environments, collector_id):
     # The idea is that the agent class should be completely independent
 
     # TODO this has to go to a separate file and to be merged with package
@@ -92,6 +92,7 @@ def collect_data(json_file, params, number_iterations, eliminated_environments):
             # by taking the output from the experience.
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
             states, rewards = agent.unroll(env)
+            print (" Collector ", collector_id, " Collecting for ", )
             agent.reinforce(rewards)
         except KeyboardInterrupt:
             env.stop()
@@ -209,7 +210,7 @@ if __name__ == '__main__':
                                                               int(environments_per_collector) * (i),
                                                               int(environments_per_collector) * (i+1) + extra_env)
 
-        print (" Collector ", i )
+        print (" Collector ", i, eliminated_environments)
 
 
         execute_collector(json_file, params, args.number_episodes, eliminated_environments)

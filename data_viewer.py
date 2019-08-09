@@ -193,16 +193,15 @@ if __name__ == "__main__":
                                                  output_img=output_image)
                         step += step_size
                         count_images += 1
-
-                    make_video('_tmp_img', 'env_'+ env._environment_name +'exp_'+str(exp[1])
+                    if args.make_videos:
+                        make_video('_tmp_img', 'env_'+ env._environment_name +'exp_'+str(exp[1])
                                                 +'_batch_' + str(batch[1]))
-
-
-
+                        
 
             print("################################")
 
 
+    # TODO add a more detailed summary for the enves that were collected.
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
     
