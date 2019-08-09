@@ -109,9 +109,11 @@ def collect_data(json_file, params, number_iterations, eliminated_environments, 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 
-def execute_collector(json_file, params, number_iterations, eliminated_environments):
+def execute_collector(json_file, params, number_iterations, eliminated_environments,
+                      collector_id):
     p = multiprocessing.Process(target=collect_data,
-                                args=(json_file, params, number_iterations, eliminated_environments,))
+                                args=(json_file, params, number_iterations,
+                                      eliminated_environments, collector_id,))
     p.start()
 
 
@@ -235,4 +237,4 @@ if __name__ == '__main__':
                "End ", int(environments_per_collector) * (i+1) + extra_env)
 
 
-        execute_collector(json_file, params, args.number_episodes, eliminated_environments)
+        execute_collector(json_file, params, args.number_episodes, eliminated_environments, i)
