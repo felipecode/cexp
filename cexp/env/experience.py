@@ -135,8 +135,11 @@ class Experience(object):
             # We set all the traffic lights to green to avoid having this traffic scenario.
             self._reset_map()
             # Data for building the master scenario
-            self._master_scenario = self.build_master_scenario(self._route, exp_params['town_name'])
-            other_scenarios = self.build_scenario_instances(scenario_definitions)
+            timeout =  estimate_route_timeout(self._route)
+            self._master_scenario = self.build_master_scenario(self._route,
+                                                               exp_params['town_name'],
+                                                               timeout)
+            other_scenarios = self.build_scenario_instances(scenario_definitions, timeout)
             self._list_scenarios = [self._master_scenario] + other_scenarios
             # Route statistics, when the route is finished there will
             # be route statistics on this object. and nothing else
@@ -368,7 +371,7 @@ class Experience(object):
         pass
         # TODO for now we are just randomizing the seeds and that is it
 
-    def build_master_scenario(self, route, town_name):
+    def build_master_scenario(self, route, town_name, timeout):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
@@ -381,7 +384,7 @@ class Experience(object):
         CarlaDataProvider.register_actor(self._ego_actor)
 
         return MasterScenario(self.world, self._ego_actor, master_scenario_configuration,
-                              timeout=estimate_route_timeout(route))
+                              timeout=timeout)
 
 
     def _load_world(self):
@@ -442,7 +445,7 @@ class Experience(object):
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
                                   timeout=timeout, debug_mode=False)
 
-    def build_scenario_instances(self, scenario_definition_vec):
+    def build_scenario_instances(self, scenario_definition_vec, timeout):
 
         """
             Based on the parsed route and possible scenarios, build all the scenario classes.
@@ -458,7 +461,8 @@ class Experience(object):
             if scenario_name == 'background_activity':  # BACKGROUND ACTIVITY SPECIAL CASE
 
                 background_definition = scenario_definition_vec[scenario_name]
-                list_instanced_scenarios.append(self._build_background(background_definition))
+                list_instanced_scenarios.append(self._build_background(background_definition,
+                                                                       timeout))
 
         return list_instanced_scenarios
 
