@@ -195,4 +195,6 @@ class CEXP(object):
         Environment.number_of_executions = {}
 
     def cleanup(self):
-        self._environment_batch[0].stop()
+        
+        if len(self._client_vec) > 0:  # we test if it is actually running
+            self._environment_batch[0].stop()
