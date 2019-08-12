@@ -210,7 +210,27 @@ class Environment(object):
                 return True
         # if no exp is running then the environment is already done
         return False
+    def is_running_version_2(self):
+        """
+            We use the running experiments to check if the route is still running
+        """
+        running_envs = []
+        num_running_envs = 0
+        running_envs_map  =[]
+        running_envs_reverse_map  =[]
+        ctr = 0
+        for idx, exp in enumerate(self._exp_list):
+            if exp.is_running():  # If any exp is still running then this environment is still on.
+                running_envs.append(1)
+                num_running_envs += 1
+                running_envs_map.append(idx)
+                running_envs_reverse_map.append(ctr)
+                ctr += 1
+            else:
+                running_envs.append(0)
+                running_envs_reverse_map.append(-1)
 
+        return running_envs, num_running_envs, running_envs_map, running_envs_reverse_map
     # TODO we can make this extra data pretier.
     def run_step(self, control_vec):
         """
