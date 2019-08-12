@@ -77,6 +77,8 @@ if __name__ == '__main__':
             env_data = env.get_data()  # returns a basically a way to read all the data properly
         except NoDataGenerated:
             print("No data generate for episode ", env)
+        except ValueError:
+            print (" Episode with errors on Json")
         else:
             not_empty = False
             for exp in env_data:
