@@ -1,5 +1,6 @@
 import carla
 import math
+import os
 import numpy as np
 import py_trees
 import traceback
@@ -14,7 +15,8 @@ from srunner.scenarios.background_activity import BackgroundActivity
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
 from cexp.env.scorer import record_route_statistics_default
-from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle
+from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
+                                             get_distance_lead_vehicle
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
@@ -74,6 +76,9 @@ class Experience(object):
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
         """
 
+        # We save the agent name for data savings
+        self._agent_name = agent_name
+
         # save all the experiment parameters to be used later
         self._exp_params = exp_params
         # carla recorder mode save the full carla logs to do some replays
@@ -83,6 +88,8 @@ class Experience(object):
                                                                               self._exp_params['exp_number']))
         # this parameter sets all the sensor threads and the main thread into saving data
         self._save_data = exp_params['save_data']
+        # we can also toogle if we want to save sensors or not.
+        self._save_sensors = exp_params['save_sensors']
         # Start objects that are going to be created
         self.world = None
         # You try to reconnect a few times.
@@ -212,7 +219,9 @@ class Experience(object):
             'distance_intersection': distance_to_intersection(self._ego_actor,
                                                               self._ego_actor.get_world().get_map()),
             'road_angle': get_current_road_angle(self._ego_actor,
-                                                 self._ego_actor.get_world().get_map())
+                                                 self._ego_actor.get_world().get_map()),
+            'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._route,
+                                                               self.world)
         }
 
         self._sync(self.world.tick())
@@ -305,8 +314,12 @@ class Experience(object):
                                                 vehicle)
 
             # setup callback
-            sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
+            if self._save_sensors:  # We have the options to not save sensors data
+                sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
                                    writer=self._writer))
+            else:
+                sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
+                                       writer=None))
             self._instanced_sensors.append(sensor)
 
         # check that all sensors have initialized their data structure
@@ -355,7 +368,7 @@ class Experience(object):
         pass
         # TODO for now we are just randomizing the seeds and that is it
 
-    def build_master_scenario(self, route, town_name, timeout=300):
+    def build_master_scenario(self, route, town_name):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
@@ -370,10 +383,12 @@ class Experience(object):
         return MasterScenario(self.world, self._ego_actor, master_scenario_configuration,
                               timeout=estimate_route_timeout(route))
 
+
     def _load_world(self):
 
         # time continues
         attempts = 0
+
         while attempts < self.MAX_CONNECTION_ATTEMPTS:
             try:
                 self.world = self._client.load_world(self._town_name)
@@ -392,12 +407,25 @@ class Experience(object):
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
         settings.synchronous_mode = True
         #settings.fixed_delta_seconds = 0.05
+
         self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
 
+        # We also set the client to record carla loggings for this episode
+
+        root_path = os.environ["SRL_DATASET_PATH"]
+        env_full_path = os.path.join(root_path, self._exp_params['package_name'],
+                                           self._exp_params['env_name'],
+                                           str(self._exp_params['exp_number'])
+                                     + '_' + self._agent_name)
+
+        self._client.start_recorder(os.path.join(env_full_path, "recording.log"))
+
+
+
 
     # Todo make a scenario builder class
-    def _build_background(self, background_definition):
+    def _build_background(self, background_definition, timeout):
         scenario_configuration = ScenarioConfiguration()
         scenario_configuration.route = None
         scenario_configuration.town = self._town_name
@@ -412,7 +440,7 @@ class Experience(object):
                                                               background_definition['vehicle.*'])
         scenario_configuration.other_actors = [actor_configuration_instance]
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
-                                  timeout=300, debug_mode=False)
+                                  timeout=timeout, debug_mode=False)
 
     def build_scenario_instances(self, scenario_definition_vec):
 
@@ -481,6 +509,7 @@ class Experience(object):
 
             self.world = None
 
+        self._client.stop_recorder()
 
     def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.

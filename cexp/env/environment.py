@@ -143,6 +143,7 @@ class Environment(object):
                 'env_number': Environment.number_of_executions[self._environment_name],
                 'exp_number': i,
                 'save_data': self._save_data,
+                'save_sensors': self._env_params['save_sensors'],
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
                 'carla_recording': self._env_params['carla_recording'],
                 'remove_wrong_data': self._env_params['remove_wrong_data'],

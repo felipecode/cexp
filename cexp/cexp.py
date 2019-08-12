@@ -29,6 +29,7 @@ class CEXP(object):
     """
 
     _default_params = {'save_dataset': False,
+                       'save_sensors': False,
                        'docker_name': None,
                        'gpu': 0,
                        'batch_size': 1,
@@ -50,10 +51,16 @@ class CEXP(object):
         :param eliminated_envs: list of the environments that are not going to be used
         :param port:
         """
+
+        # TODO do a merge instead
         if params is None:
             self._params = CEXP._default_params
         else:
             self._params = params
+
+        # Todo thuis goes out with the merge
+        if 'save_sensors' not in self._params:
+            self._params.update({'save_sensors': self._params['save_dataset']})
 
         self._batch_size = self._params['batch_size']  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
@@ -125,6 +132,7 @@ class CEXP(object):
         env_params = {
             'batch_size': self._batch_size,
             'save_dataset': self._params['save_dataset'],
+            'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],  #
             'package_name': self._json['package_name'],
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
