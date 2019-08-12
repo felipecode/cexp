@@ -37,7 +37,7 @@ if __name__ == '__main__':
     }
 
     new_json = {"envs": {},
-                "package_name": 'dataset_l4',
+                "package_name": 'dataset_dynamic_l0',
 
                 }
 
@@ -68,7 +68,7 @@ if __name__ == '__main__':
                     new_json["envs"].update({weather + '_' + town_sets[town_name] + '_route'
                                              + str(env_number).zfill(5): env_dict})
 
-    filename = os.path.join(root_route_file_output, 'dataset_l4.json')
+    filename = os.path.join(root_route_file_output, 'dataset_dynamic_l0.json')
 
     with open(filename, 'w') as fo:
         # with open(os.path.join(root_route_file_position, 'all_towns_traffic_scenarios3_4.json'), 'w') as fo:
