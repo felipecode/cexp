@@ -150,6 +150,26 @@ class Experience(object):
         for scenario in self._list_scenarios:
             scenario.scenario.scenario_tree.tick_once()
 
+    def get_status(self):
+        """
+            Returns the current status of the vehicle
+        """
+        if self._master_scenario is None:
+            raise ValueError('You should not run a route without a master scenario')
+
+        if self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.INVALID:
+            logging.debug("Exp No:{} The current scenario is INVALID".format(self.exp_id))
+            status = 'INVALID'
+        elif self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.SUCCESS:
+            logging.debug("Exp No:{} The current scenario is SUCCESSFUL".format(self.exp_id))
+            status = 'SUCCESS'
+        elif self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.FAILURE:
+            logging.debug("Exp No:{} The current scenario is FAILURE".format(self.exp_id))
+            status = 'FAILURE'
+        else:
+            status = 'RUNNING'
+
+        return status
 
     def tick_scenarios_control(self, controls):
         """
