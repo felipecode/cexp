@@ -76,7 +76,7 @@ def get_all_vehicles_closer_than(vehicle, min_distance):
     closest_vehicles = []
     for op_actor in world.get_actors():
 
-        if 'vehicle' in op_actor.get_type() and op_actor.get_id() != vehicle.get_id():
+        if 'vehicle' in op_actor.type_id and op_actor.id != vehicle.id:
             if vehicle.get_distance(op_actor) < min_distance:
                 print (" CLOSE VEHICLE DISTANCE IS ", vehicle.get_distance(op_actor) )
                 closest_vehicles.append(op_actor)
@@ -108,6 +108,7 @@ def get_distance_lead_vehicle(vehicle, route, world):
     min_dist_vehicle = -1
     # waypoint for the ego-vehicle.
     for point in route:
+
 
         point_ref_waypoint = wmap.get_waypoint(point.get_transform().location)
         if point.get_transform().location.distance(vehicle.get_transform().location) > \
