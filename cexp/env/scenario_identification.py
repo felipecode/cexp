@@ -24,8 +24,8 @@ def angle_between(orientation_1, orientation_2):
 
     return d_angle
 
-def yaw_difference(wp1, wp2):
-    dyaw = wp1.rotation.yaw - wp2.rotation.yaw
+def yaw_difference(t1, t2):
+    dyaw = t1.rotation.yaw - t2.rotation.yaw
 
     return math.sqrt(dyaw * dyaw)
 
@@ -122,8 +122,8 @@ def get_distance_lead_vehicle(vehicle, route, world):
             op_vehicle_wp = wmap.get_waypoint(op_vehicle.get_transform().location)
 
             # if the waypoints have the same orientation
-            if yaw_difference(op_vehicle_wp.get_transform(),
-                              point_ref_waypoint.get_transform()) < 10:
+            if yaw_difference(op_vehicle_wp.transform,
+                              point_ref_waypoint.transform) < 10:
                 if min_dist_vehicle == -1:
                     min_dist_vehicle = 1000
 
