@@ -2,7 +2,7 @@
 
 # Functions usefull for scenario identification
 
-
+import logging
 import numpy as np
 import math
 from agents.tools.misc import vector
@@ -132,7 +132,8 @@ def get_distance_lead_vehicle(vehicle, route, world):
                 min_dist_vehicle = min(distance_result, min_dist_vehicle)
 
 
-    print ( "DISTANCE LEAD ", min_dist_vehicle)
+    #print ( "DISTANCE LEAD ", min_dist_vehicle)
+    logging.debug( " Distance of lead vehicle %s" % str(min_dist_vehicle))
     return min_dist_vehicle
 
 
