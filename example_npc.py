@@ -48,24 +48,24 @@ if __name__ == '__main__':
               }
 
     # TODO for now batch size is one
-
     number_of_iterations = 400
     # The idea is that the agent class should be completely independent
     agent = NPCAgent(sensors_dict=[{'type': 'sensor.other.gnss',
-                 'x': 0.7, 'y': -0.4, 'z': 1.60,
-                 'id': 'GPS'}]
+                                    'x': 0.7, 'y': -0.4, 'z': 1.60,
+                                    'id': 'GPS'}]
 
                )
     # this could be joined
-    env_batch = CEXP(json, params=params, iterations_to_execute=number_of_iterations, port=arguments.port)
-                                                                # THe experience is built, the files necessary
-                                                                # to load CARLA and the scenarios are made
+    env_batch = CEXP(json, params=params, iterations_to_execute=number_of_iterations,
+                     port=arguments.port)  # THe experience is built, the files necessary
+                                           # to load CARLA and the scenarios are made
 
     # Here some docker was set
     env_batch.start()
     for env in env_batch:
         try:
-            # The policy selected to run this experience vector (The class basically) This policy can also learn, just
+            # The policy selected to run this experience vector
+            # (The class basically) This policy can also learn, just
             # by taking the output from the experience.
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
             states, rewards = agent.unroll(env)

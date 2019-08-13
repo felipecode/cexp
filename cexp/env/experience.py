@@ -223,8 +223,8 @@ class Experience(object):
                                                               self._ego_actor.get_world().get_map()),
             'road_angle': get_current_road_angle(self._ego_actor,
                                                  self._ego_actor.get_world().get_map()),
-            'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._route,
-                                                               self.world)
+            'distance_lead_vehicle': -1 #get_distance_lead_vehicle(self._ego_actor, self._route,
+                                     #                          self.world)
         }
 
         self._sync(self.world.tick())
