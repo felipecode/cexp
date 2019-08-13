@@ -110,8 +110,8 @@ def get_distance_lead_vehicle(vehicle, route, world):
     # waypoint for the ego-vehicle.
     for point in route:
 
-
-        point_ref_waypoint = wmap.get_waypoint(point.get_transform().location)
+        print (point)
+        point_ref_waypoint = wmap.get_waypoint(point[1])
         if point.get_transform().location.distance(vehicle.get_transform().location) > \
             LEAD_VEHICLE_DISTANCE * 2:
             print ( " TESTED ALL ROUTE POINTS close enough")
