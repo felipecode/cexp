@@ -139,7 +139,7 @@ def get_distance_lead_vehicle(vehicle, route, world):
 
 
 
-def identify_scenario(distance_intersection, road_angle, distance_lead_vehicle):
+def identify_scenario(distance_intersection, road_angle, distance_lead_vehicle=-1):
 
     """
     Returns the scenario for this specific point or trajectory
