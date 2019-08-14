@@ -3,13 +3,13 @@ from PIL import Image
 img = Image.open('stinkbug.png')  # opens the file using Pillow - it's not an array yet
 img.thumbnail((64, 64), Image.ANTIALIAS)  # resizes image in-place
 
-fig, ax = plt.subplots(figsize=(16, 6))
+fig = plt.figure()
 
-imgplot = ax.imshow(img, interpolation="bicubic")
+imgplot = plt.imshow(img, interpolation="bicubic")
 
 rectangle = plt.Rectangle((10, 10), 100, 100, fc='r')
 
-ax.add_path(rectangle)
+plt.gca().add_path(rectangle)
 
 
 fig.savefig('stinktriangle.png', orientation='landscape',
