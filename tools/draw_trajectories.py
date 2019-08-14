@@ -31,6 +31,8 @@ world_offset = [0, 0]
 
 
 fig = plt.figure()
+plt.xlim(0,2000)
+plt.ylim(0,2000)
 
 
 def world_to_pixel(location, offset=(0, 0)):
@@ -59,13 +61,13 @@ def draw_lane(lane, color):
         if len(polygon) > 2:
             last_point = polygon[0]
             print (" Polygon to draw ", polygon)
-            for point in polygon[1:]:
-                line = plt.Line2D(last_point, point, lw=2.5, color=color)
-                plt.gca().add_line(line)
-                last_point = point
-                #polygon = plt.Polygon(polygon, edgecolor=color)
+            #for point in polygon[1:]:
+            #    line = plt.Line2D(last_point, point, lw=2.5, color=color)
+            #    plt.gca().add_line(line)
+            #    last_point = point
+            polygon = plt.Polygon(polygon, edgecolor=color)
 
-                #plt.gca().add_patch(polygon)
+            plt.gca().add_patch(polygon)
             #pygame.draw.polygon(surface, color, polygon, 5)
 
             #pygame.draw.polygon(surface, color, polygon)
