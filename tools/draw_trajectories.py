@@ -303,7 +303,7 @@ def draw_point(datapoint, init=False, end=False):
     if end:
         result_color = (0.0, 1.0, 0)
         size = size*2
-    
+
     pixel = world_to_pixel(carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2]))
     print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
@@ -398,6 +398,7 @@ if __name__ == '__main__':
     # Here some docker was set
     env_batch.start(no_server=True)  # no carla server mode.
     # count, we count the environments that are read
+
     for env in env_batch:
 
         fig = plt.figure()
@@ -418,11 +419,15 @@ if __name__ == '__main__':
                 for batch in exp[0]:
                     print("      Batch: ", batch[1])
                     step = 0  # Add the size
-                    count_images = 0
-                    while step < len(batch[0]):
 
-                        draw_point(batch[0][step])
+                    while step < len(batch[0]):
+                        if first_time:
+                            draw_point(batch[0][step], init=True)
+                            first_time=False
+                        else:
+                            draw_point(batch[0][step])
                         step += step_size
+                    draw_point(batch[0][step], end=True)
 
         fig.savefig(env._environment_name + '.png',
                     orientation='landscape', bbox_inches='tight', dpi=1200)
