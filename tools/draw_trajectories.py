@@ -1,25 +1,14 @@
 import carla
+import argparse
 import matplotlib.pyplot as plt
-
-def create_map():
-    pass
-
+from cexp.env.scenario_identification import identify_scenario
+from cexp.cexp import CEXP
 
 
-def draw_point(position, color):
-    """
-    We draw in a certain position at the map
-    :param position: 
-    :param color: 
-    :return: 
-    """
-    # We add some color to draw the point around
+from cexp.env.environment import NoDataGenerated
 
-    return 0
 
-#def save_map()
-#
-#    pass
+
 COLOR_BUTTER_0 = (252/ 255.0, 233/ 255.0, 79/ 255.0)
 COLOR_BUTTER_1 = (237/ 255.0, 212/ 255.0, 0/ 255.0)
 COLOR_BUTTER_2 = (196/ 255.0, 160/ 255.0, 0/ 255.0)
@@ -61,6 +50,8 @@ COLOR_WHITE = (255/ 255.0, 255/ 255.0, 255/ 255.0)
 COLOR_BLACK = (0/ 255.0, 0/ 255.0, 0/ 255.0)
 
 
+############## MAP RELATED ######################
+
 # We set this as global
 pixels_per_meter = 12
 
@@ -69,10 +60,6 @@ precision = 0.05
 
 world_offset = [0, 0]
 
-
-fig = plt.figure()
-plt.xlim(-200, 6000)
-plt.ylim(-200, 6000)
 
 
 def world_to_pixel(location, offset=(0, 0)):
@@ -282,18 +269,168 @@ def draw_topology(carla_topology, index):
 
     draw_roads(set_waypoints)
 
+##### the main map drawing function #####
+
+def draw_map(town_name, render_port):
+    client = carla.Client('localhost', 2000)
+    world = client.load_world(town_name)
+
+    topology = world.get_map().get_topology()
+    draw_topology(topology, 0)
+
+
+######################################################
+##### The car drawing tools ##############
+
+
+def draw_point(datapoint):
+    """
+    We draw in a certain position at the map
+    :param position:
+    :param color:
+    :return:
+    """
+
+    result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
+                                               datapoint['measurements']['road_angle'],
+                                               datapoint['measurements']['distance_lead_vehicle']
+                                               ))
+
+    world_pos = datapoint['measurements']['ego_actor']['position']
+
+    # We add some color to draw the point around
+    pixel = world_to_pixel(carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2]))
+    circle = plt.Circle((pixel[0], pixel[1]), 0.75, fc=result_color)
+    plt.gca().add_patch(circle)
 
 
 
-client = carla.Client('localhost', 2000)
-world = client.load_world('Town01')
+def get_color(scenario):
+    """
+    Based on the scenario we paint the trajectory with a given color.
+    :param scenario:
+    :return:
+    """
 
-topology = world.get_map().get_topology()
-draw_topology(topology, 0)
+    if scenario == 'S0_lane_following':
+        return COLOR_SKY_BLUE_0
+    elif scenario == 'S1_lane_following_curve':
+        return COLOR_SKY_BLUE_2
+    elif scenario == 'S2_before_intersection':
+        return COLOR_SCARLET_RED_0
+    elif scenario == 'S3_intersection':
+        return COLOR_SCARLET_RED_2
+    elif scenario == 'S4_lead_vehicle':
+        return COLOR_ORANGE_0
+    elif scenario == 'S5_lead_vehicle_curve':
+        return COLOR_BUTTER_2
 
 
-fig.savefig('topologytest.png', orientation='landscape',
-                    bbox_inches='tight', dpi=1200)
+
+### Add some main.
+
+
+
+if __name__ == '__main__':
+
+
+
+    parser = argparse.ArgumentParser(description='Path viewer')
+    # parser.add_argument('model', type=str, help='Path to model definition json. Model weights should be on the same path.')
+    parser.add_argument('-pt', '--path', default="")
+
+    parser.add_argument(
+        '--episodes',
+        nargs='+',
+        dest='episodes',
+        type=str,
+        default='all'
+    )
+
+    parser.add_argument(
+        '-s', '--step_size',
+        type=int,
+        default=1
+    )
+    parser.add_argument(
+        '--dataset',
+        help=' the json configuration file name',
+        default=None
+    )
+    parser.add_argument(
+        '--make-videos',
+        help=' make videos from episodes',
+        action='store_true'
+    )
+
+    args = parser.parse_args()
+    path = args.path
+
+
+    first_time = True
+    count = 0
+    step_size = args.step_size
+
+    # Start a screen to show everything. The way we work is that we do IMAGES x Sensor.
+    # But maybe a more arbitrary configuration may be useful
+    screen = None
+
+    # A single loop being made
+    jsonfile = args.dataset
+    # Dictionary with the necessary params related to the execution not the model itself.
+    params = {'save_dataset': True,
+              'docker_name': 'carlalatest:latest',
+              'gpu': 0,
+              'batch_size': 1,
+              'remove_wrong_data': False,
+              'non_rendering_mode': False,
+              'carla_recording': True
+              }
+
+    # We have to connect to a server to be able to draw a topology
+    render_port = 2000
+    env_batch = CEXP(jsonfile, params, execute_all=True, ignore_previous_execution=True)
+    # Here some docker was set
+    env_batch.start(no_server=True)  # no carla server mode.
+    # count, we count the environments that are read
+    for env in env_batch:
+
+        fig = plt.figure()
+        plt.xlim(-200, 6000)
+        plt.ylim(-200, 6000)
+        draw_map(env._town_name, render_port)
+        # it can be personalized to return different types of data.
+        print("Environment Name: ", env)
+        try:
+            env_data = env.get_data()  # returns a basically a way to read all the data properly
+        except NoDataGenerated:
+            print("No data generate for episode ", env)
+        else:
+
+            for exp in env_data:
+                print("    Exp: ", exp[1])
+
+                for batch in exp[0]:
+                    print("      Batch: ", batch[1])
+                    step = 0  # Add the size
+                    count_images = 0
+                    while step < len(batch[0]):
+
+                        draw_point(batch[0][step])
+                        step += step_size
+
+        fig.savefig(env._environment_name + '.png',
+                    orientation='landscape', bbox_inches='tight', dpi=1200)
+
+
+
+
+
+
+
+
+
+
 
 
 

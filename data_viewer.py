@@ -169,7 +169,8 @@ if __name__ == "__main__":
 
                         if screen is None:
                             screen = ScreenManager()
-                            screen.start_screen([rgb_center.shape[1], rgb_center.shape[0]], [3, 1], 1, no_display=True)
+                            screen.start_screen([rgb_center.shape[1], rgb_center.shape[0]], [3, 1],
+                                                1, no_display=True)
 
                         status = {'speed': forward_speed(data_point['measurements']['ego_actor']),
                                   'directions': 2.0,
