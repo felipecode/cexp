@@ -20,6 +20,47 @@ def draw_point(position, color):
 #def save_map()
 #
 #    pass
+facecolor=(0.1843, 0.3098, 0.3098)
+COLOR_BUTTER_0 = (252, 233, 79)
+COLOR_BUTTER_1 = (237, 212, 0)
+COLOR_BUTTER_2 = (196, 160, 0)
+
+COLOR_ORANGE_0 = (252, 175, 62)
+COLOR_ORANGE_1 = (245, 121, 0)
+COLOR_ORANGE_2 = (209, 92, 0)
+
+COLOR_CHOCOLATE_0 = (233, 185, 110)
+COLOR_CHOCOLATE_1 = (193, 125, 17)
+COLOR_CHOCOLATE_2 = (143, 89, 2)
+
+COLOR_CHAMELEON_0 = (138, 226, 52)
+COLOR_CHAMELEON_1 = (115, 210, 22)
+COLOR_CHAMELEON_2 = (78, 154, 6)
+
+COLOR_SKY_BLUE_0 = (114, 159, 207)
+COLOR_SKY_BLUE_1 = (52, 101, 164)
+COLOR_SKY_BLUE_2 = (32, 74, 135)
+
+COLOR_PLUM_0 = (173, 127, 168)
+COLOR_PLUM_1 = (117, 80, 123)
+COLOR_PLUM_2 = (92, 53, 102)
+
+COLOR_SCARLET_RED_0 = (239, 41, 41)
+COLOR_SCARLET_RED_1 = (204, 0, 0)
+COLOR_SCARLET_RED_2 = (164, 0, 0)
+
+COLOR_ALUMINIUM_0 = (238, 238, 236)
+COLOR_ALUMINIUM_1 = (211, 215, 207)
+COLOR_ALUMINIUM_2 = (186, 189, 182)
+COLOR_ALUMINIUM_3 = (136, 138, 133)
+COLOR_ALUMINIUM_4 = (85, 87, 83)
+COLOR_ALUMINIUM_4_5 = (66, 62, 64)
+COLOR_ALUMINIUM_5 = (46, 52, 54)
+
+
+COLOR_WHITE = (255, 255, 255)
+COLOR_BLACK = (0, 0, 0)
+
 
 # We set this as global
 pixels_per_meter = 12
@@ -48,6 +89,111 @@ def world_to_pixel_width(width):
 def lateral_shift(transform, shift):
     transform.rotation.yaw += 90
     return transform.location + shift * transform.get_forward_vector()
+
+
+def draw_lane_marking(surface, waypoints):
+    # Left Side
+    draw_lane_marking_single_side(surface, waypoints[0], -1)
+
+    # Right Side
+    draw_lane_marking_single_side(surface, waypoints[1], 1)
+
+
+def draw_lane_marking_single_side(surface, waypoints, sign):
+    lane_marking = None
+
+    marking_type = carla.LaneMarkingType.NONE
+    previous_marking_type = carla.LaneMarkingType.NONE
+
+    marking_color = carla.LaneMarkingColor.Other
+    previous_marking_color = carla.LaneMarkingColor.Other
+
+    markings_list = []
+    temp_waypoints = []
+    current_lane_marking = carla.LaneMarkingType.NONE
+    for sample in waypoints:
+        lane_marking = sample.left_lane_marking if sign < 0 else sample.right_lane_marking
+
+        if lane_marking is None:
+            continue
+
+        marking_type = lane_marking.type
+        marking_color = lane_marking.color
+
+        if current_lane_marking != marking_type:
+            markings = get_lane_markings(
+                previous_marking_type,
+                lane_marking_color_to_tango(previous_marking_color),
+                temp_waypoints,
+                sign)
+            current_lane_marking = marking_type
+
+            for marking in markings:
+                markings_list.append(marking)
+
+            temp_waypoints = temp_waypoints[-1:]
+
+        else:
+            temp_waypoints.append((sample))
+            previous_marking_type = marking_type
+            previous_marking_color = marking_color
+
+    # Add last marking
+    last_markings = get_lane_markings(
+        previous_marking_type,
+        lane_marking_color_to_tango(previous_marking_color),
+        temp_waypoints,
+        sign)
+    for marking in last_markings:
+        markings_list.append(marking)
+
+    for markings in markings_list:
+        if markings[0] == carla.LaneMarkingType.Solid:
+            draw_solid_line(surface, markings[1], False, markings[2], 2)
+        elif markings[0] == carla.LaneMarkingType.Broken:
+            draw_broken_line(surface, markings[1], False, markings[2], 2)
+
+
+
+def draw_arrow(surface, transform, color=COLOR_ALUMINIUM_2):
+    transform.rotation.yaw += 180
+    forward = transform.get_forward_vector()
+    transform.rotation.yaw += 90
+    right_dir = transform.get_forward_vector()
+    end = transform.location
+    start = end - 2.0 * forward
+    right = start + 0.8 * forward + 0.4 * right_dir
+    left = start + 0.8 * forward - 0.4 * right_dir
+    pygame.draw.lines(
+        surface, color, False, [
+            world_to_pixel(x) for x in [
+                start, end]], 4)
+    pygame.draw.lines(
+        surface, color, False, [
+            world_to_pixel(x) for x in [
+                left, start, right]], 4)
+
+
+def draw_roads(set_waypoints):
+    for waypoints in set_waypoints:
+        waypoint = waypoints[0]
+        road_left_side = [lateral_shift(w.transform, -w.lane_width * 0.5) for w in waypoints]
+        road_right_side = [lateral_shift(w.transform, w.lane_width * 0.5) for w in waypoints]
+
+        polygon = road_left_side + [x for x in reversed(road_right_side)]
+        polygon = [world_to_pixel(x) for x in polygon]
+
+        if len(polygon) > 2:
+            pass
+            #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon, 5)
+            #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon)
+
+        # Draw Lane Markings and Arrows
+        if not waypoint.is_junction:
+            draw_lane_marking([waypoints, waypoints])
+            for n, wp in enumerate(waypoints):
+                if ((n + 1) % 400) == 0:
+                    draw_arrow(wp.transform)
 
 
 def draw_lane(lane, color):
@@ -93,9 +239,9 @@ def draw_topology(carla_topology, index):
                     break
         set_waypoints.append(waypoints)
         # Draw Shoulders, Parkings and Sidewalks
-        PARKING_COLOR = 'r'
-        SHOULDER_COLOR = 'g'
-        SIDEWALK_COLOR = 'b'
+        PARKING_COLOR = COLOR_ALUMINIUM_4_5
+        SHOULDER_COLOR = COLOR_ALUMINIUM_5
+        SIDEWALK_COLOR = COLOR_ALUMINIUM_3
 
         shoulder = [[], []]
         parking = [[], []]
