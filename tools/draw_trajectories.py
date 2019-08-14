@@ -299,7 +299,7 @@ def draw_point(datapoint):
     # We add some color to draw the point around
     pixel = world_to_pixel(carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2]))
     print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
-    circle = plt.Circle((pixel[0], pixel[1]), 3, fc=result_color)
+    circle = plt.Circle((pixel[0], pixel[1]), 10, fc=result_color)
     plt.gca().add_patch(circle)
 
 
@@ -312,11 +312,11 @@ def get_color(scenario):
     """
 
     if scenario == 'S0_lane_following':
-        return COLOR_SKY_BLUE_0
+        return COLOR_CHOCOLATE_0
     elif scenario == 'S1_lane_following_curve':
-        return COLOR_SKY_BLUE_2
+        return COLOR_CHOCOLATE_2
     elif scenario == 'S2_before_intersection':
-        return COLOR_SCARLET_RED_0
+        return COLOR_ORANGE_1
     elif scenario == 'S3_intersection':
         return COLOR_SCARLET_RED_2
     elif scenario == 'S4_lead_vehicle':
@@ -364,7 +364,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     path = args.path
-
 
     first_time = True
     count = 0
