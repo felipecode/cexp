@@ -427,7 +427,7 @@ if __name__ == '__main__':
                         else:
                             draw_point(batch[0][step])
                         step += step_size
-                    draw_point(batch[0][step], end=True)
+                    draw_point(batch[0][step-step_size], end=True)
 
         fig.savefig(env._environment_name + '.png',
                     orientation='landscape', bbox_inches='tight', dpi=1200)
