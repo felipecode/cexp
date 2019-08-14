@@ -183,16 +183,18 @@ def draw_roads(set_waypoints):
         polygon = [world_to_pixel(x) for x in polygon]
 
         if len(polygon) > 2:
-            pass
+            polygon = plt.Polygon(polygon, edgecolor=COLOR_ALUMINIUM_5)
+
+            plt.gca().add_patch(polygon)
             #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon, 5)
             #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon)
 
         # Draw Lane Markings and Arrows
-        if not waypoint.is_junction:
-            draw_lane_marking([waypoints, waypoints])
-            for n, wp in enumerate(waypoints):
-                if ((n + 1) % 400) == 0:
-                    draw_arrow(wp.transform)
+        #if not waypoint.is_junction:
+        #    draw_lane_marking([waypoints, waypoints])
+        #    for n, wp in enumerate(waypoints):
+        #        if ((n + 1) % 400) == 0:
+        #            draw_arrow(wp.transform)
 
 
 def draw_lane(lane, color):
@@ -204,7 +206,6 @@ def draw_lane(lane, color):
         polygon = [world_to_pixel(x) for x in polygon]
 
         if len(polygon) > 2:
-            last_point = polygon[0]
             print (" Polygon to draw ", polygon)
             #for point in polygon[1:]:
             #    line = plt.Line2D(last_point, point, lw=2.5, color=color)
@@ -278,6 +279,10 @@ def draw_topology(carla_topology, index):
         draw_lane( shoulder, SHOULDER_COLOR)
         draw_lane( parking, PARKING_COLOR)
         draw_lane( sidewalk, SIDEWALK_COLOR)
+
+    draw_roads(set_waypoints)
+
+
 
 
 client = carla.Client('localhost', 2000)
