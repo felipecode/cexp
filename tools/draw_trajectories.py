@@ -143,7 +143,7 @@ draw_topology(topology, 0)
 
 
 fig.savefig('topologytest.png', orientation='landscape',
-                    bbox_inches='tight')
+                    bbox_inches='tight', dpi=1200)
 
 
 
