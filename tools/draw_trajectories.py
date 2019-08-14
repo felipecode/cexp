@@ -27,17 +27,28 @@ pixels_per_meter = 0
 SCALE = 1.0
 precision = 0.05
 
-world_offset = 0
+world_offset = [0, 0]
 
 
 fig = plt.figure()
+
+
+def world_to_pixel(location, offset=(0, 0)):
+    x = SCALE * pixels_per_meter * (location.x - world_offset[0])
+    y = SCALE * pixels_per_meter * (location.y - world_offset[1])
+    return [int(x - offset[0]), int(y - offset[1])]
+
+
+def world_to_pixel_width(width):
+    return int(SCALE * pixels_per_meter * width)
+
 
 def lateral_shift(transform, shift):
     transform.rotation.yaw += 90
     return transform.location + shift * transform.get_forward_vector()
 
 
-def draw_lane( lane, color):
+def draw_lane(lane, color):
     for side in lane:
         lane_left_side = [lateral_shift(w.transform, -w.lane_width * 0.5) for w in side]
         lane_right_side = [lateral_shift(w.transform, w.lane_width * 0.5) for w in side]
@@ -72,7 +83,6 @@ def draw_topology(carla_topology, index):
                 else:
                     break
         set_waypoints.append(waypoints)
-
         # Draw Shoulders, Parkings and Sidewalks
         PARKING_COLOR = 'r'
         SHOULDER_COLOR = 'g'
@@ -128,14 +138,6 @@ fig.savefig('topologytest.png', orientation='landscape',
 
 
 
-
-def world_to_pixel(self, location, offset=(0, 0)):
-    x = self.SCALE * self._pixels_per_meter * (location.x - self._world_offset[0])
-    y = self.SCALE * self._pixels_per_meter * (location.y - self._world_offset[1])
-    return [int(x - offset[0]), int(y - offset[1])]
-
-def world_to_pixel_width(self, width):
-    return int(self.SCALE * self._pixels_per_meter * width)
 
 
 
