@@ -193,7 +193,6 @@ def draw_lane(lane, color):
         polygon = [world_to_pixel(x) for x in polygon]
 
         if len(polygon) > 2:
-            print (" Polygon to draw ", polygon)
             #for point in polygon[1:]:
             #    line = plt.Line2D(last_point, point, lw=2.5, color=color)
             #    plt.gca().add_line(line)
@@ -293,7 +292,7 @@ def draw_point(datapoint):
 
     result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
                                                datapoint['measurements']['road_angle'],
-                                               datapoint['measurements']['distance_lead_vehicle']
+                                               -1 #datapoint['measurements']['distance_lead_vehicle']
                                                ))
 
     world_pos = datapoint['measurements']['ego_actor']['position']
