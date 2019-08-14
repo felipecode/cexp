@@ -9,7 +9,7 @@ imgplot = plt.imshow(img, interpolation="bicubic")
 
 rectangle = plt.Rectangle((10, 10), 100, 100, fc='r')
 
-plt.gca().add_path(rectangle)
+plt.gca().add_patch(rectangle)
 
 
 fig.savefig('stinktriangle.png', orientation='landscape',
