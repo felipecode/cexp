@@ -299,7 +299,8 @@ def draw_point(datapoint):
 
     # We add some color to draw the point around
     pixel = world_to_pixel(carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2]))
-    circle = plt.Circle((pixel[0], pixel[1]), 0.75, fc=result_color)
+    print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
+    circle = plt.Circle((pixel[0], pixel[1]), 1, fc=result_color)
     plt.gca().add_patch(circle)
 
 
