@@ -31,8 +31,8 @@ world_offset = [0, 0]
 
 
 fig = plt.figure()
-plt.xlim(0,2000)
-plt.ylim(0,2000)
+plt.xlim(-200, 6000)
+plt.ylim(-200, 6000)
 
 
 def world_to_pixel(location, offset=(0, 0)):
