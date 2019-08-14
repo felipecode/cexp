@@ -7,7 +7,7 @@ fig, ax = plt.subplots(figsize=(16, 6))
 
 imgplot = ax.imshow(img, interpolation="bicubic")
 
-ax.Rectangle((10, 10), 100, 100, fc='r')
+plt.Rectangle((10, 10), 100, 100, fc='r')
 
 
 fig.savefig('stinktriangle.png', orientation='landscape',
