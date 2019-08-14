@@ -60,7 +60,7 @@ def draw_lane(lane, color):
             last_point = polygon[0]
             print (" Polygon to draw ", polygon)
             for point in polygon[1:]:
-                line = plt.Line2D(last_point, point, lw=2.5, edgecolor=color)
+                line = plt.Line2D(last_point, point, lw=2.5, color=color)
                 plt.gca().add_patch(line)
                 last_point = point
                 #polygon = plt.Polygon(polygon, edgecolor=color)
