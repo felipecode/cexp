@@ -281,14 +281,14 @@ def draw_map(town_name, render_port):
 ##### The car drawing tools ##############
 
 
-def draw_point(datapoint):
+def draw_point(datapoint, init=False, end=False):
     """
     We draw in a certain position at the map
     :param position:
     :param color:
     :return:
     """
-
+    size = 12
     result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
                                                datapoint['measurements']['road_angle'],
                                                -1 #datapoint['measurements']['distance_lead_vehicle']
@@ -297,9 +297,16 @@ def draw_point(datapoint):
     world_pos = datapoint['measurements']['ego_actor']['position']
 
     # We add some color to draw the point around
+    if init:
+        result_color = (1.0, 0.0, 0)
+        size = size*2
+    if end:
+        result_color = (0.0, 1.0, 0)
+        size = size*2
+    
     pixel = world_to_pixel(carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2]))
     print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
-    circle = plt.Circle((pixel[0], pixel[1]), 10, fc=result_color)
+    circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
     plt.gca().add_patch(circle)
 
 
