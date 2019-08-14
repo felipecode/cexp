@@ -372,7 +372,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     path = args.path
 
-    first_time = True
     count = 0
     step_size = args.step_size
 
@@ -401,6 +400,7 @@ if __name__ == '__main__':
 
     for env in env_batch:
 
+        first_time = True
         fig = plt.figure()
         plt.xlim(-200, 6000)
         plt.ylim(-200, 6000)
