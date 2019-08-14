@@ -22,7 +22,7 @@ def draw_point(position, color):
 #    pass
 
 # We set this as global
-pixels_per_meter = 0
+pixels_per_meter = 12
 
 SCALE = 1.0
 precision = 0.05
@@ -49,8 +49,6 @@ def lateral_shift(transform, shift):
 
 
 def draw_lane(lane, color):
-    print (lane)
-    print (color)
     for side in lane:
         lane_left_side = [lateral_shift(w.transform, -w.lane_width * 0.5) for w in side]
         lane_right_side = [lateral_shift(w.transform, w.lane_width * 0.5) for w in side]
