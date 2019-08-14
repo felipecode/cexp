@@ -49,6 +49,8 @@ def lateral_shift(transform, shift):
 
 
 def draw_lane(lane, color):
+    print (lane)
+    print (color)
     for side in lane:
         lane_left_side = [lateral_shift(w.transform, -w.lane_width * 0.5) for w in side]
         lane_right_side = [lateral_shift(w.transform, w.lane_width * 0.5) for w in side]
