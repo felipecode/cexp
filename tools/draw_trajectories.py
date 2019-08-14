@@ -57,7 +57,7 @@ def draw_lane(lane, color):
         polygon = [world_to_pixel(x) for x in polygon]
         print (" Polygon to draw ", polygon)
         if len(polygon) > 2:
-            polygon = plt.Polygon(polygon, fill=None, edgecolor=color)
+            polygon = plt.Polygon(polygon, edgecolor=color)
 
             plt.gca().add_patch(polygon)
             #pygame.draw.polygon(surface, color, polygon, 5)
