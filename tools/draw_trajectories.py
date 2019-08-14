@@ -171,7 +171,6 @@ def draw_roads(set_waypoints):
 
         if len(polygon) > 2:
             polygon = plt.Polygon(polygon, edgecolor=COLOR_ALUMINIUM_5)
-
             plt.gca().add_patch(polygon)
             #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon, 5)
             #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon)
@@ -300,7 +299,7 @@ def draw_point(datapoint):
     # We add some color to draw the point around
     pixel = world_to_pixel(carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2]))
     print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
-    circle = plt.Circle((pixel[0], pixel[1]), 1, fc=result_color)
+    circle = plt.Circle((pixel[0], pixel[1]), 3, fc=result_color)
     plt.gca().add_patch(circle)
 
 
