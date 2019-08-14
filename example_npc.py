@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
                )
     # this could be joined
-    env_batch = CEXP(json, params=params, iterations_to_execute=number_of_iterations,
+    env_batch = CEXP(json, params=params, execute_all=True,
                      port=arguments.port)  # THe experience is built, the files necessary
                                            # to load CARLA and the scenarios are made
 
