@@ -11,6 +11,10 @@ rectangle = plt.Rectangle((10, 10), 100, 100, fc='r')
 
 plt.gca().add_patch(rectangle)
 
+rectangle = plt.Rectangle((5, 5), 50, 50, fc='g')
+
+plt.gca().add_patch(rectangle)
+
 
 fig.savefig('stinktriangle.png', orientation='landscape',
                     bbox_inches='tight')

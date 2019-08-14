@@ -55,8 +55,9 @@ def draw_lane(lane, color):
 
         polygon = lane_left_side + [x for x in reversed(lane_right_side)]
         polygon = [world_to_pixel(x) for x in polygon]
-        print (" Polygon to draw ", polygon)
+
         if len(polygon) > 2:
+            print (" Polygon to draw ", polygon)
             polygon = plt.Polygon(polygon, edgecolor=color)
 
             plt.gca().add_patch(polygon)
