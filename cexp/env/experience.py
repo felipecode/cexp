@@ -410,7 +410,7 @@ class Experience(object):
 
         settings = self.world.get_settings()
         settings.no_rendering_mode = True #self._exp_params['non_rendering_mode']
-        settings.synchronous_mode = True
+        settings.synchronous_mode = False
         #settings.fixed_delta_seconds = 0.05
 
         self.world.set_weather(self._exp_params['weather_profile'])
