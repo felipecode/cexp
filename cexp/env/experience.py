@@ -409,7 +409,7 @@ class Experience(object):
                 continue
 
         settings = self.world.get_settings()
-        settings.no_rendering_mode = self._exp_params['non_rendering_mode']
+        settings.no_rendering_mode = True #self._exp_params['non_rendering_mode']
         settings.synchronous_mode = True
         #settings.fixed_delta_seconds = 0.05
 
