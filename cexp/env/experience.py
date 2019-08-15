@@ -112,6 +112,8 @@ class Experience(object):
         self._environment_data = {'exp_measurements': None,  # The exp measurements are specific of the experience
                                   'ego_controls': None,
                                   'scenario_controls': None}
+        # identify this exp
+        self._exp_id = self._exp_params['exp_number']
 
         # We try running all the necessary initalization, if we fail we clean the
         try:
@@ -168,13 +170,13 @@ class Experience(object):
             raise ValueError('You should not run a route without a master scenario')
 
         if self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.INVALID:
-            logging.debug("Exp No:{} The current scenario is INVALID".format(self.exp_id))
+            logging.debug("Exp No:{} The current scenario is INVALID".format(self._exp_id))
             status = 'INVALID'
         elif self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.SUCCESS:
-            logging.debug("Exp No:{} The current scenario is SUCCESSFUL".format(self.exp_id))
+            logging.debug("Exp No:{} The current scenario is SUCCESSFUL".format(self._exp_id))
             status = 'SUCCESS'
         elif self._master_scenario.scenario.scenario_tree.status == py_trees.common.Status.FAILURE:
-            logging.debug("Exp No:{} The current scenario is FAILURE".format(self.exp_id))
+            logging.debug("Exp No:{} The current scenario is FAILURE".format(self._exp_id))
             status = 'FAILURE'
         else:
             status = 'RUNNING'
