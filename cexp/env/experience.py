@@ -216,18 +216,21 @@ class Experience(object):
         # TODO this may go to another function
         # TODO maybe add not on every iterations, identify every second or half second.
 
-        _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
-                                                       self._route)
-        self._environment_data['exp_measurements'] = {
-            'directions': directions,
-            'forward_speed': get_forward_speed(self._ego_actor),
-            'distance_intersection': distance_to_intersection(self._ego_actor,
-                                                              self._ego_actor.get_world().get_map()),
-            'road_angle': get_current_road_angle(self._ego_actor,
-                                                 self._ego_actor.get_world().get_map()),
-            'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._route,
-                                                               self.world)
-        }
+        
+
+        if self._save_data:
+            _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
+                                                           self._route)
+            self._environment_data['exp_measurements'] = {
+                'directions': directions,
+                'forward_speed': get_forward_speed(self._ego_actor),
+                'distance_intersection': distance_to_intersection(self._ego_actor,
+                                                                  self._ego_actor.get_world().get_map()),
+                'road_angle': get_current_road_angle(self._ego_actor,
+                                                     self._ego_actor.get_world().get_map()),
+                'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._route,
+                                                                   self.world)
+            }
 
         self._sync(self.world.tick())
 
