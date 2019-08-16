@@ -61,8 +61,6 @@ if __name__ == '__main__':
                 'fov': 100,
                 'id': 'rgb_central'}
 
-
-
                ])
     # this could be joined
     env_batch = CEXP(json, params=params, execute_all=True,

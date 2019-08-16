@@ -116,7 +116,7 @@ class Environment(object):
 
     def stop(self):
         if self._save_trajectories:
-            draw_trajectories(self.get_data())
+            draw_trajectories(self.get_data(), self._exp_list[0].world)
 
 
 

@@ -444,7 +444,7 @@ class Experience(object):
         autopilot = True
         random = True
         actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
-                                                              background_definition['vehicle.*'])
+                                                              amount=background_definition['vehicle.*'])
         scenario_configuration.other_actors = [actor_configuration_instance]
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
                                   timeout=timeout, debug_mode=False)
