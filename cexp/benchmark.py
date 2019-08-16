@@ -157,7 +157,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
 
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
-              batch_size=1, save_dataset=False, port=None,
+              batch_size=1, save_dataset=False, port=None, save_sensors=False,
               agent_checkpoint_name=None, save_trajectories=False):
 
     """
@@ -182,6 +182,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
         agent_checkpoint_name = agent_module.__name__
 
     params = {'save_dataset': save_dataset,
+              'save_sensors': save_sensors,
               'docker_name': docker_image,
               'save_trajectories': save_trajectories,
               'gpu': gpu,
