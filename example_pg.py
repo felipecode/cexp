@@ -13,6 +13,7 @@ if __name__ == '__main__':
     # Dictionary with the necessary params related to the execution not the model itself.
     # TODO PARAMS NEED TO FOLLOW SOME SKELETON
     params = {'save_dataset': False,
+              'save_sensors': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,

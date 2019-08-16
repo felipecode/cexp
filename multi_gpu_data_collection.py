@@ -208,6 +208,7 @@ if __name__ == '__main__':
         # A single loop being made
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
+                  'save_sensors': True,
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
