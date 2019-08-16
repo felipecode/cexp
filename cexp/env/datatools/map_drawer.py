@@ -327,7 +327,7 @@ def get_color(scenario):
         return COLOR_BUTTER_2
 
 
-def draw_trajectories(env_data, env_name, world):
+def draw_trajectories(env_data, env_name, world, step_size=3):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
@@ -434,7 +434,7 @@ if __name__ == '__main__':
             print("No data generate for episode ", env)
         else:
 
-            draw_trajectories(env_data, env._environment_name, world)
+            draw_trajectories(env_data, env._environment_name, world, step_size)
 
 
 
