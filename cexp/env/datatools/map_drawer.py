@@ -332,6 +332,32 @@ def get_color(scenario):
         return COLOR_BUTTER_2
 
 
+def draw_trajectories(env_data):
+
+    fig = plt.figure()
+    plt.xlim(-200, 6000)
+    plt.ylim(-200, 6000)
+    draw_map(env._town_name, render_port)
+    first_time = True
+    for exp in env_data:
+        print("    Exp: ", exp[1])
+
+        for batch in exp[0]:
+            print("      Batch: ", batch[1])
+            step = 0  # Add the size
+
+            while step < len(batch[0]):
+                if first_time:
+                    draw_point(batch[0][step], init=True)
+                    first_time = False
+                else:
+                    draw_point(batch[0][step])
+                step += step_size
+            draw_point(batch[0][step - step_size], end=True)
+
+    fig.savefig(env._environment_name + '.png',
+                orientation='landscape', bbox_inches='tight', dpi=1200)
+
 
 ### Add some main.
 
@@ -400,11 +426,6 @@ if __name__ == '__main__':
 
     for env in env_batch:
 
-        first_time = True
-        fig = plt.figure()
-        plt.xlim(-200, 6000)
-        plt.ylim(-200, 6000)
-        draw_map(env._town_name, render_port)
         # it can be personalized to return different types of data.
         print("Environment Name: ", env)
         try:
@@ -413,24 +434,7 @@ if __name__ == '__main__':
             print("No data generate for episode ", env)
         else:
 
-            for exp in env_data:
-                print("    Exp: ", exp[1])
-
-                for batch in exp[0]:
-                    print("      Batch: ", batch[1])
-                    step = 0  # Add the size
-
-                    while step < len(batch[0]):
-                        if first_time:
-                            draw_point(batch[0][step], init=True)
-                            first_time=False
-                        else:
-                            draw_point(batch[0][step])
-                        step += step_size
-                    draw_point(batch[0][step-step_size], end=True)
-
-        fig.savefig(env._environment_name + '.png',
-                    orientation='landscape', bbox_inches='tight', dpi=1200)
+            draw_trajectories(env_data)
 
 
 

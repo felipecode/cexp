@@ -30,6 +30,7 @@ class CEXP(object):
 
     _default_params = {'save_dataset': False,
                        'save_sensors': False,
+                       'save_trajectories': False,
                        'docker_name': None,
                        'gpu': 0,
                        'batch_size': 1,
@@ -52,11 +53,17 @@ class CEXP(object):
         :param port:
         """
 
-        # TODO do a merge instead
+
         if params is None:
             self._params = CEXP._default_params
         else:
-            self._params = params
+            self._params = {}
+            for key, value in CEXP._default_params:
+                if key in params.keys():  # If it exist you add  it from the params
+                    self._params.update({key: params[key]})
+                else:  # if tit is not the case you use default
+                    self._params.update({key: value})
+
 
         # Todo thuis goes out with the merge
         if 'save_sensors' not in self._params:

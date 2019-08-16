@@ -39,6 +39,7 @@ if __name__ == '__main__':
     json = 'database/dataset_dynamic_l0.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
+              'save_trajectories': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,

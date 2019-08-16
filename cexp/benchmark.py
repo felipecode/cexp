@@ -158,7 +158,7 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
               batch_size=1, save_dataset=False, port=None,
-              agent_checkpoint_name=None):
+              agent_checkpoint_name=None, save_trajectories=False):
 
     """
     Computes the benchmark for a given json file containing a certain number of experiences.
@@ -183,6 +183,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
 
     params = {'save_dataset': save_dataset,
               'docker_name': docker_image,
+              'save_trajectories': save_trajectories,
               'gpu': gpu,
               'batch_size': batch_size,
               'remove_wrong_data': False,

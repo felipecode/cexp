@@ -215,8 +215,7 @@ class Experience(object):
         # Save all the measurements that are interesting
         # TODO this may go to another function
         # TODO maybe add not on every iterations, identify every second or half second.
-
-        
+        # TODO this may be requiried even if no data is saved
 
         if self._save_data:
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,

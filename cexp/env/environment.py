@@ -5,6 +5,7 @@ import shutil
 
 from cexp.env.experience import Experience
 import cexp.env.datatools.data_parser as parser
+import cexp.env.datatools.map_drawer.draw_trajectories as draw_trajectories
 
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
 
@@ -57,6 +58,8 @@ class Environment(object):
         # the name of the package this env is into
         self._package_name = env_params['package_name']
         logging.debug("Instantiated Environment %s" % self._environment_name)
+        # the trajectories can be written on a map. That is very helpful
+        self._save_trajectories = env_params['save_trajectories']
         # functions defined by the policy to compute the
         # adequate state and rewards based on CARLA data
         self.StateFunction = None
@@ -112,6 +115,11 @@ class Environment(object):
             raise ValueError("Cleaning up non created environment")
 
     def stop(self):
+        if self._save_trajectories:
+            draw_trajectories(self.get_data())
+
+
+
         self._cleanup()
 
     def add_sensors(self, sensors):
@@ -249,9 +257,7 @@ class Environment(object):
             control = control_vec[i]
             control = exp.tick_scenarios_control(control)
             exp.apply_control(control)
-
             exp.tick_world()
-                
             exp.save_experience()
 
         return self.StateFunction(self._exp_list), \
