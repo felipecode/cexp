@@ -105,7 +105,7 @@ class Environment(object):
         """
         # get all the exps to get the summary
         if self._save_trajectories:
-            draw_trajectories(self.get_data(), self._exp_list[0].world)
+            draw_trajectories(self.get_data(), self._environment_name, self._exp_list[0].world)
 
         self._latest_summary = []
         for exp in self._exp_list:
