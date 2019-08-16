@@ -436,16 +436,20 @@ class Experience(object):
         scenario_configuration = ScenarioConfiguration()
         scenario_configuration.route = None
         scenario_configuration.town = self._town_name
-        # TODO walkers are not supported yet, wait for carla 0.9.6
-        # TODO make background activity for walkers
+        # TODO The random seed should be set
         print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
-        model = 'vehicle.*'
-        transform = carla.Transform()
-        autopilot = True
-        random = True
-        actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
-                                                              amount=background_definition['vehicle.*'])
-        scenario_configuration.other_actors = [actor_configuration_instance]
+
+        configuration_instances = []
+        for key, numbers in background_definition.items():
+            model = key
+            transform = carla.Transform()
+            autopilot = True
+            random = True
+            actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
+                                                                  amount=background_definition[key])
+            configuration_instances.append(actor_configuration_instance)
+
+        scenario_configuration.other_actors = configuration_instances
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
                                   timeout=timeout, debug_mode=False)
 

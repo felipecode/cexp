@@ -104,6 +104,9 @@ class Environment(object):
 
         """
         # get all the exps to get the summary
+        if self._save_trajectories:
+            draw_trajectories(self.get_data(), self._exp_list[0].world)
+
         self._latest_summary = []
         for exp in self._exp_list:
             exp.cleanup()
@@ -115,10 +118,6 @@ class Environment(object):
             raise ValueError("Cleaning up non created environment")
 
     def stop(self):
-        if self._save_trajectories:
-            draw_trajectories(self.get_data(), self._exp_list[0].world)
-
-
 
         self._cleanup()
 
