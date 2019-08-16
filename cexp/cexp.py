@@ -141,6 +141,7 @@ class CEXP(object):
             'save_dataset': self._params['save_dataset'],
             'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],  #
             'package_name': self._json['package_name'],
+            'save_trajectories': self._params['save_trajectories'],
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording'],
