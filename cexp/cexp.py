@@ -58,7 +58,7 @@ class CEXP(object):
             self._params = CEXP._default_params
         else:
             self._params = {}
-            for key, value in CEXP._default_params:
+            for key, value in CEXP._default_params.items():
                 if key in params.keys():  # If it exist you add  it from the params
                     self._params.update({key: params[key]})
                 else:  # if tit is not the case you use default
