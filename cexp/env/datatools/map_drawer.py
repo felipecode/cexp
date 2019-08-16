@@ -2,10 +2,7 @@ import carla
 import argparse
 import matplotlib.pyplot as plt
 from cexp.env.scenario_identification import identify_scenario
-from cexp.cexp import CEXP
 
-
-from cexp.env.environment import NoDataGenerated
 
 
 
@@ -363,7 +360,9 @@ def draw_trajectories(env_data, world):
 
 if __name__ == '__main__':
 
+    from cexp.cexp import CEXP
 
+    from cexp.env.environment import NoDataGenerated
 
     parser = argparse.ArgumentParser(description='Path viewer')
     # parser.add_argument('model', type=str, help='Path to model definition json. Model weights should be on the same path.')
