@@ -269,9 +269,7 @@ def draw_topology(carla_topology, index):
 
 ##### the main map drawing function #####
 
-def draw_map(town_name, render_port):
-    client = carla.Client('localhost', 2000)
-    world = client.load_world(town_name)
+def draw_map(world):
 
     topology = world.get_map().get_topology()
     draw_topology(topology, 0)
@@ -332,12 +330,12 @@ def get_color(scenario):
         return COLOR_BUTTER_2
 
 
-def draw_trajectories(env_data):
+def draw_trajectories(env_data, world):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
     plt.ylim(-200, 6000)
-    draw_map(env._town_name, render_port)
+    draw_map(world)
     first_time = True
     for exp in env_data:
         print("    Exp: ", exp[1])
@@ -419,6 +417,8 @@ if __name__ == '__main__':
 
     # We have to connect to a server to be able to draw a topology
     render_port = 2000
+    client = carla.Client('localhost', 2000)
+
     env_batch = CEXP(jsonfile, params, execute_all=True, ignore_previous_execution=True)
     # Here some docker was set
     env_batch.start(no_server=True)  # no carla server mode.
@@ -426,6 +426,7 @@ if __name__ == '__main__':
 
     for env in env_batch:
 
+        world = client.load_world(env._town_name)
         # it can be personalized to return different types of data.
         print("Environment Name: ", env)
         try:
@@ -434,7 +435,7 @@ if __name__ == '__main__':
             print("No data generate for episode ", env)
         else:
 
-            draw_trajectories(env_data)
+            draw_trajectories(env_data, world)
 
 
 
