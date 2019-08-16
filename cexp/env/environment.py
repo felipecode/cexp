@@ -5,7 +5,7 @@ import shutil
 
 from cexp.env.experience import Experience
 import cexp.env.datatools.data_parser as parser
-import cexp.env.datatools.map_drawer.draw_trajectories as draw_trajectories
+from cexp.env.datatools.map_drawer import draw_trajectories
 
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
 
