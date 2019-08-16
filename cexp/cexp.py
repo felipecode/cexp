@@ -64,6 +64,7 @@ class CEXP(object):
                 else:  # if tit is not the case you use default
                     self._params.update({key: value})
 
+        print (" FINAL PARQMS ", self._params)
 
         # Todo thuis goes out with the merge
         if 'save_sensors' not in self._params:
