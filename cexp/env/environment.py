@@ -66,6 +66,7 @@ class Environment(object):
         self.RewardFunction = None
         # ignore previous executions
         #self._ignore_previous = ignore_previous
+        self._last_executing_agent = ''
         # update the number of executions to match the folder
 
     @staticmethod
@@ -103,14 +104,15 @@ class Environment(object):
             record the results summary and set this as an executed example
 
         """
-        # get all the exps to get the summary
-        if self._save_trajectories:
-            draw_trajectories(self.get_data(), self._environment_name, self._exp_list[0].world)
-
         self._latest_summary = []
         for exp in self._exp_list:
             exp.cleanup()
             self._latest_summary.append(exp.get_summary())
+        # get all the exps to get the summary
+        if self._save_trajectories:
+            draw_trajectories(self.get_data(),
+                              self._last_executing_agent + '_' + self._environment_name,
+                              self._exp_list[0].world)
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
@@ -127,15 +129,16 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-
     def reset(self, StateFunction, RewardFunction, agent_name=''):
-
+        # save the last executing agent name. This is to be used for logging purposes
+        self._last_executing_agent = agent_name
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
 
         if len(self._exp_list) > 0:
             self.stop()
+
 
         # set the state and reward functions to be used on this episode
         self.StateFunction = StateFunction
