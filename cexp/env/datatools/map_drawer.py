@@ -341,6 +341,7 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3):
             print("      Batch: ", batch[1])
 
             step = 0  # Add the size
+            print (" route 0 is ", route[0])
             draw_point(route[0])
             while step < len(batch[0]):
                 #if first_time:

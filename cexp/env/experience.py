@@ -66,6 +66,35 @@ def estimate_route_timeout(route):
 
     return int(SECONDS_GIVEN_PER_METERS * route_length)
 
+def clean_route(route):
+
+    curves_start_end = []
+    inside = False
+    start = -1
+    current_curve = RoadOption.LANEFOLLOW
+    index = 0
+    while index < len(route):
+
+        command = route[index][1]
+        if command != RoadOption.LANEFOLLOW and not inside:
+            inside = True
+            start = index
+            current_curve = command
+
+        if command != current_curve and inside:
+            inside = False
+            # End now is the index.
+            curves_start_end.append([start, index, current_curve])
+            if start == -1:
+                raise ValueError("End of curve without start")
+
+            start = -1
+        else:
+            index += 1
+
+    return curves_start_end
+
+
 
 class Experience(object):
     def __init__(self, client, vehicle_model, route, sensors, scenario_definitions,
@@ -380,7 +409,12 @@ class Experience(object):
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
         master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
+
+        print ( " BEFORE CONVERSION ")
+        print (clean_route(route))
         master_scenario_configuration.route = convert_transform_to_location(route)
+        print ( " Locations route")
+        print (master_scenario_configuration.route)
         master_scenario_configuration.town = town_name
         master_scenario_configuration.ego_vehicle = ActorConfigurationData('vehicle.lincoln.mkz2017',
                                                                            self._ego_actor.get_transform())
