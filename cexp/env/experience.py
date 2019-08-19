@@ -156,7 +156,7 @@ class Experience(object):
             # Set the world for the global data provider
             CarlaDataProvider.set_world(self.world)
             # We get the lat lon ref that is important for the route
-            self._lat_ref , self._lon_ref = _get_latlon_ref(self.world)
+            self._lat_ref, self._lon_ref = _get_latlon_ref(self.world)
             # We instance the ego actor object
             _, self._route = interpolate_trajectory(self.world, route)
             # elevate the z transform to avoid spawning problems
