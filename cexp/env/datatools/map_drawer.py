@@ -327,7 +327,7 @@ def get_color(scenario):
         return COLOR_BUTTER_2
 
 
-def draw_trajectories(env_data, env_name, world, step_size=3):
+def draw_trajectories(env_data, env_name, world, route, step_size=3):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
@@ -341,14 +341,16 @@ def draw_trajectories(env_data, env_name, world, step_size=3):
             print("      Batch: ", batch[1])
 
             step = 0  # Add the size
+            draw_point(route[0])
             while step < len(batch[0]):
-                if first_time:
-                    draw_point(batch[0][step], init=True)
-                    first_time = False
-                else:
-                    draw_point(batch[0][step])
+                #if first_time:
+                #    draw_point(batch[0][step], init=True)
+                #    first_time = False
+                #else:
+                draw_point(batch[0][step])
                 step += step_size
-            draw_point(batch[0][step - step_size], end=True)
+            #draw_point(batch[0][step - step_size], end=True)
+            draw_point(route[-1])
 
     fig.savefig(env_name + '_trajectory.png',
                 orientation='landscape', bbox_inches='tight', dpi=1200)
@@ -434,7 +436,7 @@ if __name__ == '__main__':
             print("No data generate for episode ", env)
         else:
 
-            draw_trajectories(env_data, env._environment_name, world, step_size)
+            draw_trajectories(env_data, env._environment_name, world, env._route, step_size)
 
 
 
