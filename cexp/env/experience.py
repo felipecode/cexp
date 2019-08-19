@@ -478,6 +478,18 @@ class Experience(object):
 
         return self._route_statistics
 
+    def record(self):
+        self._route_statistics = record_route_statistics_default(self._master_scenario,
+                                                                 self._exp_params['env_name'] + '_' +
+                                                                 str(self._exp_params['env_number']) + '_' +
+                                                                 str(self._exp_params['exp_number']))
+
+        if self._save_data:
+            self._writer.save_summary(self._route_statistics)
+            if self._exp_params['remove_wrong_data']:
+                if self._route_statistics['result'] == 'FAILURE':
+                    self._clean_bad_dataset()
+
     def cleanup(self, ego=True):
         """
         Remove and destroy all actors
@@ -498,16 +510,6 @@ class Experience(object):
                 self._instanced_sensors[i] = None
         self._instanced_sensors = []
         #  We stop the sensors first to avoid problems
-        self._route_statistics = record_route_statistics_default(self._master_scenario,
-                                                                 self._exp_params['env_name'] + '_' +
-                                                                 str(self._exp_params['env_number']) + '_' +
-                                                                 str(self._exp_params['exp_number']))
-
-        if self._save_data:
-            self._writer.save_summary(self._route_statistics)
-            if self._exp_params['remove_wrong_data']:
-                if self._route_statistics['result'] == 'FAILURE':
-                    self._clean_bad_dataset()
 
         CarlaActorPool.cleanup()
         CarlaDataProvider.cleanup()

@@ -105,14 +105,18 @@ class Environment(object):
 
         """
         self._latest_summary = []
-        for exp in self._exp_list:
-            exp.cleanup()
-            self._latest_summary.append(exp.get_summary())
+
         # get all the exps to get the summary
+        for exp in self._exp_list:
+            exp.record()
+            self._latest_summary.append(exp.get_summary())
+
+        # Using the summary we save the trajectories
         if self._save_trajectories:
             draw_trajectories(self.get_data(),
                               self._last_executing_agent + '_' + self._environment_name,
                               self._exp_list[0].world)
+
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
