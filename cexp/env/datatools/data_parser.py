@@ -113,7 +113,15 @@ def parse_measurements(measurement):
     return measurement_data
 
 
-def parse_environment(path, metadata_dict):
+def parse_environment(path, metadata_dict, read_sensors=True):
+    """
+
+    :param path:
+    :param metadata_dict:
+    :param read_sensors: if we are going to read the sensors described on the environment
+                         description
+    :return:
+    """
 
     # We start on the root folder, We want to list all the episodes
 
@@ -136,20 +144,23 @@ def parse_environment(path, metadata_dict):
             measurements_list = glob.glob(os.path.join(batch, 'measurement*'))
             sort_nicely(measurements_list)
             sensors_lists = {}
-            for sensor in sensors_types:
-                sensor_l = glob.glob(os.path.join(batch, sensor['id'] + '*'))
-                sort_nicely(sensor_l)
-                sensors_lists.update({sensor['id']: sensor_l})
+
+            if read_sensors:
+                for sensor in sensors_types:
+                    sensor_l = glob.glob(os.path.join(batch, sensor['id'] + '*'))
+                    sort_nicely(sensor_l)
+                    sensors_lists.update({sensor['id']: sensor_l})
 
             data_point_vec = []
             for i in range(len(measurements_list)):
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
 
-                for sensor in sensors_types:
-                    # TODO can bus and GPS are not implemented a sensors yet
-                    if sensor['id'] == 'can_bus' or sensor['id'] == 'GPS':
-                        continue
+                if read_sensors:
+                    for sensor in sensors_types:
+                        # TODO can bus and GPS are not implemented a sensors yet
+                        if sensor['id'] == 'can_bus' or sensor['id'] == 'GPS':
+                            continue
 
                     data_point.update({sensor['id']: sensors_lists[sensor['id']][i]})
 

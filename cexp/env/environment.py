@@ -139,7 +139,6 @@ class Environment(object):
         if len(self._exp_list) > 0:
             self.stop()
 
-
         # set the state and reward functions to be used on this episode
         self.StateFunction = StateFunction
         self.RewardFunction = RewardFunction
@@ -165,7 +164,8 @@ class Environment(object):
         # if it is the first time we execute this env
         if self._save_data and self._environment_name in Environment.number_of_executions:
             # we use one of the experiments to build the metadata
-            self._exp_list[0]._writer.save_metadata(self, self._exp_list[0]._instanced_sensors)
+            self._exp_list[0]._writer.save_metadata(self,
+                                                    self._exp_list[0]._instanced_sensors)
 
         for exp in self._exp_list:
             exp.tick_scenarios()
@@ -192,7 +192,8 @@ class Environment(object):
         with open(os.path.join(root_path, 'metadata.json'), 'r') as f:
             metadata_dict = json.loads(f.read())
 
-        full_episode_data_dict = parser.parse_environment(root_path, metadata_dict)
+        full_episode_data_dict = parser.parse_environment(root_path, metadata_dict,
+                                                          read_sensors=self._env_params['save_sensors'])
 
         return full_episode_data_dict
 
