@@ -413,8 +413,7 @@ class Experience(object):
         print ( " BEFORE CONVERSION ")
         print (clean_route(route))
         master_scenario_configuration.route = convert_transform_to_location(route)
-        print ( " Locations route")
-        print (master_scenario_configuration.route)
+
         master_scenario_configuration.town = town_name
         master_scenario_configuration.ego_vehicle = ActorConfigurationData('vehicle.lincoln.mkz2017',
                                                                            self._ego_actor.get_transform())

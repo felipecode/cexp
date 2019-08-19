@@ -47,6 +47,9 @@ COLOR_WHITE = (255/ 255.0, 255/ 255.0, 255/ 255.0)
 COLOR_BLACK = (0/ 255.0, 0/ 255.0, 0/ 255.0)
 
 
+COLOR_LIGHT_GRAY = (64/ 255.0, 64/ 255.0, 64/ 255.0)
+
+
 ############## MAP RELATED ######################
 
 # We set this as global
@@ -275,8 +278,15 @@ def draw_map(world):
 ######################################################
 ##### The car drawing tools ##############
 
+def draw_point(location, result_color):
 
-def draw_point(datapoint, init=False, end=False):
+    pixel = world_to_pixel(location)
+    circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
+    plt.gca().add_patch(circle)
+
+
+
+def draw_point_data(datapoint, init=False, end=False, color=None):
     """
     We draw in a certain position at the map
     :param position:
@@ -284,10 +294,13 @@ def draw_point(datapoint, init=False, end=False):
     :return:
     """
     size = 12
-    result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
+    if color is None:
+        result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
                                                datapoint['measurements']['road_angle'],
                                                -1 #datapoint['measurements']['distance_lead_vehicle']
                                                ))
+    else:
+        result_color = color
 
     world_pos = datapoint['measurements']['ego_actor']['position']
 
@@ -299,10 +312,11 @@ def draw_point(datapoint, init=False, end=False):
         result_color = (0.0, 1.0, 0)
         size = size*2
 
-    pixel = world_to_pixel(carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2]))
     print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
-    circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
-    plt.gca().add_patch(circle)
+    location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
+    draw_point(location, result_color)
+
+
 
 
 
@@ -327,12 +341,25 @@ def get_color(scenario):
         return COLOR_BUTTER_2
 
 
+def draw_route(route):
+    draw_point_data(route[0], init=True)
+    for point_tuple in route:
+
+        draw_point(point_tuple[0], result_color=COLOR_LIGHT_GRAY)
+
+    draw_point_data(route[-1], end=True)
+
+
+
 def draw_trajectories(env_data, env_name, world, route, step_size=3):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
     plt.ylim(-200, 6000)
+    # We draw the full map
     draw_map(world)
+    # we draw the route that has to be followed
+    draw_route(route)
     first_time = True
     for exp in env_data:
         print("    Exp: ", exp[1])
@@ -342,16 +369,16 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3):
 
             step = 0  # Add the size
             print (" route 0 is ", route[0])
-            draw_point(route[0])
+
             while step < len(batch[0]):
                 #if first_time:
                 #    draw_point(batch[0][step], init=True)
                 #    first_time = False
                 #else:
-                draw_point(batch[0][step])
+                draw_point_data(batch[0][step])
                 step += step_size
             #draw_point(batch[0][step - step_size], end=True)
-            draw_point(route[-1])
+            #draw_point(route[-1])
 
     fig.savefig(env_name + '_trajectory.png',
                 orientation='landscape', bbox_inches='tight', dpi=1200)

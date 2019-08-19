@@ -115,7 +115,8 @@ class Environment(object):
         if self._save_trajectories:
             draw_trajectories(self.get_data(),
                               self._last_executing_agent + '_' + self._environment_name,
-                              self._exp_list[0].world)
+                              self._exp_list[0].world,
+                              self._exp_list[0]._route)
 
 
         if self._environment_name in Environment.number_of_executions:
