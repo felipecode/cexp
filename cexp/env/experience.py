@@ -12,7 +12,7 @@ from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDat
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.scenarios.background_activity import BackgroundActivity
-from srunner.challenge.utils.route_manipulation import interpolate_trajectory
+from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
 from cexp.env.scorer import record_route_statistics_default
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
@@ -155,6 +155,8 @@ class Experience(object):
             CarlaActorPool.set_world(self.world)
             # Set the world for the global data provider
             CarlaDataProvider.set_world(self.world)
+            # We get the lat lon ref that is important for the route
+            self._lat_ref , self._lon_ref = _get_latlon_ref(self.world)
             # We instance the ego actor object
             _, self._route = interpolate_trajectory(self.world, route)
             # elevate the z transform to avoid spawning problems
