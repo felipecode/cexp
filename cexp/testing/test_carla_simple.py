@@ -92,65 +92,71 @@ def get_font():
     return pygame.font.Font(font, 14)
 
 
+def load_world(client):
+
+    #actor_list = []
+    world = client.get_world()
+    m = world.get_map()
+    start_pose = random.choice(m.get_spawn_points())
+    waypoint = m.get_waypoint(start_pose.location)
+
+    blueprint_library = world.get_blueprint_library()
+
+    vehicle = world.spawn_actor(
+        random.choice(blueprint_library.filter('vehicle.*')),
+        start_pose)
+    actor_list.append(vehicle)
+    vehicle.set_simulate_physics(False)
+
+    rgb_bp = blueprint_library.find('sensor.camera.rgb')
+    rgb_bp.set_attribute('image_size_x', str(1024))
+    rgb_bp.set_attribute('image_size_y', str(780))
+    rgb_bp.set_attribute('fov', str(120))
+    rgb_bp.set_attribute('sensor_tick', "0.05")
+    camera_rgb = world.spawn_actor(
+        rgb_bp,
+        carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
+        attach_to=vehicle)
+
+    camera_semseg = world.spawn_actor(
+        blueprint_library.find('sensor.camera.semantic_segmentation'),
+        carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
+        attach_to=vehicle)
+
+    #actor_list.append(camera_semseg)
+
+    return world, camera_rgb, camera_semseg
 
 def main():
-    actor_list = []
 
     clock = pygame.time.Clock()
 
     client = carla.Client('localhost', 2000)
     client.set_timeout(2.0)
-    client.start_recorder('test')
+    #client.start_recorder('test')
 
-    world = client.get_world()
 
     try:
-        m = world.get_map()
-        start_pose = random.choice(m.get_spawn_points())
-        waypoint = m.get_waypoint(start_pose.location)
 
-        blueprint_library = world.get_blueprint_library()
-
-        vehicle = world.spawn_actor(
-            random.choice(blueprint_library.filter('vehicle.*')),
-            start_pose)
-        actor_list.append(vehicle)
-        vehicle.set_simulate_physics(False)
-
-        rgb_bp = blueprint_library.find('sensor.camera.rgb')
-        rgb_bp.set_attribute('image_size_x', str(1024))
-        rgb_bp.set_attribute('image_size_y', str(780))
-        rgb_bp.set_attribute('fov', str(120))
-        rgb_bp.set_attribute('sensor_tick', "0.05")
-        camera_rgb = world.spawn_actor(
-            rgb_bp,
-            carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
-            attach_to=vehicle)
-        actor_list.append(camera_rgb)
-
-        camera_semseg = world.spawn_actor(
-            blueprint_library.find('sensor.camera.semantic_segmentation'),
-            carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
-            attach_to=vehicle)
-
-
-        actor_list.append(camera_semseg)
-
+        world, camera_rgb, camera_semseg = load_world(client)
         # Create a synchronous mode context.
-        with CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30) as sync_mode:
-            for i in range(2000):
-                clock.tick()
-                print (i)
+        sync_mode = CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30)
 
-                # Advance the simulation and wait for the data.
-                snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=2.0)
+        for i in range(2000):
+            clock.tick()
+            print (i)
 
-                # Choose the next waypoint and update the car location.
-                waypoint = random.choice(waypoint.next(1.5))
-                vehicle.set_transform(waypoint.transform)
+            if i % 200 == 0:
+                world, camera_rgb, camera_semseg = load_world(client)
+                sync_mode = CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30)
 
-                image_semseg.convert(carla.ColorConverter.CityScapesPalette)
-                fps = round(1.0 / snapshot.timestamp.delta_seconds)
+            # Advance the simulation and wait for the data.
+            snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=2.0)
+
+
+
+            image_semseg.convert(carla.ColorConverter.CityScapesPalette)
+            fps = round(1.0 / snapshot.timestamp.delta_seconds)
 
 
 
