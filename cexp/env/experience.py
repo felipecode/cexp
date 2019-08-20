@@ -221,7 +221,7 @@ class Experience(object):
 
         GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
         CarlaDataProvider.on_carla_tick()
-        # print (self._timeout, )
+        print ("Timeout ", self._timeout,  " Timestamp ", self.world.get_snapshot().timestamp)
         # update all scenarios
         for scenario in self._list_scenarios:  #
             scenario.scenario.scenario_tree.tick_once()
