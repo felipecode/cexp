@@ -274,3 +274,9 @@ class SensorInterface(object):
         for key in self._sensors_objects.keys():
             data_dict[key] = (self._timestamps[key], self._data_buffers[key])
         return data_dict
+
+    def destroy(self):
+        self._sensors_objects.clear()
+        self._data_buffers.clear()
+        self._timestamps.clear()
+        self._written.clear()
