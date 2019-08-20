@@ -99,6 +99,7 @@ class Environment(object):
         # we remove all the sensors everytime. No sensor addition on building time
         self._sensor_desc_vec = []
 
+    @profile
     def record(self):
         """
             record the results summary and set this as an executed example
@@ -135,6 +136,7 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
+    @profile
     def reset(self, StateFunction, RewardFunction, agent_name=''):
         # save the last executing agent name. This is to be used for logging purposes
         self._last_executing_agent = agent_name
