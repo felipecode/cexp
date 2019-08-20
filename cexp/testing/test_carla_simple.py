@@ -138,7 +138,7 @@ def main():
 
         # Create a synchronous mode context.
         with CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30) as sync_mode:
-            for i in range(10000):
+            for i in range(2000):
                 clock.tick()
                 print (i)
 
