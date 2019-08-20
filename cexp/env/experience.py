@@ -558,7 +558,7 @@ class Experience(object):
             logging.debug("Removed Ego Vehicle")
 
         if self.world is not None:
-
+            del self.world
             self.world = None
 
         self._client.stop_recorder()
