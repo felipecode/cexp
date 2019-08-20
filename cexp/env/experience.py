@@ -225,9 +225,10 @@ class Experience(object):
         #print ("Timeout ", self._timeout,  " Timestamp ", self.world.get_snapshot().timestamp)
         # update all scenarios
         for scenario in self._list_scenarios:  #
-            scenario.scenario.scenario_tree.tick_once()
-            controls = scenario.change_control(controls)
-
+            #scenario.scenario.scenario_tree.tick_once()
+            #controls = scenario.change_control(controls)
+            pass
+        
         if self._save_data:
             self._environment_data['ego_controls'] = controls
 
