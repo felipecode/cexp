@@ -462,7 +462,6 @@ class Experience(object):
                                            str(self._exp_params['exp_number'])
                                      + '_' + self._agent_name)
 
-        self._client.start_recorder(os.path.join(env_full_path, "recording.log"))
 
 
     # Todo make a scenario builder class
