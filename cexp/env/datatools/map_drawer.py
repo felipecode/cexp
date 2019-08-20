@@ -280,6 +280,7 @@ def draw_map(world):
 
 def draw_point(location, result_color, size):
 
+    #print ("World  Point ", location, " Draw Pixel ", pixel, " Color ", result_color)
     pixel = world_to_pixel(location)
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
     plt.gca().add_patch(circle)
@@ -304,8 +305,6 @@ def draw_point_data(datapoint, color=None):
 
     world_pos = datapoint['measurements']['ego_actor']['position']
 
-
-    print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
     location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
     draw_point(location, result_color, size)
 
@@ -338,7 +337,7 @@ def draw_route(route):
     draw_point(route[0][0].location, result_color=(0.0, 0.0, 1.0), size=24)
     for point_tuple in route:
 
-        draw_point(point_tuple[0], result_color=COLOR_LIGHT_GRAY)
+        draw_point(point_tuple[0], result_color=COLOR_LIGHT_GRAY, size=12)
 
     draw_point(route[-1][0].location, result_color=(0.0, 1.0, 0), size=24)
 
