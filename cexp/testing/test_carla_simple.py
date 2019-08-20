@@ -55,7 +55,7 @@ class CarlaSyncMode(object):
     def __enter__(self):
         self._settings = self.world.get_settings()
         self.frame = self.world.apply_settings(carla.WorldSettings(
-            no_rendering_mode=False,
+            no_rendering_mode=True,
             synchronous_mode=True))
 
         def make_queue(register_event):
@@ -130,8 +130,9 @@ def main():
 
         # Create a synchronous mode context.
         with CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30) as sync_mode:
-            for i in range(10000):
+            for i in range(100000):
                 clock.tick()
+                print (i)
 
                 # Advance the simulation and wait for the data.
                 snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=2.0)
