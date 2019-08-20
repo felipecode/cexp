@@ -337,7 +337,7 @@ def draw_route(route):
     draw_point(route[0][0].location, result_color=(0.0, 0.0, 1.0), size=24)
     for point_tuple in route:
 
-        draw_point(point_tuple[0], result_color=COLOR_LIGHT_GRAY, size=12)
+        draw_point(point_tuple[0].location, result_color=COLOR_LIGHT_GRAY, size=12)
 
     draw_point(route[-1][0].location, result_color=(0.0, 1.0, 0), size=24)
 
