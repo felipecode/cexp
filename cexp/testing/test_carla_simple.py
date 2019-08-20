@@ -117,8 +117,13 @@ def main():
         actor_list.append(vehicle)
         vehicle.set_simulate_physics(False)
 
+        rgb_bp = blueprint_library.find('sensor.camera.rgb')
+        rgb_bp.set_attribute('image_size_x', str(1024))
+        rgb_bp.set_attribute('image_size_y', str(780))
+        rgb_bp.set_attribute('fov', str(120))
+        rgb_bp.set_attribute('sensor_tick', "0.05")
         camera_rgb = world.spawn_actor(
-            blueprint_library.find('sensor.camera.rgb'),
+            rgb_bp,
             carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
             attach_to=vehicle)
         actor_list.append(camera_rgb)
@@ -127,6 +132,8 @@ def main():
             blueprint_library.find('sensor.camera.semantic_segmentation'),
             carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
             attach_to=vehicle)
+
+
         actor_list.append(camera_semseg)
 
         # Create a synchronous mode context.
