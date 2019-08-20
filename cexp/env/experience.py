@@ -220,15 +220,14 @@ class Experience(object):
         Here we tick the scenarios and also change the control based on the scenario properties
         """
 
-        GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
-        CarlaDataProvider.on_carla_tick()
+        #GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
+        #CarlaDataProvider.on_carla_tick()
         #print ("Timeout ", self._timeout,  " Timestamp ", self.world.get_snapshot().timestamp)
         # update all scenarios
         for scenario in self._list_scenarios:  #
-            #scenario.scenario.scenario_tree.tick_once()
-            #controls = scenario.change_control(controls)
-            pass
-        
+            scenario.scenario.scenario_tree.tick_once()
+            controls = scenario.change_control(controls)
+
         if self._save_data:
             self._environment_data['ego_controls'] = controls
 
@@ -240,11 +239,11 @@ class Experience(object):
             self._environment_data['scenario_controls'] = controls
         self._ego_actor.apply_control(controls)
 
-        if self._exp_params['debug']:
-            spectator = self.world.get_spectator()
-            ego_trans = self._ego_actor.get_transform()
-            spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
-                                                    carla.Rotation(pitch=-90)))
+        #if self._exp_params['debug']:
+        #    spectator = self.world.get_spectator()
+        #    ego_trans = self._ego_actor.get_transform()
+        #    spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
+        #                                            carla.Rotation(pitch=-90)))
 
     def tick_world(self):
         # Save all the measurements that are interesting
