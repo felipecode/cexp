@@ -105,7 +105,6 @@ def load_world(client):
     vehicle = world.spawn_actor(
         random.choice(blueprint_library.filter('vehicle.*')),
         start_pose)
-    actor_list.append(vehicle)
     vehicle.set_simulate_physics(False)
 
     rgb_bp = blueprint_library.find('sensor.camera.rgb')
@@ -161,10 +160,6 @@ def main():
 
 
     finally:
-
-        print('destroying actors.')
-        for actor in actor_list:
-            actor.destroy()
 
         pygame.quit()
         print('done.')
