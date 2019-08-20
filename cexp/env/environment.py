@@ -99,7 +99,7 @@ class Environment(object):
         # we remove all the sensors everytime. No sensor addition on building time
         self._sensor_desc_vec = []
 
-    @profile
+    
     def record(self):
         """
             record the results summary and set this as an executed example
@@ -125,7 +125,6 @@ class Environment(object):
         else:
             raise ValueError("Cleaning up non created environment")
 
-    @profile
     def stop(self):
 
         self._cleanup()
@@ -136,7 +135,7 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-    @profile
+
     def reset(self, StateFunction, RewardFunction, agent_name=''):
         # save the last executing agent name. This is to be used for logging purposes
         self._last_executing_agent = agent_name
@@ -253,7 +252,7 @@ class Environment(object):
 
         return running_envs, num_running_envs, running_envs_map, running_envs_reverse_map
     # TODO we can make this extra data pretier.
-    @profile
+
     def run_step(self, control_vec):
         """
         Run an step on the simulation using the agent control
