@@ -94,12 +94,9 @@ def get_font():
 
 def load_world(client):
 
-    #actor_list = []
     world = client.get_world()
     m = world.get_map()
     start_pose = random.choice(m.get_spawn_points())
-    waypoint = m.get_waypoint(start_pose.location)
-
     blueprint_library = world.get_blueprint_library()
 
     vehicle = world.spawn_actor(
@@ -132,8 +129,6 @@ def main():
 
     client = carla.Client('localhost', 2000)
     client.set_timeout(2.0)
-    #client.start_recorder('test')
-
 
     try:
 
@@ -145,14 +140,14 @@ def main():
             clock.tick()
             print (i)
 
-            if i % 200 == 0:
-                world, camera_rgb, camera_semseg = load_world(client)
-                sync_mode = CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30)
 
             # Advance the simulation and wait for the data.
             snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=2.0)
 
 
+            if i % 200 == 0:
+                world, camera_rgb, camera_semseg = load_world(client)
+                sync_mode = CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30)
 
             image_semseg.convert(carla.ColorConverter.CityScapesPalette)
             fps = round(1.0 / snapshot.timestamp.delta_seconds)
