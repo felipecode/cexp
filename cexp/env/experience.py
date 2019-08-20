@@ -97,6 +97,7 @@ def clean_route(route):
 
 
 class Experience(object):
+    @profile
     def __init__(self, client, vehicle_model, route, sensors, scenario_definitions,
                  exp_params, agent_name):
         """
@@ -193,6 +194,7 @@ class Experience(object):
         for scenario in self._list_scenarios:
             scenario.scenario.scenario_tree.tick_once()
 
+    @profile
     def get_status(self):
         """
             Returns the current status of the vehicle
@@ -232,6 +234,7 @@ class Experience(object):
 
         return controls
 
+    @profile
     def apply_control(self, controls):
 
         if self._save_data:
@@ -244,6 +247,7 @@ class Experience(object):
             spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
                                                     carla.Rotation(pitch=-90)))
 
+    @profile
     def tick_world(self):
         # Save all the measurements that are interesting
         # TODO this may go to another function
@@ -304,6 +308,7 @@ class Experience(object):
 
         logging.debug("Created Ego Vehicle")
 
+    @profile
     def _setup_sensors(self, sensors, vehicle):
         """
         Create the sensors defined by the user and attach them to the ego-vehicle
@@ -408,6 +413,7 @@ class Experience(object):
         pass
         # TODO for now we are just randomizing the seeds and that is it
 
+    @profile
     def build_master_scenario(self, route, town_name, timeout):
         # We have to find the target.
         # we also have to convert the route to the expected format
@@ -426,6 +432,7 @@ class Experience(object):
         return MasterScenario(self.world, self._ego_actor, master_scenario_configuration,
                               timeout=timeout)
 
+    @profile
     def _load_world(self):
         # time continues
         attempts = 0
@@ -463,6 +470,7 @@ class Experience(object):
 
 
     # Todo make a scenario builder class
+    @profile
     def _build_background(self, background_definition, timeout):
         scenario_configuration = ScenarioConfiguration()
         scenario_configuration.route = None
@@ -508,6 +516,7 @@ class Experience(object):
 
         return self._route_statistics
 
+    @profile
     def record(self):
         self._route_statistics = record_route_statistics_default(self._master_scenario,
                                                                  self._exp_params['env_name'] + '_' +
@@ -556,6 +565,7 @@ class Experience(object):
 
         self._client.stop_recorder()
 
+    @profile
     def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.
         # Basically remove the folder associated with this exp if the status was not success,
