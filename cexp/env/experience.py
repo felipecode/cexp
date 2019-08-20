@@ -97,7 +97,7 @@ def clean_route(route):
 
 
 class Experience(object):
-    @profile
+
     def __init__(self, client, vehicle_model, route, sensors, scenario_definitions,
                  exp_params, agent_name):
         """
@@ -306,7 +306,7 @@ class Experience(object):
 
         logging.debug("Created Ego Vehicle")
 
-    @profile
+
     def _setup_sensors(self, sensors, vehicle):
         """
         Create the sensors defined by the user and attach them to the ego-vehicle
@@ -411,7 +411,7 @@ class Experience(object):
         pass
         # TODO for now we are just randomizing the seeds and that is it
 
-    @profile
+
     def build_master_scenario(self, route, town_name, timeout):
         # We have to find the target.
         # we also have to convert the route to the expected format
@@ -430,7 +430,7 @@ class Experience(object):
         return MasterScenario(self.world, self._ego_actor, master_scenario_configuration,
                               timeout=timeout)
 
-    @profile
+
     def _load_world(self):
         # time continues
         attempts = 0
@@ -467,7 +467,7 @@ class Experience(object):
 
 
     # Todo make a scenario builder class
-    @profile
+
     def _build_background(self, background_definition, timeout):
         scenario_configuration = ScenarioConfiguration()
         scenario_configuration.route = None
@@ -513,7 +513,7 @@ class Experience(object):
 
         return self._route_statistics
 
-    @profile
+
     def record(self):
         self._route_statistics = record_route_statistics_default(self._master_scenario,
                                                                  self._exp_params['env_name'] + '_' +
@@ -526,7 +526,7 @@ class Experience(object):
                 if self._route_statistics['result'] == 'FAILURE':
                     self._clean_bad_dataset()
 
-    @profile
+
     def cleanup(self, ego=True):
         """
         Remove and destroy all actors
@@ -558,11 +558,11 @@ class Experience(object):
             logging.debug("Removed Ego Vehicle")
 
         if self.world is not None:
-            del self.world
+            self.world.destroy()
             self.world = None
 
 
-    @profile
+    
     def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.
         # Basically remove the folder associated with this exp if the status was not success,
