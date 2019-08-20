@@ -278,7 +278,7 @@ def draw_map(world):
 ######################################################
 ##### The car drawing tools ##############
 
-def draw_point(location, result_color):
+def draw_point(location, result_color, size):
 
     pixel = world_to_pixel(location)
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
@@ -286,7 +286,7 @@ def draw_point(location, result_color):
 
 
 
-def draw_point_data(datapoint, init=False, end=False, color=None):
+def draw_point_data(datapoint, color=None):
     """
     We draw in a certain position at the map
     :param position:
@@ -304,17 +304,10 @@ def draw_point_data(datapoint, init=False, end=False, color=None):
 
     world_pos = datapoint['measurements']['ego_actor']['position']
 
-    # We add some color to draw the point around
-    if init:
-        result_color = (1.0, 0.0, 0)
-        size = size*2
-    if end:
-        result_color = (0.0, 1.0, 0)
-        size = size*2
 
     print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
     location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
-    draw_point(location, result_color)
+    draw_point(location, result_color, size)
 
 
 
@@ -342,12 +335,12 @@ def get_color(scenario):
 
 
 def draw_route(route):
-    draw_point_data(route[0], init=True)
+    draw_point(route[0], result_color=(0.0, 0.0, 1.0), size=24)
     for point_tuple in route:
 
         draw_point(point_tuple[0], result_color=COLOR_LIGHT_GRAY)
 
-    draw_point_data(route[-1], end=True)
+    draw_point(route[-1], result_color=(0.0, 1.0, 0), size=24)
 
 
 
@@ -395,7 +388,8 @@ if __name__ == '__main__':
     from cexp.env.environment import NoDataGenerated
 
     parser = argparse.ArgumentParser(description='Path viewer')
-    # parser.add_argument('model', type=str, help='Path to model definition json. Model weights should be on the same path.')
+    # parser.add_argument('model', type=str,
+    #  help='Path to model definition json. Model weights should be on the same path.')
     parser.add_argument('-pt', '--path', default="")
 
     parser.add_argument(
