@@ -88,6 +88,7 @@ class Environment(object):
     def __str__(self):
         return self._environment_name
 
+    @profile
     def _cleanup(self):
         """
         Remove and destroy all actors
@@ -99,7 +100,6 @@ class Environment(object):
         # we remove all the sensors everytime. No sensor addition on building time
         self._sensor_desc_vec = []
 
-    @profile
     def record(self):
         """
             record the results summary and set this as an executed example

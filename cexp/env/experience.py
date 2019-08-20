@@ -520,6 +520,7 @@ class Experience(object):
                 if self._route_statistics['result'] == 'FAILURE':
                     self._clean_bad_dataset()
 
+    @profile
     def cleanup(self, ego=True):
         """
         Remove and destroy all actors
