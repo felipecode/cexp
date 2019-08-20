@@ -464,7 +464,6 @@ class Experience(object):
                                            str(self._exp_params['exp_number'])
                                      + '_' + self._agent_name)
 
-        self._client.start_recorder(os.path.join(env_full_path, "recording.log"))
 
 
     # Todo make a scenario builder class
@@ -547,6 +546,7 @@ class Experience(object):
                 self._instanced_sensors[i].destroy()
                 self._instanced_sensors[i] = None
         self._instanced_sensors = []
+        del self._sensor_interface
         #  We stop the sensors first to avoid problems
 
         CarlaActorPool.cleanup()
@@ -561,7 +561,6 @@ class Experience(object):
             del self.world
             self.world = None
 
-        self._client.stop_recorder()
 
     @profile
     def _clean_bad_dataset(self):
