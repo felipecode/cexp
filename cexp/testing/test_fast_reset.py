@@ -43,7 +43,7 @@ if __name__ == '__main__':
               'batch_size': 1,
               'remove_wrong_data': False,
               'non_rendering_mode': True,
-              'carla_recording': True
+              'carla_recording': False
               }
 
     # TODO for now batch size is one
