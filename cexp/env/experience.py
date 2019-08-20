@@ -239,11 +239,12 @@ class Experience(object):
             self._environment_data['scenario_controls'] = controls
         self._ego_actor.apply_control(controls)
 
-        #if self._exp_params['debug']:
-        #    spectator = self.world.get_spectator()
-        #    ego_trans = self._ego_actor.get_transform()
-        #    spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
-        #                                            carla.Rotation(pitch=-90)))
+        if self._exp_params['debug']:
+            spectator = self.world.get_spectator()
+            ego_trans = self._ego_actor.get_transform()
+            spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
+                                                    carla.Rotation(pitch=-90)))
+
 
     def tick_world(self):
         # Save all the measurements that are interesting
@@ -268,11 +269,10 @@ class Experience(object):
         self._sync(self.world.tick())
 
     def _sync(self, frame):
-        pass
-        #while frame > self.world.get_snapshot().timestamp.frame:
-        #    pass
-        #assert frame == self.world.get_snapshot().timestamp.frame
-        #self.frame = frame
+        while frame > self.world.get_snapshot().timestamp.frame:
+            pass
+        assert frame == self.world.get_snapshot().timestamp.frame
+        self.frame = frame
 
     def save_experience(self):
 
@@ -411,6 +411,7 @@ class Experience(object):
         pass
         # TODO for now we are just randomizing the seeds and that is it
 
+    @profile
     def build_master_scenario(self, route, town_name, timeout):
         # We have to find the target.
         # we also have to convert the route to the expected format
@@ -463,6 +464,7 @@ class Experience(object):
                                            str(self._exp_params['exp_number'])
                                      + '_' + self._agent_name)
 
+        self._client.start_recorder(os.path.join(env_full_path, "recording.log"))
 
 
     # Todo make a scenario builder class
@@ -512,7 +514,7 @@ class Experience(object):
 
         return self._route_statistics
 
-
+    @profile
     def record(self):
         self._route_statistics = record_route_statistics_default(self._master_scenario,
                                                                  self._exp_params['env_name'] + '_' +
@@ -559,7 +561,9 @@ class Experience(object):
 
             self.world = None
 
+        self._client.stop_recorder()
 
+    @profile
     def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.
         # Basically remove the folder associated with this exp if the status was not success,

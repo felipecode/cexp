@@ -96,6 +96,7 @@ class Environment(object):
         # make the exp vec empty
         for exp in self._exp_list:
             exp.cleanup()
+            del exp
         self._exp_list = []
         # we remove all the sensors everytime. No sensor addition on building time
         self._sensor_desc_vec = []
@@ -271,8 +272,8 @@ class Environment(object):
             exp.tick_world()
             exp.save_experience()
 
-        return None # self.StateFunction(self._exp_list), \
-              #      self.RewardFunction(self._exp_list)
+        return self.StateFunction(self._exp_list), \
+                    self.RewardFunction(self._exp_list)
 
     # TODO: the concept of batch vs the concept of repetition
     def get_summary(self):
