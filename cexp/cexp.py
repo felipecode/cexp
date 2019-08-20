@@ -146,7 +146,7 @@ class CEXP(object):
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording'],
-            'debug': self._port is not None
+            'debug': False # DEBUG SHOULD BE SET
         }
 
         # We instantiate environments here using the recently connected client

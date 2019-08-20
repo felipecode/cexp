@@ -271,8 +271,8 @@ class Environment(object):
             exp.tick_world()
             exp.save_experience()
 
-        return self.StateFunction(self._exp_list), \
-                    self.RewardFunction(self._exp_list)
+        return None # self.StateFunction(self._exp_list), \
+              #      self.RewardFunction(self._exp_list)
 
     # TODO: the concept of batch vs the concept of repetition
     def get_summary(self):
