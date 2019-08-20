@@ -100,6 +100,7 @@ def main():
 
     client = carla.Client('localhost', 2000)
     client.set_timeout(2.0)
+    client.start_recorder('test')
 
     world = client.get_world()
 
@@ -130,7 +131,7 @@ def main():
 
         # Create a synchronous mode context.
         with CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30) as sync_mode:
-            for i in range(100000):
+            for i in range(10000):
                 clock.tick()
                 print (i)
 
