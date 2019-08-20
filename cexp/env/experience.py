@@ -168,11 +168,11 @@ class Experience(object):
             # We set all the traffic lights to green to avoid having this traffic scenario.
             self._reset_map()
             # Data for building the master scenario
-            timeout =  estimate_route_timeout(self._route)
+            self._timeout = estimate_route_timeout(self._route)
             self._master_scenario = self.build_master_scenario(self._route,
                                                                exp_params['town_name'],
-                                                               timeout)
-            other_scenarios = self.build_scenario_instances(scenario_definitions, timeout)
+                                                               self._timeout)
+            other_scenarios = self.build_scenario_instances(scenario_definitions, self._timeout)
             self._list_scenarios = [self._master_scenario] + other_scenarios
             # Route statistics, when the route is finished there will
             # be route statistics on this object. and nothing else
@@ -221,10 +221,12 @@ class Experience(object):
 
         GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
         CarlaDataProvider.on_carla_tick()
+        # print (self._timeout, )
         # update all scenarios
         for scenario in self._list_scenarios:  #
             scenario.scenario.scenario_tree.tick_once()
             controls = scenario.change_control(controls)
+
         if self._save_data:
             self._environment_data['ego_controls'] = controls
 
@@ -411,8 +413,7 @@ class Experience(object):
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
         master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
-
-        print ( " BEFORE CONVERSION ")
+        print (" BEFORE CONVERSION ")
         print (clean_route(route))
         master_scenario_configuration.route = convert_transform_to_location(route)
 
@@ -425,9 +426,7 @@ class Experience(object):
         return MasterScenario(self.world, self._ego_actor, master_scenario_configuration,
                               timeout=timeout)
 
-
     def _load_world(self):
-
         # time continues
         attempts = 0
 
@@ -454,7 +453,6 @@ class Experience(object):
         self.world.apply_settings(settings)
 
         # We also set the client to record carla loggings for this episode
-
         root_path = os.environ["SRL_DATASET_PATH"]
         env_full_path = os.path.join(root_path, self._exp_params['package_name'],
                                            self._exp_params['env_name'],
@@ -464,8 +462,6 @@ class Experience(object):
         self._client.start_recorder(os.path.join(env_full_path, "recording.log"))
 
 
-
-
     # Todo make a scenario builder class
     def _build_background(self, background_definition, timeout):
         scenario_configuration = ScenarioConfiguration()
@@ -473,7 +469,6 @@ class Experience(object):
         scenario_configuration.town = self._town_name
         # TODO The random seed should be set
         print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
-
         configuration_instances = []
         for key, numbers in background_definition.items():
             model = key

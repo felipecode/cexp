@@ -335,12 +335,12 @@ def get_color(scenario):
 
 
 def draw_route(route):
-    draw_point(route[0], result_color=(0.0, 0.0, 1.0), size=24)
+    draw_point(route[0][0], result_color=(0.0, 0.0, 1.0), size=24)
     for point_tuple in route:
 
         draw_point(point_tuple[0], result_color=COLOR_LIGHT_GRAY)
 
-    draw_point(route[-1], result_color=(0.0, 1.0, 0), size=24)
+    draw_point(route[-1][0], result_color=(0.0, 1.0, 0), size=24)
 
 
 
@@ -353,7 +353,6 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3):
     draw_map(world)
     # we draw the route that has to be followed
     draw_route(route)
-    first_time = True
     for exp in env_data:
         print("    Exp: ", exp[1])
 
