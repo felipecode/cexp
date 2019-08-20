@@ -268,10 +268,11 @@ class Experience(object):
         self._sync(self.world.tick())
 
     def _sync(self, frame):
-        while frame > self.world.get_snapshot().timestamp.frame:
-            pass
-        assert frame == self.world.get_snapshot().timestamp.frame
-        self.frame = frame
+        pass
+        #while frame > self.world.get_snapshot().timestamp.frame:
+        #    pass
+        #assert frame == self.world.get_snapshot().timestamp.frame
+        #self.frame = frame
 
     def save_experience(self):
 
