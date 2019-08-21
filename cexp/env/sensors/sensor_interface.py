@@ -175,6 +175,7 @@ class CallBack(object):
             logging.error('No callback method for this sensor.')
 
     # Parsing CARLA physical Sensors
+    @profile
     def _parse_image_cb(self, image, tag, writer):
 
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
@@ -216,6 +217,7 @@ class SensorInterface(object):
         self._number_sensors = number_threads_barrier
         self._lock = Lock()
 
+
     def register_sensor(self, tag, sensor):
         if tag in self._sensors_objects:
             raise ValueError("Duplicated sensor tag [{}]".format(tag))
@@ -224,6 +226,7 @@ class SensorInterface(object):
         self._data_buffers[tag] = None
         self._timestamps[tag] = -1
 
+    @profile
     def update_sensor(self, raw, tag, data, timestamp, writer):
         if tag not in self._sensors_objects:
             raise ValueError("The sensor with tag [{}] has not been created!".format(tag))
@@ -242,6 +245,7 @@ class SensorInterface(object):
                 self._written[key] = 0
         return True
 
+    @profile
     def wait_sensors_written(self, writer):
         unsynchronized = True
 
@@ -253,6 +257,7 @@ class SensorInterface(object):
 
             time.sleep(0.01)
 
+    @profile
     def _synchronize_write(self, writer, tag, raw):
         """
         Synchronize to check if all sensors have been written.
@@ -270,10 +275,10 @@ class SensorInterface(object):
 
 
     def get_data(self):
-        #data_dict = {}
-        #for key in self._sensors_objects.keys():
-        #    data_dict[key] = (self._timestamps[key], self._data_buffers[key])
-        return None
+        data_dict = {}
+        for key in self._sensors_objects.keys():
+            data_dict[key] = (self._timestamps[key], self._data_buffers[key])
+        return data_dict
 
     def destroy(self):
         self._sensors_objects.clear()
