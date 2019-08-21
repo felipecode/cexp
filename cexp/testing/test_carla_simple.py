@@ -135,12 +135,12 @@ def main():
 
         # Create a synchronous mode context.
         with CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30) as sync_mode:
-            for i in range(100000):
+            for i in range(2000):
                 clock.tick()
                 print (i)
 
                 # Advance the simulation and wait for the data.
-                snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=2.0)
+                snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=5.0)
 
                 # Choose the next waypoint and update the car location.
                 waypoint = random.choice(waypoint.next(1.5))
