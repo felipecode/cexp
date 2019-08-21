@@ -31,7 +31,7 @@ class NPCAgent(Agent):
         if self._agent is not None:
             self._agent = BasicAgent(exp._ego_actor)
 
-        if not self.route_assigned:
+        if not self.route_assigned and self._agent is not None:
 
             plan = []
             for transform, road_option in exp._route:
