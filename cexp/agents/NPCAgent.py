@@ -28,10 +28,10 @@ class NPCAgent(Agent):
         return self._sensors_dict
 
     def make_state(self, exp):
-        if self._agent is not None:
+        if self._agent is None:
             self._agent = BasicAgent(exp._ego_actor)
 
-        if not self.route_assigned and self._agent is not None:
+        if not self.route_assigned:
 
             plan = []
             for transform, road_option in exp._route:
