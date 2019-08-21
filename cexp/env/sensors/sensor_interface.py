@@ -268,7 +268,6 @@ class SensorInterface(object):
         self._written[tag] += 1
         self._lock.release()
 
-        print (len(self._sensors_objects),len(self._data_buffers))
 
     def get_data(self):
         data_dict = {}

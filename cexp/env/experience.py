@@ -535,6 +535,7 @@ class Experience(object):
         """
         Remove and destroy all actors
         """
+
         for scenario in self._list_scenarios:
             # Reset scenario status for proper cleanup
             scenario.scenario.terminate()
@@ -546,6 +547,9 @@ class Experience(object):
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):
             if self._instanced_sensors[i] is not None:
+                print ("#######################")
+                print (" STOOPPED A FUCKIN SENSORS ")
+                print ("#######################")
                 self._instanced_sensors[i].stop()
                 self._instanced_sensors[i].destroy()
                 self._instanced_sensors[i] = None

@@ -51,10 +51,8 @@ class CarlaSyncMode(object):
         self.delta_seconds = 1.0 / kwargs.get('fps', 20)
         self._queues = []
         self._settings = None
-        self._settings = self.world.get_settings()
-        self.frame = self.world.apply_settings(carla.WorldSettings(
-            no_rendering_mode=True,
-            synchronous_mode=True))
+
+    def __enter__(self):
         self._settings = self.world.get_settings()
         self.frame = self.world.apply_settings(carla.WorldSettings(
             no_rendering_mode=True,
@@ -68,6 +66,7 @@ class CarlaSyncMode(object):
         make_queue(self.world.on_tick)
         for sensor in self.sensors:
             make_queue(sensor.listen)
+        return self
 
     def tick(self, timeout):
         self.frame = self.world.tick()
@@ -93,24 +92,28 @@ def get_font():
     return pygame.font.Font(font, 14)
 
 
+
 def main():
+    actor_list = []
 
     clock = pygame.time.Clock()
 
-    client = carla.Client('localhost', 3000)
+    client = carla.Client('localhost', 2000)
     client.set_timeout(2.0)
 
-    try:
+    world = client.get_world()
 
-        world = client.get_world()
+    try:
         m = world.get_map()
         start_pose = random.choice(m.get_spawn_points())
+        waypoint = m.get_waypoint(start_pose.location)
 
         blueprint_library = world.get_blueprint_library()
 
         vehicle = world.spawn_actor(
             random.choice(blueprint_library.filter('vehicle.*')),
             start_pose)
+        actor_list.append(vehicle)
         vehicle.set_simulate_physics(False)
 
         rgb_bp = blueprint_library.find('sensor.camera.rgb')
@@ -122,30 +125,37 @@ def main():
             rgb_bp,
             carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
             attach_to=vehicle)
+        actor_list.append(camera_rgb)
 
         camera_semseg = world.spawn_actor(
             blueprint_library.find('sensor.camera.semantic_segmentation'),
             carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
             attach_to=vehicle)
+        actor_list.append(camera_semseg)
+
         # Create a synchronous mode context.
-        sync_mode = CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30)
+        with CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30) as sync_mode:
+            for i in range(100000):
+                clock.tick()
+                print (i)
 
-        for i in range(2000):
-            clock.tick()
-            print (i)
+                # Advance the simulation and wait for the data.
+                snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=2.0)
 
+                # Choose the next waypoint and update the car location.
+                waypoint = random.choice(waypoint.next(1.5))
+                vehicle.set_transform(waypoint.transform)
 
-            # Advance the simulation and wait for the data.
-            snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=2.0)
-
-
-
-            image_semseg.convert(carla.ColorConverter.CityScapesPalette)
-            fps = round(1.0 / snapshot.timestamp.delta_seconds)
+                image_semseg.convert(carla.ColorConverter.CityScapesPalette)
+                fps = round(1.0 / snapshot.timestamp.delta_seconds)
 
 
 
     finally:
+
+        print('destroying actors.')
+        for actor in actor_list:
+            actor.destroy()
 
         pygame.quit()
         print('done.')
