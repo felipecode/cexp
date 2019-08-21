@@ -10,10 +10,10 @@
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
-            "weather_profile": "SoftRainSunset",
+            "weather_profile": "SoftRainSunset"
 
         }
 
     },
-    "package_name": "quick_benchmark"
+    "package_name": "quick_benchmark2"
 }
