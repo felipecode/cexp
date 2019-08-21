@@ -189,7 +189,7 @@ class Experience(object):
             # Re raise the exception
             raise r
 
-    @profile
+
     def tick_scenarios(self):
 
         # We tick the scenarios to get them started
@@ -217,7 +217,7 @@ class Experience(object):
 
         return status
 
-    @profile
+
     def tick_scenarios_control(self, controls):
         """
         Here we tick the scenarios and also change the control based on the scenario properties
@@ -236,7 +236,7 @@ class Experience(object):
 
         return controls
 
-    @profile
+
     def apply_control(self, controls):
 
         if self._save_data:
@@ -249,7 +249,7 @@ class Experience(object):
             spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
                                                     carla.Rotation(pitch=-90)))
 
-    @profile
+
     def tick_world(self):
         # Save all the measurements that are interesting
         # TODO this may go to another function
@@ -547,9 +547,6 @@ class Experience(object):
         # We need enumerate here, otherwise the actors are not properly removed
         for i, _ in enumerate(self._instanced_sensors):
             if self._instanced_sensors[i] is not None:
-                print ("#######################")
-                print (" STOOPPED A FUCKIN SENSORS ")
-                print ("#######################")
                 self._instanced_sensors[i].stop()
                 self._instanced_sensors[i].destroy()
                 self._instanced_sensors[i] = None

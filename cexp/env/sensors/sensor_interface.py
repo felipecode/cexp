@@ -175,11 +175,11 @@ class CallBack(object):
             logging.error('No callback method for this sensor.')
 
     # Parsing CARLA physical Sensors
-    #@profile
+
     def _parse_image_cb(self, image, tag, writer):
 
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
-        #array = copy.deepcopy(array)  # TODO IS THIS NEEDED  ?
+
         array = np.reshape(array, (image.height, image.width, 4))
         array = array[:, :, :3]
         array = array[:, :, ::-1]
@@ -188,7 +188,7 @@ class CallBack(object):
     def _parse_lidar_cb(self, lidar_data, tag, writer):
 
         points = np.frombuffer(lidar_data.raw_data, dtype=np.dtype('f4'))
-        points = copy.deepcopy(points)
+        #points = copy.deepcopy(points)
         points = np.reshape(points, (int(points.shape[0] / 3), 3))
         self._data_provider.update_sensor(lidar_data, tag, points, lidar_data.frame_number, writer)
 
