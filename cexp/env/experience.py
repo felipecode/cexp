@@ -558,11 +558,10 @@ class Experience(object):
             logging.debug("Removed Ego Vehicle")
 
         if self.world is not None:
-            self.world.destroy()
             self.world = None
 
 
-    
+
     def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.
         # Basically remove the folder associated with this exp if the status was not success,
