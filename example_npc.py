@@ -36,7 +36,7 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/quick_benchmark.json'
+    json = 'database/sample_benchmark.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'save_sensors': False,
