@@ -55,15 +55,6 @@ class CarlaSyncMode(object):
         self.frame = self.world.apply_settings(carla.WorldSettings(
             no_rendering_mode=True,
             synchronous_mode=True))
-        def make_queue(register_event):
-            q = queue.Queue()
-            register_event(q.put)
-            self._queues.append(q)
-
-        make_queue(self.world.on_tick)
-        for sensor in self.sensors:
-            make_queue(sensor.listen)
-
 
     def __enter__(self):
         self._settings = self.world.get_settings()
@@ -105,37 +96,6 @@ def get_font():
     return pygame.font.Font(font, 14)
 
 
-def load_world(client):
-
-    world = client.get_world()
-    m = world.get_map()
-    start_pose = random.choice(m.get_spawn_points())
-    blueprint_library = world.get_blueprint_library()
-
-    vehicle = world.spawn_actor(
-        random.choice(blueprint_library.filter('vehicle.*')),
-        start_pose)
-    vehicle.set_simulate_physics(False)
-
-    rgb_bp = blueprint_library.find('sensor.camera.rgb')
-    rgb_bp.set_attribute('image_size_x', str(1024))
-    rgb_bp.set_attribute('image_size_y', str(780))
-    rgb_bp.set_attribute('fov', str(120))
-    rgb_bp.set_attribute('sensor_tick', "0.05")
-    camera_rgb = world.spawn_actor(
-        rgb_bp,
-        carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
-        attach_to=vehicle)
-
-    camera_semseg = world.spawn_actor(
-        blueprint_library.find('sensor.camera.semantic_segmentation'),
-        carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
-        attach_to=vehicle)
-
-    #actor_list.append(camera_semseg)
-
-    return world, camera_rgb, camera_semseg
-
 def main():
 
     clock = pygame.time.Clock()
@@ -145,7 +105,31 @@ def main():
 
     try:
 
-        world, camera_rgb, camera_semseg = load_world(client)
+        world = client.get_world()
+        m = world.get_map()
+        start_pose = random.choice(m.get_spawn_points())
+
+        blueprint_library = world.get_blueprint_library()
+
+        vehicle = world.spawn_actor(
+            random.choice(blueprint_library.filter('vehicle.*')),
+            start_pose)
+        vehicle.set_simulate_physics(False)
+
+        rgb_bp = blueprint_library.find('sensor.camera.rgb')
+        rgb_bp.set_attribute('image_size_x', str(1024))
+        rgb_bp.set_attribute('image_size_y', str(780))
+        rgb_bp.set_attribute('fov', str(120))
+        rgb_bp.set_attribute('sensor_tick', "0.05")
+        camera_rgb = world.spawn_actor(
+            rgb_bp,
+            carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
+            attach_to=vehicle)
+
+        camera_semseg = world.spawn_actor(
+            blueprint_library.find('sensor.camera.semantic_segmentation'),
+            carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
+            attach_to=vehicle)
         # Create a synchronous mode context.
         sync_mode = CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30)
 
