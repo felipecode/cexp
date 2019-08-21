@@ -55,8 +55,6 @@ class CarlaSyncMode(object):
         self.frame = self.world.apply_settings(carla.WorldSettings(
             no_rendering_mode=True,
             synchronous_mode=True))
-
-    def __enter__(self):
         self._settings = self.world.get_settings()
         self.frame = self.world.apply_settings(carla.WorldSettings(
             no_rendering_mode=True,
@@ -70,7 +68,6 @@ class CarlaSyncMode(object):
         make_queue(self.world.on_tick)
         for sensor in self.sensors:
             make_queue(sensor.listen)
-        return self
 
     def tick(self, timeout):
         self.frame = self.world.tick()
