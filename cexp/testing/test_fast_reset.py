@@ -50,13 +50,13 @@ if __name__ == '__main__':
     number_of_iterations = 400
     # The idea is that the agent class should be completely independent
     agent = NPCAgent(
-        sensors_dict=[#{'type': 'sensor.camera.rgb',
-                       #'x': 2.0, 'y': 0.0,
-                       #'z': 1.40, 'roll': 0.0,
-                       #'pitch': -15.0, 'yaw': 0.0,
-                       #'width': 800, 'height': 600,
-                       #'fov': 100,
-                       #'id': 'rgb_central'}
+        sensors_dict=[{'type': 'sensor.camera.rgb',
+                       'x': 2.0, 'y': 0.0,
+                       'z': 1.40, 'roll': 0.0,
+                       'pitch': -15.0, 'yaw': 0.0,
+                       'width': 1800, 'height': 1200,
+                       'fov': 100,
+                       'id': 'rgb_central'}
 
                       ])
     # this could be joined
