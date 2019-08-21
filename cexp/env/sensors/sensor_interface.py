@@ -175,11 +175,11 @@ class CallBack(object):
             logging.error('No callback method for this sensor.')
 
     # Parsing CARLA physical Sensors
-    @profile
+    #@profile
     def _parse_image_cb(self, image, tag, writer):
 
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
-        array = copy.deepcopy(array)  # TODO IS THIS NEEDED  ?
+        #array = copy.deepcopy(array)  # TODO IS THIS NEEDED  ?
         array = np.reshape(array, (image.height, image.width, 4))
         array = array[:, :, :3]
         array = array[:, :, ::-1]
@@ -226,7 +226,7 @@ class SensorInterface(object):
         self._data_buffers[tag] = None
         self._timestamps[tag] = -1
 
-    @profile
+
     def update_sensor(self, raw, tag, data, timestamp, writer):
         if tag not in self._sensors_objects:
             raise ValueError("The sensor with tag [{}] has not been created!".format(tag))
@@ -245,7 +245,6 @@ class SensorInterface(object):
                 self._written[key] = 0
         return True
 
-    @profile
     def wait_sensors_written(self, writer):
         unsynchronized = True
 
@@ -257,7 +256,6 @@ class SensorInterface(object):
 
             time.sleep(0.01)
 
-    @profile
     def _synchronize_write(self, writer, tag, raw):
         """
         Synchronize to check if all sensors have been written.
