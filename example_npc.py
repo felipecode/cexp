@@ -36,7 +36,7 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/quick_benchmark2.json'
+    json = 'database/corl2017_newweather_one_curve_Town01.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'save_sensors': False,
@@ -46,7 +46,7 @@ if __name__ == '__main__':
               'batch_size': 1,
               'remove_wrong_data': False,
               'non_rendering_mode': True,
-              'carla_recording': True
+              'carla_recording': False
               }
 
     # TODO for now batch size is one
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
                ])
     # this could be joined
-    env_batch = CEXP(json, params=params, execute_all=True,
+    env_batch = CEXP(json, params=params, execute_all=True, ignore_previous_execution=True,
                      port=arguments.port)  # THe experience is built, the files necessary
                                            # to load CARLA and the scenarios are made
 
