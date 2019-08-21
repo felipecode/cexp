@@ -61,8 +61,11 @@ def distance_to_intersection(vehicle, wmap, resolution=0.1):
 def get_current_road_angle(vehicle, wmap, resolution=0.01):
 
     reference_waypoint = wmap.get_waypoint(vehicle.get_transform().location)
+    # we go a bit in to the future to identify future curves
 
     next_waypoint = reference_waypoint.next(resolution)[0]
+    for i in range(10):
+        next_waypoint = next_waypoint.next(resolution)[0]
 
     yet_another_waypoint = next_waypoint.next(resolution)[0]
 
@@ -178,7 +181,7 @@ def identify_scenario(distance_intersection, road_angle, distance_lead_vehicle=-
 
         if distance_intersection > LANE_FOLLOW_DISTANCE:
             # For now far away from an intersection means that it is a simple lane following
-            if road_angle > 0.0004:
+            if road_angle > 0.0003:
                 return 'S1_lane_following_curve'
             else:
                 return 'S0_lane_following'
@@ -192,7 +195,7 @@ def identify_scenario(distance_intersection, road_angle, distance_lead_vehicle=-
             return 'S3_intersection'
     else:
 
-        if road_angle > 0.0004:
+        if road_angle > 0.0003:
             return 'S5_lead_vehicle_curve'
         else:
             return 'S4_lead_vehicle'
