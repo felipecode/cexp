@@ -120,7 +120,7 @@ def main():
         rgb_bp.set_attribute('image_size_x', str(1024))
         rgb_bp.set_attribute('image_size_y', str(780))
         rgb_bp.set_attribute('fov', str(120))
-        rgb_bp.set_attribute('sensor_tick', "0.05")
+        #rgb_bp.set_attribute('sensor_tick', "0.05")
         camera_rgb = world.spawn_actor(
             rgb_bp,
             carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
