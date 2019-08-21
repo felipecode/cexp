@@ -6,6 +6,7 @@ import py_trees
 import traceback
 import time
 import logging
+from pympler import tracker
 
 from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
@@ -116,6 +117,9 @@ class Experience(object):
             client.start_recorder('env_{}_number_{}_batch_{:0>4d}.log'.format(self._exp_params['env_name'],
                                                                               self._exp_params['env_number'],
                                                                               self._exp_params['exp_number']))
+
+        # memory tracker
+        self._tr = tracker.SummaryTracker()
         # this parameter sets all the sensor threads and the main thread into saving data
         self._save_data = exp_params['save_data']
         # we can also toogle if we want to save sensors or not.
@@ -247,6 +251,7 @@ class Experience(object):
 
     @profile
     def tick_world(self):
+        self._tr.print_diff()
         # Save all the measurements that are interesting
         # TODO this may go to another function
         # TODO maybe add not on every iterations, identify every second or half second.
