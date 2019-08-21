@@ -64,7 +64,7 @@ class CarlaSyncMode(object):
         for sensor in self.sensors:
             make_queue(sensor.listen)
 
-    
+
     def __enter__(self):
         self._settings = self.world.get_settings()
         self.frame = self.world.apply_settings(carla.WorldSettings(
