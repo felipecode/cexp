@@ -58,14 +58,14 @@ def distance_to_intersection(vehicle, wmap, resolution=0.1):
     return total_distance
 
 
-def get_current_road_angle(vehicle, wmap, resolution=0.01):
+def get_current_road_angle(vehicle, wmap, resolution=0.05):
 
     reference_waypoint = wmap.get_waypoint(vehicle.get_transform().location)
     # we go a bit in to the future to identify future curves
 
     next_waypoint = reference_waypoint.next(resolution)[0]
-    for i in range(10):
-        next_waypoint = next_waypoint.next(resolution)[0]
+    #for i in range(10):
+    #next_waypoint = next_waypoint.next(resolution)[0]
 
     yet_another_waypoint = next_waypoint.next(resolution)[0]
 
