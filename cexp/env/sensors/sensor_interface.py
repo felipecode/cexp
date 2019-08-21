@@ -216,7 +216,6 @@ class SensorInterface(object):
         self._number_sensors = number_threads_barrier
         self._lock = Lock()
 
-
     def register_sensor(self, tag, sensor):
         if tag in self._sensors_objects:
             raise ValueError("Duplicated sensor tag [{}]".format(tag))
@@ -268,6 +267,8 @@ class SensorInterface(object):
             writer.write_image(raw, tag)
         self._written[tag] += 1
         self._lock.release()
+
+        print (len(self._sensors_objects),len(self._data_buffers))
 
     def get_data(self):
         data_dict = {}

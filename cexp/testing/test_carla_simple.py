@@ -100,7 +100,7 @@ def main():
 
     clock = pygame.time.Clock()
 
-    client = carla.Client('localhost', 2000)
+    client = carla.Client('localhost', 3000)
     client.set_timeout(2.0)
 
     try:
@@ -142,9 +142,6 @@ def main():
             snapshot, image_rgb, image_semseg = sync_mode.tick(timeout=2.0)
 
 
-            if i % 200 == 0:
-                world, camera_rgb, camera_semseg = load_world(client)
-                sync_mode = CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30)
 
             image_semseg.convert(carla.ColorConverter.CityScapesPalette)
             fps = round(1.0 / snapshot.timestamp.delta_seconds)
