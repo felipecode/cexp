@@ -551,7 +551,7 @@ class Experience(object):
                 self._instanced_sensors[i].destroy()
                 self._instanced_sensors[i] = None
         self._instanced_sensors = []
-        self._sensor_interface.destroy()
+        #self._sensor_interface.destroy()
         #  We stop the sensors first to avoid problems
 
         CarlaActorPool.cleanup()
