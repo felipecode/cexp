@@ -39,13 +39,13 @@ if __name__ == '__main__':
     json = 'database/quick_benchmark.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
-              'save_sensors': True,
+              'save_sensors': False,
               'save_trajectories': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
               'remove_wrong_data': False,
-              'non_rendering_mode': False,
+              'non_rendering_mode': True,
               'carla_recording': True
               }
 
