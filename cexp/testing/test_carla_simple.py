@@ -117,8 +117,8 @@ def main():
         vehicle.set_simulate_physics(False)
 
         rgb_bp = blueprint_library.find('sensor.camera.rgb')
-        rgb_bp.set_attribute('image_size_x', str(1024))
-        rgb_bp.set_attribute('image_size_y', str(780))
+        rgb_bp.set_attribute('image_size_x', str(1800))
+        rgb_bp.set_attribute('image_size_y', str(1200))
         rgb_bp.set_attribute('fov', str(120))
         #rgb_bp.set_attribute('sensor_tick', "0.05")
         camera_rgb = world.spawn_actor(
@@ -135,7 +135,7 @@ def main():
 
         # Create a synchronous mode context.
         with CarlaSyncMode(world, camera_rgb, camera_semseg, fps=30) as sync_mode:
-            for i in range(2000):
+            for i in range(5000):
                 clock.tick()
                 print (i)
 
