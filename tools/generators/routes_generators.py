@@ -32,8 +32,8 @@ def write_routes(ofilename, output_routes, town_name):
 def make_routes(filename, world):
     spawn_points = world.get_map().get_spawn_points()
     routes_vector = []
-    for point_a in spawn_points[:10]:
-        for point_b in spawn_points[:10]:
+    for point_a in spawn_points:
+        for point_b in spawn_points:
             print (point_a, point_b)
             if point_a != point_b:
                 routes_vector.append([point_a, point_b])
