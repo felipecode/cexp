@@ -155,16 +155,15 @@ def parse_environment(path, metadata_dict, read_sensors=True):
             for i in range(len(measurements_list)):
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
-                print (sensors_lists)
+
 
                 if read_sensors:
                     for sensor in sensors_types:
                         # TODO can bus and GPS are not implemented a sensors yet
                         if sensor['id'] == 'can_bus' or sensor['id'] == 'GPS':
                             continue
-                    print(sensor['id'])
 
-                    data_point.update({sensor['id']: sensors_lists[sensor['id']][i]})
+                        data_point.update({sensor['id']: sensors_lists[sensor['id']][i]})
 
                 data_point_vec.append(data_point)
             batch_vec.append((data_point_vec, batch.split('/')[-1]))
