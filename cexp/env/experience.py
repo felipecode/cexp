@@ -468,8 +468,6 @@ class Experience(object):
                                            str(self._exp_params['exp_number'])
                                      + '_' + self._agent_name)
 
-
-
     # Todo make a scenario builder class
 
     def _build_background(self, background_definition, timeout):

@@ -297,8 +297,7 @@ def draw_point_data(datapoint, color=None):
     size = 12
     if color is None:
         result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
-                                               datapoint['measurements']['road_angle'],
-                                               -1 #datapoint['measurements']['distance_lead_vehicle']
+                                               datapoint['measurements']['distance_lead_vehicle']
                                                ))
     else:
         result_color = color
@@ -321,15 +320,15 @@ def get_color(scenario):
 
     if scenario == 'S0_lane_following':
         return COLOR_CHOCOLATE_0
-    elif scenario == 'S1_lane_following_curve':
+    elif scenario == 'S1_before_intersection':
         return COLOR_CHOCOLATE_2
-    elif scenario == 'S2_before_intersection':
+    elif scenario == 'S2_intersection':
         return COLOR_ORANGE_1
-    elif scenario == 'S3_intersection':
+    elif scenario == 'S3_lead_vehicle':
         return COLOR_SCARLET_RED_2
-    elif scenario == 'S4_lead_vehicle':
+    elif scenario == 'S4_lead_vehicle_before_intersection':
         return COLOR_ORANGE_0
-    elif scenario == 'S5_lead_vehicle_curve':
+    elif scenario == 'S5_lead_vehicle_inside_intersection':
         return COLOR_BUTTER_2
 
 
