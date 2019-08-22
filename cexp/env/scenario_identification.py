@@ -39,8 +39,6 @@ def angle_between_transforms(location1, location2, location3):
     angle_wp = math.acos(min(1.0, cos_wp))  # COS can't be larger than 1, it can happen due to float imprecision
     return angle_wp
 
-LANE_FOLLOW_DISTANCE = 25.0  # If further than this distance then it is lane following
-LEAD_VEHICLE_DISTANCE = 25.0
 
 def distance_to_intersection(vehicle, wmap, resolution=0.1):
     # TODO heavy function, takes 70MS this can be reduced.
@@ -147,6 +145,8 @@ def get_distance_lead_vehicle(vehicle, route, world):
 
 
 def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
+                      thresh_intersection=25.0,
+                      thresh_lead_vehicle=25.0
 
                       ):
 
@@ -185,10 +185,10 @@ def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
 
     # TODO for now only for scenarios 0-2
 
-    if distance_lead_vehicle == -1 or distance_lead_vehicle > LEAD_VEHICLE_DISTANCE:
+    if distance_lead_vehicle == -1 or distance_lead_vehicle > thresh_lead_vehicle:
         # There are no vehicle ahead
 
-        if distance_intersection > LANE_FOLLOW_DISTANCE:
+        if distance_intersection > thresh_intersection:
             # For now far away from an intersection means that it is a simple lane following
             return 'S0_lane_following'
 
@@ -199,7 +199,7 @@ def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
         else:
             return 'S2_intersection'
     else:
-        if distance_intersection > LANE_FOLLOW_DISTANCE:
+        if distance_intersection > thresh_intersection:
             # For now that means that S4 is being followed
             return 'S3_lead_vehicle'
 

@@ -91,7 +91,6 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
             # The policy selected to run this experience vector (The class basically) This policy can also learn, just
             # by taking the output from the experience.
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
-
             print (" Collector ", collector_id, " Collecting for ", env)
             states, rewards = agent.unroll(env)
             agent.reinforce(rewards)
@@ -209,6 +208,7 @@ if __name__ == '__main__':
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
                   'save_sensors': True,
+                  'save_trajectories': True,
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
