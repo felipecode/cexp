@@ -3,7 +3,7 @@
         "ClearNoon_route00003": {
             "repetitions": 1,
             "route": {
-                "file": "Town01_navigation.xml",
+                "file": "corl2017/Town01_navigation.xml",
                 "id": 3
             },
             "scenarios": {
@@ -16,7 +16,7 @@
        "ClearNoon_route00024": {
             "repetitions": 1,
             "route": {
-                "file": "Town01_navigation.xml",
+                "file": "corl2017/Town01_navigation.xml",
                 "id": 24
             },
             "scenarios": {
@@ -29,7 +29,7 @@
       "ClearNoon_route00003_nav": {
             "repetitions": 1,
             "route": {
-                "file": "Town01_navigation.xml",
+                "file": "corl2017/Town01_navigation.xml",
                 "id": 3
             },
             "scenarios": {
@@ -45,7 +45,7 @@
        "ClearNoon_route00024_nav": {
             "repetitions": 1,
             "route": {
-                "file": "Town01_navigation.xml",
+                "file": "corl2017/Town01_navigation.xml",
                 "id": 24
             },
             "scenarios": {
