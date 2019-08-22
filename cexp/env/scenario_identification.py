@@ -201,7 +201,7 @@ def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
     else:
         if distance_intersection > thresh_intersection:
             # For now that means that S4 is being followed
-            return 'S3_lead_vehicle'
+            return 'S3_lead_vehicle_following'
 
         elif distance_intersection > 1.0:
             # Distance intersection.
