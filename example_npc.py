@@ -36,10 +36,10 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/quick_benchmark2.json'
+    json = 'database/corl/corl2017_training_navigation_dynamic_Town01.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
-              'save_sensors': False,
+              'save_sensors': True,
               'save_trajectories': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
@@ -53,15 +53,15 @@ if __name__ == '__main__':
     number_of_iterations = 400
     # The idea is that the agent class should be completely independent
     agent = NPCAgent(
-        sensors_dict = [#{'type': 'sensor.camera.rgb',
-                #'x': 2.0, 'y': 0.0,
-                #'z': 1.40, 'roll': 0.0,
-                #'pitch': -15.0, 'yaw': 0.0,
-                #'width': 800, 'height': 600,
-                #'fov': 100,
-                #'id': 'rgb_central'}
+        sensors_dict = [{'type': 'sensor.camera.rgb',
+                        'x': 2.0, 'y': 0.0,
+                        'z': 1.40, 'roll': 0.0,
+                        'pitch': -15.0, 'yaw': 0.0,
+                        'width': 800, 'height': 600,
+                        'fov': 100,
+                        'id': 'rgb_central'}
 
-               ])
+                       ])
     # this could be joined
     env_batch = CEXP(json, params=params, execute_all=True, ignore_previous_execution=True,
                      port=arguments.port)  # THe experience is built, the files necessary
