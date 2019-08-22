@@ -478,13 +478,14 @@ class Experience(object):
         print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
         configuration_instances = []
         for key, numbers in background_definition.items():
-            model = key
-            transform = carla.Transform()
-            autopilot = True
-            random = True
-            actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
-                                                                  amount=background_definition[key])
-            configuration_instances.append(actor_configuration_instance)
+            if 'walkers' in key:
+                model = key
+                transform = carla.Transform()
+                autopilot = True
+                random = True
+                actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
+                                                                      amount=background_definition[key])
+                configuration_instances.append(actor_configuration_instance)
 
         scenario_configuration.other_actors = configuration_instances
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
