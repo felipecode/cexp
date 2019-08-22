@@ -34,7 +34,7 @@ def make_routes(filename, world):
     routes_vector = []
     for point_a in spawn_points:
         for point_b in spawn_points:
-
+            print (point_a, point_b)
             if point_a != point_b:
                 routes_vector.append([point_a, point_b])
 
