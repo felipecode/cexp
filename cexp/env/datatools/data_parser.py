@@ -155,7 +155,7 @@ def parse_environment(path, metadata_dict, read_sensors=True):
             for i in range(len(measurements_list)):
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
-
+                print (sensors_lists)
                 if read_sensors:
                     for sensor in sensors_types:
                         # TODO can bus and GPS are not implemented a sensors yet
