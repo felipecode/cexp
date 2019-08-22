@@ -184,12 +184,14 @@ class Environment(object):
         return StateFunction(self._exp_list), \
                  RewardFunction(self._exp_list)
 
-    def get_data(self):
+    def get_data(self, read_sensors=None):
         # Each environment can have a reference datapoint,
         # where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
         # It is always save in the SRL path
+        if read_sensors is None:
+            read_sensors = self._env_params['save_sensors']
         root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name,
                                  self._environment_name)
         # If the metadata does not exist the environment does not have a reference data.
@@ -201,7 +203,7 @@ class Environment(object):
             metadata_dict = json.loads(f.read())
 
         full_episode_data_dict = parser.parse_environment(root_path, metadata_dict,
-                                                          read_sensors=self._env_params['save_sensors'])
+                                                          read_sensors=read_sensors)
 
         return full_episode_data_dict
 
