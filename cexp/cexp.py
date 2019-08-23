@@ -146,6 +146,7 @@ class CEXP(object):
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording'],
+            'agent_name': agent_name,
             'debug': False # DEBUG SHOULD BE SET
         }
 

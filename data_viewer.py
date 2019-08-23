@@ -84,6 +84,11 @@ if __name__ == "__main__":
         type=str,
         default='all'
     )
+    parser.add_argument(
+        '--agent_name',
+        help=' the json configuration file name',
+        default=None
+    )
 
     parser.add_argument(
         '-s', '--step_size',
@@ -126,6 +131,7 @@ if __name__ == "__main__":
     jsonfile = args.dataset
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
+              'save_sensors': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
@@ -139,7 +145,7 @@ if __name__ == "__main__":
     # THe experience is built, the files necessary
     env_batch = CEXP(jsonfile, params, number_of_iterations, sequential=True)
     # Here some docker was set
-    env_batch.start(no_server=True)  # no carla server mode.
+    env_batch.start(no_server=True, agent_name=args.agent_name)  # no carla server mode.
     # count, we count the environments that are read
     for env in env_batch:
         steer_vec = []

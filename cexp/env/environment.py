@@ -66,7 +66,7 @@ class Environment(object):
         self.RewardFunction = None
         # ignore previous executions
         #self._ignore_previous = ignore_previous
-        self._last_executing_agent = ''
+        self._last_executing_agent = env_params['agent_name']
         # update the number of executions to match the folder
 
     @staticmethod
@@ -168,7 +168,7 @@ class Environment(object):
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, self._scenarios, exp_params,
-                                             agent_name))
+                                             self._last_executing_agent))
         # if it is the first time we execute this env
         if self._save_data and self._environment_name in Environment.number_of_executions:
             # we use one of the experiments to build the metadata
@@ -203,7 +203,8 @@ class Environment(object):
             metadata_dict = json.loads(f.read())
 
         full_episode_data_dict = parser.parse_environment(root_path, metadata_dict,
-                                                          read_sensors=read_sensors)
+                                                          read_sensors=read_sensors,
+                                                          get_data=self._last_executing_agent)
 
         return full_episode_data_dict
 
