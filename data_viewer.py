@@ -141,6 +141,7 @@ if __name__ == "__main__":
               }
     # TODO for now batch size is one
     number_of_iterations = 123
+
     # this could be joined
     # THe experience is built, the files necessary
     env_batch = CEXP(jsonfile, params, number_of_iterations, sequential=True)
