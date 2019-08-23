@@ -51,7 +51,7 @@ def get_forward_speed(vehicle):
         speed = np.dot(vel_np, orientation)
         return speed
 
-
+# TODO this is actually a benchmark paramter .... either seconds or seconds per meter.
 
 SECONDS_GIVEN_PER_METERS = 0.6
 
