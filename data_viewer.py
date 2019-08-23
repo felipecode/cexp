@@ -123,9 +123,9 @@ if __name__ == "__main__":
     screen = None
     # We keep the three camera configuration with central well
 
-    central_camera_name = 'rgb_central'
-    left_camera_name = 'rgb_left'
-    right_camera_name = 'rgb_right'
+    central_camera_name = 'rgb'
+    left_camera_name = 'rgb'
+    right_camera_name = 'rgb'
 
     # A single loop being made
     jsonfile = args.dataset
