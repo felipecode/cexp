@@ -110,7 +110,7 @@ def get_distance_lead_vehicle(vehicle, route, world):
     # Check if there is a lead vehicle. By that follow the route of the
     # current vehicle and test for other vehicles that are close by.
 
-    op_vehicle_list = get_all_vehicles_closer_than(vehicle, LEAD_VEHICLE_DISTANCE * 2)
+    op_vehicle_list = get_all_vehicles_closer_than(vehicle, 50)
 
     min_dist_vehicle = -1
     # waypoint for the ego-vehicle.
@@ -118,7 +118,7 @@ def get_distance_lead_vehicle(vehicle, route, world):
 
         point_ref_waypoint = wmap.get_waypoint(point[0].location)
         if point[0].location.distance(vehicle.get_transform().location) > \
-            LEAD_VEHICLE_DISTANCE * 2:
+                50:
             break
 
 
