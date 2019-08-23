@@ -204,7 +204,7 @@ class Environment(object):
 
         full_episode_data_dict = parser.parse_environment(root_path, metadata_dict,
                                                           read_sensors=read_sensors,
-                                                          get_data=self._last_executing_agent)
+                                                          agent_name=self._last_executing_agent)
 
         return full_episode_data_dict
 
