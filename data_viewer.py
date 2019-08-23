@@ -85,7 +85,7 @@ if __name__ == "__main__":
         default='all'
     )
     parser.add_argument(
-        '--agent_name',
+        '--agent-name',
         help=' the json configuration file name',
         default=None
     )
