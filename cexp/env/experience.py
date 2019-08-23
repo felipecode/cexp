@@ -51,9 +51,9 @@ def get_forward_speed(vehicle):
         speed = np.dot(vel_np, orientation)
         return speed
 
-# TODO is scenario mutually exclusive ?? FOR NOW YES
 
-SECONDS_GIVEN_PER_METERS = 0.4
+
+SECONDS_GIVEN_PER_METERS = 0.6
 
 def estimate_route_timeout(route):
     route_length = 0.0  # in meters
