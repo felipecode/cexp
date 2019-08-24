@@ -50,7 +50,7 @@ def parse_scenario(possible_scenarios, wanted_scenarios, route, match_position):
         for scenario in scenarios_for_trigger:
             if scenario['name'] in wanted_scenarios:
                 print (scenario)
-                print (get_filtered_match_position(scenario, route,match_position))
+                print (get_filtered_match_position(scenario, route ,match_position))
                 scenarios_to_add.update({scenario['name']: get_filtered_match_position(scenario,
                                                                                       route,
                                                                                        match_position)})

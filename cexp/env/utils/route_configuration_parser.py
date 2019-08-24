@@ -240,6 +240,8 @@ def get_scenario_type(scenario, match_position, trajectory):
     :return: 0 for option, 0 ,1 for option
     """
 
+    print (route)
+
     if scenario == 'Scenario4':
         for tuple_wp_turn in trajectory[match_position:]:
             if RoadOption.LANEFOLLOW != tuple_wp_turn[1]:
