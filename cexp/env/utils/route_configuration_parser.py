@@ -199,6 +199,7 @@ def convert_waypoint_float(waypoint):
     waypoint['yaw'] = float(waypoint['yaw'])
 
 
+
 def match_world_location_to_route(world_location, route_description):
     """
     We match this location to a given route.
@@ -344,7 +345,7 @@ def get_actors_instances(list_of_antagonist_actors):
 
 def get_filtered_match_position(event, route):
 
-    waypoint  = convert_waypoint_float(event['trigger_position'])
+    convert_waypoint_float(event['trigger_position'])
     #match_position = match_world_location_to_route(waypoint, route)
 
     #if match_position is not None:
@@ -355,7 +356,7 @@ def get_filtered_match_position(event, route):
         other_vehicles = event['other_actors']
     else:
         other_vehicles = None
-    scenario_subtype = get_scenario_type(event['name'], waypoint,
+    scenario_subtype = get_scenario_type(event['name'], event['trigger_position'],
                                          route)
     if scenario_subtype is None:
         raise ValueError(" You selected a scenario 4 that is not applicable")
@@ -363,7 +364,7 @@ def get_filtered_match_position(event, route):
 
     scenario_description = {
                            'other_actors': other_vehicles,
-                           'trigger_position': waypoint,
+                           'trigger_position': event['trigger_position'],
                            'type': scenario_subtype,  # some scenarios have different configurations
     }
 
