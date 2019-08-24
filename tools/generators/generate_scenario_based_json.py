@@ -1,9 +1,55 @@
 
 import json
+import argparse
 import os
 from random import randint
 
-if __name__ == '__main__':
+import carla
+from cexp.env.server_manager import start_test_server, check_test_server
+
+
+
+from cexp.env.utils.route_configuration_parser import \
+        parse_annotations_file, parse_routes_file, scan_route_for_scenarios
+
+from srunner.challenge.utils.route_manipulation import interpolate_trajectory
+
+
+
+
+
+
+def get_scenario_list(world, scenarios_json_path, routes_path):
+
+    world_annotations = parse_annotations_file(scenarios_json_path)
+
+    route = parse_routes_file(routes_path)
+
+    _, route_interpolated = interpolate_trajectory(world, route)
+
+    possible_scenarios, existent_triggers = scan_route_for_scenarios(route_interpolated,
+                                                                     world_annotations,
+                                                                     world.get_map().name)
+
+    return possible_scenarios, existent_triggers
+
+
+
+# Some id list
+
+def generate_json_with_scenarios(world, scenarios_json_path, routes_path, wanted_scenarios):
+
+
+
+
+
+
+
+    print (get_scenario_list(world, scenarios_json_path, routes_path))
+
+    """
+
+
 
     root_route_file_position = 'database/corl2017'
     root_route_file_output = 'database'
@@ -27,7 +73,6 @@ if __name__ == '__main__':
                                   "HardRainNoon",
                                    "ClearSunset"]
                     }
-
 
 
     name_dict = {'training':{'Town01': 'training'
@@ -74,3 +119,39 @@ if __name__ == '__main__':
     with open(filename, 'w') as fo:
         # with open(os.path.join(root_route_file_position, 'all_towns_traffic_scenarios3_4.json'), 'w') as fo:
         fo.write(json.dumps(new_json, sort_keys=True, indent=4))
+
+    """
+
+
+if __name__ == '__main__':
+    description = ("CARLA AD Challenge evaluation: evaluate your Agent in CARLA scenarios\n")
+
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument('-t', '--town', default='Town01', help='The town name to be used')
+
+    parser.add_argument('-o', '--output', default='database/dataset_scenarios_l0.json',
+                        help='The outputfile json')
+
+
+
+    parser.add_argument('-r', '--input-route', default='database/routes/routes_town01.xml',
+                        help='The outputfile json')
+
+
+    parser.add_argument('-r', '--scenarios-json',
+                        default='database/scenarios/all_towns_traffic_scenarios1_3_4.json',
+                        help='the input json with scnarios')
+
+    arguments = parser.parse_args()
+
+    if not check_test_server(6666):
+        start_test_server(6666)
+        print (" WAITING FOR DOCKER TO BE STARTED")
+
+    client = carla.Client('localhost', 6666)
+
+    world = client.load_world(arguments.town)
+
+    generate_json_with_scenarios(world, arguments.scenarios-json, arguments.input_route,
+                                 wanted_scenarios=['Scenario3', 'Scenario4'])

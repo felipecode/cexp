@@ -2,6 +2,7 @@ from __future__ import print_function
 import math
 import json
 import os
+import random
 import numpy as np
 
 from agents.navigation.local_planner import RoadOption
@@ -144,14 +145,14 @@ def parse_exp_vec(exp_vec):
 
         # check the scenarios files (They can be in more than one file) and load the corresponding scenario.
 
-        if 'file' in exp_dict['scenarios'] and exp_dict['scenarios']['file'] != "None":
-            parse_annotations_file(exp_dict['scenarios']['file'])
 
-            #TODO scenario file  reading is not currently implemented
-            #possible_scenarios, existent_triggers = scan_route_for_scenarios(read_routes['trajectory'], scenarios_file)
-            possible_scenarios = None
-        else:
-            possible_scenarios = exp_dict['scenarios']  # The scenarios are here directly
+        # TODO check  this but i think scenarios should be here directly
+        #if 'file' in exp_dict['scenarios'] and exp_dict['scenarios']['file'] != "None":
+
+
+        #    possible_scenarios = None
+        #else:
+        possible_scenarios = exp_dict['scenarios']  # The scenarios are here directly
 
 
 
@@ -251,7 +252,7 @@ def get_scenario_type(scenario, match_position, trajectory):
     return 0
 
 
-def scan_route_for_scenarios(route_description, world_annotations):
+def scan_route_for_scenarios(route_description, world_annotations, town_name_input):
     """
     Just returns a plain list of possible scenarios that can happen in this route by matching
     the locations from the scenario into the route description
@@ -268,7 +269,7 @@ def scan_route_for_scenarios(route_description, world_annotations):
     latest_trigger_id = 0
 
     for town_name in world_annotations.keys():
-        if town_name != route_description['town_name']:
+        if town_name != town_name_input:
             continue
 
         scenarios = world_annotations[town_name]
@@ -278,7 +279,7 @@ def scan_route_for_scenarios(route_description, world_annotations):
                 waypoint = event['transform']  # trigger point of this scenario
                 convert_waypoint_float(waypoint)
                 # We match trigger point to the  route, now we need to check if the route affects
-                match_position = match_world_location_to_route(waypoint, route_description['trajectory'])
+                match_position = match_world_location_to_route(waypoint, route_description)
                 if match_position is not None:
                     # We match a location for this scenario, create a scenario object so this scenario
                     # can be instantiated later
@@ -288,7 +289,7 @@ def scan_route_for_scenarios(route_description, world_annotations):
                     else:
                         other_vehicles = None
                     scenario_subtype = get_scenario_type(scenario_name, match_position,
-                                                         route_description['trajectory'])
+                                                         route_description)
                     if scenario_subtype is None:
                         continue
                     scenario_description = {
@@ -311,3 +312,134 @@ def scan_route_for_scenarios(route_description, world_annotations):
                     possible_scenarios[trigger_id].append(scenario_description)
 
     return possible_scenarios, existent_triggers
+
+
+def get_actors_instances(list_of_antagonist_actors):
+    """
+    Get the full list of actor instances.
+    """
+
+    def get_actors_from_list(list_of_actor_def):
+        """
+            Receives a list of actor definitions and creates an actual list of ActorConfigurationObjects
+        """
+        sublist_of_actors = []
+        for actor_def in list_of_actor_def:
+            sublist_of_actors.append(convert_json_to_actor(actor_def))
+
+        return sublist_of_actors
+
+    list_of_actors = []
+    # Parse vehicles to the left
+    if 'front' in list_of_antagonist_actors:
+        list_of_actors += get_actors_from_list(list_of_antagonist_actors['front'])
+
+    if 'left' in list_of_antagonist_actors:
+        list_of_actors += get_actors_from_list(list_of_antagonist_actors['left'])
+
+    if 'right' in list_of_antagonist_actors:
+        list_of_actors += get_actors_from_list(list_of_antagonist_actors['right'])
+
+    return list_of_actors
+
+def get_filtered_match_position(event, route):
+    waypoint  = convert_waypoint_float(event['transform'])
+
+    match_position = match_world_location_to_route(waypoint, route)
+
+
+    if match_position is not None:
+        # We match a location for this scenario, create a scenario object so this scenario
+        # can be instantiated later
+
+        if 'other_actors' in event:
+            other_vehicles = event['other_actors']
+        else:
+            other_vehicles = None
+        scenario_subtype = get_scenario_type(scenario_name, match_position,
+                                             route)
+        if scenario_subtype is None:
+            raise ValueError(" You selected a scenario 4 that is not applicable")
+
+
+        scenario_description = {
+            'name': scenario_name,
+                               'other_actors': other_vehicles,
+                               'trigger_position': waypoint,
+                               'type': scenario_subtype,  # some scenarios have different configurations
+        }
+
+
+    else:
+        raise ValueError(" You selected a scenario that does not match your route.")
+
+    return  scenario_description
+
+
+def compare_scenarios(scenario_choice, existent_scenario):
+
+    def transform_to_pos_vec(scenario):
+
+        position_vec = [scenario['trigger_position']]
+        if scenario['other_actors'] is not None:
+            if 'left' in scenario['other_actors']:
+                position_vec += scenario['other_actors']['left']
+            if 'front' in scenario['other_actors']:
+                position_vec += scenario['other_actors']['front']
+            if 'right' in scenario['other_actors']:
+                position_vec += scenario['other_actors']['right']
+
+        return position_vec
+
+    # put the positions of the scenario choice into a vec of positions to be able to compare
+
+    choice_vec = transform_to_pos_vec(scenario_choice)
+    existent_vec = transform_to_pos_vec(existent_scenario)
+    for pos_choice in choice_vec:
+        for pos_existent in existent_vec:
+
+            dx = float(pos_choice['x']) - float(pos_existent['x'])
+            dy = float(pos_choice['y']) - float(pos_existent['y'])
+            dz = float(pos_choice['z']) - float(pos_existent['z'])
+            dist_position = math.sqrt(dx * dx + dy * dy + dz * dz)
+            dyaw = float(pos_choice['yaw']) - float(pos_choice['yaw'])
+            dist_angle = math.sqrt(dyaw * dyaw)
+            if dist_position < TRIGGER_THRESHOLD and dist_angle < TRIGGER_ANGLE_THRESHOLD:
+                return True
+
+    return False
+
+
+def scenario_sampling(potential_scenarios_definitions):
+    """
+    The function used to sample the scenarios that are going to happen for this route.
+    :param potential_scenarios_definitions: all the scenarios to be sampled
+    :return: return the ones sampled for this case.
+    """
+    def position_sampled(scenario_choice, sampled_scenarios):
+        # Check if this position was already sampled
+        for existent_scenario in sampled_scenarios:
+            # If the scenarios have equal positions then it is true.
+            if compare_scenarios(scenario_choice, existent_scenario):
+                return True
+
+        return False
+
+    # The idea is to randomly sample a scenario per trigger position.
+    sampled_scenarios = []
+    for trigger in potential_scenarios_definitions.keys():
+        possible_scenarios = potential_scenarios_definitions[trigger]
+        scenario_choice = possible_scenarios[0]  # HERE WE TAKE ONE
+        del possible_scenarios[possible_scenarios.index(scenario_choice)]
+        # We keep sampling and testing if this position is present on any of the scenarios.
+        while position_sampled(scenario_choice, sampled_scenarios):
+            if len(possible_scenarios) == 0:
+                scenario_choice = None
+                break
+            scenario_choice = possible_scenarios[0]
+            del possible_scenarios[possible_scenarios.index(scenario_choice)]
+
+        if scenario_choice is not None:
+            sampled_scenarios.append(scenario_choice)
+
+    return sampled_scenarios
