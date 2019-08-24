@@ -25,7 +25,7 @@ def get_scenario_list(world, scenarios_json_path, routes_path):
 
     route = parse_routes_file(routes_path)
 
-    _, route_interpolated = interpolate_trajectory(world, route)
+    _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
 
     possible_scenarios, existent_triggers = scan_route_for_scenarios(route_interpolated,
                                                                      world_annotations,
