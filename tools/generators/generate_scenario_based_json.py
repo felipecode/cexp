@@ -42,7 +42,7 @@ def get_scenario_list(world, scenarios_json_path, routes_path):
 
 
 
-def parse_scenario(possible_scenarios, wanted_scenarios, route):
+def parse_scenario(possible_scenarios, wanted_scenarios, route, match_position):
 
     scenarios_to_add = {}
     for key in possible_scenarios.keys():  # this iterate under different keys
@@ -50,9 +50,10 @@ def parse_scenario(possible_scenarios, wanted_scenarios, route):
         for scenario in scenarios_for_trigger:
             if scenario['name'] in wanted_scenarios:
                 print (scenario)
-                print (get_filtered_match_position(scenario, route))
-                scenarios_to_add.update({scenario['name']:get_filtered_match_position(scenario,
-                                                                                      route)})
+                print (get_filtered_match_position(scenario, route,match_position))
+                scenarios_to_add.update({scenario['name']: get_filtered_match_position(scenario,
+                                                                                      route,
+                                                                                       match_position)})
                 # TODO WARNING JUST ONE SCENARIO FOR TRIGGER... THE FIRST ONE
                 break
 
@@ -104,7 +105,8 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                 # get the possible scenario for a given ID
                 specific_scenarios_for_route = parse_scenario(possible_scenarios[id],
                                                               wanted_scenarios,
-                                                              routes_parsed[id]
+                                                              routes_parsed[id],
+                                                              id
 
                                                               )
 

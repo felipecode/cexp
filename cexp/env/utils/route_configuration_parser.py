@@ -343,7 +343,7 @@ def get_actors_instances(list_of_antagonist_actors):
 
     return list_of_actors
 
-def get_filtered_match_position(event, route):
+def get_filtered_match_position(event, route, match_position):
 
     convert_waypoint_float(event['trigger_position'])
     #match_position = match_world_location_to_route(waypoint, route)
@@ -356,7 +356,7 @@ def get_filtered_match_position(event, route):
         other_vehicles = event['other_actors']
     else:
         other_vehicles = None
-    scenario_subtype = get_scenario_type(event['name'], event['trigger_position'],
+    scenario_subtype = get_scenario_type(event['name'], match_position,
                                          route)
     if scenario_subtype is None:
         raise ValueError(" You selected a scenario 4 that is not applicable")
