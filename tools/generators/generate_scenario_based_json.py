@@ -49,6 +49,7 @@ def parse_scenario(possible_scenarios, wanted_scenarios):
         scenarios_for_trigger = possible_scenarios[key]
         for scenario in scenarios_for_trigger:
             if scenario['name'] in wanted_scenarios:
+                print (get_filtered_match_position(scenario))
                 scenarios_to_add.update({scenario['name']:get_filtered_match_position(scenario)})
                 # TODO WARNING JUST ONE SCENARIO FOR TRIGGER... THE FIRST ONE
                 break
@@ -76,7 +77,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
     routes_parser, possible_scenarios = get_scenario_list(world, scenarios_json_path, routes_path)
 
 
-    print (possible_scenarios)
+    #print (possible_scenarios)
 
     weather_sets = {'training': ["ClearNoon",
                                   "WetNoon",
@@ -99,7 +100,8 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                 #for town_name in town_sets.keys():
 
                 # get the possible scenario for a given ID
-                specific_scenarios_for_route = possible_scenarios[id]
+                specific_scenarios_for_route = parse_scenario(possible_scenarios[id],
+                                                              wanted_scenarios)
 
 
                 scenarios_all ={"file": "None",
@@ -244,4 +246,4 @@ if __name__ == '__main__':
     generate_json_with_scenarios(world, arguments.scenarios_json, arguments.input_route,
                                  wanted_scenarios=['Scenario3', 'Scenario4'],
                                  output_json_name=arguments.output,
-                                 routes_id=random.sample(range(10), 5))
+                                 routes_id=[8, 4, 1, 2, 7])
