@@ -3,6 +3,7 @@ import json
 import argparse
 import logging
 import sys
+import random
 import os
 from random import randint
 
@@ -44,7 +45,7 @@ def get_scenario_list(world, scenarios_json_path, routes_path):
 
 def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                                  wanted_scenarios, output_json_name,
-                                 number_of_routes=200):
+                                 routes_id):
 
     """
 
@@ -67,6 +68,8 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
     routes_parser, possible_scenarios = get_scenario_list(world, scenarios_json_path, routes_path)
 
 
+    print (possible_scenarios)
+
     weather_sets = {'training': ["ClearNoon",
                                   "WetNoon",
                                   "HardRainNoon",
@@ -83,26 +86,29 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
 
         for weather in w_set:
 
-            for route in routes_parser[]:
+            for id in routes_id:  # TODO change this to routes id
                 #for town_name in town_sets.keys():
 
-                for env_number in range(200):
-                    env_dict = {
-                        "route": {
-                            "file": routes_path,
-                            "id": randint(0, 65790)
-                        },
-                        "scenarios": {"file": "None",
-                                      'background_activity': {"vehicle.*": 100,
-                                                              "walker.*": 0}
-                                      },
-                        "town_name": "Town01",
-                        "vehicle_model": "vehicle.lincoln.mkz2017",
-                        "weather_profile": weather
-                    }
+                # get the possible scenario for a given ID
+                sceneario = possible_scenarios[id]
 
-                    new_json["envs"].update({weather + '_' + town_sets[town_name] + '_route'
-                                             + str(env_number).zfill(5): env_dict})
+                #for env_number in range(200):
+                env_dict = {
+                    "route": {
+                        "file": routes_path,
+                        "id": id
+                    },
+                    "scenarios": {"file": "None",
+                                  'background_activity': {"vehicle.*": 100,
+                                                          "walker.*": 0},
+                                  },
+                    "town_name": "Town01",
+                    "vehicle_model": "vehicle.lincoln.mkz2017",
+                    "weather_profile": weather
+                }
+
+                new_json["envs"].update({weather + '_' + '_route'
+                                         + str(id).zfill(5): env_dict})
 
 
 
@@ -219,4 +225,6 @@ if __name__ == '__main__':
     world = client.load_world(arguments.town)
 
     generate_json_with_scenarios(world, arguments.scenarios_json, arguments.input_route,
-                                 wanted_scenarios=['Scenario3', 'Scenario4'])
+                                 wanted_scenarios=['Scenario3', 'Scenario4'],
+                                 output_json_name=arguments.output,
+                                 routes_id=random.sample(range(10), 5))
