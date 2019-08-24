@@ -23,29 +23,91 @@ def get_scenario_list(world, scenarios_json_path, routes_path):
 
     world_annotations = parse_annotations_file(scenarios_json_path)
 
-    route = parse_routes_file(routes_path)
+    route_descriptions_list = parse_routes_file(routes_path)
 
-    _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
+    per_route_possible_scenarios = []
+    for route in route_descriptions_list:
 
-    possible_scenarios, existent_triggers = scan_route_for_scenarios(route_interpolated,
-                                                                     world_annotations,
-                                                                     world.get_map().name)
+        _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
 
-    return possible_scenarios, existent_triggers
+        possible_scenarios, existent_triggers = scan_route_for_scenarios(route_interpolated,
+                                                                         world_annotations,
+                                                                         world.get_map().name)
+        per_route_possible_scenarios.append(possible_scenarios)
 
 
-
-# Some id list
-
-def generate_json_with_scenarios(world, scenarios_json_path, routes_path, wanted_scenarios):
-
+    return route_descriptions_list, per_route_possible_scenarios
 
 
 
+# TODO pregenerate the names
+
+def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
+                                 wanted_scenarios, output_json_name,
+                                 number_of_routes=200):
+
+    """
+
+    :param world:
+    :param scenarios_json_path:
+    :param routes_path:
+    :param wanted_scenarios:
+    :param output_json_name:
+    :param number_of_routes: the number of routes used on the generation
+    :return:
+    """
 
 
 
-    print (get_scenario_list(world, scenarios_json_path, routes_path))
+
+
+
+
+
+    routes_parser, possible_scenarios = get_scenario_list(world, scenarios_json_path, routes_path)
+
+
+    weather_sets = {'training': ["ClearNoon",
+                                  "WetNoon",
+                                  "HardRainNoon",
+                                   "ClearSunset"]
+                    }
+    new_json = {"envs": {},
+                "package_name": output_json_name,
+
+                }
+
+    for w_set_name in weather_sets.keys():
+        # get the actual set  from th name
+        w_set = weather_sets[w_set_name]
+
+        for weather in w_set:
+
+            for route in routes_parser[]:
+                #for town_name in town_sets.keys():
+
+                for env_number in range(200):
+                    env_dict = {
+                        "route": {
+                            "file": routes_path,
+                            "id": randint(0, 65790)
+                        },
+                        "scenarios": {"file": "None",
+                                      'background_activity': {"vehicle.*": 100,
+                                                              "walker.*": 0}
+                                      },
+                        "town_name": "Town01",
+                        "vehicle_model": "vehicle.lincoln.mkz2017",
+                        "weather_profile": weather
+                    }
+
+                    new_json["envs"].update({weather + '_' + town_sets[town_name] + '_route'
+                                             + str(env_number).zfill(5): env_dict})
+
+
+
+
+
 
     """
 
@@ -75,12 +137,6 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path, wanted
                     }
 
 
-    name_dict = {'training':{'Town01': 'training'
-                             },
-                 'new_weather': {'Town01': 'newweather'
-
-                 }
-    }
 
     new_json = {"envs": {},
                 "package_name": 'dataset_vehicles_l1',
