@@ -12,7 +12,7 @@ from cexp.env.server_manager import start_test_server, check_test_server
 
 
 
-from cexp.env.utils.route_configuration_parser import \
+from cexp.env.utils.route_configuration_parser import get_filtered_match_position, \
         parse_annotations_file, parse_routes_file, scan_route_for_scenarios
 
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory
@@ -41,7 +41,21 @@ def get_scenario_list(world, scenarios_json_path, routes_path):
 
 
 
-# TODO pregenerate the names
+
+def parse_scenario(possible_scenarios, wanted_scenarios):
+
+    scenarios_to_add = {}
+    for key in possible_scenarios.keys():  # this iterate under different keys
+        scenarios_for_trigger = possible_scenarios[key]
+        for scenario in scenarios_for_trigger:
+            if scenario['name'] in wanted_scenarios:
+                scenarios_to_add.update({scenario['name']:get_filtered_match_position(scenario)})
+                # TODO WARNING JUST ONE SCENARIO FOR TRIGGER... THE FIRST ONE
+                break
+
+    return scenarios_to_add
+
+# TODO it is always the first served scenarios
 
 def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                                  wanted_scenarios, output_json_name,
@@ -59,12 +73,6 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
     """
 
 
-
-
-
-
-
-
     routes_parser, possible_scenarios = get_scenario_list(world, scenarios_json_path, routes_path)
 
 
@@ -80,6 +88,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
 
                 }
 
+
     for w_set_name in weather_sets.keys():
         # get the actual set  from th name
         w_set = weather_sets[w_set_name]
@@ -90,7 +99,19 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                 #for town_name in town_sets.keys():
 
                 # get the possible scenario for a given ID
-                sceneario = possible_scenarios[id]
+                specific_scenarios_for_route = possible_scenarios[id]
+
+
+                scenarios_all ={"file": "None",
+                                'background_activity': {"vehicle.*": 100,
+                                      "walker.*": 0},
+                               }
+
+                            
+                for key in specific_scenarios_for_route.keys():
+
+                    scenarios_all.update({key: specific_scenarios_for_route[key]})
+
 
                 #for env_number in range(200):
                 env_dict = {
@@ -98,10 +119,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                         "file": routes_path,
                         "id": id
                     },
-                    "scenarios": {"file": "None",
-                                  'background_activity': {"vehicle.*": 100,
-                                                          "walker.*": 0},
-                                  },
+                    "scenarios": scenarios_all,
                     "town_name": "Town01",
                     "vehicle_model": "vehicle.lincoln.mkz2017",
                     "weather_profile": weather
@@ -204,11 +222,8 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output', default='database/dataset_scenarios_l0.json',
                         help='The outputfile json')
 
-
-
     parser.add_argument('-r', '--input-route', default='database/routes/routes_town01.xml',
                         help='The outputfile json')
-
 
     parser.add_argument('-j', '--scenarios-json',
                         default='database/scenarios/all_towns_traffic_scenarios1_3_4.json',
