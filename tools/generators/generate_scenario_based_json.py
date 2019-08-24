@@ -130,6 +130,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
 
     filename = output_json_name
 
+    print (new_json)
     with open(filename, 'w') as fo:
         fo.write(json.dumps(new_json, sort_keys=True, indent=4))
 
