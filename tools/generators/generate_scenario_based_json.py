@@ -49,8 +49,10 @@ def parse_scenario(possible_scenarios, wanted_scenarios, route):
         scenarios_for_trigger = possible_scenarios[key]
         for scenario in scenarios_for_trigger:
             if scenario['name'] in wanted_scenarios:
+                print (scenario)
                 print (get_filtered_match_position(scenario, route))
-                scenarios_to_add.update({scenario['name']:get_filtered_match_position(scenario)})
+                scenarios_to_add.update({scenario['name']:get_filtered_match_position(scenario,
+                                                                                      route)})
                 # TODO WARNING JUST ONE SCENARIO FOR TRIGGER... THE FIRST ONE
                 break
 
