@@ -19,8 +19,6 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
 
 
-
-
 def get_scenario_list(world, scenarios_json_path, routes_path):
 
     world_annotations = parse_annotations_file(scenarios_json_path)
@@ -164,5 +162,5 @@ if __name__ == '__main__':
 
     world = client.load_world(arguments.town)
 
-    generate_json_with_scenarios(world, arguments.scenarios-json, arguments.input_route,
+    generate_json_with_scenarios(world, arguments.scenarios_json, arguments.input_route,
                                  wanted_scenarios=['Scenario3', 'Scenario4'])
