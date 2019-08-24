@@ -51,8 +51,9 @@ def parse_scenario(possible_scenarios, wanted_scenarios, route, match_position):
             if scenario['name'] in wanted_scenarios:
                 print (scenario)
                 convert_waypoint_float(scenario['trigger_position'])
+                name  = scenario['name']
                 del scenario['name']
-                scenarios_to_add.update({scenario['name']: scenario})
+                scenarios_to_add.update({name: scenario})
                 # TODO WARNING JUST ONE SCENARIO FOR TRIGGER... THE FIRST ONE
                 break
 
