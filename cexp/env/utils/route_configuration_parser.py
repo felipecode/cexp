@@ -343,7 +343,7 @@ def get_actors_instances(list_of_antagonist_actors):
     return list_of_actors
 
 def get_filtered_match_position(event, route):
-    waypoint  = convert_waypoint_float(event['transform'])
+    waypoint  = convert_waypoint_float(event['trigger_position'])
     match_position = match_world_location_to_route(waypoint, route)
 
     if match_position is not None:
