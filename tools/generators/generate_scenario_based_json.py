@@ -12,7 +12,7 @@ from cexp.env.server_manager import start_test_server, check_test_server
 
 
 
-from cexp.env.utils.route_configuration_parser import get_filtered_match_position, \
+from cexp.env.utils.route_configuration_parser import convert_waypoint_float, \
         parse_annotations_file, parse_routes_file, scan_route_for_scenarios
 
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory
@@ -50,10 +50,9 @@ def parse_scenario(possible_scenarios, wanted_scenarios, route, match_position):
         for scenario in scenarios_for_trigger:
             if scenario['name'] in wanted_scenarios:
                 print (scenario)
-                print (get_filtered_match_position(scenario, route ,match_position))
-                scenarios_to_add.update({scenario['name']: get_filtered_match_position(scenario,
-                                                                                      route,
-                                                                                       match_position)})
+                convert_waypoint_float(scenario['trigger_position'])
+                del scenario['name']
+                scenarios_to_add.update({scenario['name']: scenario})
                 # TODO WARNING JUST ONE SCENARIO FOR TRIGGER... THE FIRST ONE
                 break
 

@@ -240,7 +240,6 @@ def get_scenario_type(scenario, match_position, trajectory):
     :return: 0 for option, 0 ,1 for option
     """
 
-    print (trajectory)
 
     if scenario == 'Scenario4':
         for tuple_wp_turn in trajectory[match_position:]:
@@ -344,37 +343,6 @@ def get_actors_instances(list_of_antagonist_actors):
         list_of_actors += get_actors_from_list(list_of_antagonist_actors['right'])
 
     return list_of_actors
-
-def get_filtered_match_position(event, route, match_position):
-
-    convert_waypoint_float(event['trigger_position'])
-    #match_position = match_world_location_to_route(waypoint, route)
-
-    #if match_position is not None:
-    # We match a location for this scenario, create a scenario object so this scenario
-    # can be instantiated later
-
-    if 'other_actors' in event:
-        other_vehicles = event['other_actors']
-    else:
-        other_vehicles = None
-    scenario_subtype = get_scenario_type(event['name'], match_position,
-                                         route)
-    if scenario_subtype is None:
-        raise ValueError(" You selected a scenario 4 that is not applicable")
-
-
-    scenario_description = {
-                           'other_actors': other_vehicles,
-                           'trigger_position': event['trigger_position'],
-                           'type': scenario_subtype,  # some scenarios have different configurations
-    }
-
-
-    #else:
-    #    raise ValueError(" You selected a scenario that does not match your route.")
-
-    return  scenario_description
 
 
 def compare_scenarios(scenario_choice, existent_scenario):
