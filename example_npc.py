@@ -36,7 +36,7 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/nocrash/nocrash_training_dense_Town01.json'
+    json = 'database/nocrash/nocrash_newweather_dense_Town01.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'save_sensors': True,
@@ -45,7 +45,7 @@ if __name__ == '__main__':
               'gpu': 0,
               'batch_size': 1,
               'remove_wrong_data': False,
-              'non_rendering_mode': True,
+              'non_rendering_mode': False,
               'carla_recording': False
               }
 
