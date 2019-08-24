@@ -84,7 +84,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                                    "ClearSunset"]
                     }
     new_json = {"envs": {},
-                "package_name": output_json_name,
+                "package_name": output_json_name.split('/')[-1],
 
                 }
 
@@ -107,7 +107,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                                       "walker.*": 0},
                                }
 
-                            
+
                 for key in specific_scenarios_for_route.keys():
 
                     scenarios_all.update({key: specific_scenarios_for_route[key]})
@@ -128,9 +128,10 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                 new_json["envs"].update({weather + '_' + '_route'
                                          + str(id).zfill(5): env_dict})
 
+    filename = output_json_name
 
-
-
+    with open(filename, 'w') as fo:
+        fo.write(json.dumps(new_json, sort_keys=True, indent=4))
 
 
     """
