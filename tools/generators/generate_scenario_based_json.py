@@ -1,6 +1,8 @@
 
 import json
 import argparse
+import logging
+import sys
 import os
 from random import randint
 
@@ -126,6 +128,15 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path, wanted
 if __name__ == '__main__':
     description = ("CARLA AD Challenge evaluation: evaluate your Agent in CARLA scenarios\n")
 
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
+
     parser = argparse.ArgumentParser(description=description)
 
     parser.add_argument('-t', '--town', default='Town01', help='The town name to be used')
@@ -139,7 +150,7 @@ if __name__ == '__main__':
                         help='The outputfile json')
 
 
-    parser.add_argument('-r', '--scenarios-json',
+    parser.add_argument('-j', '--scenarios-json',
                         default='database/scenarios/all_towns_traffic_scenarios1_3_4.json',
                         help='the input json with scnarios')
 
