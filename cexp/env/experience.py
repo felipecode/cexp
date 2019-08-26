@@ -21,7 +21,6 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _
 from cexp.env.scorer import record_route_statistics_default
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
                                              get_distance_lead_vehicle
-from cexp.env.utils.route_configuration_parser import get_filtered_match_position,
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
@@ -551,14 +550,14 @@ class Experience(object):
                 if scenario_definition is None:
                     raise ValueError(" Not Implemented ")
 
-                matched_definition = get_filtered_match_position(scenario_definition, self._route)
 
-                ScenarioClass = number_class_translation[scenario_name][matched_definition['type']]
+
+                ScenarioClass = number_class_translation[scenario_name][scenario_definition['type']]
 
                 egoactor_trigger_position = convert_json_to_transform(
-                                                matched_definition['trigger_position'])
+                    scenario_definition['trigger_position'])
                 scenario_configuration = ScenarioConfiguration()
-                scenario_configuration.other_actors = None # TODO the other actors are maybe needed
+                scenario_configuration.other_actors = None  # TODO the other actors are maybe needed
                 scenario_configuration.town = self._town_name
                 scenario_configuration.trigger_point = egoactor_trigger_position
                 scenario_configuration.ego_vehicle = ActorConfigurationData(
@@ -573,7 +572,7 @@ class Experience(object):
                     #     raise e
                     #else:
                     print("Skipping scenario '{}' due to setup error: {}".format(
-                        matched_definition['name'], e))
+                        scenario_definition['name'], e))
                     continue
                 # registering the used actors on the data provider so they can be updated.
 
