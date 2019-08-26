@@ -192,6 +192,7 @@ class Environment(object):
         # It is always save in the SRL path
         if read_sensors is None:
             read_sensors = self._env_params['save_sensors']
+
         root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name,
                                  self._environment_name)
         # If the metadata does not exist the environment does not have a reference data.

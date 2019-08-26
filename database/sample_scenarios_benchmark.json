@@ -6,10 +6,9 @@
                 "id": 24
             },
             "scenarios": {
-                "background_activity": {
-                    "vehicle.*": 20,
-                    "walker.*": 0
-                }
+              'Scenario3':
+                      'ids': [0,1,2,3],
+
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",

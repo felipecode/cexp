@@ -115,7 +115,7 @@ class CEXP(object):
         # TODO: this setup is hardcoded for Batch_size == 1
         # TODO add here several server starts into a for
         # TODO for i in range(self._batch_size)
-        if agent_name is not None:
+        if agent_name is not None and not self.ignore_previous_execution:
             Environment.check_for_executions(agent_name, self._json['package_name'])
         if no_server:
             self._client_vec = []

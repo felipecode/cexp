@@ -13,16 +13,44 @@ from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDat
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.scenarios.background_activity import BackgroundActivity
+
+from srunner.scenarios.object_crash_vehicle import DynamicObjectCrossing
+from srunner.scenarios.object_crash_intersection import VehicleTurningRight, VehicleTurningLeft
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
 from cexp.env.scorer import record_route_statistics_default
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
                                              get_distance_lead_vehicle
+from cexp.env.utils.route_configuration_parser import get_filtered_match_position,
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
 
 from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
+
+
+number_class_translation = {
+
+    "Scenario1": [None],
+    "Scenario2": [None],
+    "Scenario3": [DynamicObjectCrossing],
+    "Scenario4": [VehicleTurningRight, VehicleTurningLeft],
+    "Scenario5": [None],
+    "Scenario6": [None],
+    "Scenario7": [None],
+    "Scenario8": [None],
+    "Scenario9": [None],
+    "Scenario10": [None]
+
+}
+
+
+def convert_json_to_transform(actor_dict):
+
+    return carla.Transform(location=carla.Location(x=float(actor_dict['x']), y=float(actor_dict['y']),
+                                                   z=float(actor_dict['z'])),
+                           rotation=carla.Rotation(roll=0.0, pitch=0.0, yaw=float(actor_dict['yaw'])))
+
 
 def convert_transform_to_location(transform_vec):
 
@@ -308,6 +336,8 @@ class Experience(object):
         self._ego_actor = CarlaActorPool.request_new_actor(self._vehicle_model, start_transform,
                                                            hero=True)
 
+        CarlaDataProvider.set_ego_vehicle_route(
+            convert_transform_to_location(self._route))
         logging.debug("Created Ego Vehicle")
 
 
@@ -475,22 +505,23 @@ class Experience(object):
         scenario_configuration.route = None
         scenario_configuration.town = self._town_name
         # TODO The random seed should be set
-        print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
+        # print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
         configuration_instances = []
         for key, numbers in background_definition.items():
-            if 'walkers' in key:
-                model = key
-                transform = carla.Transform()
-                autopilot = True
-                random = True
-                actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
-                                                                      amount=background_definition[key])
-                configuration_instances.append(actor_configuration_instance)
+
+            model = key
+            transform = carla.Transform()
+            autopilot = True
+            random = True
+            actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
+                                                                  amount=background_definition[key])
+            configuration_instances.append(actor_configuration_instance)
 
         scenario_configuration.other_actors = configuration_instances
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
                                   timeout=timeout, debug_mode=False)
 
+    # TODO adding also scenario
     def build_scenario_instances(self, scenario_definition_vec, timeout):
 
         """
@@ -502,6 +533,8 @@ class Experience(object):
         list_instanced_scenarios = []
         if scenario_definition_vec is None:
             return list_instanced_scenarios
+
+
         for scenario_name in scenario_definition_vec:
             # The BG activity encapsulates several scenarios that contain vehicles going arround
             if scenario_name == 'background_activity':  # BACKGROUND ACTIVITY SPECIAL CASE
@@ -509,6 +542,44 @@ class Experience(object):
                 background_definition = scenario_definition_vec[scenario_name]
                 list_instanced_scenarios.append(self._build_background(background_definition,
                                                                        timeout))
+            else:
+
+                # Sample the scenarios to be used for this route instance.
+
+                scenario_definition = scenario_definition_vec[scenario_name]
+
+                if scenario_definition is None:
+                    raise ValueError(" Not Implemented ")
+
+                matched_definition = get_filtered_match_position(scenario_definition, self._route)
+
+                ScenarioClass = number_class_translation[scenario_name][matched_definition['type']]
+
+                egoactor_trigger_position = convert_json_to_transform(
+                                                matched_definition['trigger_position'])
+                scenario_configuration = ScenarioConfiguration()
+                scenario_configuration.other_actors = None # TODO the other actors are maybe needed
+                scenario_configuration.town = self._town_name
+                scenario_configuration.trigger_point = egoactor_trigger_position
+                scenario_configuration.ego_vehicle = ActorConfigurationData(
+                                                        'vehicle.lincoln.mkz2017',
+                                                        self._ego_actor.get_transform())
+                try:
+                    scenario_instance = ScenarioClass(self.world, self._ego_actor,
+                                                      scenario_configuration,
+                                                      criteria_enable=False, timeout=timeout)
+                except Exception as e:
+                    #if  self._exp_params['debug'] > 1:
+                    #     raise e
+                    #else:
+                    print("Skipping scenario '{}' due to setup error: {}".format(
+                        matched_definition['name'], e))
+                    continue
+                # registering the used actors on the data provider so they can be updated.
+
+                #CarlaDataProvider.register_actors(scenario_instance.other_actors)
+
+                list_instanced_scenarios.append(scenario_instance)
 
         return list_instanced_scenarios
 
