@@ -131,6 +131,8 @@ def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
     # TODO probably add more metadata
     # the experience number
     exp_vec = []
+
+    print ( "READ SENSORS ", read_sensors)
     for exp in experience_list:
 
         batch_list = glob.glob(os.path.join(exp, '[0-9]'))
@@ -153,6 +155,7 @@ def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
 
 
             data_point_vec = []
+            print ( "THis ", len(measurements_list), " Measurements ")
             for i in range(len(measurements_list)):
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
