@@ -318,7 +318,7 @@ def get_N_HexCol(N=5):
     HSV_tuples = [(x * 1.0 / N, 0.5, 0.5) for x in range(N)]
     rgb_out = []
     for rgb in HSV_tuples:
-        rgb = map(lambda x: int(x * 255.0), colorsys.hsv_to_rgb(*rgb))
+        rgb = map(lambda x: x, colorsys.hsv_to_rgb(*rgb))
         rgb_out.append(tuple(rgb))
     return rgb_out
 
