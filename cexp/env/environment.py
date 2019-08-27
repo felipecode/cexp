@@ -69,6 +69,9 @@ class Environment(object):
         self._last_executing_agent = env_params['agent_name']
         # update the number of executions to match the folder
 
+        # We can also have the environment to save opponent agents positions on map:
+        self._save_opp_trajectories = env_params['save_opp_trajectories']
+
     @staticmethod
     def check_for_executions(agent_name, package_name):
         """
@@ -120,6 +123,11 @@ class Environment(object):
                               self._exp_list[0].world,
                               self._exp_list[0]._route)
 
+        if self._save_opp_trajectories:
+            draw_trajectories(self.get_data(),
+                              self._last_executing_agent + '_' + self._environment_name,
+                              self._exp_list[0].world)
+
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
@@ -161,6 +169,7 @@ class Environment(object):
                 'exp_number': i,
                 'save_data': self._save_data,
                 'save_sensors': self._env_params['save_sensors'],
+                'save_opponents': self._env_params['save_opponents'],
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
                 'carla_recording': self._env_params['carla_recording'],
                 'remove_wrong_data': self._env_params['remove_wrong_data'],

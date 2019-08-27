@@ -142,14 +142,16 @@ class CEXP(object):
         env_params = {
             'batch_size': self._batch_size,
             'save_dataset': self._params['save_dataset'],
-            'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],  #
+            'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],
+            'save_opponents': self._params['save_opponents'], #
+            'save_opp_trajectories': self._params['save_opp_trajectories'],  #
             'package_name': self._json['package_name'],
             'save_trajectories': self._params['save_trajectories'],
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording'],
             'agent_name': agent_name,
-            'debug': False # DEBUG SHOULD BE SET
+            'debug': False  # DEBUG SHOULD BE SET
         }
 
         # We instantiate environments here using the recently connected client
@@ -171,7 +173,7 @@ class CEXP(object):
         if self._environments is None:
             raise ValueError("You are trying to iterate over an not started cexp "
                              "object, run the start method ")
-        # This strategy of execution takes into considerion the env repetition
+        # This strategy of execution takes into consideration the env repetition
         #  and execute a certain number of times.from
         # The environment itself is able to tell when the repetition is already made.
         if self._execute_all:

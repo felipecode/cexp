@@ -166,7 +166,8 @@ class Experience(object):
 
         # if we are going to save, we keep track of a dictionary with all the data
         self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
-                              exp_params['exp_number'], agent_name)
+                              exp_params['exp_number'], agent_name,
+                              other_vehicles=exp_params['save_opponents'])
         self._environment_data = {'exp_measurements': None,  # The exp measurements are specific of the experience
                                   'ego_controls': None,
                                   'scenario_controls': None}
