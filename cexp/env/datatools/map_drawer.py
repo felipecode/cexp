@@ -1,6 +1,7 @@
 import carla
 import colorsys
 import argparse
+import os
 import matplotlib.pyplot as plt
 from cexp.env.scenario_identification import identify_scenario
 
@@ -323,7 +324,7 @@ def get_N_HexCol(N=5):
     return rgb_out
 
 
-def draw_opp_data(datapoint):
+def draw_opp_data(datapoint, agent_number):
     """
     We draw in a certain position at the map
     :param position:
@@ -333,13 +334,13 @@ def draw_opp_data(datapoint):
     size = 12
     color_pallete = get_N_HexCol(len(datapoint['measurements']['opponents']))
     count = 0
-    for opp in datapoint['measurements']['opponents']:
+    opp = datapoint['measurements']['opponents'][agent_number]
 
-        result_color = color_pallete[count]
-        world_pos = opp['position']
-        location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
-        draw_point(location, result_color, size)
-        count += 1
+    result_color = color_pallete[count]
+    world_pos = opp['position']
+    location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
+    draw_point(location, result_color, size)
+    count += 1
 
 
 
@@ -408,35 +409,52 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3):
                 orientation='landscape', bbox_inches='tight', dpi=1200)
 
 
+def get_number_of_opponents(env_data):
+
+
+   return len(env_data[0][0][0][0][0]['measurements']['opponents']
 
 
 
 def draw_opp_trajectories(env_data, env_name, world, step_size=3):
 
-    fig = plt.figure()
-    plt.xlim(-200, 6000)
-    plt.ylim(-200, 6000)
-    # We draw the full map
-    draw_map(world)
+
+
     # we draw the route that has to be followed
-    for exp in env_data:
-        print("    Exp: ", exp[1])
+    number_of_agents = get_number_of_opponents(env_data)
 
-        for batch in exp[0]:
-            print("      Batch: ", batch[1])
+    print ( " WE HJAVE  agents EQUALS TO ", number_of_agents)
 
-            step = 0  # Add the size
+    if not os.path.exists('_opp_traj'):
+        os.mkdir('_opp_traj')
 
-            while step < len(batch[0]):
-                #if first_time:
-                #    draw_point(batch[0][step], init=True)
-                #    first_time = False
-                #else:
-                draw_opp_data(batch[0][step])
-                step += step_size
+    for agent_number in range(number_of_agents):
+        fig = plt.figure()
+        plt.xlim(-200, 6000)
+        plt.ylim(-200, 6000)
+        # We draw the full map
+        draw_map(world)
+        for exp in env_data:
+            print("    Exp: ", exp[1])
 
-    fig.savefig(env_name + '_opp_trajectories.png',
-                orientation='landscape', bbox_inches='tight', dpi=1200)
+
+
+            for batch in exp[0]:
+                print("      Batch: ", batch[1])
+
+                step = 0  # Add the size
+
+                while step < len(batch[0]):
+                    #if first_time:
+                    #    draw_point(batch[0][step], init=True)
+                    #    first_time = False
+                    #else:
+                    draw_opp_data(batch[0][step], agent_number)
+                    step += step_size
+
+        print ( " SAVE D AGENT")
+        fig.savefig('_opp_traj/'+ env_name + '_opp_' + str(agent_number) + '_trajectory.png',
+                    orientation='landscape', bbox_inches='tight', dpi=1200)
 
 ### Add some main.
 
