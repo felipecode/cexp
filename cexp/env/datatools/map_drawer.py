@@ -501,9 +501,7 @@ if __name__ == '__main__':
     # We have to connect to a server to be able to draw a topology
     render_port = 2000
     client = carla.Client('localhost', 2000)
-
-    world = client.load_world('Town02')
-
+    client.set_timeout(25.0)
 
     env_batch = CEXP(jsonfile, params, execute_all=True, ignore_previous_execution=True)
     # Here some docker was set
@@ -512,6 +510,8 @@ if __name__ == '__main__':
 
     for env in env_batch:
 
+        print ( " Town Name ", env._town_name)
+        world = client.load_world(env._town_name)
         # it can be personalized to return different types of data.
         print("Environment Name: ", env)
         try:
