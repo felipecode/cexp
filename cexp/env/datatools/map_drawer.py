@@ -412,7 +412,7 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3):
 def get_number_of_opponents(env_data):
 
 
-   return len(env_data[0][0][0][0][0]['measurements']['opponents']
+   return len(env_data[0][0][0][0][0]['measurements']['opponents'])
 
 
 
