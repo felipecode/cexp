@@ -172,7 +172,7 @@ def draw_roads(set_waypoints):
         polygon = [world_to_pixel(x) for x in polygon]
 
         if len(polygon) > 2:
-            polygon = plt.Polygon(polygon, edgecolor=COLOR_ALUMINIUM_5)
+            polygon = plt.Polygon(polygon, edgecolor=COLOR_WHITE)
             plt.gca().add_patch(polygon)
             #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon, 5)
             #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon)
@@ -280,15 +280,15 @@ def draw_map(world):
 ######################################################
 ##### The car drawing tools ##############
 
-def draw_point(location, result_color, size):
+def draw_point(location, result_color, size, alpha=None):
 
     pixel = world_to_pixel(location)
-    circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
+    circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
     plt.gca().add_patch(circle)
 
 
 
-def draw_point_data(datapoint, color=None, direct_read=False):
+def draw_point_data(datapoint, color=None, direct_read=False, alpha=None):
     """
     We draw in a certain position at the map
     :param position:
@@ -311,7 +311,7 @@ def draw_point_data(datapoint, color=None, direct_read=False):
     world_pos = datapoint['measurements']['ego_actor']['position']
 
     location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
-    draw_point(location, result_color, size)
+    draw_point(location, result_color, size, alpha)
 
 
 
@@ -324,7 +324,7 @@ def get_N_HexCol(N=5):
     return rgb_out
 
 
-def draw_opp_data(datapoint, agent_number):
+def draw_opp_data(datapoint, agent_number, alpha=None):
     """
     We draw in a certain position at the map
     :param position:
@@ -334,6 +334,8 @@ def draw_opp_data(datapoint, agent_number):
     if not datapoint['measurements']['opponents'] or not isinstance(datapoint['measurements']['opponents'],
                                                                 dict):
         return
+    if agent_number not in datapoint['measurements']['opponents']:
+        return
     size = 12
     color_pallete = get_N_HexCol(len(datapoint['measurements']['opponents']))
     count = 0
@@ -342,7 +344,7 @@ def draw_opp_data(datapoint, agent_number):
     result_color = color_pallete[count]
     world_pos = opp['position']
     location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
-    draw_point(location, result_color, size)
+    draw_point(location, result_color, size, alpha)
     count += 1
 
 
@@ -450,7 +452,9 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
                     #    draw_point(batch[0][step], init=True)
                     #    first_time = False
                     #else:
-                    draw_opp_data(batch[0][step], agent_number)
+
+                    draw_point_data(batch[0][step], color=(0.0,1.0,0.0),  alpha=0.5)
+                    draw_opp_data(batch[0][step], agent_number, alpha=0.5)
                     step += step_size
 
         print ( " SAVE D AGENT")
