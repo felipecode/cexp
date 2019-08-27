@@ -287,7 +287,7 @@ def draw_point(location, result_color, size):
 
 
 
-def draw_point_data(datapoint, color=None):
+def draw_point_data(datapoint, color=None, direct_read=False):
     """
     We draw in a certain position at the map
     :param position:
@@ -296,7 +296,11 @@ def draw_point_data(datapoint, color=None):
     """
     size = 12
     if color is None:
-        result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
+
+        if direct_read:
+            get_color(datapoint['measurements']['scenario'])
+        else:
+            result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
                                                datapoint['measurements']['distance_lead_vehicle']
                                                ))
     else:
@@ -306,6 +310,42 @@ def draw_point_data(datapoint, color=None):
 
     location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
     draw_point(location, result_color, size)
+
+
+import colorsys
+
+def get_N_HexCol(N=5):
+    HSV_tuples = [(x * 1.0 / N, 0.5, 0.5) for x in range(N)]
+    rgb_out = []
+    for rgb in HSV_tuples:
+        rgb = map(lambda x: int(x * 255), colorsys.hsv_to_rgb(*rgb))
+        rgb_out.append(tuple(rgb))
+    return rgb_out
+
+
+def draw_opp_data(datapoint):
+    """
+    We draw in a certain position at the map
+    :param position:
+    :param color:
+    :return:
+    """
+    size = 12
+    color_pallete = get_N_HexCol(len(datapoint['measurements']['opponents']))
+    count = 0
+    for opp in datapoint['measurements']['opponents']:
+
+
+
+        result_color = color_pallete[count]
+
+        world_pos = opp['position']
+
+        location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
+
+        draw_point(location, result_color, size)
+
+        count += 1
 
 
 
@@ -335,10 +375,10 @@ def get_color(scenario):
 def draw_route(route):
     draw_point(route[0][0].location, result_color=(0.0, 0.0, 1.0), size=24)
     for point_tuple in route:
-
         draw_point(point_tuple[0].location, result_color=COLOR_LIGHT_GRAY, size=12)
 
     draw_point(route[-1][0].location, result_color=(0.0, 1.0, 0), size=24)
+
 
 
 
@@ -373,6 +413,38 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3):
     fig.savefig(env_name + '_trajectory.png',
                 orientation='landscape', bbox_inches='tight', dpi=1200)
 
+
+
+
+
+def draw_opp_trajectories(env_data, env_name, world, step_size=3):
+
+    fig = plt.figure()
+    plt.xlim(-200, 6000)
+    plt.ylim(-200, 6000)
+    # We draw the full map
+    draw_map(world)
+    # we draw the route that has to be followed
+    for exp in env_data:
+        print("    Exp: ", exp[1])
+
+        for batch in exp[0]:
+            print("      Batch: ", batch[1])
+
+            step = 0  # Add the size
+
+            while step < len(batch[0]):
+                #if first_time:
+                #    draw_point(batch[0][step], init=True)
+                #    first_time = False
+                #else:
+                draw_opp_data(batch[0][step])
+                step += step_size
+            #draw_point(batch[0][step - step_size], end=True)
+            #draw_point(route[-1])
+
+    fig.savefig(env_name + '_trajectory.png',
+                orientation='landscape', bbox_inches='tight', dpi=1200)
 
 ### Add some main.
 

@@ -41,6 +41,8 @@ if __name__ == '__main__':
     params = {'save_dataset': True,
               'save_sensors': True,
               'save_trajectories': True,
+              'save_opponents': True,
+              'save_opp_trajectories': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,

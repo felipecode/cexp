@@ -40,6 +40,8 @@ class Writer(object):
         self._env_full_path = os.path.join(root_path, dataset_name, env_name,
                                            str(env_number) + '_' + agent_name)
 
+        # if we save the opponent vehicles , this makes the measurements vec more intesnse.
+        self._save_opponent = other_vehicles
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
 
@@ -56,7 +58,7 @@ class Writer(object):
     def _build_measurements(self, world, previous):
 
         measurements = {"ego_actor": {},
-                        "opponents": {},   # Todo add more information on demand, now just ego actor
+                        "opponents": [],   # Todo add more information on demand, now just ego actor
                         "lane": {}
                         }
         measurements.update(previous)
@@ -73,6 +75,22 @@ class Writer(object):
                         "velocity": [velocity.x, velocity.y, velocity.z]
                      }
                     )
+                elif actor.attributes['role_name'] == 'autopilot' and self._save_opponents:
+
+                    transform = actor.get_transform()
+                    velocity = actor.get_velocity()
+                    measurements['opponents'].append({
+
+                        "position": [transform.location.x, transform.location.y,
+                                     transform.location.z],
+                        "orientation": [transform.rotation.roll, transform.rotation.pitch,
+                                        transform.rotation.yaw],
+                        "velocity": [velocity.x, velocity.y, velocity.z]
+                    }
+                    )
+
+
+
 
         # Add other actors and lane information
         # general actor info

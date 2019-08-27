@@ -31,6 +31,8 @@ class CEXP(object):
     _default_params = {'save_dataset': False,
                        'save_sensors': False,
                        'save_trajectories': False,
+                       'save_opponents': False,
+                       'save_opp_trajectories': False,
                        'docker_name': None,
                        'gpu': 0,
                        'batch_size': 1,
