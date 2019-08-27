@@ -57,7 +57,7 @@ if __name__ == '__main__':
                             "file": town_name,
                             "id": randint(0,65790)
                         },
-                        "scenarios": {"file": "None",
+                        "scenarios": {
                                       'background_activity': {"vehicle.*": 100,
                                                               "walker.*": 0}
                                       },
