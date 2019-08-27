@@ -295,6 +295,7 @@ def draw_point_data(datapoint, color=None, direct_read=False):
     :return:
     """
     size = 12
+
     if color is None:
 
         if direct_read:
@@ -332,11 +333,13 @@ def draw_opp_data(datapoint):
     size = 12
     color_pallete = get_N_HexCol(len(datapoint['measurements']['opponents']))
     count = 0
+    print (color_pallete)
     for opp in datapoint['measurements']['opponents']:
 
         result_color = color_pallete[count]
         world_pos = opp['position']
         location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
+        print (" To draw ", result_color, " at ", location)
         draw_point(location, result_color, size)
         count += 1
 
