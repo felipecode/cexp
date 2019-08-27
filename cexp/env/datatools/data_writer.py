@@ -58,12 +58,11 @@ class Writer(object):
     def _build_measurements(self, world, previous):
 
         measurements = {"ego_actor": {},
-                        "opponents": [0]*300,   # Todo add more information on demand, now just ego actor
+                        "opponents": {},   # Todo add more information on demand, now just ego actor
                         "lane": {}
                         }
         measurements.update(previous)
         # All the actors present we save their information
-        count_actors = 0
         for actor in world.get_actors():
             if 'vehicle' in actor.type_id:
                 if actor.attributes['role_name'] == 'hero':
@@ -81,16 +80,14 @@ class Writer(object):
                     print ("ID ", actor.id)
                     transform = actor.get_transform()
                     velocity = actor.get_velocity()
-                    measurements['opponents'][actor.id]={
+                    measurements['opponents'].update( { actor.id:{
 
                         "position": [transform.location.x, transform.location.y,
                                      transform.location.z],
                         "orientation": [transform.rotation.roll, transform.rotation.pitch,
                                         transform.rotation.yaw],
                         "velocity": [velocity.x, velocity.y, velocity.z]
-                    }
-
-                    count_actors+=1
+                    }})
 
 
 
