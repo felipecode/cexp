@@ -509,6 +509,7 @@ if __name__ == '__main__':
 
     for env in env_batch:
 
+        print ( " Town Name ", env._town_name)
         world = client.load_world(env._town_name)
         # it can be personalized to return different types of data.
         print("Environment Name: ", env)
