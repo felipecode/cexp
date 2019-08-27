@@ -334,6 +334,7 @@ def draw_opp_data(datapoint, agent_number):
     size = 12
     color_pallete = get_N_HexCol(len(datapoint['measurements']['opponents']))
     count = 0
+    print (datapoint['measurements']['opponents'])
     opp = datapoint['measurements']['opponents'][agent_number]
 
     result_color = color_pallete[count]
