@@ -77,7 +77,6 @@ class Writer(object):
                     )
                 elif actor.attributes['role_name'] == 'autopilot' and self._save_opponents:
 
-                    print ("ID ", actor.id)
                     transform = actor.get_transform()
                     velocity = actor.get_velocity()
                     measurements['opponents'].update( { actor.id:{
