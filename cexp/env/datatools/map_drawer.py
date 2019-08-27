@@ -505,7 +505,7 @@ if __name__ == '__main__':
 
     env_batch = CEXP(jsonfile, params, execute_all=True, ignore_previous_execution=True)
     # Here some docker was set
-    env_batch.start(no_server=True)  # no carla server mode.
+    env_batch.start(no_server=True, agent_name='Agent')  # no carla server mode.
     # count, we count the environments that are read
 
     for env in env_batch:
