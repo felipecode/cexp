@@ -336,6 +336,7 @@ def draw_opp_data(datapoint, agent_number):
     size = 12
     color_pallete = get_N_HexCol(len(datapoint['measurements']['opponents']))
     count = 0
+    print (datapoint['measurements']['opponents'])
     opp = datapoint['measurements']['opponents'][agent_number]
 
     result_color = color_pallete[count]
@@ -438,8 +439,6 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
         print (" AGENT NUMBER ", agent_number)
         for exp in env_data:
             print("    Exp: ", exp[1])
-
-
 
             for batch in exp[0]:
                 print("      Batch: ", batch[1])
