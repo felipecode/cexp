@@ -331,7 +331,7 @@ def draw_opp_data(datapoint, agent_number):
     :param color:
     :return:
     """
-    if not datapoint['measurements']['opponents'] or isinstance(datapoint['measurements']['opponents'],
+    if not datapoint['measurements']['opponents'] or not isinstance(datapoint['measurements']['opponents'],
                                                                 dict):
         return
     size = 12
