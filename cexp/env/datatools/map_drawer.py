@@ -411,10 +411,10 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3):
                 orientation='landscape', bbox_inches='tight', dpi=1200)
 
 
-def get_number_of_opponents(env_data):
+def get_actor_ids(env_data):
 
 
-   return len(env_data[0][0][0][0][0]['measurements']['opponents'])
+   return env_data[0][0][0][0][0]['measurements']['opponents'].keys()
 
 
 
@@ -423,19 +423,19 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
 
 
     # we draw the route that has to be followed
-    number_of_agents = get_number_of_opponents(env_data)
+    actors_ids = get_actor_ids(env_data)
 
-    print ( " WE HJAVE  agents EQUALS TO ", number_of_agents)
 
     if not os.path.exists('_opp_traj'):
         os.mkdir('_opp_traj')
 
-    for agent_number in range(number_of_agents):
+    for agent_number in actors_ids:
         fig = plt.figure()
         plt.xlim(-200, 6000)
         plt.ylim(-200, 6000)
         # We draw the full map
         draw_map(world)
+        print (" AGENT NUMBER ", agent_number)
         for exp in env_data:
             print("    Exp: ", exp[1])
 
