@@ -10,10 +10,11 @@ def count_number_traffic_lights(route, route_percentage):
 
     # Need to get the route world and perecentage complete
 
-    route_position = len[route] * route_percentage
+    route_position = len(route) * route_percentage
 
     route_cleaned = clean_route(route[0:route_position])
 
+    print ( " route passed")
     print (route_cleaned)
 
     # we basically count the number of intersection since " ALL OF THEM" have traffic lights
