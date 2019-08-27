@@ -10,7 +10,7 @@ def count_number_traffic_lights(route, route_percentage):
 
     # Need to get the route world and perecentage complete
 
-    route_position = len(route) * route_percentage
+    route_position = int(len(route) * route_percentage)
 
     route_cleaned = clean_route(route[0:route_position])
 
@@ -164,7 +164,7 @@ def record_route_statistics_default(master_scenario, exp_name):
                           'number_red_lights': len(list_red_lights),
                           'total_number_traffic_lights': count_number_traffic_lights(
                                                                             master_scenario.route,
-                                                                                     score_route),
+                                                                            score_route/100.0),
                           'result': result,
                           'help_text': return_message
                           }
