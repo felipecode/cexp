@@ -41,7 +41,7 @@ class Writer(object):
                                            str(env_number) + '_' + agent_name)
 
         # if we save the opponent vehicles , this makes the measurements vec more intesnse.
-        self._save_opponent = other_vehicles
+        self._save_opponents = other_vehicles
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
 
