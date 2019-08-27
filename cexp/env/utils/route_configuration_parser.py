@@ -34,6 +34,34 @@ def parse_annotations_file(annotation_filename):
     return final_dict  # the file has a current maps name that is an one element vec
 
 
+def clean_route(route):
+
+    curves_start_end = []
+    inside = False
+    start = -1
+    current_curve = RoadOption.LANEFOLLOW
+    index = 0
+    while index < len(route):
+
+        command = route[index][1]
+        if command != RoadOption.LANEFOLLOW and not inside:
+            inside = True
+            start = index
+            current_curve = command
+
+        if command != current_curve and inside:
+            inside = False
+            # End now is the index.
+            curves_start_end.append([start, index, current_curve])
+            if start == -1:
+                raise ValueError("End of curve without start")
+
+            start = -1
+        else:
+            index += 1
+
+    return curves_start_end
+
 
 
 def parse_routes_file(route_filename):

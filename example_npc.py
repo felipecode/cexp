@@ -39,7 +39,7 @@ if __name__ == '__main__':
     json = 'database/nocrash/nocrash_newweather_dense_Town01.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
-              'save_sensors': True,
+              'save_sensors': False,
               'save_trajectories': True,
               'save_opponents': True,
               'save_opp_trajectories': True,
@@ -47,7 +47,7 @@ if __name__ == '__main__':
               'gpu': 0,
               'batch_size': 1,
               'remove_wrong_data': False,
-              'non_rendering_mode': False,
+              'non_rendering_mode': True,
               'carla_recording': False
               }
 
@@ -55,13 +55,13 @@ if __name__ == '__main__':
     number_of_iterations = 400
     # The idea is that the agent class should be completely independent
     agent = NPCAgent(
-        sensors_dict = [{'type': 'sensor.camera.rgb',
-                        'x': 2.0, 'y': 0.0,
-                        'z': 1.40, 'roll': 0.0,
-                        'pitch': -15.0, 'yaw': 0.0,
-                        'width': 800, 'height': 600,
-                        'fov': 100,
-                        'id': 'rgb_central'}
+        sensors_dict = [#{'type': 'sensor.camera.rgb',
+                        #'x': 2.0, 'y': 0.0,
+                        #'z': 1.40, 'roll': 0.0,
+                        #'pitch': -15.0, 'yaw': 0.0,
+                        #'width': 800, 'height': 600,
+                        #'fov': 100,
+                        #'id': 'rgb_central'}
 
                        ])
     # this could be joined

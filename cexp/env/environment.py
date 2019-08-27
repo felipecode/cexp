@@ -5,7 +5,7 @@ import shutil
 
 from cexp.env.experience import Experience
 import cexp.env.datatools.data_parser as parser
-from cexp.env.datatools.map_drawer import draw_trajectories
+from cexp.env.datatools.map_drawer import draw_trajectories, draw_opp_trajectories
 
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
 
@@ -124,10 +124,9 @@ class Environment(object):
                               self._exp_list[0]._route)
 
         if self._save_opp_trajectories:
-            draw_trajectories(self.get_data(),
-                              self._last_executing_agent + '_' + self._environment_name,
-                              self._exp_list[0].world)
-
+            draw_opp_trajectories(self.get_data(),
+                                  self._last_executing_agent + '_' + self._environment_name,
+                                  self._exp_list[0].world)
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1

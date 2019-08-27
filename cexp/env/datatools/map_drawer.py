@@ -443,7 +443,7 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
             #draw_point(batch[0][step - step_size], end=True)
             #draw_point(route[-1])
 
-    fig.savefig(env_name + '_trajectory.png',
+    fig.savefig(env_name + '_opp_trajectories.png',
                 orientation='landscape', bbox_inches='tight', dpi=1200)
 
 ### Add some main.

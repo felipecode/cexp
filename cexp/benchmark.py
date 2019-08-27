@@ -20,7 +20,8 @@ def parse_results_summary(summary):
         'episodes_completion': summary['score_route'],
         'result': float(summary['result'] == 'SUCCESS'),
         'infractions_score': summary['score_penalty'],
-        'number_red_lights': summary['number_red_lights']
+        'number_red_lights': summary['number_red_lights'],
+        'total_number_traffic_lights': summary['total_number_traffic_lights']
     }
 
     return result_dictionary
@@ -73,7 +74,6 @@ def check_benchmark_finished(json_filename, agent_checkpoint_name):
 def check_benchmarked_episodes_metric(json_filename, agent_checkpoint_name):
 
     """ return a dict with each metric from the header and
-
         The len of each environment is the number of times this environment has been benchmarked.
      """
 
@@ -123,12 +123,14 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
     # if it doesnt exist we add the file, this is how we are writting.
     filename = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
                             environment_name, agent_checkpoint_name + '_benchmark_summary.csv')
-    set_of_metrics = ['episodes_completion', 'result', 'infractions_score', 'number_red_lights']
+    set_of_metrics = ['episodes_completion', 'result', 'infractions_score',
+                      'number_red_lights', 'total_number_traffic_lights']
 
     if not os.path.exists(filename):
         csv_outfile = open(filename, 'w')
-        csv_outfile.write("%s,%s,%s,%s,%s\n"
-                          % ('rep', 'episodes_completion', 'result', 'infractions_score', 'number_red_lights'))
+        csv_outfile.write("%s,%s,%s,%s,%s,%s\n"
+                          % ('rep', 'episodes_completion', 'result', 'infractions_score',
+                             'number_red_lights', 'total_number_traffic_lights'))
 
         csv_outfile.close()
 
