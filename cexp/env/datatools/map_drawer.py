@@ -1,4 +1,5 @@
 import carla
+import colorsys
 import argparse
 import matplotlib.pyplot as plt
 from cexp.env.scenario_identification import identify_scenario
@@ -280,7 +281,6 @@ def draw_map(world):
 
 def draw_point(location, result_color, size):
 
-    #print ("World  Point ", location, " Draw Pixel ", pixel, " Color ", result_color)
     pixel = world_to_pixel(location)
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
     plt.gca().add_patch(circle)
@@ -312,13 +312,12 @@ def draw_point_data(datapoint, color=None, direct_read=False):
     draw_point(location, result_color, size)
 
 
-import colorsys
 
 def get_N_HexCol(N=5):
     HSV_tuples = [(x * 1.0 / N, 0.5, 0.5) for x in range(N)]
     rgb_out = []
     for rgb in HSV_tuples:
-        rgb = map(lambda x: int(x * 255), colorsys.hsv_to_rgb(*rgb))
+        rgb = map(lambda x: int(x * 255.0), colorsys.hsv_to_rgb(*rgb))
         rgb_out.append(tuple(rgb))
     return rgb_out
 
@@ -335,16 +334,10 @@ def draw_opp_data(datapoint):
     count = 0
     for opp in datapoint['measurements']['opponents']:
 
-
-
         result_color = color_pallete[count]
-
         world_pos = opp['position']
-
         location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
-
         draw_point(location, result_color, size)
-
         count += 1
 
 
@@ -440,8 +433,6 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
                 #else:
                 draw_opp_data(batch[0][step])
                 step += step_size
-            #draw_point(batch[0][step - step_size], end=True)
-            #draw_point(route[-1])
 
     fig.savefig(env_name + '_opp_trajectories.png',
                 orientation='landscape', bbox_inches='tight', dpi=1200)
@@ -527,7 +518,7 @@ if __name__ == '__main__':
             print("No data generate for episode ", env)
         else:
 
-            draw_trajectories(env_data, env._environment_name, world, env._route, step_size)
+            draw_opp_trajectories(env_data, env._environment_name, world, step_size)
 
 
 
