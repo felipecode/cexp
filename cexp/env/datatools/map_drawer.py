@@ -382,7 +382,7 @@ def draw_route(route):
 
 
 
-def draw_trajectories(env_data, env_name, world, route, step_size=3):
+def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read=False ):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
@@ -490,13 +490,17 @@ if __name__ == '__main__':
         default=1
     )
     parser.add_argument(
+        '-dr', '--direct_read',
+        action='store_true'
+    )
+    parser.add_argument(
         '--dataset',
         help=' the json configuration file name',
         default=None
     )
     parser.add_argument(
-        '--make-videos',
-        help=' make videos from episodes',
+        '--make-opp',
+        help=' make the opponent trajectories from videos',
         action='store_true'
     )
 
@@ -544,7 +548,10 @@ if __name__ == '__main__':
             print("No data generate for episode ", env)
         else:
 
-            draw_opp_trajectories(env_data, env._environment_name, world, step_size)
+            if args.make_opp:
+                draw_opp_trajectories(env_data, env._environment_name, world, step_size)
+            else:
+                draw_trajectories(env_data, env._environment_name, world, env._route, step_size)
 
 
 
