@@ -79,7 +79,7 @@ class Writer(object):
 
                     transform = actor.get_transform()
                     velocity = actor.get_velocity()
-                    measurements['opponents'].update( { actor.id:{
+                    measurements['opponents'].update( { actor.id: {
 
                         "position": [transform.location.x, transform.location.y,
                                      transform.location.z],
