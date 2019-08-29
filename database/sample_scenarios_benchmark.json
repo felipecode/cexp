@@ -1,19 +1,4 @@
 {
-    "additional_sensors": [
-        {
-            "fov": 100,
-            "height": 600,
-            "id": "rgb",
-            "pitch": -15.0,
-            "roll": 0.0,
-            "type": "sensor.camera.rgb",
-            "width": 800,
-            "x": 2.0,
-            "y": 0.0,
-            "yaw": 0.0,
-            "z": 1.4
-        }
-    ],
     "envs": {
             "WetSunset_route00024": {
             "route": {
@@ -21,15 +6,14 @@
                 "id": 24
             },
             "scenarios": {
-                "background_activity": {
-                    "vehicle.*": 20,
-                    "walker.*": 50
-                }
+              'Scenario3':
+                      'ids': [0,1,2,3],
+
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset",
-            "repetitions": 3
+            "repetitions": 2
         },
         "SoftRainSunset_route00000": {
             "route": {
@@ -42,7 +26,7 @@
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset",
-            "repetitions": 3
+            "repetitions": 2
         },
       "WetNoon_route00024": {
             "route": {
@@ -55,8 +39,8 @@
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon",
-            "repetitions": 3
+            "repetitions": 2
         }
     },
-    "package_name": "sample_benchmark2"
+    "package_name": "sample_benchmark"
 }

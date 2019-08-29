@@ -39,8 +39,6 @@ def angle_between_transforms(location1, location2, location3):
     angle_wp = math.acos(min(1.0, cos_wp))  # COS can't be larger than 1, it can happen due to float imprecision
     return angle_wp
 
-LANE_FOLLOW_DISTANCE = 25.0  # If further than this distance then it is lane following
-LEAD_VEHICLE_DISTANCE = 25.0
 
 def distance_to_intersection(vehicle, wmap, resolution=0.1):
     # TODO heavy function, takes 70MS this can be reduced.
@@ -58,11 +56,14 @@ def distance_to_intersection(vehicle, wmap, resolution=0.1):
     return total_distance
 
 
-def get_current_road_angle(vehicle, wmap, resolution=0.01):
+def get_current_road_angle(vehicle, wmap, resolution=0.05):
 
     reference_waypoint = wmap.get_waypoint(vehicle.get_transform().location)
+    # we go a bit in to the future to identify future curves
 
     next_waypoint = reference_waypoint.next(resolution)[0]
+    #for i in range(10):
+    #next_waypoint = next_waypoint.next(resolution)[0]
 
     yet_another_waypoint = next_waypoint.next(resolution)[0]
 
@@ -78,8 +79,6 @@ def get_all_vehicles_closer_than(vehicle, min_distance):
 
         if 'vehicle' in op_actor.type_id and op_actor.id != vehicle.id:
             if vehicle.get_transform().location.distance(op_actor.get_transform().location) < min_distance:
-                #print (" CLOSE VEHICLE DISTANCE IS ",
-                #       vehicle.get_transform().location.distance(op_actor.get_transform().location) )
                 closest_vehicles.append(op_actor)
 
 
@@ -97,6 +96,13 @@ def op_vehicle_distance(waypoint, list_close_vehicles):
     return -1
 
 def get_distance_lead_vehicle(vehicle, route, world):
+    """
+
+    :param vehicle:
+    :param route:
+    :param world:
+    :return:
+    """
 
 
     # We get the world map
@@ -104,16 +110,15 @@ def get_distance_lead_vehicle(vehicle, route, world):
     # Check if there is a lead vehicle. By that follow the route of the
     # current vehicle and test for other vehicles that are close by.
 
-    op_vehicle_list = get_all_vehicles_closer_than(vehicle, LEAD_VEHICLE_DISTANCE * 2)
+    op_vehicle_list = get_all_vehicles_closer_than(vehicle, 50)
 
     min_dist_vehicle = -1
     # waypoint for the ego-vehicle.
     for point in route:
 
-        #print ( " TESTED  point ", point[0].location)
         point_ref_waypoint = wmap.get_waypoint(point[0].location)
         if point[0].location.distance(vehicle.get_transform().location) > \
-            LEAD_VEHICLE_DISTANCE * 2:
+                50:
             break
 
 
@@ -132,15 +137,18 @@ def get_distance_lead_vehicle(vehicle, route, world):
                 min_dist_vehicle = min(distance_result, min_dist_vehicle)
 
 
-    #print ( "DISTANCE LEAD ", min_dist_vehicle)
-    logging.debug( " Distance of lead vehicle %s" % str(min_dist_vehicle))
+    logging.debug(" Distance of lead vehicle %s" % str(min_dist_vehicle))
     return min_dist_vehicle
 
 
 
 
 
-def identify_scenario(distance_intersection, road_angle, distance_lead_vehicle=-1):
+def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
+                      thresh_intersection=25.0,
+                      thresh_lead_vehicle=25.0
+
+                      ):
 
     """
     Returns the scenario for this specific point or trajectory
@@ -148,11 +156,15 @@ def identify_scenario(distance_intersection, road_angle, distance_lead_vehicle=-
     S0: Lane Following -Straight - S0_lane_following
     S1: Intersection - S1_intersection
     S2: Traffic Light/ before intersection - S2_before_intersection
-    S3: Lane Following - Curve - S3_lane_following_curve
+    S3: Lane Following with a car in front
+    S4: Stop for a lead vehicle in front of the intersection ( Or continue
+    S5: FOllowing a vehicle inside the intersection.
 
-    S4: S4_lead_vehicle
-    S5: S5_lead_vehicle_following on curves
-    S6: Unsupervised strategy directly - S6_lead vehicle following before intersection?
+
+
+    # These two params are very important when controlling the training procedure
+
+    ### Future ones to add ( higher complexity)
 
 
     S4: Control Loss (TS1) - S4_control_loss
@@ -173,31 +185,36 @@ def identify_scenario(distance_intersection, road_angle, distance_lead_vehicle=-
 
     # TODO for now only for scenarios 0-2
 
-    if distance_lead_vehicle == -1 or distance_lead_vehicle > 25.0:
+    if distance_lead_vehicle == -1 or distance_lead_vehicle > thresh_lead_vehicle:
         # There are no vehicle ahead
 
-        if distance_intersection > LANE_FOLLOW_DISTANCE:
+        if distance_intersection > thresh_intersection:
             # For now far away from an intersection means that it is a simple lane following
-            if road_angle > 0.0008:
-                return 'S1_lane_following_curve'
-            else:
-                return 'S0_lane_following'
+            return 'S0_lane_following'
 
         elif distance_intersection > 1.0:
             # S2  Check if it is directly affected by the next intersection
-            return 'S2_before_intersection'
+            return 'S1_before_intersection'
+
+        else:
+            return 'S2_intersection'
+    else:
+        if distance_intersection > thresh_intersection:
+            # For now that means that S4 is being followed
+            return 'S3_lead_vehicle_following'
+
+        elif distance_intersection > 1.0:
+            # Distance intersection.
+            return 'S4_lead_vehicle_before_intersection'
 
         else:  # Then it is
 
-            return 'S3_intersection'
-    else:
-
-        if road_angle > 0.0008:
-            return 'S5_lead_vehicle_curve'
-        else:
-            return 'S4_lead_vehicle'
+            return 'S5_lead_vehicle_inside_intersection'
 
 
+
+
+"""
 
     #S0 direction equal lane following
     # More conditions For town01 and 02 for sure, for other towns have to check roundabout ( HOW ??)
@@ -225,7 +242,7 @@ def identify_scenario(distance_intersection, road_angle, distance_lead_vehicle=-
         # S10: Also probably requires world position mapping, we may need a system for that.
 
 
-
+"""
 
 
 

@@ -1,0 +1,18 @@
+{
+    "envs":{
+       "route0": {
+            "route": {
+                "file": "routes/straight_town01.xml",
+                "id": 0
+            },
+            "scenarios": {
+                "file": "None"
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "repetitions": 200
+        }
+
+    },
+    "package_name": "quick_benchmark"
+}

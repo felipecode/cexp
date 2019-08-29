@@ -253,6 +253,7 @@ class Experience(object):
 
         GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
         CarlaDataProvider.on_carla_tick()
+        #print ("Timeout ", self._timeout,  " Timestamp ", self.world.get_snapshot().timestamp)
         # update all scenarios
         for scenario in self._list_scenarios:  #
             scenario.scenario.scenario_tree.tick_once()
@@ -450,6 +451,8 @@ class Experience(object):
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
         master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
+        print (" BEFORE CONVERSION ")
+        print (clean_route(route))
         master_scenario_configuration.route = convert_transform_to_location(route)
 
         master_scenario_configuration.town = town_name

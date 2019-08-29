@@ -28,7 +28,7 @@ class NPCAgent(Agent):
         return self._sensors_dict
 
     def make_state(self, exp):
-        if not self._agent:
+        if self._agent is None:
             self._agent = BasicAgent(exp._ego_actor)
 
         if not self.route_assigned:

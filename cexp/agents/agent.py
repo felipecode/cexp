@@ -127,7 +127,6 @@ class Agent(object):
             self.add_value(state_batch, state)
 
 
-
         environment.record()
         environment.stop()
 

@@ -113,17 +113,26 @@ def parse_measurements(measurement):
     return measurement_data
 
 
-def parse_environment(path, metadata_dict):
+def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
+    """
+
+    :param path:
+    :param metadata_dict:
+    :param read_sensors: if we are going to read the sensors described on the environment
+                         description
+    :return:
+    """
 
     # We start on the root folder, We want to list all the episodes
-
-    experience_list = glob.glob(os.path.join(path, '[0-9]*'))
+    experience_list = glob.glob(os.path.join(path, '[0-9]_' + agent_name + '*'))
 
     sensors_types = metadata_dict['sensors']
 
     # TODO probably add more metadata
     # the experience number
     exp_vec = []
+
+    print ( "READ SENSORS ", read_sensors)
     for exp in experience_list:
 
         batch_list = glob.glob(os.path.join(exp, '[0-9]'))
@@ -136,22 +145,28 @@ def parse_environment(path, metadata_dict):
             measurements_list = glob.glob(os.path.join(batch, 'measurement*'))
             sort_nicely(measurements_list)
             sensors_lists = {}
-            for sensor in sensors_types:
-                sensor_l = glob.glob(os.path.join(batch, sensor['id'] + '*'))
-                sort_nicely(sensor_l)
-                sensors_lists.update({sensor['id']: sensor_l})
+
+            if read_sensors:
+                for sensor in sensors_types:
+                    sensor_l = glob.glob(os.path.join(batch, sensor['id'] + '*'))
+                    sort_nicely(sensor_l)
+                    sensors_lists.update({sensor['id']: sensor_l})
+            print (sensors_types)
+
 
             data_point_vec = []
+            print ( "THis ", len(measurements_list), " Measurements ")
             for i in range(len(measurements_list)):
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
 
-                for sensor in sensors_types:
-                    # TODO can bus and GPS are not implemented a sensors yet
-                    if sensor['id'] == 'can_bus' or sensor['id'] == 'GPS':
-                        continue
+                if read_sensors:
+                    for sensor in sensors_types:
+                        # TODO can bus and GPS are not implemented a sensors yet
+                        if sensor['id'] == 'can_bus' or sensor['id'] == 'GPS':
+                            continue
 
-                    data_point.update({sensor['id']: sensors_lists[sensor['id']][i]})
+                        data_point.update({sensor['id']: sensors_lists[sensor['id']][i]})
 
                 data_point_vec.append(data_point)
             batch_vec.append((data_point_vec, batch.split('/')[-1]))

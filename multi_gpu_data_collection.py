@@ -10,10 +10,7 @@ import multiprocessing
 from cexp.agents.NPCAgent import NPCAgent
 from cexp.cexp import CEXP
 import sys
-try:
-    sys.path.append(glob.glob('PythonAPI')[0])
-except IndexError:
-    pass
+
 
 # TODO I have a problem with respect to where to put files
 
@@ -84,14 +81,13 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
     # to load CARLA and the scenarios are made
 
     # Here some docker was set
-    NPCAgent._name = '.'
+    NPCAgent._name = 'Multi'
     env_batch.start(agent_name=NPCAgent._name)
     for env in env_batch:
         try:
             # The policy selected to run this experience vector (The class basically) This policy can also learn, just
             # by taking the output from the experience.
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
-
             print (" Collector ", collector_id, " Collecting for ", env)
             states, rewards = agent.unroll(env)
             agent.reinforce(rewards)
@@ -135,7 +131,6 @@ def get_eliminated_environments(json_file, start_position, end_position):
     return eliminated_environments_list
 
 def test_eliminated_environments_division():
-
 
     pass
 
@@ -209,6 +204,7 @@ if __name__ == '__main__':
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
                   'save_sensors': True,
+                  'save_trajectories': True,
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
@@ -225,7 +221,8 @@ if __name__ == '__main__':
         # we list all the possible environments
         eliminated_environments = get_eliminated_environments(json_file,
                                                               int(environments_per_collector) * (i),
-                                                              int(environments_per_collector) * (i+1) + extra_env)
+                                                              int(environments_per_collector) * (i+1)
+                                                              + extra_env)
 
         print (" Collector ", i, "Start ",  int(environments_per_collector) * (i),
                "End ", int(environments_per_collector) * (i+1) + extra_env)

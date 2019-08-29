@@ -42,8 +42,8 @@ def generate_corl2017_config_file():
                                     "SoftRainSunset"]
                     }
 
-    tasks = {'empty': {'Town01': {"file": "None"},
-                       'Town02': {"file": "None"}
+    tasks = {'empty': {'Town01': {},
+                       'Town02': {}
                         },
              'one_curve': {'Town01': {"file": "None"},
                             'Town02': {"file": "None"}

@@ -175,6 +175,7 @@ class CallBack(object):
             logging.error('No callback method for this sensor.')
 
     # Parsing CARLA physical Sensors
+
     def _parse_image_cb(self, image, tag, writer):
 
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
@@ -225,6 +226,7 @@ class SensorInterface(object):
         self._data_buffers[tag] = None
         self._timestamps[tag] = -1
 
+
     def update_sensor(self, raw, tag, data, timestamp, writer):
         if tag not in self._sensors_objects:
             raise ValueError("The sensor with tag [{}] has not been created!".format(tag))
@@ -269,8 +271,15 @@ class SensorInterface(object):
         self._written[tag] += 1
         self._lock.release()
 
+
     def get_data(self):
         data_dict = {}
         for key in self._sensors_objects.keys():
             data_dict[key] = (self._timestamps[key], self._data_buffers[key])
         return data_dict
+
+    def destroy(self):
+        self._sensors_objects.clear()
+        self._data_buffers.clear()
+        self._timestamps.clear()
+        self._written.clear()

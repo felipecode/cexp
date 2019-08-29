@@ -36,21 +36,21 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/dataset_vehicles_l0.json'
+    json = 'database/nocrash/nocrash_newweather_dense_Town01.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
-              'save_sensors': True,
+              'save_sensors': False,
               'save_trajectories': True,
+              'save_opponents': True,
+              'save_opp_trajectories': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
               'remove_wrong_data': False,
               'non_rendering_mode': False,
-              'carla_recording': True
+              'carla_recording': False
               }
 
-    # TODO for now batch size is one
-    number_of_iterations = 400
     # The idea is that the agent class should be completely independent
     agent = NPCAgent(
         sensors_dict = [{'type': 'sensor.camera.rgb',
@@ -59,11 +59,56 @@ if __name__ == '__main__':
                 'pitch': -15.0, 'yaw': 0.0,
                 'width': 800, 'height': 600,
                 'fov': 100,
-                'id': 'rgb_central'}
+                'id': 'rgb_central'},
 
-               ])
+               {'type': 'sensor.camera.semantic_segmentation',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 0.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'labels_central'},
+               {'type': 'sensor.camera.rgb',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': -30.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'rgb_left'},
+
+               {'type': 'sensor.camera.semantic_segmentation',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': -30.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'labels_left'},
+               {'type': 'sensor.camera.rgb',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 30.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'rgb_right'},
+
+               {'type': 'sensor.camera.semantic_segmentation',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 30.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'labels_right'},
+                {'type': 'sensor.can_bus',
+                 'reading_frequency': 25,
+                 'id': 'can_bus'
+                 },
+                {'type': 'sensor.other.gnss',
+                 'x': 0.7, 'y': -0.4, 'z': 1.60,
+                 'id': 'GPS'}
+
+                       ])
     # this could be joined
-    env_batch = CEXP(json, params=params, execute_all=True,
+    env_batch = CEXP(json, params=params, execute_all=True, ignore_previous_execution=True,
                      port=arguments.port)  # THe experience is built, the files necessary
                                            # to load CARLA and the scenarios are made
 
