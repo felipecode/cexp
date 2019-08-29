@@ -1,5 +1,7 @@
 import carla
+import colorsys
 import argparse
+import os
 import matplotlib.pyplot as plt
 from cexp.env.scenario_identification import identify_scenario
 
@@ -45,6 +47,9 @@ COLOR_ALUMINIUM_5 = (46/ 255.0, 52/ 255.0, 54/ 255.0)
 
 COLOR_WHITE = (255/ 255.0, 255/ 255.0, 255/ 255.0)
 COLOR_BLACK = (0/ 255.0, 0/ 255.0, 0/ 255.0)
+
+
+COLOR_LIGHT_GRAY = (196/ 255.0, 196/ 255.0, 196/ 255.0)
 
 
 ############## MAP RELATED ######################
@@ -167,7 +172,7 @@ def draw_roads(set_waypoints):
         polygon = [world_to_pixel(x) for x in polygon]
 
         if len(polygon) > 2:
-            polygon = plt.Polygon(polygon, edgecolor=COLOR_ALUMINIUM_5)
+            polygon = plt.Polygon(polygon, edgecolor=COLOR_WHITE)
             plt.gca().add_patch(polygon)
             #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon, 5)
             #pygame.draw.polygon(, COLOR_ALUMINIUM_5, polygon)
@@ -275,8 +280,15 @@ def draw_map(world):
 ######################################################
 ##### The car drawing tools ##############
 
+def draw_point(location, result_color, size, alpha=None):
 
-def draw_point(datapoint, init=False, end=False):
+    pixel = world_to_pixel(location)
+    circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
+    plt.gca().add_patch(circle)
+
+
+
+def draw_point_data(datapoint, color=None, direct_read=False, alpha=None):
     """
     We draw in a certain position at the map
     :param position:
@@ -284,25 +296,58 @@ def draw_point(datapoint, init=False, end=False):
     :return:
     """
     size = 12
-    result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
-                                               datapoint['measurements']['road_angle'],
-                                               -1 #datapoint['measurements']['distance_lead_vehicle']
+
+    if color is None:
+
+        if direct_read:
+            get_color(datapoint['measurements']['scenario'])
+        else:
+            result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
+                                               datapoint['measurements']['distance_lead_vehicle']
                                                ))
+    else:
+        result_color = color
 
     world_pos = datapoint['measurements']['ego_actor']['position']
 
-    # We add some color to draw the point around
-    if init:
-        result_color = (1.0, 0.0, 0)
-        size = size*2
-    if end:
-        result_color = (0.0, 1.0, 0)
-        size = size*2
+    location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
+    draw_point(location, result_color, size, alpha)
 
-    pixel = world_to_pixel(carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2]))
-    print ("World  Point ", world_pos, " Draw Pixel ", pixel, " Color ", result_color)
-    circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color)
-    plt.gca().add_patch(circle)
+
+
+def get_N_HexCol(N=5):
+    HSV_tuples = [(x * 1.0 / N, 0.5, 0.5) for x in range(N)]
+    rgb_out = []
+    for rgb in HSV_tuples:
+        rgb = map(lambda x: x, colorsys.hsv_to_rgb(*rgb))
+        rgb_out.append(tuple(rgb))
+    return rgb_out
+
+
+def draw_opp_data(datapoint, agent_number, alpha=None):
+    """
+    We draw in a certain position at the map
+    :param position:
+    :param color:
+    :return:
+    """
+    if not datapoint['measurements']['opponents'] or not isinstance(datapoint['measurements']['opponents'],
+                                                                dict):
+        return
+    if agent_number not in datapoint['measurements']['opponents']:
+        return
+    size = 12
+    color_pallete = get_N_HexCol(len(datapoint['measurements']['opponents']))
+    count = 0
+    opp = datapoint['measurements']['opponents'][agent_number]
+
+    result_color = color_pallete[count]
+    world_pos = opp['position']
+    location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
+    draw_point(location, result_color, size, alpha)
+    count += 1
+
+
 
 
 
@@ -315,25 +360,37 @@ def get_color(scenario):
 
     if scenario == 'S0_lane_following':
         return COLOR_CHOCOLATE_0
-    elif scenario == 'S1_lane_following_curve':
+    elif scenario == 'S1_before_intersection':
         return COLOR_CHOCOLATE_2
-    elif scenario == 'S2_before_intersection':
+    elif scenario == 'S2_intersection':
         return COLOR_ORANGE_1
-    elif scenario == 'S3_intersection':
+    elif scenario == 'S3_lead_vehicle':
         return COLOR_SCARLET_RED_2
-    elif scenario == 'S4_lead_vehicle':
+    elif scenario == 'S4_lead_vehicle_before_intersection':
         return COLOR_ORANGE_0
-    elif scenario == 'S5_lead_vehicle_curve':
+    elif scenario == 'S5_lead_vehicle_inside_intersection':
         return COLOR_BUTTER_2
 
 
-def draw_trajectories(env_data, env_name, world, step_size=3):
+def draw_route(route):
+    draw_point(route[0][0].location, result_color=(0.0, 0.0, 1.0), size=24)
+    for point_tuple in route:
+        draw_point(point_tuple[0].location, result_color=COLOR_LIGHT_GRAY, size=12)
+
+    draw_point(route[-1][0].location, result_color=(0.0, 1.0, 0), size=24)
+
+
+
+
+def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read=False ):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
     plt.ylim(-200, 6000)
+    # We draw the full map
     draw_map(world)
-    first_time = True
+    # we draw the route that has to be followed
+    draw_route(route)
     for exp in env_data:
         print("    Exp: ", exp[1])
 
@@ -341,18 +398,68 @@ def draw_trajectories(env_data, env_name, world, step_size=3):
             print("      Batch: ", batch[1])
 
             step = 0  # Add the size
+            print (" route 0 is ", route[0])
+
             while step < len(batch[0]):
-                if first_time:
-                    draw_point(batch[0][step], init=True)
-                    first_time = False
-                else:
-                    draw_point(batch[0][step])
+                #if first_time:
+                #    draw_point(batch[0][step], init=True)
+                #    first_time = False
+                #else:
+                draw_point_data(batch[0][step])
                 step += step_size
-            draw_point(batch[0][step - step_size], end=True)
+            #draw_point(batch[0][step - step_size], end=True)
+            #draw_point(route[-1])
 
     fig.savefig(env_name + '_trajectory.png',
                 orientation='landscape', bbox_inches='tight', dpi=1200)
 
+
+def get_actor_ids(env_data):
+
+
+   return env_data[0][0][0][0][0]['measurements']['opponents'].keys()
+
+
+
+def draw_opp_trajectories(env_data, env_name, world, step_size=3):
+
+
+
+    # we draw the route that has to be followed
+    actors_ids = get_actor_ids(env_data)
+
+
+    if not os.path.exists('_opp_traj'):
+        os.mkdir('_opp_traj')
+
+    for agent_number in actors_ids:
+        fig = plt.figure()
+        plt.xlim(-200, 6000)
+        plt.ylim(-200, 6000)
+        # We draw the full map
+        draw_map(world)
+        print (" AGENT NUMBER ", agent_number)
+        for exp in env_data:
+            print("    Exp: ", exp[1])
+
+            for batch in exp[0]:
+                print("      Batch: ", batch[1])
+
+                step = 0  # Add the size
+
+                while step < len(batch[0]):
+                    #if first_time:
+                    #    draw_point(batch[0][step], init=True)
+                    #    first_time = False
+                    #else:
+
+                    draw_point_data(batch[0][step], color=(0.0,1.0,0.0),  alpha=0.5)
+                    draw_opp_data(batch[0][step], agent_number, alpha=0.5)
+                    step += step_size
+
+        print ( " SAVE D AGENT")
+        fig.savefig('_opp_traj/'+ env_name + '_opp_' + str(agent_number) + '_trajectory.png',
+                    orientation='landscape', bbox_inches='tight', dpi=1200)
 
 ### Add some main.
 
@@ -365,7 +472,8 @@ if __name__ == '__main__':
     from cexp.env.environment import NoDataGenerated
 
     parser = argparse.ArgumentParser(description='Path viewer')
-    # parser.add_argument('model', type=str, help='Path to model definition json. Model weights should be on the same path.')
+    # parser.add_argument('model', type=str,
+    #  help='Path to model definition json. Model weights should be on the same path.')
     parser.add_argument('-pt', '--path', default="")
 
     parser.add_argument(
@@ -382,13 +490,17 @@ if __name__ == '__main__':
         default=1
     )
     parser.add_argument(
+        '-dr', '--direct_read',
+        action='store_true'
+    )
+    parser.add_argument(
         '--dataset',
         help=' the json configuration file name',
         default=None
     )
     parser.add_argument(
-        '--make-videos',
-        help=' make videos from episodes',
+        '--make-opp',
+        help=' make the opponent trajectories from videos',
         action='store_true'
     )
 
@@ -411,20 +523,22 @@ if __name__ == '__main__':
               'batch_size': 1,
               'remove_wrong_data': False,
               'non_rendering_mode': False,
-              'carla_recording': True
+              'carla_recording': False
               }
 
     # We have to connect to a server to be able to draw a topology
     render_port = 2000
     client = carla.Client('localhost', 2000)
+    client.set_timeout(25.0)
 
     env_batch = CEXP(jsonfile, params, execute_all=True, ignore_previous_execution=True)
     # Here some docker was set
-    env_batch.start(no_server=True)  # no carla server mode.
+    env_batch.start(no_server=True, agent_name='Agent')  # no carla server mode.
     # count, we count the environments that are read
 
     for env in env_batch:
 
+        print ( " Town Name ", env._town_name)
         world = client.load_world(env._town_name)
         # it can be personalized to return different types of data.
         print("Environment Name: ", env)
@@ -434,7 +548,10 @@ if __name__ == '__main__':
             print("No data generate for episode ", env)
         else:
 
-            draw_trajectories(env_data, env._environment_name, world, step_size)
+            if args.make_opp:
+                draw_opp_trajectories(env_data, env._environment_name, world, step_size)
+            else:
+                draw_trajectories(env_data, env._environment_name, world, env._route, step_size)
 
 
 

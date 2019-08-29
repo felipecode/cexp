@@ -5,7 +5,7 @@ import shutil
 
 from cexp.env.experience import Experience
 import cexp.env.datatools.data_parser as parser
-from cexp.env.datatools.map_drawer import draw_trajectories
+from cexp.env.datatools.map_drawer import draw_trajectories, draw_opp_trajectories
 
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
 
@@ -66,7 +66,11 @@ class Environment(object):
         self.RewardFunction = None
         # ignore previous executions
         #self._ignore_previous = ignore_previous
+        self._last_executing_agent = env_params['agent_name']
         # update the number of executions to match the folder
+
+        # We can also have the environment to save opponent agents positions on map:
+        self._save_opp_trajectories = env_params['save_opp_trajectories']
 
     @staticmethod
     def check_for_executions(agent_name, package_name):
@@ -87,6 +91,7 @@ class Environment(object):
     def __str__(self):
         return self._environment_name
 
+
     def _cleanup(self):
         """
         Remove and destroy all actors
@@ -94,6 +99,7 @@ class Environment(object):
         # make the exp vec empty
         for exp in self._exp_list:
             exp.cleanup()
+            del exp
         self._exp_list = []
         # we remove all the sensors everytime. No sensor addition on building time
         self._sensor_desc_vec = []
@@ -103,19 +109,30 @@ class Environment(object):
             record the results summary and set this as an executed example
 
         """
-        # get all the exps to get the summary
-        if self._save_trajectories:
-            draw_trajectories(self.get_data(), self._environment_name, self._exp_list[0].world)
-
         self._latest_summary = []
+
+        # get all the exps to get the summary
         for exp in self._exp_list:
-            exp.cleanup()
+            exp.record()
             self._latest_summary.append(exp.get_summary())
+
+        # Using the summary we save the trajectories
+        if self._save_trajectories:
+            draw_trajectories(self.get_data(),
+                              self._last_executing_agent + '_' + self._environment_name,
+                              self._exp_list[0].world,
+                              self._exp_list[0]._route)
+
+        if self._save_opp_trajectories:
+            draw_opp_trajectories(self.get_data(),
+                                  self._last_executing_agent + '_' + self._environment_name,
+                                  self._exp_list[0].world)
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
         else:
             raise ValueError("Cleaning up non created environment")
+
 
     def stop(self):
 
@@ -127,9 +144,9 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-
     def reset(self, StateFunction, RewardFunction, agent_name=''):
-
+        # save the last executing agent name. This is to be used for logging purposes
+        self._last_executing_agent = agent_name
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
@@ -151,6 +168,7 @@ class Environment(object):
                 'exp_number': i,
                 'save_data': self._save_data,
                 'save_sensors': self._env_params['save_sensors'],
+                'save_opponents': self._env_params['save_opponents'],
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
                 'carla_recording': self._env_params['carla_recording'],
                 'remove_wrong_data': self._env_params['remove_wrong_data'],
@@ -158,11 +176,12 @@ class Environment(object):
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, self._scenarios, exp_params,
-                                             agent_name))
+                                             self._last_executing_agent))
         # if it is the first time we execute this env
         if self._save_data and self._environment_name in Environment.number_of_executions:
             # we use one of the experiments to build the metadata
-            self._exp_list[0]._writer.save_metadata(self, self._exp_list[0]._instanced_sensors)
+            self._exp_list[0]._writer.save_metadata(self,
+                                                    self._exp_list[0]._instanced_sensors)
 
         for exp in self._exp_list:
             exp.tick_scenarios()
@@ -173,12 +192,15 @@ class Environment(object):
         return StateFunction(self._exp_list), \
                  RewardFunction(self._exp_list)
 
-    def get_data(self):
+    def get_data(self, read_sensors=None):
         # Each environment can have a reference datapoint,
         # where the data is already collected. That can go
         # Directly to the json where the data is collected.
         # This is the package that is where the data is saved.
         # It is always save in the SRL path
+        if read_sensors is None:
+            read_sensors = self._env_params['save_sensors']
+
         root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name,
                                  self._environment_name)
         # If the metadata does not exist the environment does not have a reference data.
@@ -189,7 +211,9 @@ class Environment(object):
         with open(os.path.join(root_path, 'metadata.json'), 'r') as f:
             metadata_dict = json.loads(f.read())
 
-        full_episode_data_dict = parser.parse_environment(root_path, metadata_dict)
+        full_episode_data_dict = parser.parse_environment(root_path, metadata_dict,
+                                                          read_sensors=read_sensors,
+                                                          agent_name=self._last_executing_agent)
 
         return full_episode_data_dict
 
@@ -241,6 +265,7 @@ class Environment(object):
 
         return running_envs, num_running_envs, running_envs_map, running_envs_reverse_map
     # TODO we can make this extra data pretier.
+
     def run_step(self, control_vec):
         """
         Run an step on the simulation using the agent control

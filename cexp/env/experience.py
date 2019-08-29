@@ -7,12 +7,16 @@ import traceback
 import time
 import logging
 
+
 from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.scenarios.background_activity import BackgroundActivity
-from srunner.challenge.utils.route_manipulation import interpolate_trajectory
+
+from srunner.scenarios.object_crash_vehicle import DynamicObjectCrossing
+from srunner.scenarios.object_crash_intersection import VehicleTurningRight, VehicleTurningLeft
+from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
 from cexp.env.scorer import record_route_statistics_default
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
@@ -22,6 +26,30 @@ from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
 
 from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
+
+
+number_class_translation = {
+
+    "Scenario1": [None],
+    "Scenario2": [None],
+    "Scenario3": [DynamicObjectCrossing],
+    "Scenario4": [VehicleTurningRight, VehicleTurningLeft],
+    "Scenario5": [None],
+    "Scenario6": [None],
+    "Scenario7": [None],
+    "Scenario8": [None],
+    "Scenario9": [None],
+    "Scenario10": [None]
+
+}
+
+
+def convert_json_to_transform(actor_dict):
+
+    return carla.Transform(location=carla.Location(x=float(actor_dict['x']), y=float(actor_dict['y']),
+                                                   z=float(actor_dict['z'])),
+                           rotation=carla.Rotation(roll=0.0, pitch=0.0, yaw=float(actor_dict['yaw'])))
+
 
 def convert_transform_to_location(transform_vec):
 
@@ -50,9 +78,9 @@ def get_forward_speed(vehicle):
         speed = np.dot(vel_np, orientation)
         return speed
 
-# TODO is scenario mutually exclusive ?? FOR NOW YES
+# TODO this is actually a benchmark paramter .... either seconds or seconds per meter.
 
-SECONDS_GIVEN_PER_METERS = 0.4
+SECONDS_GIVEN_PER_METERS = 0.6
 
 def estimate_route_timeout(route):
     route_length = 0.0  # in meters
@@ -66,8 +94,38 @@ def estimate_route_timeout(route):
 
     return int(SECONDS_GIVEN_PER_METERS * route_length)
 
+def clean_route(route):
+
+    curves_start_end = []
+    inside = False
+    start = -1
+    current_curve = RoadOption.LANEFOLLOW
+    index = 0
+    while index < len(route):
+
+        command = route[index][1]
+        if command != RoadOption.LANEFOLLOW and not inside:
+            inside = True
+            start = index
+            current_curve = command
+
+        if command != current_curve and inside:
+            inside = False
+            # End now is the index.
+            curves_start_end.append([start, index, current_curve])
+            if start == -1:
+                raise ValueError("End of curve without start")
+
+            start = -1
+        else:
+            index += 1
+
+    return curves_start_end
+
+
 
 class Experience(object):
+
     def __init__(self, client, vehicle_model, route, sensors, scenario_definitions,
                  exp_params, agent_name):
         """
@@ -108,7 +166,8 @@ class Experience(object):
 
         # if we are going to save, we keep track of a dictionary with all the data
         self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
-                              exp_params['exp_number'], agent_name)
+                              exp_params['exp_number'], agent_name,
+                              other_vehicles=exp_params['save_opponents'])
         self._environment_data = {'exp_measurements': None,  # The exp measurements are specific of the experience
                                   'ego_controls': None,
                                   'scenario_controls': None}
@@ -126,6 +185,8 @@ class Experience(object):
             CarlaActorPool.set_world(self.world)
             # Set the world for the global data provider
             CarlaDataProvider.set_world(self.world)
+            # We get the lat lon ref that is important for the route
+            self._lat_ref, self._lon_ref = _get_latlon_ref(self.world)
             # We instance the ego actor object
             _, self._route = interpolate_trajectory(self.world, route)
             # elevate the z transform to avoid spawning problems
@@ -137,11 +198,11 @@ class Experience(object):
             # We set all the traffic lights to green to avoid having this traffic scenario.
             self._reset_map()
             # Data for building the master scenario
-            timeout =  estimate_route_timeout(self._route)
+            self._timeout = estimate_route_timeout(self._route)
             self._master_scenario = self.build_master_scenario(self._route,
                                                                exp_params['town_name'],
-                                                               timeout)
-            other_scenarios = self.build_scenario_instances(scenario_definitions, timeout)
+                                                               self._timeout)
+            other_scenarios = self.build_scenario_instances(scenario_definitions, self._timeout)
             self._list_scenarios = [self._master_scenario] + other_scenarios
             # Route statistics, when the route is finished there will
             # be route statistics on this object. and nothing else
@@ -155,6 +216,7 @@ class Experience(object):
                 self._clean_bad_dataset()
             # Re raise the exception
             raise r
+
 
     def tick_scenarios(self):
 
@@ -183,6 +245,7 @@ class Experience(object):
 
         return status
 
+
     def tick_scenarios_control(self, controls):
         """
         Here we tick the scenarios and also change the control based on the scenario properties
@@ -194,10 +257,12 @@ class Experience(object):
         for scenario in self._list_scenarios:  #
             scenario.scenario.scenario_tree.tick_once()
             controls = scenario.change_control(controls)
+
         if self._save_data:
             self._environment_data['ego_controls'] = controls
 
         return controls
+
 
     def apply_control(self, controls):
 
@@ -210,6 +275,7 @@ class Experience(object):
             ego_trans = self._ego_actor.get_transform()
             spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
                                                     carla.Rotation(pitch=-90)))
+
 
     def tick_world(self):
         # Save all the measurements that are interesting
@@ -269,7 +335,10 @@ class Experience(object):
         self._ego_actor = CarlaActorPool.request_new_actor(self._vehicle_model, start_transform,
                                                            hero=True)
 
+        CarlaDataProvider.set_ego_vehicle_route(
+            convert_transform_to_location(self._route))
         logging.debug("Created Ego Vehicle")
+
 
     def _setup_sensors(self, sensors, vehicle):
         """
@@ -375,12 +444,14 @@ class Experience(object):
         pass
         # TODO for now we are just randomizing the seeds and that is it
 
+
     def build_master_scenario(self, route, town_name, timeout):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
         master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
         master_scenario_configuration.route = convert_transform_to_location(route)
+
         master_scenario_configuration.town = town_name
         master_scenario_configuration.ego_vehicle = ActorConfigurationData('vehicle.lincoln.mkz2017',
                                                                            self._ego_actor.get_transform())
@@ -392,7 +463,6 @@ class Experience(object):
 
 
     def _load_world(self):
-
         # time continues
         attempts = 0
 
@@ -420,40 +490,36 @@ class Experience(object):
         self.world.apply_settings(settings)
 
         # We also set the client to record carla loggings for this episode
-
         root_path = os.environ["SRL_DATASET_PATH"]
         env_full_path = os.path.join(root_path, self._exp_params['package_name'],
                                            self._exp_params['env_name'],
                                            str(self._exp_params['exp_number'])
                                      + '_' + self._agent_name)
 
-        self._client.start_recorder(os.path.join(env_full_path, "recording.log"))
-
-
-
-
     # Todo make a scenario builder class
+
     def _build_background(self, background_definition, timeout):
         scenario_configuration = ScenarioConfiguration()
         scenario_configuration.route = None
         scenario_configuration.town = self._town_name
         # TODO The random seed should be set
-        print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
-
+        # print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
         configuration_instances = []
         for key, numbers in background_definition.items():
-            model = key
-            transform = carla.Transform()
-            autopilot = True
-            random = True
-            actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
-                                                                  amount=background_definition[key])
-            configuration_instances.append(actor_configuration_instance)
+            if 'walker' not in key:
+                model = key
+                transform = carla.Transform()
+                autopilot = True
+                random = True
+                actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
+                                                                      amount=background_definition[key])
+                configuration_instances.append(actor_configuration_instance)
 
         scenario_configuration.other_actors = configuration_instances
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
                                   timeout=timeout, debug_mode=False)
 
+    # TODO adding also scenario
     def build_scenario_instances(self, scenario_definition_vec, timeout):
 
         """
@@ -465,6 +531,8 @@ class Experience(object):
         list_instanced_scenarios = []
         if scenario_definition_vec is None:
             return list_instanced_scenarios
+
+
         for scenario_name in scenario_definition_vec:
             # The BG activity encapsulates several scenarios that contain vehicles going arround
             if scenario_name == 'background_activity':  # BACKGROUND ACTIVITY SPECIAL CASE
@@ -472,6 +540,44 @@ class Experience(object):
                 background_definition = scenario_definition_vec[scenario_name]
                 list_instanced_scenarios.append(self._build_background(background_definition,
                                                                        timeout))
+            else:
+
+                # Sample the scenarios to be used for this route instance.
+
+                scenario_definition = scenario_definition_vec[scenario_name]
+
+                if scenario_definition is None:
+                    raise ValueError(" Not Implemented ")
+
+
+
+                ScenarioClass = number_class_translation[scenario_name][scenario_definition['type']]
+
+                egoactor_trigger_position = convert_json_to_transform(
+                    scenario_definition['trigger_position'])
+                scenario_configuration = ScenarioConfiguration()
+                scenario_configuration.other_actors = None  # TODO the other actors are maybe needed
+                scenario_configuration.town = self._town_name
+                scenario_configuration.trigger_point = egoactor_trigger_position
+                scenario_configuration.ego_vehicle = ActorConfigurationData(
+                                                        'vehicle.lincoln.mkz2017',
+                                                        self._ego_actor.get_transform())
+                try:
+                    scenario_instance = ScenarioClass(self.world, self._ego_actor,
+                                                      scenario_configuration,
+                                                      criteria_enable=False, timeout=timeout)
+                except Exception as e:
+                    #if  self._exp_params['debug'] > 1:
+                    #     raise e
+                    #else:
+                    print("Skipping scenario '{}' due to setup error: {}".format(
+                        scenario_definition['name'], e))
+                    continue
+                # registering the used actors on the data provider so they can be updated.
+
+                #CarlaDataProvider.register_actors(scenario_instance.other_actors)
+
+                list_instanced_scenarios.append(scenario_instance)
 
         return list_instanced_scenarios
 
@@ -479,10 +585,25 @@ class Experience(object):
 
         return self._route_statistics
 
+
+    def record(self):
+        self._route_statistics = record_route_statistics_default(self._master_scenario,
+                                                                 self._exp_params['env_name'] + '_' +
+                                                                 str(self._exp_params['env_number']) + '_' +
+                                                                 str(self._exp_params['exp_number']))
+
+        if self._save_data:
+            self._writer.save_summary(self._route_statistics)
+            if self._exp_params['remove_wrong_data']:
+                if self._route_statistics['result'] == 'FAILURE':
+                    self._clean_bad_dataset()
+
+
     def cleanup(self, ego=True):
         """
         Remove and destroy all actors
         """
+
         for scenario in self._list_scenarios:
             # Reset scenario status for proper cleanup
             scenario.scenario.terminate()
@@ -498,17 +619,8 @@ class Experience(object):
                 self._instanced_sensors[i].destroy()
                 self._instanced_sensors[i] = None
         self._instanced_sensors = []
+        self._sensor_interface.destroy()
         #  We stop the sensors first to avoid problems
-        self._route_statistics = record_route_statistics_default(self._master_scenario,
-                                                                 self._exp_params['env_name'] + '_' +
-                                                                 str(self._exp_params['env_number']) + '_' +
-                                                                 str(self._exp_params['exp_number']))
-
-        if self._save_data:
-            self._writer.save_summary(self._route_statistics)
-            if self._exp_params['remove_wrong_data']:
-                if self._route_statistics['result'] == 'FAILURE':
-                    self._clean_bad_dataset()
 
         CarlaActorPool.cleanup()
         CarlaDataProvider.cleanup()
@@ -519,10 +631,9 @@ class Experience(object):
             logging.debug("Removed Ego Vehicle")
 
         if self.world is not None:
-
             self.world = None
 
-        self._client.stop_recorder()
+
 
     def _clean_bad_dataset(self):
         # TODO for now only deleting on failure.
