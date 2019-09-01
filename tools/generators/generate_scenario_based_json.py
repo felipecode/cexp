@@ -77,7 +77,8 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
     """
 
 
-    routes_parsed, possible_scenarios = get_scenario_list(world, scenarios_json_path, routes_path)
+    routes_parsed, possible_scenarios = get_scenario_list(world, scenarios_json_path,
+                                                          'database/'+routes_path)
 
 
     #print (possible_scenarios)
