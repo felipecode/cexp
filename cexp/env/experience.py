@@ -477,6 +477,8 @@ class Experience(object):
                 logging.debug("=============================")
                 break
             except Exception:
+                import traceback
+                traceback.print_exc()
                 attempts += 1
                 print('======[WARNING] The server is not ready [{}/{} attempts]!!'.format(attempts,
                                                                       self.MAX_CONNECTION_ATTEMPTS))
