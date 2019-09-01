@@ -112,7 +112,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                                                               )
 
 
-                scenarios_all ={"file": "None",
+                scenarios_all = {
                                 'background_activity': {"vehicle.*": 100,
                                       "walker.*": 0},
                                }
