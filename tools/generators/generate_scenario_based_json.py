@@ -165,7 +165,7 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output', default='database/dataset_scenarios_l0.json',
                         help='The outputfile json')
 
-    parser.add_argument('-r', '--input-route', default='database/routes/routes_town01.xml',
+    parser.add_argument('-r', '--input-route', default='routes/routes_town01.xml',
                         help='The outputfile json')
 
     parser.add_argument('-j', '--scenarios-json',
