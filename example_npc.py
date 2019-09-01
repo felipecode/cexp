@@ -42,7 +42,7 @@ if __name__ == '__main__':
               'save_sensors': True,
               'save_trajectories': True,
               'save_opponents': True,
-              'save_opp_trajectories': True,
+              'save_opp_trajectories': False,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
@@ -60,8 +60,6 @@ if __name__ == '__main__':
                 'width': 800, 'height': 600,
                 'fov': 100,
                 'id': 'rgb_central'},
-
-
 
                        ])
     # this could be joined
