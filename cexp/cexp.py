@@ -136,6 +136,7 @@ class CEXP(object):
                     self._environment_batch[0].reset(port=self._port)
                 free_port = self._port  # This is just a test mode where CARLA is already up.
             # setup world and client assuming that the CARLA server is up and running
+            logging.debug(" Connecting to the free port client")
             self._client_vec = [carla.Client('localhost', free_port)]
             self._client_vec[0].set_timeout(self.client_timeout)
 
