@@ -136,8 +136,9 @@ def check_test_server(port):
     # Check if a server is open at some port
 
     try:
-        print ( " TRYING TO CONNECT ")
+        print ( " TRYING TO CONNECT ", port)
         client = carla.Client(host='localhost', port=port)
+        print ( "GETT VERSION ")
         client.get_server_version()
         del client
         return True
