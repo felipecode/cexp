@@ -102,7 +102,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
 
         for weather in w_set:
 
-            for id in routes_id:  # TODO change this to routes id
+            for id in range(len(routes_parsed)):  # TODO change this to routes id
                 # get the possible scenario for a given ID
                 specific_scenarios_for_route = parse_scenario(possible_scenarios[id],
                                                               wanted_scenarios,
