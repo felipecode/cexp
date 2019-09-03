@@ -290,7 +290,7 @@ class Experience(object):
 
 
             dist_scenario3, dist_scenario4 = get_distance_closest_scenarios(
-                                                    self._route, self._list_scenarios,
+                                                    self._master_scenario.route, self._list_scenarios,
                                                     get_current_completion(self._master_scenario))
 
             self._environment_data['exp_measurements'] = {
