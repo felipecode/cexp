@@ -36,6 +36,8 @@ def get_scenario_list(world, scenarios_json_path, routes_path, routes_id):
         possible_scenarios, existent_triggers = scan_route_for_scenarios(route_interpolated[:-position_less_10_percent],
                                                                          world_annotations,
                                                                          world.get_map().name)
+        if not possible_scenarios:
+            continue
         per_route_possible_scenarios.append(possible_scenarios)
 
 
