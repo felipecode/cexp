@@ -169,6 +169,14 @@ def get_distance_closest_scenarios(route, list_scenarios, percentage_completed):
     distance_scenario3 = -1
     distance_scenario4 = -1
 
+    print ( "TRIGGERS ")
+
+    print (triggers_scenario3)
+
+    print ( "#####")
+
+    print (triggers_scenario4)
+
     for trigger in triggers_scenario3:
         distance, found = get_distance_along_route(route_cut, trigger)
 
