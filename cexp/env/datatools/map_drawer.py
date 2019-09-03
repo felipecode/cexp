@@ -380,9 +380,7 @@ def draw_route(route):
     draw_point(route[-1][0].location, result_color=(0.0, 1.0, 0), size=24)
 
 
-
-
-def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read=False ):
+def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read=False):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
@@ -405,7 +403,7 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read
                 #    draw_point(batch[0][step], init=True)
                 #    first_time = False
                 #else:
-                draw_point_data(batch[0][step])
+                draw_point_data(batch[0][step], direct_read=direct_read)
                 step += step_size
             #draw_point(batch[0][step - step_size], end=True)
             #draw_point(route[-1])

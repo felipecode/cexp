@@ -121,7 +121,8 @@ class Environment(object):
             draw_trajectories(self.get_data(),
                               self._last_executing_agent + '_' + self._environment_name,
                               self._exp_list[0].world,
-                              self._exp_list[0]._route)
+                              self._exp_list[0]._route,
+                              direct_read=self._env_params['direct_read'])
 
         if self._save_opp_trajectories:
             draw_opp_trajectories(self.get_data(),

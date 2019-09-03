@@ -38,7 +38,8 @@ class CEXP(object):
                        'batch_size': 1,
                        'remove_wrong_data': False,
                        'non_rendering_mode': False,
-                       'carla_recording': True
+                       'carla_recording': True,
+                       'direct_read': False
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
@@ -152,6 +153,7 @@ class CEXP(object):
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording'],
+            'direct_read': self._params['direct_read'],
             'agent_name': agent_name,
             'debug': False  # DEBUG SHOULD BE SET
         }

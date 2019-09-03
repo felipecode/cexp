@@ -29,7 +29,7 @@ class Writer(object):
 
         self._root_path = root_path
         self._experience_name = env_name
-        self._dataset_name  = dataset_name
+        self._dataset_name = dataset_name
         self._latest_id = 0
         # path for the writter for this specific batch
         self._full_path = os.path.join(root_path, dataset_name, env_name,
