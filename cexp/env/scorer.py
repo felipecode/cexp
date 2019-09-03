@@ -31,7 +31,7 @@ def get_current_completion(master_scenario):
     for event in list_traffic_events:
         if event.get_type() == TrafficEventType.ROUTE_COMPLETION:
             if event.get_dict():
-                return event.get_dict()['route_completed']/100.0
+                return event.get_dict()['route_completed']
             else:
                 return 0
 
