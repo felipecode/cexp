@@ -146,12 +146,12 @@ def get_distance_lead_vehicle(vehicle, route, world):
 def get_distance_closest_scenarios(route, list_scenarios, percentage_completed):
 
     # We take the route starting from the vehicle postion there
-
+    percentage_completed = percentage_completed/100.0
     route_cut = route[int(percentage_completed*len(route)):]
 
     print ( " PERCENTAGE COMPLETED ", percentage_completed)
 
-
+    print ( " LEN ROUTE CUT ", len(route_cut))
     # TODO only working for scenarios 3 and 4
 
     triggers_scenario3 = []
