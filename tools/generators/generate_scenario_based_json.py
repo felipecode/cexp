@@ -44,7 +44,7 @@ def get_scenario_list(world, scenarios_json_path, routes_path, routes_id):
 
 
 
-def parse_scenario(possible_scenarios, wanted_scenarios, route, match_position):
+def parse_scenario(possible_scenarios, wanted_scenarios):
 
     scenarios_to_add = {}
     for key in possible_scenarios.keys():  # this iterate under different keys
@@ -85,6 +85,12 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                                                           routes_id)
 
 
+    print ( " POSSIBLE SCENARIOS ")
+
+
+    print (possible_scenarios)
+
+    print ("###################")
 
     weather_sets = {'training': ["ClearNoon",
                                   "WetNoon",
@@ -105,9 +111,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
             for id in range(len(routes_parsed)):  # TODO change this to routes id
                 # get the possible scenario for a given ID
                 specific_scenarios_for_route = parse_scenario(possible_scenarios[id],
-                                                              wanted_scenarios,
-                                                              routes_parsed[id],
-                                                              id
+                                                              wanted_scenarios
                                                               )
 
                 scenarios_all = {
