@@ -51,7 +51,7 @@ def parse_scenario(possible_scenarios, wanted_scenarios):
         scenarios_for_trigger = possible_scenarios[key]
         for scenario in scenarios_for_trigger:
             if scenario['name'] in wanted_scenarios:
-                print (scenario)
+                #print (scenario)
                 convert_waypoint_float(scenario['trigger_position'])
                 name  = scenario['name']
                 #del scenario['name']
@@ -85,7 +85,9 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                                                           routes_id)
 
 
-    print ( " POSSIBLE SCENARIOS ")
+    print ( " POSSIBLE SCENARIOS ", len(possible_scenarios))
+
+    print ( " len routes PARSED ", len(routes_parsed))
 
 
     print (possible_scenarios)
