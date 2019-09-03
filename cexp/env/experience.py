@@ -18,7 +18,7 @@ from srunner.scenarios.object_crash_vehicle import DynamicObjectCrossing
 from srunner.scenarios.object_crash_intersection import VehicleTurningRight, VehicleTurningLeft
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
-from cexp.env.scorer import record_route_statistics_default
+from cexp.env.scorer import record_route_statistics_default, get_current_completion
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
                                              get_distance_lead_vehicle, get_distance_closest_scenarios
 
@@ -290,7 +290,8 @@ class Experience(object):
 
 
             dist_scenario3, dist_scenario4 = get_distance_closest_scenarios(
-                                                    self._route, self._list_scenarios)
+                                                    self._route, self._list_scenarios,
+                                                    get_current_completion(self._master_scenario))
 
             self._environment_data['exp_measurements'] = {
                 'directions': directions,

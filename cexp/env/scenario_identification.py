@@ -149,6 +149,8 @@ def get_distance_closest_scenarios(route, list_scenarios, percentage_completed):
 
     route_cut = route[int(percentage_completed*len(route)):]
 
+    print ( " PERCENTAGE COMPLETED ", percentage_completed)
+
 
     # TODO only working for scenarios 3 and 4
 
