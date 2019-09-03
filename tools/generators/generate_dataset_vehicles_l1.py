@@ -55,7 +55,7 @@ if __name__ == '__main__':
                     env_dict = {
                         "route": {
                             "file": town_name,
-                            "id": randint(0,65790)
+                            "id": randint(0, 65790)
                         },
                         "scenarios": {
                                       'background_activity': {"vehicle.*": 100,

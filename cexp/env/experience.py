@@ -20,7 +20,7 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _
 
 from cexp.env.scorer import record_route_statistics_default
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
-                                             get_distance_lead_vehicle
+                                             get_distance_lead_vehicle, get_distance_closest_scenarios
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
@@ -287,6 +287,11 @@ class Experience(object):
         if self._save_data:
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                            self._route)
+
+
+            dist_scenario3, dist_scenario4 = get_distance_closest_scenarios(
+                                                    self._route, self._list_scenarios)
+
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
                 'forward_speed': get_forward_speed(self._ego_actor),
@@ -295,8 +300,13 @@ class Experience(object):
                 'road_angle': get_current_road_angle(self._ego_actor,
                                                      self._ego_actor.get_world().get_map()),
                 'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._route,
-                                                                   self.world)
+                                                                   self.world),
+                'distance_closest_scenario3': dist_scenario3,
+
+                'distance__closest_scenario4': dist_scenario4
             }
+
+            print ('S3 ', dist_scenario3, 'S4 ', dist_scenario4)
 
         self._sync(self.world.tick())
 

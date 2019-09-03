@@ -6,6 +6,7 @@ import logging
 import numpy as np
 import math
 from agents.tools.misc import vector
+from srunner.tools.scenario_helper import get_distance_along_route
 
 def angle_between(orientation_1, orientation_2):
     """
@@ -142,6 +143,44 @@ def get_distance_lead_vehicle(vehicle, route, world):
 
 
 
+def get_distance_closest_scenarios(route, list_scenarios, percentage_completed):
+
+    # We take the route starting from the vehicle postion there
+
+    route_cut = route[int(percentage_completed*len(route)):]
+
+
+    # TODO only working for scenarios 3 and 4
+
+    triggers_scenario3 = []
+    triggers_scenario4 = []
+
+    for scenario in list_scenarios:
+        # We get all the scenario 3 and 4 triggers
+        if scenario.__name__ == 'DynamicObjectCrossing':
+            triggers_scenario3.append(scenario._trigger_location)
+
+        elif scenario.__name__ == 'VehicleTurningRight' or scenario.__name__ == 'VehicleTurningLeft':
+            triggers_scenario4.append(scenario._trigger_location)
+
+
+    distance_scenario3 = -1
+    distance_scenario4 = -1
+
+    for trigger in triggers_scenario3:
+        distance, found = get_distance_along_route(route_cut, trigger)
+
+        if found == True and distance_scenario3 == -1 or distance < distance_scenario3:
+            distance_scenario3 = distance
+
+    for trigger in triggers_scenario4:
+        distance, found = get_distance_along_route(route_cut, trigger)
+
+        if found == True and distance_scenario4 == -1 or distance < distance_scenario4:
+            distance_scenario4 = distance
+
+
+    return distance_scenario3, distance_scenario4
 
 
 def identify_scenario(distance_intersection, distance_lead_vehicle=-1,

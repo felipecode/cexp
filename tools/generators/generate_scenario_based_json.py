@@ -20,18 +20,20 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
 
 
-def get_scenario_list(world, scenarios_json_path, routes_path):
+def get_scenario_list(world, scenarios_json_path, routes_path, routes_id):
 
     world_annotations = parse_annotations_file(scenarios_json_path)
 
     route_descriptions_list = parse_routes_file(routes_path)
 
     per_route_possible_scenarios = []
-    for route in route_descriptions_list:
+    for id in routes_id:
+        route = route_descriptions_list[id]
 
         _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
 
-        possible_scenarios, existent_triggers = scan_route_for_scenarios(route_interpolated,
+        position_less_10_percent = int(0.1 * len(route_interpolated))
+        possible_scenarios, existent_triggers = scan_route_for_scenarios(route_interpolated[:-position_less_10_percent],
                                                                          world_annotations,
                                                                          world.get_map().name)
         per_route_possible_scenarios.append(possible_scenarios)
@@ -76,12 +78,13 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
     :return:
     """
 
+    # TODO add like partial routes.
 
     routes_parsed, possible_scenarios = get_scenario_list(world, scenarios_json_path,
-                                                          'database/'+routes_path)
+                                                          'database/'+routes_path,
+                                                          routes_id)
 
 
-    #print (possible_scenarios)
 
     weather_sets = {'training': ["ClearNoon",
                                   "WetNoon",
@@ -89,10 +92,9 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                                    "ClearSunset"]
                     }
     new_json = {"envs": {},
-                "package_name": output_json_name.split('/')[-1],
+                "package_name": output_json_name.split('/')[-1].split('.')[0],
 
                 }
-
 
     for w_set_name in weather_sets.keys():
         # get the actual set  from th name
@@ -101,29 +103,22 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
         for weather in w_set:
 
             for id in routes_id:  # TODO change this to routes id
-                #for town_name in town_sets.keys():
-
                 # get the possible scenario for a given ID
                 specific_scenarios_for_route = parse_scenario(possible_scenarios[id],
                                                               wanted_scenarios,
                                                               routes_parsed[id],
                                                               id
-
                                                               )
-
 
                 scenarios_all = {
                                 'background_activity': {"vehicle.*": 100,
                                       "walker.*": 0},
                                }
 
-
                 for key in specific_scenarios_for_route.keys():
-
                     scenarios_all.update({key: specific_scenarios_for_route[key]})
 
 
-                #for env_number in range(200):
                 env_dict = {
                     "route": {
                         "file": routes_path,
@@ -135,7 +130,7 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
                     "weather_profile": weather
                 }
 
-                new_json["envs"].update({weather + '_' + '_route'
+                new_json["envs"].update({weather + '_route'
                                          + str(id).zfill(5): env_dict})
 
     filename = output_json_name
@@ -166,12 +161,14 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output', default='database/dataset_scenarios_l0.json',
                         help='The outputfile json')
 
-    parser.add_argument('-r', '--input-route', default='routes/routes_town01.xml',
+    parser.add_argument('-r', '--input-route', default='routes/routes_all.xml',
                         help='The outputfile json')
 
     parser.add_argument('-j', '--scenarios-json',
                         default='database/scenarios/all_towns_traffic_scenarios1_3_4.json',
                         help='the input json with scnarios')
+
+
 
     arguments = parser.parse_args()
 
