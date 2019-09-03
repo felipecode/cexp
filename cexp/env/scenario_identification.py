@@ -162,7 +162,7 @@ def get_distance_closest_scenarios(route, list_scenarios, percentage_completed):
         if type(scenario).__name__ == 'DynamicObjectCrossing':
             triggers_scenario3.append(scenario._trigger_location)
 
-        elif type(scenario).__name__ == 'VehicleTurningRight' or scenario.__name__ == 'VehicleTurningLeft':
+        elif type(scenario).__name__ == 'VehicleTurningRight' or type(scenario).__name__ == 'VehicleTurningLeft':
             triggers_scenario4.append(scenario._trigger_location)
 
 
