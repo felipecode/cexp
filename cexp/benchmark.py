@@ -207,10 +207,11 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
             # if there is no name for the checkpoint we set it as the agent module name
             for env in env_batch:
                 try:
+                    print(" =======> Driving in environment: ", env)
                     _, _ = agent.unroll(env)
                     # Just execute the environment. For this case the rewards doesnt matter.
                     summary = env.get_summary()
-                    logging.debug("Finished episode got summary ")
+                    logging.debug(" =======> Finished episode got summary ")
                     # Add partial summary to allow continuation
                     add_summary(env._environment_name, summary,
                                 benchmark_name, agent_checkpoint_name)
