@@ -288,10 +288,11 @@ class Experience(object):
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                            self._route)
 
-
             dist_scenario3, dist_scenario4 = get_distance_closest_scenarios(
                                                     self._master_scenario.route, self._list_scenarios,
                                                     get_current_completion(self._master_scenario))
+
+            # HERE we may adapt the npc to stop dist_scenario3
 
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
@@ -526,7 +527,8 @@ class Experience(object):
                 transform = carla.Transform()
                 autopilot = True
                 random = True
-                actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
+                actor_configuration_instance = ActorConfigurationData(model, transform,
+                                                                      autopilot, random,
                                                                       amount=background_definition[key])
                 configuration_instances.append(actor_configuration_instance)
 
@@ -590,7 +592,7 @@ class Experience(object):
                     continue
                 # registering the used actors on the data provider so they can be updated.
 
-                #CarlaDataProvider.register_actors(scenario_instance.other_actors)
+                CarlaDataProvider.register_actors(scenario_instance.other_actors)
 
                 list_instanced_scenarios.append(scenario_instance)
 
