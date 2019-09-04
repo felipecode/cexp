@@ -61,7 +61,6 @@ def record_route_statistics_default(master_scenario, exp_name):
     list_stop_inf = []
     # analyze all traffic events
     for event in list_traffic_events:
-        # TODO: PRINT FOR DEBUGING
         if event.get_type() == TrafficEventType.COLLISION_STATIC:
             score_penalty += PENALTY_COLLISION_STATIC
             msg = event.get_message()
