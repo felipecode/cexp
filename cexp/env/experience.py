@@ -90,7 +90,7 @@ def estimate_route_timeout(route):
         route_length += dist
         prev_point = current_point
 
-    print (" final time ", SECONDS_GIVEN_PER_METERS * route_length)
+    #print (" final time ", SECONDS_GIVEN_PER_METERS * route_length)
 
     return int(SECONDS_GIVEN_PER_METERS * route_length)
 
@@ -451,8 +451,8 @@ class Experience(object):
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
         master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
-        print (" BEFORE CONVERSION ")
-        print (clean_route(route))
+        #print (" BEFORE CONVERSION ")
+        #print (clean_route(route))
         master_scenario_configuration.route = convert_transform_to_location(route)
 
         master_scenario_configuration.town = town_name
@@ -471,7 +471,6 @@ class Experience(object):
 
         while attempts < self.MAX_CONNECTION_ATTEMPTS:
             try:
-                print('Currently loading town is: ', self._town_name)
                 self.world = self._client.load_world(self._town_name)
                 logging.debug("=============================")
                 logging.debug("---------New Episode---------")
@@ -543,6 +542,7 @@ class Experience(object):
                 background_definition = scenario_definition_vec[scenario_name]
                 list_instanced_scenarios.append(self._build_background(background_definition,
                                                                        timeout))
+
             else:
 
                 # Sample the scenarios to be used for this route instance.
@@ -551,8 +551,6 @@ class Experience(object):
 
                 if scenario_definition is None:
                     raise ValueError(" Not Implemented ")
-
-
 
                 ScenarioClass = number_class_translation[scenario_name][scenario_definition['type']]
 
@@ -581,6 +579,7 @@ class Experience(object):
                 #CarlaDataProvider.register_actors(scenario_instance.other_actors)
 
                 list_instanced_scenarios.append(scenario_instance)
+
 
         return list_instanced_scenarios
 
