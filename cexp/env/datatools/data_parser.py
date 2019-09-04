@@ -137,6 +137,7 @@ def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
     exp_vec = []
 
     print ( "READ SENSORS ", read_sensors)
+    print ("expected sensor types ", sensors_types)
     for exp in experience_list:
 
         batch_list = glob.glob(os.path.join(exp, '[0-9]'))
