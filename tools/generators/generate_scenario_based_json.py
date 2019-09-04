@@ -58,8 +58,7 @@ def parse_scenario(possible_scenarios, wanted_scenarios):
                 name  = scenario['name']
                 #del scenario['name']
                 scenarios_to_add.update({name: scenario})
-                # TODO WARNING JUST ONE SCENARIO FOR TRIGGER... THE FIRST ONE
-                break
+
 
     return scenarios_to_add
 
