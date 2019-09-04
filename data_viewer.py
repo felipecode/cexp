@@ -170,6 +170,7 @@ if __name__ == "__main__":
                     while step < len(batch[0]):
 
                         data_point = batch[0][step]
+                        print (data_point)
                         rgb_center = io.imread(data_point[central_camera_name])[:,:,:3]
                         rgb_left = io.imread(data_point[left_camera_name])[:,:,:3]
                         rgb_right = io.imread(data_point[right_camera_name])[:,:,:3]
