@@ -113,7 +113,7 @@ def get_scenario_3(world, route, number_scenario3=2):
         position_scenario_inroute = (previous_start+start)//2
 
         print ( " position ", position_scenario_inroute)
-        transform = route_interpolated[position_scenario_inroute]
+        transform = route_interpolated[position_scenario_inroute][0]
         scenario_vec.append({
             "pitch": transform.rotation.pitch,
             "x": transform.location.x,
