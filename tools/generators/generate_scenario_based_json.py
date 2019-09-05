@@ -17,7 +17,35 @@ from cexp.env.utils.route_configuration_parser import convert_waypoint_float, \
 
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory
 
+from agents.navigation.local_planner import RoadOption
 
+def clean_route(route):
+
+    curves_start_end = []
+    inside = False
+    start = -1
+    current_curve = RoadOption.LANEFOLLOW
+    index = 0
+    while index < len(route):
+
+        command = route[index][1]
+        if command != RoadOption.LANEFOLLOW and not inside:
+            inside = True
+            start = index
+            current_curve = command
+
+        if command != current_curve and inside:
+            inside = False
+            # End now is the index.
+            curves_start_end.append([start, index, current_curve])
+            if start == -1:
+                raise ValueError("End of curve without start")
+
+            start = -1
+        else:
+            index += 1
+
+    return curves_start_end
 
 
 def get_scenario_list(world, scenarios_json_path, routes_path, routes_id):
@@ -58,15 +86,57 @@ def parse_scenario(possible_scenarios, wanted_scenarios):
                 name  = scenario['name']
                 #del scenario['name']
                 scenarios_to_add.update({name: scenario})
-
+                # TODO WARNING JUST ONE SCENARIO FOR TRIGGER... THE FIRST ONE
+                break
 
     return scenarios_to_add
 
+def get_scenario_3(world, route, number_scenario3=2):
+
+    _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
+    curves_positions = clean_route(route_interpolated)
+    number_added_scenarios = 0
+
+    scenario_vec = []
+
+    previous_start = 0
+    print (" ROUTE SIZE ", len (route_interpolated))
+
+    for curve_start_end_type in curves_positions:
+
+        start = curve_start_end_type[0]
+        print (curve_start_end_type)
+
+        # we get a position for scenario 3 in the middle of the curve
+        # we can add heuristics for more
+
+        position_scenario_inroute = (previous_start+start)//2
+
+        print ( " position ", position_scenario_inroute)
+        transform = route_interpolated[position_scenario_inroute]
+        scenario_vec.append({
+            "pitch": transform.rotation.pitch,
+            "x": transform.location.x,
+            "y": transform.location.y,
+            "yaw": transform.rotation.yaw,
+            "z": transform.location.z
+        })
+
+        previous_start = start
+        number_added_scenarios += 1
+
+        if number_added_scenarios == number_scenario3:
+            break
+
+
+    return scenario_vec
+
+
 # TODO it is always the first served scenarios
 
-def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
-                                 wanted_scenarios, output_json_name,
-                                 routes_id):
+def generate_json_with_scenarios(world, routes_path,
+                                 number_per_route, output_json_name,
+                                 routes_id, number_of_vehicles):
 
     """
 
@@ -79,19 +149,11 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
     :return:
     """
 
-    # TODO add like partial routes.
 
-    routes_parsed, possible_scenarios = get_scenario_list(world, scenarios_json_path,
-                                                          'database/'+routes_path,
-                                                          routes_id)
+    route_descriptions_list = parse_routes_file(routes_path)
 
 
-    print ( " POSSIBLE SCENARIOS ", len(possible_scenarios))
 
-    print ( " len routes PARSED ", len(routes_parsed))
-
-
-    print (possible_scenarios)
 
     print ("###################")
 
@@ -111,20 +173,18 @@ def generate_json_with_scenarios(world, scenarios_json_path, routes_path,
 
         for weather in w_set:
 
-            for id in range(len(possible_scenarios)):  # TODO change this to routes id
+            for id in range(len(routes_id)):  # TODO change this to routes id
                 # get the possible scenario for a given ID
-                specific_scenarios_for_route = parse_scenario(possible_scenarios[id],
-                                                              wanted_scenarios
-                                                              )
+                specific_scenarios_for_route = get_scenario_3(world,
+                                                              route_descriptions_list[routes_id[id]],
+                                                              number_per_route)
 
                 scenarios_all = {
-                                'background_activity': {"vehicle.*": 100,
+                                'background_activity': {"vehicle.*": number_of_vehicles,
                                       "walker.*": 0},
                                }
 
-                for key in specific_scenarios_for_route.keys():
-                    scenarios_all.update({key: specific_scenarios_for_route[key]})
-
+                scenarios_all.update({'Scenario3': specific_scenarios_for_route})
 
                 env_dict = {
                     "route": {
@@ -188,10 +248,11 @@ if __name__ == '__main__':
     client.set_timeout(30.0)
     world = client.load_world(arguments.town)
 
-    generate_json_with_scenarios(world, arguments.scenarios_json, arguments.input_route,
-                                 wanted_scenarios=['Scenario3'],
+    generate_json_with_scenarios(world, arguments.input_route,
+                                 number_per_route=2,
                                  output_json_name=arguments.output,
-                                 routes_id=range(0, 25))
+                                 routes_id=range(0, 25),
+                                 number_of_vehicles=0)
 
 
 
