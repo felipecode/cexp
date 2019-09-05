@@ -50,9 +50,12 @@ class NPCAgent(Agent):
                 # Distance to the other actors
                 for actor in scenario.other_actors:
                     if actor.is_alive:
-                        print (exp._ego_actor.get_transform().location.distance(
-                                                                actor.get_transform().location),
-                              " type ", actor.type_id)
+                        actor_distance = exp._ego_actor.get_transform().location.distance(
+                                                                actor.get_transform().location)
+                        print (actor_distance, " type ", actor.type_id)
+
+                        if 'walker' in actor.type_id:
+                            self._distance_pedestrian_crossing = actor_distance
 
         return None
 
