@@ -560,41 +560,43 @@ class Experience(object):
             else:
 
                 # Sample the scenarios to be used for this route instance.
+                # tehre can be many instances of the same scenario
+                scenario_definition_instances = scenario_definition_vec[scenario_name]
 
-                scenario_definition = scenario_definition_vec[scenario_name]
-
-                if scenario_definition is None:
+                if scenario_definition_instances is None:
                     raise ValueError(" Not Implemented ")
 
+                for scenario_definition in scenario_definition_instances:
 
+                    # TODO scenario 4 is out
 
-                ScenarioClass = number_class_translation[scenario_name][scenario_definition['type']]
+                    ScenarioClass = number_class_translation[scenario_name][0]
 
-                egoactor_trigger_position = convert_json_to_transform(
-                    scenario_definition['trigger_position'])
-                scenario_configuration = ScenarioConfiguration()
-                scenario_configuration.other_actors = None  # TODO the other actors are maybe needed
-                scenario_configuration.town = self._town_name
-                scenario_configuration.trigger_point = egoactor_trigger_position
-                scenario_configuration.ego_vehicle = ActorConfigurationData(
-                                                        'vehicle.lincoln.mkz2017',
-                                                        self._ego_actor.get_transform())
-                try:
-                    scenario_instance = ScenarioClass(self.world, self._ego_actor,
-                                                      scenario_configuration,
-                                                      criteria_enable=False, timeout=timeout)
-                except Exception as e:
-                    #if  self._exp_params['debug'] > 1:
-                    #     raise e
-                    #else:
-                    print("Skipping scenario '{}' due to setup error: {}".format(
-                        scenario_definition['name'], e))
-                    continue
-                # registering the used actors on the data provider so they can be updated.
+                    egoactor_trigger_position = convert_json_to_transform(
+                        scenario_definition)
+                    scenario_configuration = ScenarioConfiguration()
+                    scenario_configuration.other_actors = None  # TODO the other actors are maybe needed
+                    scenario_configuration.town = self._town_name
+                    scenario_configuration.trigger_point = egoactor_trigger_position
+                    scenario_configuration.ego_vehicle = ActorConfigurationData(
+                                                            'vehicle.lincoln.mkz2017',
+                                                            self._ego_actor.get_transform())
+                    try:
+                        scenario_instance = ScenarioClass(self.world, self._ego_actor,
+                                                          scenario_configuration,
+                                                          criteria_enable=False, timeout=timeout)
+                    except Exception as e:
+                        #if  self._exp_params['debug'] > 1:
+                        #     raise e
+                        #else:
+                        print("Skipping scenario '{}' due to setup error: {}".format(
+                            'Scenario3', e))
+                        continue
+                    # registering the used actors on the data provider so they can be updated.
 
-                CarlaDataProvider.register_actors(scenario_instance.other_actors)
+                    CarlaDataProvider.register_actors(scenario_instance.other_actors)
 
-                list_instanced_scenarios.append(scenario_instance)
+                    list_instanced_scenarios.append(scenario_instance)
 
         return list_instanced_scenarios
 
