@@ -179,8 +179,8 @@ class CEXP(object):
         if self._execute_all:
             execution_list = []
             # TODO not working on execute all mode.
-            print ("EXECUTIONS")
-            print (Environment.number_of_executions)
+            #print ("EXECUTIONS")
+            #print (Environment.number_of_executions)        {'ClearSunset_route00022': 0, 'ClearSunset_route00023': 1,'ClearSunset_route00020': 0,...}
             for env_name in self._environments.keys():
                 repetitions = 1
                 # TODO check necessity
@@ -191,7 +191,7 @@ class CEXP(object):
                 if "repetitions" in self._json['envs'][env_name]:
                     repetitions = self._json['envs'][env_name]['repetitions']
 
-                print (" Env name ", env_name)
+                #print (" Env name ", env_name)
                 if env_name in Environment.number_of_executions.keys():
                     repetitions_rem = max(0, repetitions -\
                                       Environment.number_of_executions[env_name])
