@@ -150,7 +150,7 @@ def generate_json_with_scenarios(world, routes_path,
     """
 
 
-    route_descriptions_list = parse_routes_file(routes_path)
+    route_descriptions_list = parse_routes_file('database/' + routes_path)
 
 
 
