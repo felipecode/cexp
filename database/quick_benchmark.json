@@ -1,29 +1,32 @@
 {
     "envs":{
-       "ClearNoon_route00004": {
-            "repetitions": 1,
-            "route": {
-                "file": "corl2017/Town02_straight.xml",
-                "id": 4
-            },
-            "scenarios": {
-            },
-            "town_name": "Town02",
-            "vehicle_model": "vehicle.lincoln.mkz2017",
-            "weather_profile": "ClearNoon"
+      "WetNoon_route00024": {
+        "route": {
+          "file": "nocrash/Town01_navigation.xml",
+          "id": 24
         },
-      "ClearNoon_route00013": {
-            "repetitions": 1,
-            "route": {
-                "file": "corl2017/Town02_straight.xml",
-                "id": 13
+        "scenarios": {
+          "Scenario3": {
+            "name": "Scenario3",
+            "other_actors": null,
+            "trigger_position": {
+              "pitch": "0",
+              "x": 392.17,
+              "y": 12.3,
+              "yaw": 89.0,
+              "z": 1.0
             },
-            "scenarios": {
-            },
-            "town_name": "Town02",
-            "vehicle_model": "vehicle.lincoln.mkz2017",
-            "weather_profile": "ClearNoon"
-        }
+            "type": 0
+          },
+          "background_activity": {
+            "vehicle.*": 100,
+            "walker.*": 0
+          }
+        },
+        "town_name": "Town01",
+        "vehicle_model": "vehicle.lincoln.mkz2017",
+        "weather_profile": "WetNoon"
+      }
 
     },
     "package_name": "quick_benchmark"
