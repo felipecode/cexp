@@ -67,9 +67,9 @@ class NPCAgent(Agent):
     def run_step(self, state):
 
         if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 10.0:
-            self._agent.set_speed(self._distance_pedestrian_crossing/2.0)
+            self._agent._local_planner.set_speed(self._distance_pedestrian_crossing/2.0)
             print ( "########## SET SPEED #########")
-            print(self._agent._target_speed)
+            print(self._agent._local_planner._target_speed)
 
         control = self._agent.run_step()
 
