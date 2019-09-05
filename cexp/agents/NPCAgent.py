@@ -49,9 +49,10 @@ class NPCAgent(Agent):
                 print ( " DISTANCE TO OTHERS ")
                 # Distance to the other actors
                 for actor in scenario.other_actors:
-                    print (exp._ego_actor.get_transform().location.distance(
-                                                            actor.get_transform().location),
-                          " type ", actor.type_id)
+                    if actor.is_alive:
+                        print (exp._ego_actor.get_transform().location.distance(
+                                                                actor.get_transform().location),
+                              " type ", actor.type_id)
 
         return None
 
