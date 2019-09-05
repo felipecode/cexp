@@ -21,6 +21,8 @@ class NPCAgent(Agent):
         self.route_assigned = False
         self._agent = None
 
+        self._distance_pedestrian_crossing = -1
+
     # TODO we set the sensors here directly.
     def sensors(self):
 
@@ -41,6 +43,15 @@ class NPCAgent(Agent):
             self._agent._local_planner.set_global_plan(plan)
             self.route_assigned = True
 
+        for scenario in exp._list_scenarios:
+            # We get all the scenario 3 and 4 triggers
+            if type(scenario).__name__ == 'DynamicObjectCrossing':
+                print ( " DISTANCE TO OTHERS ")
+                # Distance to the other actors
+                for actor in scenario.other_actors:
+                    print (exp._ego_actor.get_transform().location.distance(
+                                                            actor.get_transform().location))
+
         return None
 
     def make_reward(self, exp):
@@ -50,6 +61,8 @@ class NPCAgent(Agent):
 
     def run_step(self, state):
         control = self._agent.run_step()
+
+        # IF WE ARE TO CLOSE TO
 
         logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
         return control
