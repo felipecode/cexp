@@ -5,7 +5,7 @@ import os
 if __name__ == '__main__':
 
     root_route_file_position = 'database/corl2017'
-    root_route_file_output = 'database'
+    root_route_file_output = '/datatmp/Experiments/yixiao/carl/database'
     # root_route_file_position = 'srunner/challenge/'
     #filename_town01 = os.path.join(root_route_file_position, 'Town01_navigation.json')
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
                             "file": town_name,
                             "id": env_number
                         },
-                        "scenarios": {"file": "None"},
+                        "scenarios": {},
                         "town_name": "Town01",
                         "vehicle_model": "vehicle.lincoln.mkz2017",
                         "weather_profile": weather

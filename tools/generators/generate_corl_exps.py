@@ -4,7 +4,7 @@ import os
 
 def generate_corl2017_config_file():
 
-    root_route_file_position = 'database/corl2017'
+    root_route_file_position = '/datatmp/Experiments/yixiao/carl/database'
     #filename_town01 = os.path.join(root_route_file_position, 'Town01_navigation.json')
 
     # The sensor information should be on get data
