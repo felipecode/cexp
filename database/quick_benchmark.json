@@ -1,9 +1,9 @@
 {
     "envs":{
-      "WetNoon_route00005": {
+      "WetNoon_route00014": {
             "route": {
                 "file": "nocrash/Town01_navigation.xml",
-                "id": 5
+                "id": 14
             },
             "scenarios": {
                 "Scenario3": {
@@ -11,9 +11,9 @@
                     "other_actors": null,
                     "trigger_position": {
                         "pitch": "0",
-                        "x": 167.69,
-                        "y": 1.93,
-                        "yaw": 0.0,
+                        "x": 2.52,
+                        "y": 163.4,
+                        "yaw": 270.0,
                         "z": 1.0
                     },
                     "type": 0
