@@ -22,6 +22,7 @@ class NPCAgent(Agent):
         self._agent = None
 
         self._distance_pedestrian_crossing = -1
+        self._closest_pedestrian_crossing = None
 
     # TODO we set the sensors here directly.
     def sensors(self):
@@ -55,7 +56,18 @@ class NPCAgent(Agent):
                         print (actor_distance, " type ", actor.type_id)
 
                         if 'walker' in actor.type_id:
-                            self._distance_pedestrian_crossing = actor_distance
+                            if self._distance_pedestrian_crossing  != -1:
+                                if actor_distance < self._distance_pedestrian_crossing:
+                                    self._distance_pedestrian_crossing = actor_distance
+                                    self._closest_pedestrian_crossing = actor
+                            else:
+                                self._distance_pedestrian_crossing = actor_distance
+                                self._closest_pedestrian_crossing = actor
+        # if the closest pedestrian dies we reset
+        if self._closest_pedestrian_crossing is not None and \
+            not self._closest_pedestrian_crossing.is_alive:
+            self._closest_pedestrian_crossing = None
+            self._distance_pedestrian_crossing = -1
 
         return None
 
