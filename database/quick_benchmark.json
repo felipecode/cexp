@@ -1,16 +1,30 @@
 {
     "envs":{
-       "route0": {
+       "ClearNoon_route00004": {
+            "repetitions": 1,
             "route": {
-                "file": "routes/straight_town01.xml",
-                "id": 0
+                "file": "Town02_straight.xml",
+                "id": 4
             },
             "scenarios": {
                 "file": "None"
             },
-            "town_name": "Town01",
+            "town_name": "Town02",
             "vehicle_model": "vehicle.lincoln.mkz2017",
-            "repetitions": 200
+            "weather_profile": "ClearNoon"
+        },
+      "ClearNoon_route00013": {
+            "repetitions": 1,
+            "route": {
+                "file": "Town02_straight.xml",
+                "id": 13
+            },
+            "scenarios": {
+                "file": "None"
+            },
+            "town_name": "Town02",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         }
 
     },
