@@ -7,7 +7,6 @@
                 "id": 4
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town02",
             "vehicle_model": "vehicle.lincoln.mkz2017",
@@ -20,7 +19,6 @@
                 "id": 13
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town02",
             "vehicle_model": "vehicle.lincoln.mkz2017",
