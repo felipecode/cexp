@@ -18,12 +18,12 @@ def draw_routes(world, routes_file, output_folder):
     if not os.path.exists(output_folder):
         os.mkdir(output_folder)
 
-    routes_descriptions = parse_routes_file(routes_file)
+    routes_descriptions = parse_routes_file('database/' + routes_file)
 
     for route in routes_descriptions:
         fig = plt.figure()
-        plt.xlim(-200, 6000)
-        plt.ylim(-200, 6000)
+        plt.xlim(-200, 5500)
+        plt.ylim(-200, 5500)
 
         draw_map(world)
 
