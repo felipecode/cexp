@@ -28,7 +28,6 @@ def draw_routes(world, routes_file, output_folder):
         draw_map(world)
 
         _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
-        print (route)
         draw_route(route_interpolated)
 
         fig.savefig(os.path.join(output_folder,
@@ -62,7 +61,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-t', '--town', default='Town01', help='The town name to be used')
 
-    parser.add_argument('-o', '--output', default='database/dataset_scenarios_l0.json',
+    parser.add_argument('-o', '--output', default='database/output_routes',
                         help='The outputfile json')
 
     parser.add_argument('-r', '--input-route', default='routes/routes_all.xml',
