@@ -29,7 +29,7 @@ def draw_routes(world, routes_file, output_folder):
 
         _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
         print (route)
-        draw_route(route)
+        draw_route(route_interpolated)
 
         fig.savefig(os.path.join(output_folder,
                                  'route_' + str(route['id']) + '_.png'),
