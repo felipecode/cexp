@@ -36,7 +36,7 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/corl2017/corl2017_training_straight_Town01.json'
+    json = 'database/benchmark_scenario3_town01.json'
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'save_sensors': True,
