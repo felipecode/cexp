@@ -288,7 +288,7 @@ class Experience(object):
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                            self._route)
 
-            dist_scenario3 = get_distance_closest_crossing_waker(self)
+            dist_scenario3, _ = get_distance_closest_crossing_waker(self)
 
             # HERE we may adapt the npc to stop dist_scenario3
 
