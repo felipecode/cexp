@@ -91,27 +91,36 @@ def parse_scenario(possible_scenarios, wanted_scenarios):
 
     return scenarios_to_add
 
+
+# TODO this is considering the curve situations.
 def get_scenario_3(world, route, number_scenario3=2):
 
     _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
     curves_positions = clean_route(route_interpolated)
     print ( "CURVES ", curves_positions)
-    number_added_scenarios = 0
+    number_added_scenarios = 1
 
     scenario_vec = []
 
-    previous_start = 0
+    transform = route_interpolated[0][0]
+    scenario_vec.append({
+        "pitch": transform.rotation.pitch,
+        "x": transform.location.x,
+        "y": transform.location.y,
+        "yaw": transform.rotation.yaw,
+        "z": transform.location.z
+    })
     print (" ROUTE SIZE ", len (route_interpolated))
 
     for curve_start_end_type in curves_positions:
-
-        start = curve_start_end_type[0]
+        if number_added_scenarios == number_scenario3:
+            break
+        end_curve = curve_start_end_type[1]
         print (curve_start_end_type)
 
-        # we get a position for scenario 3 in the middle of the curve
-        # we can add heuristics for more
+        # we get a position for scenario 3 just after a curve happens  #
 
-        position_scenario_inroute = (previous_start+start)//2
+        position_scenario_inroute = end_curve +1
 
         print ( " position ", position_scenario_inroute)
         transform = route_interpolated[position_scenario_inroute][0]
@@ -123,11 +132,11 @@ def get_scenario_3(world, route, number_scenario3=2):
             "z": transform.location.z
         })
 
-        previous_start = start
         number_added_scenarios += 1
 
-        if number_added_scenarios == number_scenario3:
-            break
+
+
+
 
 
     return scenario_vec
@@ -182,7 +191,7 @@ def generate_json_with_scenarios(world, routes_path,
 
                 scenarios_all = {
                                 'background_activity': {"vehicle.*": number_of_vehicles,
-                                      "walker.*": 0},
+                                                        "walker.*": 0},
                                }
 
                 scenarios_all.update({'Scenario3': specific_scenarios_for_route})
