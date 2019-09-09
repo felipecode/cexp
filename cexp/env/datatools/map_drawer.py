@@ -52,6 +52,9 @@ COLOR_BLACK = (0/ 255.0, 0/ 255.0, 0/ 255.0)
 COLOR_LIGHT_GRAY = (196/ 255.0, 196/ 255.0, 196/ 255.0)
 
 
+COLOR_PINK = (255/255.0,192/255.0,203/255.0)
+
+
 ############## MAP RELATED ######################
 
 # We set this as global
@@ -370,6 +373,8 @@ def get_color(scenario):
         return COLOR_ORANGE_0
     elif scenario == 'S5_lead_vehicle_inside_intersection':
         return COLOR_BUTTER_2
+    elif scenario == 'S6_pedestrian':
+        return COLOR_PINK
 
 
 def draw_route(route):

@@ -220,9 +220,12 @@ def get_distance_closest_crossing_waker(exp):
     return distance_pedestrian_crossing, closest_pedestrian_crossing
 
 
-def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
+def identify_scenario(distance_intersection,
+                      distance_lead_vehicle=-1,
+                      distance_crossing_walker=-1,
                       thresh_intersection=25.0,
-                      thresh_lead_vehicle=25.0
+                      thresh_lead_vehicle=25.0,
+                      thresh_crossing_walker=10.0
 
                       ):
 
@@ -235,6 +238,7 @@ def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
     S3: Lane Following with a car in front
     S4: Stop for a lead vehicle in front of the intersection ( Or continue
     S5: FOllowing a vehicle inside the intersection.
+    S6: Pedestrian crossing leaving from hiden coca cola thing: S6_pedestrian
 
 
 
@@ -261,31 +265,36 @@ def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
 
     # TODO for now only for scenarios 0-2
 
-    if distance_lead_vehicle == -1 or distance_lead_vehicle > thresh_lead_vehicle:
-        # There are no vehicle ahead
+    if distance_crossing_walker != -1 and distance_crossing_walker < 10.0:
 
-        if distance_intersection > thresh_intersection:
-            # For now far away from an intersection means that it is a simple lane following
-            return 'S0_lane_following'
+        return 'S6_pedestrian'
 
-        elif distance_intersection > 1.0:
-            # S2  Check if it is directly affected by the next intersection
-            return 'S1_before_intersection'
-
-        else:
-            return 'S2_intersection'
     else:
-        if distance_intersection > thresh_intersection:
-            # For now that means that S4 is being followed
-            return 'S3_lead_vehicle_following'
+        if distance_lead_vehicle == -1 or distance_lead_vehicle > thresh_lead_vehicle:
+            # There are no vehicle ahead
 
-        elif distance_intersection > 1.0:
-            # Distance intersection.
-            return 'S4_lead_vehicle_before_intersection'
+            if distance_intersection > thresh_intersection:
+                # For now far away from an intersection means that it is a simple lane following
+                return 'S0_lane_following'
 
-        else:  # Then it is
+            elif distance_intersection > 1.0:
+                # S2  Check if it is directly affected by the next intersection
+                return 'S1_before_intersection'
 
-            return 'S5_lead_vehicle_inside_intersection'
+            else:
+                return 'S2_intersection'
+        else:
+            if distance_intersection > thresh_intersection:
+                # For now that means that S4 is being followed
+                return 'S3_lead_vehicle_following'
+
+            elif distance_intersection > 1.0:
+                # Distance intersection.
+                return 'S4_lead_vehicle_before_intersection'
+
+            else:  # Then it is
+
+                return 'S5_lead_vehicle_inside_intersection'
 
 
 
