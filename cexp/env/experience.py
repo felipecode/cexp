@@ -20,7 +20,7 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _
 
 from cexp.env.scorer import record_route_statistics_default, get_current_completion
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
-                                             get_distance_lead_vehicle, get_distance_closest_scenarios
+                                             get_distance_lead_vehicle, get_distance_closest_crossing_waker
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
@@ -80,7 +80,7 @@ def get_forward_speed(vehicle):
 
 # TODO this is actually a benchmark paramter .... either seconds or seconds per meter.
 
-SECONDS_GIVEN_PER_METERS = 0.6
+SECONDS_GIVEN_PER_METERS = 0.8
 
 def estimate_route_timeout(route):
     route_length = 0.0  # in meters
@@ -288,9 +288,7 @@ class Experience(object):
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                            self._route)
 
-            dist_scenario3, dist_scenario4 = get_distance_closest_scenarios(
-                                                    self._master_scenario.route, self._list_scenarios,
-                                                    get_current_completion(self._master_scenario))
+            dist_scenario3 = get_distance_closest_crossing_waker(self)
 
             # HERE we may adapt the npc to stop dist_scenario3
 
@@ -305,10 +303,10 @@ class Experience(object):
                                                                    self.world),
                 'distance_closest_scenario3': dist_scenario3,
 
-                'distance__closest_scenario4': dist_scenario4
+                'distance__closest_scenario4': -1
             }
 
-            print ('S3 ', dist_scenario3, 'S4 ', dist_scenario4)
+            print ('S3 ', dist_scenario3, 'S4 ', -1)
 
         self._sync(self.world.tick())
 

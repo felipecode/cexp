@@ -1,5 +1,6 @@
 import logging
 from cexp.agents.agent import Agent
+from cexp.env.scenario_identification import get_distance_closest_crossing_waker
 
 from agents.navigation.basic_agent import BasicAgent
 
@@ -44,25 +45,9 @@ class NPCAgent(Agent):
             self._agent._local_planner.set_global_plan(plan)
             self.route_assigned = True
 
-        for scenario in exp._list_scenarios:
-            # We get all the scenario 3 and 4 triggers
-            if type(scenario).__name__ == 'DynamicObjectCrossing':
-                print ( " DISTANCE TO OTHERS ")
-                # Distance to the other actors
-                for actor in scenario.other_actors:
-                    if actor.is_alive:
-                        actor_distance = exp._ego_actor.get_transform().location.distance(
-                                                                actor.get_transform().location)
-                        print (actor_distance, " type ", actor.type_id)
+        self._distance_pedestrian_crossing, self._closest_pedestrian_crossing =\
+                get_distance_closest_crossing_waker(exp)
 
-                        if 'walker' in actor.type_id:
-                            if self._distance_pedestrian_crossing  != -1:
-                                if actor_distance < self._distance_pedestrian_crossing:
-                                    self._distance_pedestrian_crossing = actor_distance
-                                    self._closest_pedestrian_crossing = actor
-                            else:
-                                self._distance_pedestrian_crossing = actor_distance
-                                self._closest_pedestrian_crossing = actor
         # if the closest pedestrian dies we reset
         if self._closest_pedestrian_crossing is not None and \
             not self._closest_pedestrian_crossing.is_alive:
@@ -78,6 +63,7 @@ class NPCAgent(Agent):
 
     def run_step(self, state):
 
+        print (self._distance_pedestrian_crossing)
         if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 10.0:
             self._agent._local_planner.set_speed(self._distance_pedestrian_crossing/2.0)
             print ( "########## SET SPEED #########")

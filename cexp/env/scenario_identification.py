@@ -142,6 +142,7 @@ def get_distance_lead_vehicle(vehicle, route, world):
     return min_dist_vehicle
 
 
+# TODO this is distance to the triggers not actually useful
 
 def get_distance_closest_scenarios(route, list_scenarios, percentage_completed):
 
@@ -191,6 +192,32 @@ def get_distance_closest_scenarios(route, list_scenarios, percentage_completed):
 
 
     return distance_scenario3, distance_scenario4
+
+def get_distance_closest_crossing_waker(exp):
+    # TODO we get the distance of the walker which is crossing the closest
+    distance_pedestrian_crossing = -1
+    closest_pedestrian_crossing = None
+    for scenario in exp._list_scenarios:
+        # We get all the scenario 3 and 4 triggers
+        if type(scenario).__name__ == 'DynamicObjectCrossing':
+            print (" DISTANCE TO OTHERS ")
+            # Distance to the other actors
+            for actor in scenario.other_actors:
+                if actor.is_alive:
+                    actor_distance = exp._ego_actor.get_transform().location.distance(
+                        actor.get_transform().location)
+                    print (actor_distance, " type ", actor.type_id)
+
+                    if 'walker' in actor.type_id:
+                        if distance_pedestrian_crossing != -1:
+                            if actor_distance < distance_pedestrian_crossing:
+                                distance_pedestrian_crossing = actor_distance
+                                closest_pedestrian_crossing = actor
+                        else:
+                            distance_pedestrian_crossing = actor_distance
+                            closest_pedestrian_crossing = actor
+
+    return distance_pedestrian_crossing, closest_pedestrian_crossing
 
 
 def identify_scenario(distance_intersection, distance_lead_vehicle=-1,
