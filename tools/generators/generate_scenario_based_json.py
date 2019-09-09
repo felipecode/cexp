@@ -95,6 +95,7 @@ def get_scenario_3(world, route, number_scenario3=2):
 
     _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
     curves_positions = clean_route(route_interpolated)
+    print ( "CURVES ", curves_positions)
     number_added_scenarios = 0
 
     scenario_vec = []
