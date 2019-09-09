@@ -101,7 +101,7 @@ def get_scenario_3(world, route, number_scenario3=1):
     number_added_scenarios = 0
 
     scenario_vec = []
-    if curves_positions[0][0] > 20.0:
+    if not curves_positions or  curves_positions[0][0] > 20.0:
         transform = route_interpolated[0][0]
         scenario_vec.append({
             "pitch": transform.rotation.pitch,
@@ -110,6 +110,7 @@ def get_scenario_3(world, route, number_scenario3=1):
             "yaw": transform.rotation.yaw,
             "z": transform.location.z
         })
+        number_added_scenarios += 1
     print (" ROUTE SIZE ", len (route_interpolated))
 
     for curve_start_end_type in curves_positions:
