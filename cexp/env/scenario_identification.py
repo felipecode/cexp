@@ -265,7 +265,7 @@ def identify_scenario(distance_intersection,
 
     # TODO for now only for scenarios 0-2
 
-    if distance_crossing_walker != -1 and distance_crossing_walker < 10.0:
+    if distance_crossing_walker != -1 and distance_crossing_walker < thresh_crossing_walker:
 
         return 'S6_pedestrian'
 

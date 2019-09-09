@@ -306,7 +306,8 @@ def draw_point_data(datapoint, color=None, direct_read=False, alpha=None):
             result_color = get_color(datapoint['scenario'])
         else:
             result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
-                                               datapoint['measurements']['distance_lead_vehicle']
+                                               datapoint['measurements']['distance_lead_vehicle'],
+                                               datapoint['measurements']['distance_crossing_walker'],
                                                ))
     else:
         result_color = color

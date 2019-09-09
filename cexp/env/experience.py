@@ -301,9 +301,9 @@ class Experience(object):
                                                      self._ego_actor.get_world().get_map()),
                 'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._route,
                                                                    self.world),
-                'distance_closest_scenario3': dist_scenario3,
+                'distance_crossing_walker': dist_scenario3,
 
-                'distance__closest_scenario4': -1
+                'distance_closest_scenario4': -1
             }
 
             print ('S3 ', dist_scenario3, 'S4 ', -1)
