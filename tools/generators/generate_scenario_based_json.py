@@ -93,26 +93,27 @@ def parse_scenario(possible_scenarios, wanted_scenarios):
 
 
 # TODO this is considering the curve situations.
-def get_scenario_3(world, route, number_scenario3=2):
+def get_scenario_3(world, route, number_scenario3=1):
 
     _, route_interpolated = interpolate_trajectory(world, route['trajectory'])
     curves_positions = clean_route(route_interpolated)
     print ( "CURVES ", curves_positions)
-    number_added_scenarios = 1
+    number_added_scenarios = 0
 
     scenario_vec = []
-
-    transform = route_interpolated[0][0]
-    scenario_vec.append({
-        "pitch": transform.rotation.pitch,
-        "x": transform.location.x,
-        "y": transform.location.y,
-        "yaw": transform.rotation.yaw,
-        "z": transform.location.z
-    })
+    if curves_positions[0][0] > 20.0:
+        transform = route_interpolated[0][0]
+        scenario_vec.append({
+            "pitch": transform.rotation.pitch,
+            "x": transform.location.x,
+            "y": transform.location.y,
+            "yaw": transform.rotation.yaw,
+            "z": transform.location.z
+        })
     print (" ROUTE SIZE ", len (route_interpolated))
 
     for curve_start_end_type in curves_positions:
+
         if number_added_scenarios == number_scenario3:
             break
         end_curve = curve_start_end_type[1]
@@ -120,7 +121,7 @@ def get_scenario_3(world, route, number_scenario3=2):
 
         # we get a position for scenario 3 just after a curve happens  #
 
-        position_scenario_inroute = end_curve +1
+        position_scenario_inroute = end_curve + 1
 
         print ( " position ", position_scenario_inroute)
         transform = route_interpolated[position_scenario_inroute][0]
