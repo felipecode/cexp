@@ -68,6 +68,11 @@ def check_benchmark_finished(json_filename, agent_checkpoint_name):
             print ( " PATH ", path, "does not exist")
             return False
 
+        else:
+            data_matrix = np.loadtxt(open(path, "rb"), delimiter=",", skiprows=1)
+            if len(data_matrix) == 0:
+                return False
+
     return True
 
 
@@ -211,7 +216,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     _, _ = agent.unroll(env)
                     # Just execute the environment. For this case the rewards doesnt matter.
                     summary = env.get_summary()
-                    logging.debug(" =======> Finished episode got summary ")
+                    logging.debug("Finished episode got summary ")
                     # Add partial summary to allow continuation
                     add_summary(env._environment_name, summary,
                                 benchmark_name, agent_checkpoint_name)
