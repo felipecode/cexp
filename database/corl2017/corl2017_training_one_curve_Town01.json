@@ -21,9 +21,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 0
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -34,9 +32,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 1
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -47,9 +43,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 2
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -60,9 +54,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 3
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -73,9 +65,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 4
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -86,9 +76,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 5
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -99,9 +87,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 6
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -112,9 +98,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 7
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -125,9 +109,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 8
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -138,9 +120,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 9
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -151,9 +131,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 10
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -164,9 +142,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 11
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -177,9 +153,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 12
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -190,9 +164,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 13
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -203,9 +175,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 14
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -216,9 +186,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 15
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -229,9 +197,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 16
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -242,9 +208,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 17
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -255,9 +219,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 18
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -268,9 +230,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 19
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -281,9 +241,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 20
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -294,9 +252,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 21
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -307,9 +263,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 22
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -320,9 +274,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 23
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -333,9 +285,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 24
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearNoon"
@@ -346,9 +296,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 0
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -359,9 +307,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 1
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -372,9 +318,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 2
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -385,9 +329,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 3
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -398,9 +340,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 4
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -411,9 +351,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 5
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -424,9 +362,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 6
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -437,9 +373,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 7
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -450,9 +384,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 8
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -463,9 +395,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 9
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -476,9 +406,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 10
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -489,9 +417,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 11
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -502,9 +428,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 12
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -515,9 +439,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 13
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -528,9 +450,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 14
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -541,9 +461,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 15
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -554,9 +472,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 16
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -567,9 +483,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 17
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -580,9 +494,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 18
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -593,9 +505,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 19
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -606,9 +516,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 20
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -619,9 +527,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 21
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -632,9 +538,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 22
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -645,9 +549,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 23
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -658,9 +560,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 24
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "ClearSunset"
@@ -671,9 +571,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 0
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -684,9 +582,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 1
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -697,9 +593,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 2
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -710,9 +604,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 3
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -723,9 +615,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 4
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -736,9 +626,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 5
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -749,9 +637,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 6
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -762,9 +648,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 7
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -775,9 +659,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 8
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -788,9 +670,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 9
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -801,9 +681,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 10
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -814,9 +692,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 11
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -827,9 +703,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 12
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -840,9 +714,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 13
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -853,9 +725,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 14
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -866,9 +736,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 15
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -879,9 +747,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 16
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -892,9 +758,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 17
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -905,9 +769,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 18
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -918,9 +780,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 19
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -931,9 +791,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 20
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -944,9 +802,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 21
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -957,9 +813,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 22
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -970,9 +824,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 23
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -983,9 +835,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 24
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "HardRainNoon"
@@ -996,9 +846,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 0
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1009,9 +857,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 1
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1022,9 +868,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 2
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1035,9 +879,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 3
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1048,9 +890,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 4
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1061,9 +901,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 5
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1074,9 +912,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 6
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1087,9 +923,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 7
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1100,9 +934,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 8
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1113,9 +945,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 9
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1126,9 +956,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 10
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1139,9 +967,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 11
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1152,9 +978,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 12
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1165,9 +989,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 13
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1178,9 +1000,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 14
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1191,9 +1011,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 15
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1204,9 +1022,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 16
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1217,9 +1033,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 17
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1230,9 +1044,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 18
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1243,9 +1055,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 19
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1256,9 +1066,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 20
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1269,9 +1077,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 21
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1282,9 +1088,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 22
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1295,9 +1099,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 23
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
@@ -1308,9 +1110,7 @@
                 "file": "corl2017/Town01_one_curve.xml",
                 "id": 24
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
