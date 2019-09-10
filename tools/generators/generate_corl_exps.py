@@ -45,11 +45,11 @@ def generate_corl2017_config_file():
     tasks = {'empty': {'Town01': {},
                        'Town02': {}
                         },
-             'one_curve': {'Town01': {"file": "None"},
-                            'Town02': {"file": "None"}
+             'one_curve': {'Town01': {},
+                            'Town02': {}
                            },
-             'navigation': {'Town01': {"file": "None"},
-                            'Town02': {"file": "None"}
+             'navigation': {'Town01': {},
+                            'Town02': {}
                             },
 
              'navigation_dynamic': {'Town01': {'background_activity': {"vehicle.*": 20,
