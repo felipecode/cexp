@@ -293,7 +293,7 @@ def draw_text(content, location, result_color, size):
 
     pixel = world_to_pixel(location)
 
-    plt.text(pixel[0], pixel[1], str(content), fontsize=size, fc=result_color)
+    plt.text(pixel[0], pixel[1], str(content), fontsize=size)
 
     #circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
     #plt.gca().add_patch(circle)
