@@ -129,8 +129,8 @@ def make_routes(filename, positions, spawn_points, town_name):
 
     routes_vector = []
     for pos_tuple in positions:
-        point_a = spawn_points[pos_tuple[0]]
-        point_b = spawn_points[pos_tuple[1]]
+        point_a = spawn_points[pos_tuple[1]]
+        point_b = spawn_points[pos_tuple[0]]
         if point_a != point_b:
             routes_vector.append([point_a, point_b])
         else:
@@ -201,8 +201,8 @@ if __name__ == '__main__':
     view_start_positions(world, spawn_points)
 
     selected_pos = [ [10, 54], [53, 11], [16, 48], [61, 71], [74, 62], [50, 79], [75,49],
-                     [80, 53], [80, 50], [60, 80], [83, 61], [94, 72], [43, 74], [3, 66],
-                     [39, 64], [15, 70], [11, 59], [15, 42], [41, 14], [33, 54], [84, 32],
+                     [80, 53], [80, 50], [60, 80], [83, 61], [94, 72], [43, 74], [19, 66],
+                     [39, 64], [15, 70], [11, 59], [15, 42], [41, 14], [33, 54], [67, 32],
                      [26, 10], [7, 29], [97, 100], [1, 96] ]
 
     make_routes(arguments.output, selected_pos, spawn_points, world.get_map().name)
