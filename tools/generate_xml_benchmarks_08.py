@@ -188,7 +188,7 @@ def view_start_positions(map_name, positions_to_plot):
 def plot_all_spawn_points_carla08():
 
 
-
+    pass
 
 if __name__ == '__main__':
 
