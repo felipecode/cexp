@@ -200,7 +200,10 @@ if __name__ == '__main__':
     print (spawn_points)
     view_start_positions(world, spawn_points)
 
-    selected_pos = [ [39, 71], [10, 27], [71,63] ]
+    selected_pos = [ [10, 54], [53, 11], [16, 48], [61, 71], [74, 62], [50, 79], [75,49],
+                     [80, 53], [80, 50], [60, 80], [83, 61], [94, 72], [43, 74], [3, 66],
+                     [39, 64], [15, 70], [11, 59], [15, 42], [41, 14], [33, 54], [84, 32],
+                     [26, 10], [7, 29], [97, 100], [1, 96] ]
 
     make_routes(arguments.output, selected_pos, spawn_points, world.get_map().name)
 
