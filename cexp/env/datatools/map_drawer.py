@@ -289,6 +289,14 @@ def draw_point(location, result_color, size, alpha=None):
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
     plt.gca().add_patch(circle)
 
+def draw_text(content, location, result_color, size):
+
+    pixel = world_to_pixel(location)
+
+    plt.text(pixel[0], pixel[1], str(content), fontsize=size, fc=result_color)
+
+    #circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
+    #plt.gca().add_patch(circle)
 
 
 def draw_point_data(datapoint, color=None, direct_read=False, alpha=None):

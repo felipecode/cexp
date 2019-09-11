@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
 from cexp.env.server_manager import start_test_server, check_test_server
+from cexp.env.datatools.map_drawer import draw_point, draw_map, draw_text
 import carla
 from PIL import Image
 from tools.converter import Converter
@@ -138,48 +139,33 @@ def make_routes(filename, positions, spawn_points, town_name):
     write_routes(filename, routes_vector, town_name=town_name)
 
 
-def view_start_positions(map_name, positions_to_plot):
+def view_start_positions(world, positions_to_plot):
     # We assume the CARLA server is already waiting for a client to connect at
     # host:port. The same way as in the client example.
     print('CarlaClient connected')
 
-    # We load the default settings to the client.
-    try:
-        image = mpimg.imread('tools/%s.png' % map_name)
-        carla_map = CarlaMap(map_name, 0.1653, 50)
-    except IOError as exception:
-        logging.error(exception)
-        logging.error('Cannot find map "%s"', map_name)
-        sys.exit(1)
 
     count = 0
 
     fig, ax = plt.subplots(1)
 
-    ax.imshow(image)
+    plt.xlim(-200, 5000)
+    plt.ylim(-200, 5000)
+    draw_map(world)
 
     for position in positions_to_plot:
 
         # Check if position is valid
 
         # Convert world to pixel coordinates
-        pixel = carla_map.convert_to_pixel([position.location.x,
-                                            position.location.y,
-                                            position.location.z])
+        draw_point(position.location, (1,0,0), 12, alpha=None)
 
-        circle = Circle((pixel[0], pixel[1]), 12, color='r', label='A point')
-        ax.add_patch(circle)
+        draw_text(str(count), position.location, (1,0,0), 12)
 
-        print ("### Pos ", count, " (", position,  ")")
-        circle = Circle((pixel[0], pixel[1]), 12, color='r', label='B point')
-        ax.add_patch(circle)
-
-        plt.text(pixel[0] , pixel[1]  , str(count), fontsize=6)
-
-        plt.axis('off')
-        plt.show()
         count += 1
 
+    plt.axis('off')
+    plt.show()
     fig.savefig('map' + str(count) + '.pdf',
                 orientation='landscape', bbox_inches='tight')
 
