@@ -157,7 +157,7 @@ def view_start_positions(map_name, positions_to_plot):
     fig, ax = plt.subplots(1)
 
     ax.imshow(image)
-    
+
     for position in positions_to_plot:
 
         # Check if position is valid
@@ -174,7 +174,7 @@ def view_start_positions(map_name, positions_to_plot):
         circle = Circle((pixel[0], pixel[1]), 12, color='r', label='B point')
         ax.add_patch(circle)
 
-        plt.text(pixel[0], pixel[1], str(count), size='x-small')
+        plt.text(pixel[0], pixel[1], str(count), fontsize=8)
 
         plt.axis('off')
         plt.show()
