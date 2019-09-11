@@ -198,7 +198,7 @@ if __name__ == '__main__':
 
     spawn_points = world.get_map().get_spawn_points()
     print (spawn_points)
-    view_start_positions(arguments.town, spawn_points)
+    view_start_positions(world, spawn_points)
 
     selected_pos = [ [39, 71], [10, 27], [71,63] ]
 
