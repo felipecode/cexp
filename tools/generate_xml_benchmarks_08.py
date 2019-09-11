@@ -154,11 +154,12 @@ def view_start_positions(map_name, positions_to_plot):
 
     count = 0
 
+    fig, ax = plt.subplots(1)
+
+    ax.imshow(image)
+    
     for position in positions_to_plot:
 
-        fig, ax = plt.subplots(1)
-
-        ax.imshow(image)
         # Check if position is valid
 
         # Convert world to pixel coordinates
@@ -169,7 +170,7 @@ def view_start_positions(map_name, positions_to_plot):
         circle = Circle((pixel[0], pixel[1]), 12, color='r', label='A point')
         ax.add_patch(circle)
 
-        print ( "### Pos (", position,  ")")
+        print ("### Pos ", count, " (", position,  ")")
         circle = Circle((pixel[0], pixel[1]), 12, color='r', label='B point')
         ax.add_patch(circle)
 
@@ -177,17 +178,16 @@ def view_start_positions(map_name, positions_to_plot):
 
         plt.axis('off')
         plt.show()
-
-        fig.savefig('map' + str(count) + '.pdf',
-                    orientation='landscape', bbox_inches='tight')
         count += 1
 
-
+    fig.savefig('map' + str(count) + '.pdf',
+                orientation='landscape', bbox_inches='tight')
 
 def plot_all_spawn_points_carla08():
 
 
     pass
+
 
 if __name__ == '__main__':
 
@@ -201,18 +201,14 @@ if __name__ == '__main__':
 
     arguments = parser.parse_args()
 
-
     if not check_test_server(6666):
         start_test_server(6666)
         print (" WAITING FOR DOCKER TO BE STARTED")
-
 
     client = carla.Client('localhost', 6666)
 
     client.set_timeout(30.0)
     world = client.load_world(arguments.town)
-
-
 
     spawn_points = world.get_map().get_spawn_points()
     print (spawn_points)
