@@ -54,7 +54,7 @@ class CarlaMap(object):
     def check_pixel_on_map(self, pixel):
 
         if pixel[0] < self.map_image_lanes.shape[1] and pixel[0] > 0 and \
-            pixel[1] < self.map_image_lanes.shape[0] and pixel[1] > 0:
+                pixel[1] < self.map_image_lanes.shape[0] and pixel[1] > 0:
             return True
         else:
             return False
@@ -152,8 +152,8 @@ def view_start_positions(map_name, positions_to_plot):
         logging.error('Cannot find map "%s"', map_name)
         sys.exit(1)
 
-
     count = 0
+
     for position in positions_to_plot:
 
         fig, ax = plt.subplots(1)
@@ -168,7 +168,6 @@ def view_start_positions(map_name, positions_to_plot):
 
         circle = Circle((pixel[0], pixel[1]), 12, color='r', label='A point')
         ax.add_patch(circle)
-
 
         print ( "### Pos (", position,  ")")
         circle = Circle((pixel[0], pixel[1]), 12, color='r', label='B point')
@@ -210,6 +209,7 @@ if __name__ == '__main__':
 
     client = carla.Client('localhost', 6666)
 
+    client.set_timeout(30.0)
     world = client.load_world(arguments.town)
 
 
