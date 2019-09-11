@@ -174,7 +174,7 @@ def view_start_positions(map_name, positions_to_plot):
         circle = Circle((pixel[0], pixel[1]), 12, color='r', label='B point')
         ax.add_patch(circle)
 
-        plt.text(pixel[0], pixel[1] + (5*(count%2)), str(count), fontsize=6)
+        plt.text(pixel[0] + (8*(count%2)), pixel[1] , str(count), fontsize=6)
 
         plt.axis('off')
         plt.show()
