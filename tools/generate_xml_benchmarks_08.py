@@ -124,18 +124,18 @@ def write_routes(ofilename, output_routes, town_name):
 
 
 
-def make_routes(filename, world):
-    spawn_points = world.get_map().get_spawn_points()
-    routes_vector = []
-    for point_a in spawn_points:
-        for point_b in spawn_points:
-            #print (point_a, point_b)
-            if point_a != point_b:
-                routes_vector.append([point_a, point_b])
-            else:
-                print (point_a, point_b)
+def make_routes(filename, positions, spawn_points, town_name):
 
-    write_routes(filename, routes_vector, world.get_map().name)
+    routes_vector = []
+    for pos_tuple in positions:
+        point_a = spawn_points[pos_tuple[0]]
+        point_b = spawn_points[pos_tuple[1]]
+        if point_a != point_b:
+            routes_vector.append([point_a, point_b])
+        else:
+            print (point_a, point_b)
+
+    write_routes(filename, routes_vector, town_name=town_name)
 
 
 def view_start_positions(map_name, positions_to_plot):
@@ -174,7 +174,7 @@ def view_start_positions(map_name, positions_to_plot):
         circle = Circle((pixel[0], pixel[1]), 12, color='r', label='B point')
         ax.add_patch(circle)
 
-        plt.text(pixel[0] , pixel[1] - (60*(count%2)) , str(count), fontsize=6)
+        plt.text(pixel[0] , pixel[1]  , str(count), fontsize=6)
 
         plt.axis('off')
         plt.show()
@@ -213,4 +213,8 @@ if __name__ == '__main__':
     spawn_points = world.get_map().get_spawn_points()
     print (spawn_points)
     view_start_positions(arguments.town, spawn_points)
+
+    selected_pos = [ [39, 71], [10, 27], [71,63] ]
+
+    make_routes(arguments.output, selected_pos, spawn_points, world.get_map().name)
 
