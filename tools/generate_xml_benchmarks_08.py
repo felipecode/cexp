@@ -160,7 +160,7 @@ def view_start_positions(world, positions_to_plot):
         # Convert world to pixel coordinates
         draw_point(position.location, (1,0,0), 12, alpha=None)
 
-        draw_text(str(count), position.location, (1,0,0), 12)
+        draw_text(str(count), position.location, (1,0,0), 5)
 
         count += 1
 
