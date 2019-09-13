@@ -31,7 +31,7 @@ def estimate_route_distance(route):
         prev_point = current_point
 
 
-    return int( route_length)
+    return route_length
 
 
 
@@ -187,14 +187,19 @@ def get_positions_further_thresh(filename, world, thresh):
 
     spawn_points = world.get_map().get_spawn_points()
     routes_vector = []
+    count_a = 0
     for point_a in spawn_points:
+        count_b = 0
         for point_b in spawn_points:
             # print (point_a, point_b)
             _, route_ab = interpolate_trajectory(world, [point_a, point_b])
             distance = estimate_route_distance(route_ab)
             print ( " Distance ", distance)
+            print ()
             if point_a != point_b and distance > thresh:
                 routes_vector.append([point_a, point_b])
+            count_b += 1
+        count_a += 1
 
 
     write_routes(filename, routes_vector, world.get_map().name)
@@ -230,7 +235,7 @@ if __name__ == '__main__':
     print (spawn_points)
     view_start_positions(world, spawn_points)
 
-    selected_pos = [ [10, 54], [53, 11], [48, 16], [61, 71], [74, 62], [50, 79], [75,49],
+    selected_pos = [ [10, 54], [53, 11], [48, 11], [61, 71], [74, 62], [50, 79], [75,49],
                      [80, 53], [80, 50], [60, 80], [83, 61], [94, 72], [43, 74],
                        [13, 66], [89, 64],
                                            [15, 70],  [11, 59],
