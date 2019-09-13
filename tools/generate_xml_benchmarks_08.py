@@ -15,10 +15,24 @@ import carla
 from PIL import Image
 from tools.converter import Converter
 
+from srunner.challenge.utils.route_manipulation import interpolate_trajectory
+
 """"
 This script generates routes based on the compitation of the start and end scenarios.
 
 """
+
+def estimate_route_distance(route):
+    route_length = 0.0  # in meters
+    prev_point = route[0][0]
+    for current_point, _ in route[1:]:
+        dist = current_point.location.distance(prev_point.location)
+        route_length += dist
+        prev_point = current_point
+
+
+    return int( route_length)
+
 
 
 class CarlaMap(object):
@@ -169,6 +183,22 @@ def view_start_positions(world, positions_to_plot):
     fig.savefig('map' + str(count) + '.pdf',
                 orientation='landscape', bbox_inches='tight')
 
+def get_positions_further_thresh(filename, world, thresh):
+
+    spawn_points = world.get_map().get_spawn_points()
+    routes_vector = []
+    for point_a in spawn_points:
+        for point_b in spawn_points:
+            # print (point_a, point_b)
+            _, route_ab = interpolate_trajectory(world, [point_a, point_b])
+            distance = estimate_route_distance(route_ab)
+            print ( " Distance ", distance)
+            if point_a != point_b and distance > thresh:
+                routes_vector.append([point_a, point_b])
+
+
+    write_routes(filename, routes_vector, world.get_map().name)
+
 def plot_all_spawn_points_carla08():
 
 
@@ -200,18 +230,18 @@ if __name__ == '__main__':
     print (spawn_points)
     view_start_positions(world, spawn_points)
 
-    #selected_pos = [ [10, 54], [53, 11], [16, 48], [61, 71], [74, 62], [50, 79], [75,49],
-    #                 [80, 53], [80, 50], [60, 80], [83, 61], [94, 72], [43, 74],
-    #                   [13, 66], [89, 64],
-    #                                       [15, 70],  [11, 59],
-    #                   [15, 94], [41, 7],
-    #                   [33, 13], [67, 43],
-    #
-    #                   [26, 10], [7, 29], [97, 100], [1, 96] ]
+    selected_pos = [ [10, 54], [53, 11], [48, 16], [61, 71], [74, 62], [50, 79], [75,49],
+                     [80, 53], [80, 50], [60, 80], [83, 61], [94, 72], [43, 74],
+                       [13, 66], [89, 64],
+                                           [15, 70],  [11, 59],
+                       [15, 94], [41, 7],
+                       [33, 13], [67, 43],
 
-    selected_pos = [[17, 12], [14, 18], [7, 18], [15, 8], [36, 42], [43, 34], [33, 40], [39,34],
-                     [35,0], [89,24], [89,67], [30,21], [22,31], [59, 68], [66,69] ,[62,55] ,[57,63],
-                      [48,52], [51,47], [46,52] , [51,44], [74,76], [75,73], [35,56], [100,24]    ]
+                       [26, 10], [7, 29], [97, 100], [1, 96] ]
+
+    #selected_pos = [[17, 12], [14, 18], [7, 18], [15, 8], [36, 42], [43, 34], [33, 40], [39,34],
+    #                 [35,0], [89,24], [89,67], [30,21], [22,31], [59, 68], [66,69] ,[62,55] ,[57,63],
+    #                  [48,52], [51,47], [46,52] , [51,44], [74,76], [75,73], [35,56], [100,24]    ]
 
     make_routes(arguments.output, selected_pos, spawn_points, world.get_map().name)
 
