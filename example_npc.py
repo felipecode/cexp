@@ -47,7 +47,7 @@ if __name__ == '__main__':
               'gpu': 0,
               'batch_size': 1,
               'remove_wrong_data': False,
-              'non_rendering_mode': False,
+              'non_rendering_mode': True,
               'carla_recording': False
               }
 
