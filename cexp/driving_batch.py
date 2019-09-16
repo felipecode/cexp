@@ -10,15 +10,15 @@ from cexp.env.server_manager import ServerManagerDocker, find_free_port, check_t
 from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
 
-# I see now 4 execution, consumption modes:
-# TODO separate what creates the environment list from the actual environmental runner class
-# Execute a certain number of iterations sequentially or randomly
+
+
+
 # Consume the environments based on how many times they were already executed
 # Consume de environmens ignoring if they were executed already
 # Do an execution eliminating part of the environments used.
 
 
-class DBatch(object):
+class DrivingBatch(object):
     """
     THE main CEXP module.
     It contains the instanced env files that can be iterated to have instanced environments to get

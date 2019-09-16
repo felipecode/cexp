@@ -108,8 +108,7 @@ if __name__ == '__main__':
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
-    description = ("CARLA AD Challenge evaluation: evaluate your Agent in CARLA scenarios\n")
-
+    description = ("kkk")
     parser = argparse.ArgumentParser(description=description)
 
     parser.add_argument('--port', default=None, help='Port for an already existent server')
@@ -135,15 +134,11 @@ if __name__ == '__main__':
 
     # TODO for now batch size is one
 
-    number_of_iterations = 400
     # The idea is that the agent class should be completely independent
-    agent = NPCAgent(
-
-                     )
+    agent = NPCAgent()
 
     # The driving batch generate environments from a json file,
-    driving_batch = cexp.DBatch(json_file, params=params,
-                                iterations_to_execute=number_of_iterations, port=arguments.port)
+    driving_batch = cexp.driving_batch.DrivingBatch(json_file, params=params, port=arguments.port)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
 
