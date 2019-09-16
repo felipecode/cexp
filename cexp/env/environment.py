@@ -95,7 +95,8 @@ class Environment(object):
         # we remove all the sensors everytime. No sensor addition on building time
         self._sensor_desc_vec = []
 
-    def record(self):
+    # ELIMINATE
+    def _record(self):
         """
             record the results summary and set this as an executed example
 
@@ -114,14 +115,21 @@ class Environment(object):
     def stop(self):
         self._cleanup()
 
-    def add_sensors(self, sensors):
+    def set_sensors(self, sensors):
         if not isinstance(sensors, list):
             raise ValueError(" Sensors added to the environment should be a list of dictionaries")
 
         self._sensor_desc_vec += sensors
 
+    def reset(self, StateFunction, RewardFunction, agent_name=None):
+        """
+            Default state function is the vehicle speed
 
-    def reset(self, StateFunction, RewardFunction, agent_name=''):
+        :param StateFunction:
+        :param RewardFunction:
+        :param agent_name:
+        :return:
+        """
 
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
@@ -198,6 +206,7 @@ class Environment(object):
         shutil.rmtree(root_path)
 
     def get_path(self):
+        # TODO do we keep this one ?
 
         return os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
 
@@ -212,7 +221,7 @@ class Environment(object):
         return False
 
     # TODO we can make this extra data pretier.
-    def run_step(self, control_vec):
+    def step(self, control_vec):
         """
         Run an step on the simulation using the agent control
         :param control_vec:
@@ -236,6 +245,11 @@ class Environment(object):
     # TODO: the concept of batch vs the concept of repetition
     def get_summary(self):
 
+        """
+            Returns the current
+        :return:
+        """
+
         # If the environment is still running there is no summary yet
         if self.is_running():
             print (" STILL RUNNING ")
@@ -243,14 +257,14 @@ class Environment(object):
         # This seems to be always a batch
         return self._latest_summary[0]
 
-    def eliminate_data(self):
-        # An exception was caught we basically delete everything that correspond to the
-        # executing agent.
-
-        for exp in self._exp_list:
-            exp._clean_bad_dataset()
-
-        if len(self._exp_list) > 0:
-            self._exp_list[0]._writer.delete_env()
+    #def eliminate_data(self):
+    #    # An exception was caught we basically delete everything that correspond to the
+    #    # executing agent.
+    #
+    #    for exp in self._exp_list:
+    #        exp._clean_bad_dataset()
+    #
+    #    if len(self._exp_list) > 0:
+    #        self._exp_list[0]._writer.delete_env()
 
 

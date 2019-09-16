@@ -18,20 +18,28 @@ import cexp.env.utils.route_configuration_parser as parser
 # Do an execution eliminating part of the environments used.
 
 
+# TODO the only execution mode is execute all. Things are controlled always on json
+# TODO randomness does not exist.
 
-class CEXP(object):
+
+class DBatch(object):
     """
     THE main CEXP module.
     It contains the instanced env files that can be iterated to have instanced environments to get
     """
 
     _default_params = {'save_dataset': False,
+                       'save_sensors': False,
+                       'save_trajectories': False,
+                       'save_opponents': False,
+                       'save_opp_trajectories': False,
                        'docker_name': None,
                        'gpu': 0,
                        'batch_size': 1,
                        'remove_wrong_data': False,
                        'non_rendering_mode': False,
-                       'carla_recording': True
+                       'carla_recording': True,
+                       'direct_read': False
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
@@ -47,10 +55,23 @@ class CEXP(object):
         :param eliminated_envs: list of the environments that are not going to be used
         :param port:
         """
+
+
         if params is None:
             self._params = CEXP._default_params
         else:
-            self._params = params
+            self._params = {}
+            for key, value in CEXP._default_params.items():
+                if key in params.keys():  # If it exist you add  it from the params
+                    self._params.update({key: params[key]})
+                else:  # if tit is not the case you use default
+                    self._params.update({key: value})
+
+        print (" FINAL PARQMS ", self._params)
+
+        # Todo thuis goes out with the merge
+        if 'save_sensors' not in self._params:
+            self._params.update({'save_sensors': self._params['save_dataset']})
 
         self._batch_size = self._params['batch_size']  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
@@ -97,7 +118,8 @@ class CEXP(object):
         # TODO: this setup is hardcoded for Batch_size == 1
         # TODO add here several server starts into a for
         # TODO for i in range(self._batch_size)
-        if agent_name is not None:
+        logging.debug("Starting the CEXP System !")
+        if agent_name is not None and not self.ignore_previous_execution:
             Environment.check_for_executions(agent_name, self._json['package_name'])
         if no_server:
             self._client_vec = []
@@ -115,6 +137,7 @@ class CEXP(object):
                     self._environment_batch[0].reset(port=self._port)
                 free_port = self._port  # This is just a test mode where CARLA is already up.
             # setup world and client assuming that the CARLA server is up and running
+            logging.debug(" Connecting to the free port client")
             self._client_vec = [carla.Client('localhost', free_port)]
             self._client_vec[0].set_timeout(self.client_timeout)
 
@@ -122,11 +145,17 @@ class CEXP(object):
         env_params = {
             'batch_size': self._batch_size,
             'save_dataset': self._params['save_dataset'],
+            'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],
+            'save_opponents': self._params['save_opponents'], #
+            'save_opp_trajectories': self._params['save_opp_trajectories'],  #
             'package_name': self._json['package_name'],
+            'save_trajectories': self._params['save_trajectories'],
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording'],
-            'debug': self._port is not None
+            'direct_read': self._params['direct_read'],
+            'agent_name': agent_name,
+            'debug': False  # DEBUG SHOULD BE SET
         }
 
         # We instantiate environments here using the recently connected client
@@ -148,18 +177,20 @@ class CEXP(object):
         if self._environments is None:
             raise ValueError("You are trying to iterate over an not started cexp "
                              "object, run the start method ")
-        # This strategy of execution takes into considerion the env repetition
+        # This strategy of execution takes into consideration the env repetition
         #  and execute a certain number of times.from
         # The environment itself is able to tell when the repetition is already made.
         if self._execute_all:
             execution_list = []
+            # TODO not working on execute all mode.
             print ("EXECUTIONS")
             print (Environment.number_of_executions)
-            for env_name in self._json['envs'].keys():
+            for env_name in self._environments.keys():
                 repetitions = 1
-                # We check the remaining necessary executions for each of the environments
-                if "repetitions" not in self._json['envs'][env_name] and not self.ignore_previous_execution:
-                    raise ValueError(" Setting to execute all but repetition information is not  on the json file")
+                # TODO check necessity
+                #  We check the remaining necessary executions for each of the environments
+                #if "repetitions" not in self._json['envs'][env_name] and not self.ignore_previous_execution:
+                #    raise ValueError(" Setting to execute all but repetition information is not  on the json file")
 
                 if "repetitions" in self._json['envs'][env_name]:
                     repetitions = self._json['envs'][env_name]['repetitions']
@@ -190,4 +221,6 @@ class CEXP(object):
         Environment.number_of_executions = {}
 
     def cleanup(self):
-        self._environment_batch[0].stop()
+
+        if len(self._client_vec) > 0 and self._port is None:  # we test if it is actually running
+            self._environment_batch[0].stop()

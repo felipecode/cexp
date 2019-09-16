@@ -220,6 +220,21 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
 
 
+def benchmark_env_loop(renv, agent, save_data):
+
+
+    state, _ = renv.reset(StateFunction = agent.get_sensors, save_data=save_data)
+    # TODO maybe add a check for the env.
+    while renv.get_info()['status'] == 'Running':
+
+        controls = agent.step(state)
+        state, _ = renv.step(controls)
+
+
+    renv.stop()
+
+
+
 
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
               batch_size=1, save_dataset=False, port=None,
@@ -259,20 +274,23 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
     while True:
         try:
             # We reattempt in case of failure of the benchmark
-            env_batch = CEXP(benchmark_name, params, execute_all=True, sequential=False, port=port)
+            pratice = CEXP(benchmark_name, params, execute_all=True, sequential=False, port=port)
             # to load CARLA and the scenarios are made
             # Here some docker was set
-            env_batch.start(agent_name=agent_checkpoint_name)
+            pratice.start(agent_name=agent_checkpoint_name)
             # take the path to the class and instantiate an agent
             agent = getattr(agent_module, agent_module.__name__)(agent_params_path)
             # if there is no name for the checkpoint we set it as the agent module name
-            for env in env_batch:
+            for renv in env_batch:
+
+                #if  len(env.get_summary()) >
                 try:
-                    _, _ = agent.unroll(env)
+                    summary = benchmark_env_loop(renv, agent, save_dataset)
                     # Just execute the environment. For this case the rewards doesnt matter.
-                    summary = env.get_summary()
+                    #summary = env.get_summary()
                     logging.debug("Finished episode got summary ")
                     # Add partial summary to allow continuation
+                    # TODO check how to add summary
                     add_summary(env._environment_name, summary,
                                 benchmark_name, agent_checkpoint_name)
 
