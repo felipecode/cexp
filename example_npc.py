@@ -40,8 +40,8 @@ if __name__ == '__main__':
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
               'save_sensors': True,
-              'save_trajectories': True,
-              'save_opponents': True,
+              'save_trajectories': False,
+              'save_opponents': False,
               'save_opp_trajectories': False,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
