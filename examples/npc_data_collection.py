@@ -1,10 +1,8 @@
 import sys
 import glob
 import argparse
-
 import logging
 import traceback
-
 import cexp
 
 from agents.navigation.basic_agent import BasicAgent
