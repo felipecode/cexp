@@ -119,9 +119,10 @@ class Environment(object):
         # Using the summary we save the trajectories
         if self._save_trajectories:
             draw_trajectories(self.get_data(),
-                              self._last_executing_agent + '_' + self._environment_name,
+              self._last_executing_agent + '_' + self._package_name  + '_' + self._environment_name,
                               self._exp_list[0].world,
-                              self._exp_list[0]._route)
+                              self._exp_list[0]._route,
+                              direct_read=self._env_params['direct_read'])
 
         if self._save_opp_trajectories:
             draw_opp_trajectories(self.get_data(),
@@ -201,6 +202,7 @@ class Environment(object):
         if read_sensors is None:
             read_sensors = self._env_params['save_sensors']
 
+        print ( "READ SENSORS  ", read_sensors)
         root_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name,
                                  self._environment_name)
         # If the metadata does not exist the environment does not have a reference data.

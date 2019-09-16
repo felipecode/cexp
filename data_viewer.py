@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
     # this could be joined
     # THe experience is built, the files necessary
-    env_batch = CEXP(jsonfile, params, number_of_iterations, sequential=True)
+    env_batch = CEXP(jsonfile, params, execute_all=True, ignore_previous_execution=True)
     # Here some docker was set
     env_batch.start(no_server=True, agent_name=args.agent_name)  # no carla server mode.
     # count, we count the environments that are read

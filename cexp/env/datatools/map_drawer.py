@@ -52,6 +52,9 @@ COLOR_BLACK = (0/ 255.0, 0/ 255.0, 0/ 255.0)
 COLOR_LIGHT_GRAY = (196/ 255.0, 196/ 255.0, 196/ 255.0)
 
 
+COLOR_PINK = (255/255.0,192/255.0,203/255.0)
+
+
 ############## MAP RELATED ######################
 
 # We set this as global
@@ -286,6 +289,14 @@ def draw_point(location, result_color, size, alpha=None):
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
     plt.gca().add_patch(circle)
 
+def draw_text(content, location, result_color, size):
+
+    pixel = world_to_pixel(location)
+
+    plt.text(pixel[0], pixel[1], str(content), fontsize=size)
+
+    #circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
+    #plt.gca().add_patch(circle)
 
 
 def draw_point_data(datapoint, color=None, direct_read=False, alpha=None):
@@ -300,10 +311,11 @@ def draw_point_data(datapoint, color=None, direct_read=False, alpha=None):
     if color is None:
 
         if direct_read:
-            get_color(datapoint['measurements']['scenario'])
+            result_color = get_color(datapoint['scenario'])
         else:
             result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
-                                               datapoint['measurements']['distance_lead_vehicle']
+                                               datapoint['measurements']['distance_lead_vehicle'],
+                                               datapoint['measurements']['distance_crossing_walker'],
                                                ))
     else:
         result_color = color
@@ -370,6 +382,8 @@ def get_color(scenario):
         return COLOR_ORANGE_0
     elif scenario == 'S5_lead_vehicle_inside_intersection':
         return COLOR_BUTTER_2
+    elif scenario == 'S6_pedestrian':
+        return COLOR_PINK
 
 
 def draw_route(route):
@@ -380,9 +394,7 @@ def draw_route(route):
     draw_point(route[-1][0].location, result_color=(0.0, 1.0, 0), size=24)
 
 
-
-
-def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read=False ):
+def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read=False):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
@@ -405,7 +417,7 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read
                 #    draw_point(batch[0][step], init=True)
                 #    first_time = False
                 #else:
-                draw_point_data(batch[0][step])
+                draw_point_data(batch[0][step], direct_read=direct_read)
                 step += step_size
             #draw_point(batch[0][step - step_size], end=True)
             #draw_point(route[-1])

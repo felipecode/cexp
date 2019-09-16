@@ -18,9 +18,9 @@ from srunner.scenarios.object_crash_vehicle import DynamicObjectCrossing
 from srunner.scenarios.object_crash_intersection import VehicleTurningRight, VehicleTurningLeft
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
-from cexp.env.scorer import record_route_statistics_default
+from cexp.env.scorer import record_route_statistics_default, get_current_completion
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
-                                             get_distance_lead_vehicle
+                                             get_distance_lead_vehicle, get_distance_closest_crossing_waker
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
@@ -80,7 +80,7 @@ def get_forward_speed(vehicle):
 
 # TODO this is actually a benchmark paramter .... either seconds or seconds per meter.
 
-SECONDS_GIVEN_PER_METERS = 0.6
+SECONDS_GIVEN_PER_METERS = 0.8
 
 def estimate_route_timeout(route):
     route_length = 0.0  # in meters
@@ -287,6 +287,11 @@ class Experience(object):
         if self._save_data:
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                            self._route)
+
+            dist_scenario3, _ = get_distance_closest_crossing_waker(self)
+
+            # HERE we may adapt the npc to stop dist_scenario3
+
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
                 'forward_speed': get_forward_speed(self._ego_actor),
@@ -295,8 +300,13 @@ class Experience(object):
                 'road_angle': get_current_road_angle(self._ego_actor,
                                                      self._ego_actor.get_world().get_map()),
                 'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._route,
-                                                                   self.world)
+                                                                   self.world),
+                'distance_crossing_walker': dist_scenario3,
+
+                'distance_closest_scenario4': -1
             }
+
+            print ('S3 ', dist_scenario3, 'S4 ', -1)
 
         self._sync(self.world.tick())
 
@@ -477,6 +487,8 @@ class Experience(object):
                 logging.debug("=============================")
                 break
             except Exception:
+                import traceback
+                traceback.print_exc()
                 attempts += 1
                 print('======[WARNING] The server is not ready [{}/{} attempts]!!'.format(attempts,
                                                                       self.MAX_CONNECTION_ATTEMPTS))
@@ -513,7 +525,8 @@ class Experience(object):
                 transform = carla.Transform()
                 autopilot = True
                 random = True
-                actor_configuration_instance = ActorConfigurationData(model, transform, autopilot, random,
+                actor_configuration_instance = ActorConfigurationData(model, transform,
+                                                                      autopilot, random,
                                                                       amount=background_definition[key])
                 configuration_instances.append(actor_configuration_instance)
 
@@ -546,40 +559,44 @@ class Experience(object):
             else:
 
                 # Sample the scenarios to be used for this route instance.
+                # tehre can be many instances of the same scenario
+                scenario_definition_instances = scenario_definition_vec[scenario_name]
 
-                scenario_definition = scenario_definition_vec[scenario_name]
-
-                if scenario_definition is None:
+                if scenario_definition_instances is None:
                     raise ValueError(" Not Implemented ")
 
-                ScenarioClass = number_class_translation[scenario_name][scenario_definition['type']]
 
-                egoactor_trigger_position = convert_json_to_transform(
-                    scenario_definition['trigger_position'])
-                scenario_configuration = ScenarioConfiguration()
-                scenario_configuration.other_actors = None  # TODO the other actors are maybe needed
-                scenario_configuration.town = self._town_name
-                scenario_configuration.trigger_point = egoactor_trigger_position
-                scenario_configuration.ego_vehicle = ActorConfigurationData(
-                                                        'vehicle.lincoln.mkz2017',
-                                                        self._ego_actor.get_transform())
-                try:
-                    scenario_instance = ScenarioClass(self.world, self._ego_actor,
-                                                      scenario_configuration,
-                                                      criteria_enable=False, timeout=timeout)
-                except Exception as e:
-                    #if  self._exp_params['debug'] > 1:
-                    #     raise e
-                    #else:
-                    print("Skipping scenario '{}' due to setup error: {}".format(
-                        scenario_definition['name'], e))
-                    continue
-                # registering the used actors on the data provider so they can be updated.
+                for scenario_definition in scenario_definition_instances:
 
-                #CarlaDataProvider.register_actors(scenario_instance.other_actors)
+                    # TODO scenario 4 is out
 
-                list_instanced_scenarios.append(scenario_instance)
+                    ScenarioClass = number_class_translation[scenario_name][0]
 
+                    egoactor_trigger_position = convert_json_to_transform(
+                        scenario_definition)
+                    scenario_configuration = ScenarioConfiguration()
+                    scenario_configuration.other_actors = None  # TODO the other actors are maybe needed
+                    scenario_configuration.town = self._town_name
+                    scenario_configuration.trigger_point = egoactor_trigger_position
+                    scenario_configuration.ego_vehicle = ActorConfigurationData(
+                                                            'vehicle.lincoln.mkz2017',
+                                                            self._ego_actor.get_transform())
+                    try:
+                        scenario_instance = ScenarioClass(self.world, self._ego_actor,
+                                                          scenario_configuration,
+                                                          criteria_enable=False, timeout=timeout)
+                    except Exception as e:
+                        #if  self._exp_params['debug'] > 1:
+                        #     raise e
+                        #else:
+                        print("Skipping scenario '{}' due to setup error: {}".format(
+                            'Scenario3', e))
+                        continue
+                    # registering the used actors on the data provider so they can be updated.
+
+                    CarlaDataProvider.register_actors(scenario_instance.other_actors)
+
+                    list_instanced_scenarios.append(scenario_instance)
 
         return list_instanced_scenarios
 

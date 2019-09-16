@@ -38,7 +38,8 @@ class CEXP(object):
                        'batch_size': 1,
                        'remove_wrong_data': False,
                        'non_rendering_mode': False,
-                       'carla_recording': True
+                       'carla_recording': True,
+                       'direct_read': False
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
@@ -117,6 +118,7 @@ class CEXP(object):
         # TODO: this setup is hardcoded for Batch_size == 1
         # TODO add here several server starts into a for
         # TODO for i in range(self._batch_size)
+        logging.debug("Starting the CEXP System !")
         if agent_name is not None and not self.ignore_previous_execution:
             Environment.check_for_executions(agent_name, self._json['package_name'])
         if no_server:
@@ -135,6 +137,7 @@ class CEXP(object):
                     self._environment_batch[0].reset(port=self._port)
                 free_port = self._port  # This is just a test mode where CARLA is already up.
             # setup world and client assuming that the CARLA server is up and running
+            logging.debug(" Connecting to the free port client")
             self._client_vec = [carla.Client('localhost', free_port)]
             self._client_vec[0].set_timeout(self.client_timeout)
 
@@ -150,6 +153,7 @@ class CEXP(object):
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
             'carla_recording': self._params['carla_recording'],
+            'direct_read': self._params['direct_read'],
             'agent_name': agent_name,
             'debug': False  # DEBUG SHOULD BE SET
         }

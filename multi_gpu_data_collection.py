@@ -174,7 +174,6 @@ if __name__ == '__main__':
         dest='eliminated_gpus',
         type=str)
 
-
     args = argparser.parse_args()
     json_file = os.path.join('database', args.json_config)
 
@@ -189,7 +188,7 @@ if __name__ == '__main__':
 
     # Set GPUS to eliminate.
     # we get all the gpu (STANDARD 10, make variable)
-    gpu_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    gpu_list = ['0', '1', '2', '3', '4', '5', '7', '8', '9']
 
     # we eliminate the ones not used
     if args.eliminated_gpus is not None:

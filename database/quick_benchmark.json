@@ -1,16 +1,31 @@
 {
     "envs":{
-       "route0": {
+      "WetNoon_route00014": {
             "route": {
-                "file": "routes/straight_town01.xml",
-                "id": 0
+                "file": "nocrash/Town01_navigation.xml",
+                "id": 14
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": {
+                    "name": "Scenario3",
+                    "other_actors": null,
+                    "trigger_position": {
+                        "pitch": "0",
+                        "x": 2.52,
+                        "y": 163.4,
+                        "yaw": 270.0,
+                        "z": 1.0
+                    },
+                    "type": 0
+                },
+                "background_activity": {
+                    "vehicle.*": 100,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
-            "repetitions": 200
+            "weather_profile": "WetNoon"
         }
 
     },

@@ -112,6 +112,10 @@ def parse_measurements(measurement):
         measurement_data = json.load(f)
     return measurement_data
 
+def parse_scenarios(measurement):
+    with open(measurement) as f:
+        scenario_data = json.load(f)
+    return scenario_data
 
 def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
     """
@@ -133,6 +137,7 @@ def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
     exp_vec = []
 
     print ( "READ SENSORS ", read_sensors)
+    print ("expected sensor types ", sensors_types)
     for exp in experience_list:
 
         batch_list = glob.glob(os.path.join(exp, '[0-9]'))
@@ -144,6 +149,10 @@ def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
 
             measurements_list = glob.glob(os.path.join(batch, 'measurement*'))
             sort_nicely(measurements_list)
+            ## Written scenario list.
+
+            scenario_list = glob.glob(os.path.join(batch, 'scenario*'))
+            sort_nicely(scenario_list)
             sensors_lists = {}
 
             if read_sensors:
@@ -159,7 +168,8 @@ def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
             for i in range(len(measurements_list)):
                 data_point = {}
                 data_point.update({'measurements': parse_measurements(measurements_list[i])})
-
+                if i < len(scenario_list):
+                    data_point.update({'scenario': parse_scenarios(scenario_list[i])['scenario']})
                 if read_sensors:
                     for sensor in sensors_types:
                         # TODO can bus and GPS are not implemented a sensors yet

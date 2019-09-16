@@ -1,5 +1,6 @@
 import logging
 from cexp.agents.agent import Agent
+from cexp.env.scenario_identification import get_distance_closest_crossing_waker
 
 from agents.navigation.basic_agent import BasicAgent
 
@@ -21,6 +22,9 @@ class NPCAgent(Agent):
         self.route_assigned = False
         self._agent = None
 
+        self._distance_pedestrian_crossing = -1
+        self._closest_pedestrian_crossing = None
+
     # TODO we set the sensors here directly.
     def sensors(self):
 
@@ -41,6 +45,15 @@ class NPCAgent(Agent):
             self._agent._local_planner.set_global_plan(plan)
             self.route_assigned = True
 
+        self._distance_pedestrian_crossing, self._closest_pedestrian_crossing =\
+                get_distance_closest_crossing_waker(exp)
+
+        # if the closest pedestrian dies we reset
+        if self._closest_pedestrian_crossing is not None and \
+            not self._closest_pedestrian_crossing.is_alive:
+            self._closest_pedestrian_crossing = None
+            self._distance_pedestrian_crossing = -1
+
         return None
 
     def make_reward(self, exp):
@@ -49,7 +62,22 @@ class NPCAgent(Agent):
         return None
 
     def run_step(self, state):
+
+        print (self._distance_pedestrian_crossing)
+        if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
+            if self._distance_pedestrian_crossing < 4.5:
+                self._agent._local_planner.set_speed(0.0)
+            else:
+                self._agent._local_planner.set_speed(self._distance_pedestrian_crossing/4.5)
+                
+            print ( "########## SET SPEED #########")
+            print(self._agent._local_planner._target_speed)
+
+
+
         control = self._agent.run_step()
+
+        # IF WE ARE TO CLOSE TO
 
         logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
         return control

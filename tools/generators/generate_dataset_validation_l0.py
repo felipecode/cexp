@@ -1,7 +1,6 @@
 
 import json
 import os
-from random import randint
 
 if __name__ == '__main__':
 
@@ -16,8 +15,7 @@ if __name__ == '__main__':
     # For each of the routes to be evaluated.
 
     # Tows to be generated
-    town_sets = {
-                 'routes/routes_all.xml': 'routes'
+    town_sets = {'corl2017/Town02_navigation.xml': 'navigation',
                  }
 
 
@@ -30,15 +28,15 @@ if __name__ == '__main__':
 
 
 
-    name_dict = {'training':{'Town01': 'training'
+    name_dict = {'training':{'Town02': 'training'
                              },
-                 'new_weather': {'Town01': 'newweather'
+                 'new_weather': {'Town02': 'newweather'
 
                  }
     }
 
     new_json = {"envs": {},
-                "package_name": 'dataset_vehicles_l1',
+                "package_name": 'dataset_validation_l0',
 
                 }
 
@@ -50,18 +48,18 @@ if __name__ == '__main__':
 
             for town_name in town_sets.keys():
 
-                for env_number in range(200):
+                for env_number in range(25):
 
                     env_dict = {
                         "route": {
                             "file": town_name,
-                            "id": randint(0, 65790)
+                            "id": env_number
                         },
                         "scenarios": {
-                                      'background_activity': {"vehicle.*": 100,
+                                      'background_activity': {"vehicle.*": 50,
                                                               "walker.*": 0}
                                       },
-                        "town_name": "Town01",
+                        "town_name": "Town02",
                         "vehicle_model": "vehicle.lincoln.mkz2017",
                         "weather_profile": weather
                     }
@@ -69,7 +67,7 @@ if __name__ == '__main__':
                     new_json["envs"].update({weather + '_' + town_sets[town_name] + '_route'
                                              + str(env_number).zfill(5): env_dict})
 
-    filename = os.path.join(root_route_file_output, 'dataset_vehicles_l1.json')
+    filename = os.path.join(root_route_file_output, 'dataset_validation_l0.json')
 
     with open(filename, 'w') as fo:
         # with open(os.path.join(root_route_file_position, 'all_towns_traffic_scenarios3_4.json'), 'w') as fo:

@@ -37,9 +37,10 @@ if __name__ == '__main__':
 
     # A single loop being made
     json = 'database/corl2017/corl2017_newtown_one_curve_Town02.json'
+
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
-              'save_sensors': False,
+              'save_sensors': True,
               'save_trajectories': True,
               'save_opponents': True,
               'save_opp_trajectories': False,
@@ -53,9 +54,7 @@ if __name__ == '__main__':
 
     # The idea is that the agent class should be completely independent
     agent = NPCAgent(
-        sensors_dict = [
-
-                       ])
+        sensors_dict = [])
     # this could be joined
     env_batch = CEXP(json, params=params, execute_all=True, ignore_previous_execution=True,
                      port=arguments.port)  # THe experience is built, the files necessary

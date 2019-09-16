@@ -91,7 +91,7 @@ class ServerManagerDocker(ServerManager):
 
         self._docker_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(64))
         # temporary config file
-        # TODO allow only quality level to be set here
+        # TODO quality level to be set here
         my_env = os.environ.copy()
         my_env["NV_GPU"] = str(self._gpu)
         logging.debug("Docker command %s" % ' '.join(['docker', 'run', '--name', self._docker_id,'--rm', '-d', '-p',
@@ -136,7 +136,9 @@ def check_test_server(port):
     # Check if a server is open at some port
 
     try:
+        print ( " TRYING TO CONNECT ", port)
         client = carla.Client(host='localhost', port=port)
+        print ( "GETT VERSION ")
         client.get_server_version()
         del client
         return True

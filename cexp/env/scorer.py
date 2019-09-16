@@ -20,6 +20,22 @@ def count_number_traffic_lights(route, route_percentage):
     # we basically count the number of intersection since " ALL OF THEM" have traffic lights
     return len(route_cleaned)
 
+
+def get_current_completion(master_scenario):
+    list_traffic_events = []
+    for node in master_scenario.scenario.test_criteria.children:
+        if node.list_traffic_events:
+            list_traffic_events.extend(node.list_traffic_events)
+
+
+    for event in list_traffic_events:
+        if event.get_type() == TrafficEventType.ROUTE_COMPLETION:
+            if event.get_dict():
+                return event.get_dict()['route_completed']
+            else:
+                return 0
+
+
 def record_route_statistics_default(master_scenario, exp_name):
     """
       This function is intended to be called from outside and provide
