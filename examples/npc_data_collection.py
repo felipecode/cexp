@@ -1,9 +1,8 @@
 import sys
-import glob
 import argparse
 import logging
 import traceback
-import cexp
+from cexp.driving_batch import DrivingBatch
 
 from agents.navigation.basic_agent import BasicAgent
 
@@ -136,7 +135,7 @@ if __name__ == '__main__':
     agent = NPCAgent()
 
     # The driving batch generate environments from a json file,
-    driving_batch = cexp.driving_batch.DrivingBatch(json_file, params=params, port=arguments.port)
+    driving_batch = DrivingBatch(json_file, params=params, port=arguments.port)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
 
