@@ -123,14 +123,19 @@ class Environment(object):
 
     def reset(self, StateFunction, RewardFunction, agent_name=None):
         """
-            Default state function is the vehicle speed
+        Reset the environment, when reseting it is necessary to define
+        the function that will provide the reward at every step and
+        also the function that will provide the state to the user on every step
+
+        THe optional agent name can be also set for data saving purposes.
 
         :param StateFunction:
         :param RewardFunction:
         :param agent_name:
         :return:
         """
-
+        # save the last executing agent name. This is to be used for logging purposes
+        self._last_executing_agent = agent_name
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
@@ -257,14 +262,10 @@ class Environment(object):
         # This seems to be always a batch
         return self._latest_summary[0]
 
-    #def eliminate_data(self):
-    #    # An exception was caught we basically delete everything that correspond to the
-    #    # executing agent.
-    #
-    #    for exp in self._exp_list:
-    #        exp._clean_bad_dataset()
-    #
-    #    if len(self._exp_list) > 0:
-    #        self._exp_list[0]._writer.delete_env()
+
+
+
+
+
 
 

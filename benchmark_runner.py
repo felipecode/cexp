@@ -4,8 +4,8 @@ import logging
 import sys
 
 from cexp.benchmark import benchmark
-from tools.generators.generate_corl_exps import generate_corl2017_config_file
-from tools.generators.generate_no_crash_exps import generate_nocrash_config_file
+from generators.generate_corl_exps import generate_corl2017_config_file
+from generators import generate_nocrash_config_file
 
 def produce_corl2017_csv():
     pass

@@ -5,36 +5,22 @@ import argparse
 import logging
 import traceback
 
-import cad
+import cexp
 
 from agents.navigation.basic_agent import BasicAgent
 
 
-# TODO ADD the posibility to configure what goes in and what goes out
-###
-# TODO MAKE SCENARIO ASSIGMENT DETERMINISTIC ( IS IT DONE ??)
-
-
 class NPCAgent(object):
 
-    def __init__(self, sensors_dict):
-        self._sensors_dict = sensors_dict
-        super().__init__(self)
-
-    def setup(self, config_file_path):
-        self.route_assigned = False
+    def __init__(self):
+        self._route_assigned = False
         self._agent = None
 
-    # TODO we set the sensors here directly.
-    def sensors(self):
-
-        return self._sensors_dict
-
-    def make_state(self, exp):
+    def _setup(self, exp):
         if not self._agent:
             self._agent = BasicAgent(exp._ego_actor)
 
-        if not self.route_assigned:
+        if not self._route_assigned:
 
             plan = []
             for transform, road_option in exp._route:
@@ -42,32 +28,59 @@ class NPCAgent(object):
                 plan.append((wp, road_option))
 
             self._agent._local_planner.set_global_plan(plan)
-            self.route_assigned = True
+            self._route_assigned = True
 
-        return None
+    def get_sensors(self, exp):
+        """
+        The state function that need to be defined to be used by cexp to return
+        the state at every iteration.
+        :param exp:
+        :return:
+        """
+
+        # The first time this function is call we initialize the agent.
+        self._setup(exp)
+
+        return exp.get_sensor_data()
 
     def step(self, state):
-        control = self._agent.run_step()
 
+        """
+        The step function
+
+        :param state:
+        :return:
+        """
+        # We print downs the sensors that are being received.
+        # The agent received the following sensor data.
+        print("=====================>")
+        for key, val in state.items():
+            if hasattr(val[1], 'shape'):
+                shape = val[1].shape
+                print("[{} -- {:06d}] with shape {}".format(key, val[0], shape))
+            else:
+                print("[{} -- {:06d}] ".format(key, val[0]))
+        print("<=====================")
+        # The sensors however are not needed since this basically run an step for the
+        # NPC default agent at CARLA:
+        control = self._agent.run_step()
         logging.debug("Output %f %f %f " % (control.steer, control.throttle, control.brake))
         return control
 
-    def reinforce(self, rewards):
-        """
-        This agent cannot learn so there is no reinforce
-        """
-        pass
-
     def reset(self):
         print (" Correctly reseted the agent")
-        self.route_assigned = False
+        self._route_assigned = False
         self._agent = None
 
 
 def collect_data_loop(renv, agent):
-    # YOU MAY REDEFINE the sensor set based on what the agent has. BUT THERE CAN
-    # ALSO BE SOMETHING ON THE SENSORS.
-    renv.set_sensors(agent.sensors())
+
+    # The first step is to set sensors that are going to be produced
+    # representation of the sensor input is showed on the main loop.
+    sensors_dict = [{'type': 'sensor.other.gnss',
+                     'x': 0.7, 'y': -0.4, 'z': 1.60,
+                     'id': 'GPS'}]
+    renv.set_sensors(sensors_dict)
     state, _ = renv.reset(StateFunction=agent.get_sensors, save_data=True)
 
     while renv.get_info()['status'] == 'Running':
@@ -78,6 +91,7 @@ def collect_data_loop(renv, agent):
         renv.remove_data(agent.name)
 
     renv.stop()
+    agent.reset()
 
 
 
@@ -123,25 +137,21 @@ if __name__ == '__main__':
 
     number_of_iterations = 400
     # The idea is that the agent class should be completely independent
-    agent = NPCAgent(sensors_dict=[{'type': 'sensor.other.gnss',
-                                    'x': 0.7, 'y': -0.4, 'z': 1.60,
-                                    'id': 'GPS'}]
+    agent = NPCAgent(
 
                      )
 
     # The driving batch generate environments from a json file,
-    practice_batch = cad.DBatch(json_file, params=params,
+    driving_batch = cexp.DBatch(json_file, params=params,
                                 iterations_to_execute=number_of_iterations, port=arguments.port)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
 
     # Here some docker was set
-    practice_batch.start()
-    for renv in practice_batch:
+    driving_batch.start()
+    for renv in driving_batch:
         try:
-            # The policy selected to run this experience vector (The class basically) This policy can also learn, just
-            # by taking the output from the experience.
-            # I need a mechanism to test the rewards so I can test the policy gradient strategy
+            # The policy selected to run this experience vector
             collect_data_loop(renv, agent)
         except KeyboardInterrupt:
             renv.stop()

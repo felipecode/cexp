@@ -1,6 +1,40 @@
 import os
 from srunner.scenariomanager.traffic_events import TrafficEventType
+from cexp.env.utils.route_configuration_parser import clean_route
 import py_trees
+
+
+
+def count_number_traffic_lights(route, route_percentage):
+
+
+    # Need to get the route world and perecentage complete
+
+    route_position = int(len(route) * route_percentage)
+
+    route_cleaned = clean_route(route[0:route_position])
+
+    print ( " route passed")
+    print (route_cleaned)
+
+    # we basically count the number of intersection since " ALL OF THEM" have traffic lights
+    return len(route_cleaned)
+
+
+def get_current_completion(master_scenario):
+    list_traffic_events = []
+    for node in master_scenario.scenario.test_criteria.children:
+        if node.list_traffic_events:
+            list_traffic_events.extend(node.list_traffic_events)
+
+
+    for event in list_traffic_events:
+        if event.get_type() == TrafficEventType.ROUTE_COMPLETION:
+            if event.get_dict():
+                return event.get_dict()['route_completed']
+            else:
+                return 0
+
 
 def record_route_statistics_default(master_scenario, exp_name):
     """
@@ -144,6 +178,9 @@ def record_route_statistics_default(master_scenario, exp_name):
                           'score_route': score_route,
                           'score_penalty': score_penalty,
                           'number_red_lights': len(list_red_lights),
+                          'total_number_traffic_lights': count_number_traffic_lights(
+                                                                            master_scenario.route,
+                                                                            score_route/100.0),
                           'result': result,
                           'help_text': return_message
                           }
