@@ -7,7 +7,7 @@ import shutil
 import numpy as np
 import traceback
 
-from cexp.cexp import CEXP
+from cexp.driving_batch import DrivingBatch
 
 
 # TODO ADD the posibility to configure what goes in and what goes out ( OUput format)
