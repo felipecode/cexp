@@ -6,7 +6,7 @@ import logging
 import traceback
 
 from cexp.cexp import CEXP
-from cexp.agents.NPCAgentDead import NPCAgentDead
+from cexp.agents.NPCAgent import NPCAgent
 
 # TODO ADD the posibility to configure what goes in and what goes out
 ###
@@ -52,7 +52,7 @@ if __name__ == '__main__':
               }
 
     # The idea is that the agent class should be completely independent
-    agent = NPCAgentDead(
+    agent = NPCAgent(
         sensors_dict = [
                         {'type': 'sensor.camera.rgb',
                          'x': 2.0, 'y': 0.0,
