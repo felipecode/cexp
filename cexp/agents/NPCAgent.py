@@ -83,7 +83,7 @@ class NPCAgent(Agent):
                                          self._closest_pedestrian_crossing):
                 self._agent._local_planner.set_speed(0.0)
             else:
-                self._agent._local_planner.set_speed(self._distance_pedestrian_crossing/4.5)
+                self._agent._local_planner.set_speed(self._distance_pedestrian_crossing/3.5)
 
             print ( "########## SET SPEED #########")
             print(self._agent._local_planner._target_speed)
