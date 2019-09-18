@@ -67,7 +67,7 @@ class NPCAgent(Agent):
     def _pedestrian_in_route(self, route, actor):
 
         for point in route:
-            if point.distance(actor.get_transform().location) < 1.0:
+            if point[0].distance(actor.get_transform().location) < 1.0:
 
                 return True
 
