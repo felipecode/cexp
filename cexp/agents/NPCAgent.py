@@ -20,6 +20,7 @@ class NPCAgent(Agent):
 
     def setup(self, config_file_path):
         self.route_assigned = False
+        self._route  = None
         self._agent = None
 
         self._distance_pedestrian_crossing = -1
@@ -36,6 +37,8 @@ class NPCAgent(Agent):
             self._agent = BasicAgent(exp._ego_actor)
 
         if not self.route_assigned:
+
+            self._route = exp._route
 
             plan = []
             for transform, road_option in exp._route:
@@ -61,15 +64,27 @@ class NPCAgent(Agent):
 
         return None
 
+    def _pedestrian_in_route(self, route, actor):
+
+        for point in route:
+            if point.distance(actor.get_transform().location) < 1.0:
+
+                return True
+
+        return False
+
+
     def run_step(self, state):
 
         print (self._distance_pedestrian_crossing)
         if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
-            if self._distance_pedestrian_crossing < 4.5:
+
+            if self._pedestrian_in_route(self._route,
+                                         self._closest_pedestrian_crossing):
                 self._agent._local_planner.set_speed(0.0)
             else:
                 self._agent._local_planner.set_speed(self._distance_pedestrian_crossing/4.5)
-                
+
             print ( "########## SET SPEED #########")
             print(self._agent._local_planner._target_speed)
 
