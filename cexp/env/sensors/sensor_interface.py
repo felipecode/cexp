@@ -64,6 +64,7 @@ class HDMapReader(object):
     def destroy(self):
         self._run_ps = False
 
+
 class CANBusMeasurement(object):
     def __init__(self, data, frame_number):
         self.data = data
@@ -103,30 +104,6 @@ class CANBusSensor(object):
     def __call__(self):
 
         """ We convert the vehicle physics information into a convenient dictionary """
-        # TODO if you need more physics we can just do it ONCE !
-        """
-        vehicle_physics = self._vehicle.get_physics_control()
-        wheels_list_dict = []
-        for wheel in vehicle_physics.wheels:
-            wheels_list_dict.append(
-                {'tire_friction': wheel.tire_friction,
-                 'damping_rate': wheel.damping_rate
-                 #'disable_steering': wheel.disable_steering
-
-                 }
-            )
-
-        torque_curve = []
-        for point in vehicle_physics.torque_curve:
-            torque_curve.append({'x': point.x,
-                                'y': point.y
-                                })
-        steering_curve = []
-        for point in vehicle_physics.steering_curve:
-            steering_curve.append({'x': point.x,
-                                'y': point.y
-                                })
-        """
         return {
             'speed': self._get_forward_speed()
         }
@@ -175,10 +152,11 @@ class CallBack(object):
             logging.error('No callback method for this sensor.')
 
     # Parsing CARLA physical Sensors
+
     def _parse_image_cb(self, image, tag, writer):
 
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
-        array = copy.deepcopy(array)  # TODO IS THIS NEEDED  ?
+
         array = np.reshape(array, (image.height, image.width, 4))
         array = array[:, :, :3]
         array = array[:, :, ::-1]
@@ -187,7 +165,7 @@ class CallBack(object):
     def _parse_lidar_cb(self, lidar_data, tag, writer):
 
         points = np.frombuffer(lidar_data.raw_data, dtype=np.dtype('f4'))
-        points = copy.deepcopy(points)
+        #points = copy.deepcopy(points)
         points = np.reshape(points, (int(points.shape[0] / 3), 3))
         self._data_provider.update_sensor(lidar_data, tag, points, lidar_data.frame_number, writer)
 
@@ -224,6 +202,7 @@ class SensorInterface(object):
         self._sensors_objects[tag] = sensor
         self._data_buffers[tag] = None
         self._timestamps[tag] = -1
+
 
     def update_sensor(self, raw, tag, data, timestamp, writer):
         if tag not in self._sensors_objects:
@@ -269,8 +248,15 @@ class SensorInterface(object):
         self._written[tag] += 1
         self._lock.release()
 
+
     def get_data(self):
         data_dict = {}
         for key in self._sensors_objects.keys():
             data_dict[key] = (self._timestamps[key], self._data_buffers[key])
         return data_dict
+
+    def destroy(self):
+        self._sensors_objects.clear()
+        self._data_buffers.clear()
+        self._timestamps.clear()
+        self._written.clear()

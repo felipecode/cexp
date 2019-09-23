@@ -21,7 +21,7 @@ import cexp.env.utils.route_configuration_parser as parser
 class DrivingBatch(object):
     """
     THE main CEXP module.
-    It contains the instanced env files that can be iterated to have instanced environments to get
+    It contains the instanced env files that can be iterated to have instanced environments.
     """
 
     _default_params = {'save_dataset': False,
@@ -42,7 +42,7 @@ class DrivingBatch(object):
                  ignore_previous_execution=False,
                  eliminated_environments=None):
         """
-
+        The initialization should receive the following parameters
         :param jsonfile:
         :param params:
         :param iterations_to_execute:
@@ -52,21 +52,17 @@ class DrivingBatch(object):
         """
 
         if params is None:
-            self._params = DBatch._default_params
+            self._params = DrivingBatch._default_params
         else:
             self._params = {}
-            for key, value in DBatch._default_params.items():
+            for key, value in DrivingBatch._default_params.items():
                 if key in params.keys():  # If it exist you add  it from the params
                     self._params.update({key: params[key]})
                 else:  # if tit is not the case you use default
                     self._params.update({key: value})
 
         print (" FINAL PARQMS ", self._params)
-
-        # Todo thuis goes out with the merge
-        if 'save_sensors' not in self._params:
-            self._params.update({'save_sensors': self._params['save_dataset']})
-
+        # THIS IS ALWAYS 1 for now
         self._batch_size = self._params['batch_size']  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
         self._environment_batch = []
@@ -98,7 +94,7 @@ class DrivingBatch(object):
 
     def start(self, no_server=False, agent_name=None):
         """
-
+        Sstart the carla servers and configure the environments associated with the execution.
         :param no_server:
         :param agent_name: the name of an agent to check for previous executions.
         :return:

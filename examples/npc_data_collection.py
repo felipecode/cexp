@@ -14,6 +14,12 @@ class NPCAgent(object):
         self._agent = None
 
     def _setup(self, exp):
+        """
+        Setup the agent for the current ongoing experiment. Basically if it is
+        the first time it will setup the agent.
+        :param exp:
+        :return:
+        """
         if not self._agent:
             self._agent = BasicAgent(exp._ego_actor)
 
@@ -27,23 +33,23 @@ class NPCAgent(object):
             self._agent._local_planner.set_global_plan(plan)
             self._route_assigned = True
 
-    def get_sensors(self, exp):
+    def get_sensors(self, exp_list):
         """
         The state function that need to be defined to be used by cexp to return
         the state at every iteration.
-        :param exp:
+        :param exp_list: the list of experiments to be processed on this batch.
         :return:
         """
 
         # The first time this function is call we initialize the agent.
-        self._setup(exp)
+        self._setup(exp_list[0])
 
-        return exp.get_sensor_data()
+        return exp_list[0].get_sensor_data()
 
     def step(self, state):
 
         """
-        The step function
+        The step function, receives the output from the state function ( get_sensors)
 
         :param state:
         :return:
@@ -78,11 +84,11 @@ def collect_data_loop(renv, agent):
                      'x': 0.7, 'y': -0.4, 'z': 1.60,
                      'id': 'GPS'}]
     renv.set_sensors(sensors_dict)
-    state, _ = renv.reset(StateFunction=agent.get_sensors, save_data=True)
+    state, _ = renv.reset(StateFunction=agent.get_sensors)
 
     while renv.get_info()['status'] == 'Running':
         controls = agent.step(state)
-        state, _ = renv.step(controls)
+        state, _ = renv.step([controls])
 
     if renv.get_info()['status'] == 'Failed':
         renv.remove_data(agent.name)
@@ -111,7 +117,8 @@ if __name__ == '__main__':
     parser.add_argument('--port', default=None, help='Port for an already existent server')
 
     parser.add_argument('-js', '--json-file',
-                        default=None, help='Port for an already existent server')
+                        default='database/sample_benchmark.json',
+                        help='The json file to be used for this case.')
 
     arguments = parser.parse_args()
 

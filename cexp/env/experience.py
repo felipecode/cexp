@@ -1,7 +1,4 @@
 import carla
-import math
-import os
-import numpy as np
 import py_trees
 import traceback
 import time
@@ -19,12 +16,13 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _
 from agents.navigation.local_planner import RoadOption
 
 
-from cexp.env.scorer import record_route_statistics_default, get_current_completion
+from cexp.env.scorer import record_route_statistics_default, get_current_completion, clean_route
 from cexp.env.datatools.data_writer import Writer
+from cexp.env.utils.route_configuration_parser import estimate_route_timeout
 from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
 from cexp.env.utils.scenario_utils import number_class_translation
 from cexp.env.utils.general import get_forward_speed, convert_transform_to_location, \
-                                   distance_vehicle, clean_route, convert_json_to_transform
+                                   distance_vehicle, convert_json_to_transform
 
 
 class Experience(object):

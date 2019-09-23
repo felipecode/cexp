@@ -2,8 +2,6 @@ from __future__ import print_function
 import math
 import json
 import os
-import numpy as np
-
 from agents.navigation.local_planner import RoadOption
 import carla
 import xml.etree.ElementTree as ET
@@ -99,6 +97,48 @@ def parse_weather(exp_weather):
     else:
         raise ValueError("Invalid weather on the configuration json file")
 
+
+SECONDS_GIVEN_PER_METERS = 0.8
+
+def estimate_route_timeout(route):
+    route_length = 0.0  # in meters
+    prev_point = route[0][0]
+    for current_point, _ in route[1:]:
+        dist = current_point.location.distance(prev_point.location)
+        route_length += dist
+        prev_point = current_point
+
+    #print (" final time ", SECONDS_GIVEN_PER_METERS * route_length)
+
+    return int(SECONDS_GIVEN_PER_METERS * route_length)
+
+def clean_route(route):
+
+    curves_start_end = []
+    inside = False
+    start = -1
+    current_curve = RoadOption.LANEFOLLOW
+    index = 0
+    while index < len(route):
+
+        command = route[index][1]
+        if command != RoadOption.LANEFOLLOW and not inside:
+            inside = True
+            start = index
+            current_curve = command
+
+        if command != current_curve and inside:
+            inside = False
+            # End now is the index.
+            curves_start_end.append([start, index, current_curve])
+            if start == -1:
+                raise ValueError("End of curve without start")
+
+            start = -1
+        else:
+            index += 1
+
+    return curves_start_end
 
 
 def parse_exp_vec(exp_vec):

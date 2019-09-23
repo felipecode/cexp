@@ -61,9 +61,9 @@ class Environment(object):
         # adequate state and rewards based on CARLA data
         self.StateFunction = None
         self.RewardFunction = None
-        # ignore previous executions
-        #self._ignore_previous = ignore_previous
-        # update the number of executions to match the folder
+        # The information dictionary to be queried by the environment users.
+        self._env_exec_info = []
+
 
     @staticmethod
     def check_for_executions(agent_name, package_name):
@@ -95,17 +95,16 @@ class Environment(object):
         # we remove all the sensors everytime. No sensor addition on building time
         self._sensor_desc_vec = []
 
-    # ELIMINATE
     def _record(self):
         """
             record the results summary and set this as an executed example
 
         """
         # get all the exps to get the summary
-        self._latest_summary = []
+        self._env_exec_info = []
         for exp in self._exp_list:
             exp.cleanup()
-            self._latest_summary.append(exp.get_summary())
+            self._env_exec_info.append(exp.get_summary())
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
@@ -121,7 +120,7 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-    def reset(self, StateFunction, RewardFunction, agent_name=None):
+    def reset(self, StateFunction=None, RewardFunction=None, agent_name=''):
         """
         Reset the environment, when reseting it is necessary to define
         the function that will provide the reward at every step and
@@ -134,6 +133,12 @@ class Environment(object):
         :param agent_name:
         :return:
         """
+        # if reward or state functions are not we basically return the
+        if RewardFunction is None:
+            RewardFunction = (lambda x: None)
+        if StateFunction is None:
+            StateFunction = (lambda x: None)
+
         # save the last executing agent name. This is to be used for logging purposes
         self._last_executing_agent = agent_name
         # create the environment
@@ -156,6 +161,8 @@ class Environment(object):
                 'env_number': Environment.number_of_executions[self._environment_name],
                 'exp_number': i,
                 'save_data': self._save_data,
+                'save_sensors': self._env_params['save_sensors'],
+                'save_opponents': self._env_params['save_opponents'],
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
                 'carla_recording': self._env_params['carla_recording'],
                 'remove_wrong_data': self._env_params['remove_wrong_data'],
@@ -198,6 +205,7 @@ class Environment(object):
 
         return full_episode_data_dict
 
+    # TODO does remove data make sense ?
     def remove_data(self):
         """
             Remove all data from this specific environment
@@ -210,12 +218,13 @@ class Environment(object):
 
         shutil.rmtree(root_path)
 
-    def get_path(self):
-        # TODO do we keep this one ?
+    #def get_path(self):
+    #    # TODO do we keep this one ?
 
-        return os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
+    #    return os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
 
-    def is_running(self):
+
+    def _is_running(self):
         """
             We use the running experiments to check if the route is still running
         """
@@ -225,13 +234,16 @@ class Environment(object):
         # if no exp is running then the environment is already done
         return False
 
-    # TODO we can make this extra data pretier.
     def step(self, control_vec):
         """
         Run an step on the simulation using the agent control
         :param control_vec:
         :return:
         """
+
+        # If we don't receive a list we can force it
+        if not isinstance(control_vec, list):
+            control_vec = [control_vec]
 
         # Run the loop for all the experiments on the batch.
         # update all scenarios
@@ -247,20 +259,29 @@ class Environment(object):
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)
 
-    # TODO: the concept of batch vs the concept of repetition
-    def get_summary(self):
+    def get_info(self):
 
         """
-            Returns the current
-        :return:
+            Returns the current information about the executions being held
+            as well as if this env is running or not.
         """
+
+        info = {
+            'summary': None
+        }
 
         # If the environment is still running there is no summary yet
-        if self.is_running():
-            print (" STILL RUNNING ")
-            return None
-        # This seems to be always a batch
-        return self._latest_summary[0]
+        if self._is_running():
+            info.update({'status': 'Running'})
+
+        else:
+            # If it is not running we basically try to record what is happening.
+            self._record()
+            info.update({'status': 'Finished'})
+            info['summary'] = self._env_exec_info[0]
+        # Todo for now it is working for batch 0
+
+        return info
 
 
 
