@@ -200,7 +200,6 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
               'direct_read': direct_read
               }
     env_batch = None
-    print (" GPU ", gpu)
     # this could be joined
     while True:
         try:

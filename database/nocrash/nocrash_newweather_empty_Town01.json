@@ -1,19 +1,4 @@
 {
-    "additional_sensors": [
-        {
-            "fov": 100,
-            "height": 600,
-            "id": "rgb",
-            "pitch": -15.0,
-            "roll": 0.0,
-            "type": "sensor.camera.rgb",
-            "width": 800,
-            "x": 2.0,
-            "y": 0.0,
-            "yaw": 0.0,
-            "z": 1.4
-        }
-    ],
     "envs": {
         "SoftRainSunset_route00000": {
             "repetitions": 1,
@@ -21,9 +6,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 0
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -34,9 +17,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 1
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -47,9 +28,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 2
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -60,9 +39,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 3
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -73,9 +50,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 4
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -86,9 +61,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 5
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -99,9 +72,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 6
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -112,9 +83,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 7
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -125,9 +94,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 8
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -138,9 +105,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 9
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -151,9 +116,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 10
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -164,9 +127,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 11
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -177,9 +138,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 12
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -190,9 +149,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 13
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -203,9 +160,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 14
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -216,9 +171,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 15
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -229,9 +182,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 16
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -242,9 +193,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 17
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -255,9 +204,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 18
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -268,9 +215,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 19
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -281,9 +226,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 20
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -294,9 +237,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 21
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -307,9 +248,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 22
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -320,9 +259,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 23
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -333,9 +270,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 24
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "SoftRainSunset"
@@ -346,9 +281,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 0
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -359,9 +292,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 1
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -372,9 +303,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 2
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -385,9 +314,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 3
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -398,9 +325,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 4
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -411,9 +336,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 5
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -424,9 +347,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 6
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -437,9 +358,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 7
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -450,9 +369,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 8
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -463,9 +380,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 9
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -476,9 +391,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 10
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -489,9 +402,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 11
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -502,9 +413,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 12
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -515,9 +424,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 13
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -528,9 +435,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 14
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -541,9 +446,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 15
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -554,9 +457,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 16
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -567,9 +468,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 17
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -580,9 +479,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 18
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -593,9 +490,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 19
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -606,9 +501,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 20
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -619,9 +512,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 21
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -632,9 +523,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 22
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -645,9 +534,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 23
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
@@ -658,9 +545,7 @@
                 "file": "nocrash/Town01_navigation.xml",
                 "id": 24
             },
-            "scenarios": {
-                "file": "None"
-            },
+            "scenarios": {},
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetSunset"
