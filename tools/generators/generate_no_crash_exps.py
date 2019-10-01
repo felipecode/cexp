@@ -4,7 +4,7 @@ import os
 
 def generate_nocrash_config_file():
 
-    root_route_file_position = 'database/nocrash'
+    root_route_file_position = '/datatmp/Experiments/yixiao/carl/database'
     # root_route_file_position = 'srunner/challenge/'
     #filename_town01 = os.path.join(root_route_file_position, 'Town01_navigation.json')
 
