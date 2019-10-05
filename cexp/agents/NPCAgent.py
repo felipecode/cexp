@@ -63,7 +63,7 @@ class NPCAgent(Agent):
 
     def run_step(self, state):
 
-        print (self._distance_pedestrian_crossing)
+        #print (self._distance_pedestrian_crossing)
         if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
             if self._distance_pedestrian_crossing < 4.5:
                 self._agent._local_planner.set_speed(0.0)
@@ -74,13 +74,12 @@ class NPCAgent(Agent):
             print(self._agent._local_planner._target_speed)
 
 
-
-        control = self._agent.run_step()
+        control, hazard_detected, light_state = self._agent.run_step()
 
         # IF WE ARE TO CLOSE TO
 
         logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
-        return control
+        return control, hazard_detected, light_state
 
     def reinforce(self, rewards):
         """

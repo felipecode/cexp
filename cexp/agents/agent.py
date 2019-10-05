@@ -32,10 +32,14 @@ class Agent(object):
     def _run_step_batch(self, input_data_vec):
         # TODO ELIMINATE this For make the inference inside and code the angent to make it
         controls_vec = []
+        hazard_detected_vec = []
+        red_traffic_light_vec = []
         for input_data in input_data_vec:
-            controls_vec.append(self.run_step(input_data))
+            controls_vec.append(self.run_step(input_data)[0])
+            hazard_detected_vec.append(self.run_step(input_data)[1])
+            red_traffic_light_vec.append(self.run_step(input_data)[2])
 
-        return controls_vec
+        return controls_vec, hazard_detected_vec, red_traffic_light_vec
 
     def make_reward(self, exp):
         """
@@ -117,10 +121,10 @@ class Agent(object):
 
         while environment.is_running():
 
-            controls = self._run_step_batch(state)
+            controls, hazard_detected_vec, red_traffic_light_vec= self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             # Experiment on the batch.
-            state, reward = environment.run_step(controls)
+            state, reward = environment.run_step(controls, hazard_detected_vec, red_traffic_light_vec)
 
             # TODO check the posible sizes mismatches here
             self.add_value(reward_batch, reward)

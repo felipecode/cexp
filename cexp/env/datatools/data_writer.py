@@ -5,6 +5,7 @@ import os
 import json
 import shutil
 import numpy as np
+import math
 
 from google.protobuf.json_format import MessageToJson, MessageToDict
 
@@ -75,8 +76,8 @@ class Writer(object):
                         "velocity": [velocity.x, velocity.y, velocity.z]
                      }
                     )
-                elif actor.attributes['role_name'] == 'autopilot' and self._save_opponents:
 
+                elif actor.attributes['role_name'] == 'autopilot' and self._save_opponents:
                     transform = actor.get_transform()
                     velocity = actor.get_velocity()
                     measurements['opponents'].update( { actor.id: {
@@ -87,6 +88,32 @@ class Writer(object):
                                         transform.rotation.yaw],
                         "velocity": [velocity.x, velocity.y, velocity.z]
                     }})
+
+                # We calculate the "Relative Angle" by computing the difference of orientation yaw between closest waypoint and ego
+                # Note that the axises and intervals of yaw are different, one is [-180,180], and the other is [0, 360], we need to do some transformations
+                ego_yaw = measurements['ego_actor']['orientation'][2]
+                waypoint_yaw = measurements['closes_waypoint']['orientation'][2]
+                # the axises of yaw are different to Cartesian coordinate system, we need to transform
+                waypoint_yaw = 360 - (waypoint_yaw - 90)
+                if waypoint_yaw >= 360.0:
+                    waypoint_yaw = waypoint_yaw - 360
+                ego_yaw = 360 - (ego_yaw - 90)
+                if ego_yaw >= 360.0:
+                    ego_yaw = ego_yaw - 360
+                ego_rad = ego_yaw * math.pi / 180                             # from degree to radian
+                waypoint_rad = waypoint_yaw * math.pi / 180                          # from degree to radian
+
+                measurements.update({'relative_angle': abs(waypoint_rad - ego_rad)})
+
+                # To define the distance to the centerline, we need to firstly calculate the road tangent, then compute the distance between the agent and the tangent
+                waypoint_x = measurements['closes_waypoint']['position'][0]
+                waypoint_y = measurements['closes_waypoint']['position'][1]
+                ego_x = measurements['ego_actor']['position'][0]
+                ego_y = measurements['ego_actor']['position'][1]
+                slope = math.tan(waypoint_rad)
+                b = waypoint_y - slope * waypoint_x
+                d = abs(slope * ego_x - ego_y + b) / math.sqrt(math.pow(slope,2) + math.pow(-1,2))
+                measurements.update({'distance_to_centerline': d})
 
 
 
@@ -176,7 +203,7 @@ class Writer(object):
             jsonObj.update({'scenarios': scenario_dict})
 
             # Set of weathers, all the posible
-            jsonObj.update({'set_of_weathers': None})
+            jsonObj.update({'set_of_weathers': environment._environment_name.split('_')[0]})
 
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 

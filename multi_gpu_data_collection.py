@@ -35,6 +35,7 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                 'width': 800, 'height': 600,
                 'fov': 100,
                 'id': 'labels_central'},
+
                {'type': 'sensor.camera.rgb',
                 'x': 2.0, 'y': 0.0,
                 'z': 1.40, 'roll': 0.0,
@@ -50,6 +51,7 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                 'width': 800, 'height': 600,
                 'fov': 100,
                 'id': 'labels_left'},
+
                {'type': 'sensor.camera.rgb',
                 'x': 2.0, 'y': 0.0,
                 'z': 1.40, 'roll': 0.0,
@@ -65,10 +67,12 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                 'width': 800, 'height': 600,
                 'fov': 100,
                 'id': 'labels_right'},
+
                 {'type': 'sensor.can_bus',
                  'reading_frequency': 25,
                  'id': 'can_bus'
                  },
+
                 {'type': 'sensor.other.gnss',
                  'x': 0.7, 'y': -0.4, 'z': 1.60,
                  'id': 'GPS'}
@@ -188,7 +192,7 @@ if __name__ == '__main__':
 
     # Set GPUS to eliminate.
     # we get all the gpu (STANDARD 10, make variable)
-    gpu_list = ['0', '1', '2', '3', '4', '5', '7', '8', '9']
+    gpu_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
     # we eliminate the ones not used
     if args.eliminated_gpus is not None:
