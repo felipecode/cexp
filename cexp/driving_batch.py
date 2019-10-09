@@ -10,22 +10,16 @@ from cexp.env.server_manager import ServerManagerDocker, find_free_port, check_t
 from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
 
-# I see now 4 execution, consumption modes:
-# TODO separate what creates the environment list from the actual environmental runner class
-# Execute a certain number of iterations sequentially or randomly
+
 # Consume the environments based on how many times they were already executed
 # Consume de environmens ignoring if they were executed already
 # Do an execution eliminating part of the environments used.
 
 
-# TODO the only execution mode is execute all. Things are controlled always on json
-# TODO randomness does not exist.
-
-
-class CEXP(object):
+class DrivingBatch(object):
     """
     THE main CEXP module.
-    It contains the instanced env files that can be iterated to have instanced environments to get
+    It contains the instanced env files that can be iterated to have instanced environments.
     """
 
     _default_params = {'save_dataset': False,
@@ -42,12 +36,11 @@ class CEXP(object):
                        'direct_read': False
                       }
 
-    def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
-                 port=None, execute_all=False, ignore_previous_execution=False,
+    def __init__(self, jsonfile, params=None, port=None,
+                 ignore_previous_execution=False,
                  eliminated_environments=None):
-        # TODO data consumption and benchmarking differentiation is important.
         """
-
+        The initialization should receive the following parameters
         :param jsonfile:
         :param params:
         :param iterations_to_execute:
@@ -56,32 +49,28 @@ class CEXP(object):
         :param port:
         """
 
-
         if params is None:
-            self._params = CEXP._default_params
+            self._params = DrivingBatch._default_params
         else:
             self._params = {}
-            for key, value in CEXP._default_params.items():
+            for key, value in DrivingBatch._default_params.items():
                 if key in params.keys():  # If it exist you add  it from the params
                     self._params.update({key: params[key]})
                 else:  # if tit is not the case you use default
                     self._params.update({key: value})
 
-        print (" FINAL PARQMS ", self._params)
-
-        # Todo thuis goes out with the merge
-        if 'save_sensors' not in self._params:
-            self._params.update({'save_sensors': self._params['save_dataset']})
-
+        # THIS IS ALWAYS 1 for now
         self._batch_size = self._params['batch_size']  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
         self._environment_batch = []
         for i in range(self._batch_size):
             self._environment_batch.append(ServerManagerDocker(self._params))
 
-        # Executing
-        self._execute_all = execute_all
+        # We get the folder where the jsonfile is located.
+        print (jsonfile.split('/')[:-1])
+        self._jsonfile_path = os.path.join(*jsonfile.split('/')[:-1])
         # Read the json file being
+        print ( " THE JSON FILE PATH ", self._jsonfile_path)
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
         # The timeout for waiting for the server to start.
@@ -92,11 +81,7 @@ class CEXP(object):
 
         # uninitialized environments vector
         self._environments = None
-        # Starting the number of iterations that are going to be ran.
-        self._iterations_to_execute = iterations_to_execute
         self._client_vec = None
-        # if the loading of environments will be sequential or random.
-        self._sequential = sequential
         # set a fixed port to be looked into
         self._port = port
         # add eliminated environments
@@ -110,7 +95,7 @@ class CEXP(object):
 
     def start(self, no_server=False, agent_name=None):
         """
-
+        Sstart the carla servers and configure the environments associated with the execution.
         :param no_server:
         :param agent_name: the name of an agent to check for previous executions.
         :return:
@@ -160,8 +145,8 @@ class CEXP(object):
 
         # We instantiate environments here using the recently connected client
         self._environments = {}
-        parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(
-                                    sort_nicely_dict(self._json['envs'].items())))
+        parserd_exp_dict = parser.parse_exp_vec(self._jsonfile_path, collections.OrderedDict(
+                                                sort_nicely_dict(self._json['envs'].items())))
 
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
@@ -174,47 +159,37 @@ class CEXP(object):
             self._environments.update({env_name: env})
 
     def __iter__(self):
+        """
+        The iterator for the CEXP attempts to execute every experiment on the json file.
+        If the ignore previous execution is set it will reexecute previously executed experiments.
+        Otherwise it just execute the missing ones.
+        :return:
+        """
         if self._environments is None:
-            raise ValueError("You are trying to iterate over an not started cexp "
+            raise ValueError("You are trying to iterate over an not started driving "
                              "object, run the start method ")
         # This strategy of execution takes into consideration the env repetition
         #  and execute a certain number of times.from
         # The environment itself is able to tell when the repetition is already made.
-        if self._execute_all:
-            execution_list = []
-            # TODO not working on execute all mode.
-            print ("EXECUTIONS")
-            print (Environment.number_of_executions)
-            for env_name in self._environments.keys():
-                repetitions = 1
-                # TODO check necessity
-                #  We check the remaining necessary executions for each of the environments
-                #if "repetitions" not in self._json['envs'][env_name] and not self.ignore_previous_execution:
-                #    raise ValueError(" Setting to execute all but repetition information is not  on the json file")
 
-                if "repetitions" in self._json['envs'][env_name]:
-                    repetitions = self._json['envs'][env_name]['repetitions']
+        execution_list = []
+        for env_name in self._environments.keys():
+            # The default is
+            repetitions = 1
+            if "repetitions" in self._json['envs'][env_name]:
+                repetitions = self._json['envs'][env_name]['repetitions']
 
-                print (" Env name ", env_name)
-                if env_name in Environment.number_of_executions.keys():
-                    repetitions_rem = max(0, repetitions -\
+            print (" Env name ", env_name)
+            if env_name in Environment.number_of_executions.keys():
+                repetitions_rem = max(0, repetitions -\
                                       Environment.number_of_executions[env_name])
-                    execution_list += [self._environments[env_name]] * repetitions_rem
+                execution_list += [self._environments[env_name]] * repetitions_rem
 
-                else:
-                    # We add all the repetitions to the execution list
-                    execution_list += [self._environments[env_name]] * repetitions
+            else:
+                # We add all the repetitions to the execution list
+                execution_list += [self._environments[env_name]] * repetitions
 
-            return iter(execution_list)
-        # These two modes ignore the repetitions parameter and just keep executing.
-        elif self._sequential:
-            return iter([self._environments[list(self._environments.keys())[i % len(self._environments)]]
-                         for i in range(self._iterations_to_execute)])
-        else:
-            return iter([self._environments[random.choice(list(self._environments.keys()))] for _ in range(self._iterations_to_execute)])
-
-    def __len__(self):
-        return self._iterations_to_execute
+        return iter(execution_list)
 
     def __del__(self):
         self.cleanup()

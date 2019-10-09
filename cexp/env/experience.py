@@ -1,7 +1,4 @@
 import carla
-import math
-import os
-import numpy as np
 import py_trees
 import traceback
 import time
@@ -13,115 +10,20 @@ from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDat
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.scenarios.background_activity import BackgroundActivity
-
-from srunner.scenarios.object_crash_vehicle import DynamicObjectCrossing
-from srunner.scenarios.object_crash_intersection import VehicleTurningRight, VehicleTurningLeft
+from srunner.scenarios.background_activity_walker import BackgroundActivityWalkers
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
-from cexp.env.scorer import record_route_statistics_default, get_current_completion
-from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
-                                             get_distance_lead_vehicle, get_distance_closest_crossing_waker
 
 from agents.navigation.local_planner import RoadOption
+
+
+from cexp.env.scorer import record_route_statistics_default, get_current_completion, clean_route
 from cexp.env.datatools.data_writer import Writer
-
+from cexp.env.utils.route_configuration_parser import estimate_route_timeout
 from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
-
-
-number_class_translation = {
-
-    "Scenario1": [None],
-    "Scenario2": [None],
-    "Scenario3": [DynamicObjectCrossing],
-    "Scenario4": [VehicleTurningRight, VehicleTurningLeft],
-    "Scenario5": [None],
-    "Scenario6": [None],
-    "Scenario7": [None],
-    "Scenario8": [None],
-    "Scenario9": [None],
-    "Scenario10": [None]
-
-}
-
-
-def convert_json_to_transform(actor_dict):
-
-    return carla.Transform(location=carla.Location(x=float(actor_dict['x']), y=float(actor_dict['y']),
-                                                   z=float(actor_dict['z'])),
-                           rotation=carla.Rotation(roll=0.0, pitch=0.0, yaw=float(actor_dict['yaw'])))
-
-
-def convert_transform_to_location(transform_vec):
-
-    location_vec = []
-    for transform_tuple in transform_vec:
-        location_vec.append((transform_tuple[0].location, transform_tuple[1]))
-
-    return location_vec
-
-def distance_vehicle(waypoint, vehicle_position):
-
-    dx = waypoint.location.x - vehicle_position.x
-    dy = waypoint.location.y - vehicle_position.y
-
-    return math.sqrt(dx * dx + dy * dy)
-
-def get_forward_speed(vehicle):
-        """ Convert the vehicle transform directly to forward speed """
-
-        velocity = vehicle.get_velocity()
-        transform = vehicle.get_transform()
-        vel_np = np.array([velocity.x, velocity.y, velocity.z])
-        pitch = np.deg2rad(transform.rotation.pitch)
-        yaw = np.deg2rad(transform.rotation.yaw)
-        orientation = np.array([np.cos(pitch) * np.cos(yaw), np.cos(pitch) * np.sin(yaw), np.sin(pitch)])
-        speed = np.dot(vel_np, orientation)
-        return speed
-
-# TODO this is actually a benchmark paramter .... either seconds or seconds per meter.
-
-SECONDS_GIVEN_PER_METERS = 0.8
-
-def estimate_route_timeout(route):
-    route_length = 0.0  # in meters
-    prev_point = route[0][0]
-    for current_point, _ in route[1:]:
-        dist = current_point.location.distance(prev_point.location)
-        route_length += dist
-        prev_point = current_point
-
-    print (" final time ", SECONDS_GIVEN_PER_METERS * route_length)
-
-    return int(SECONDS_GIVEN_PER_METERS * route_length)
-
-def clean_route(route):
-
-    curves_start_end = []
-    inside = False
-    start = -1
-    current_curve = RoadOption.LANEFOLLOW
-    index = 0
-    while index < len(route):
-
-        command = route[index][1]
-        if command != RoadOption.LANEFOLLOW and not inside:
-            inside = True
-            start = index
-            current_curve = command
-
-        if command != current_curve and inside:
-            inside = False
-            # End now is the index.
-            curves_start_end.append([start, index, current_curve])
-            if start == -1:
-                raise ValueError("End of curve without start")
-
-            start = -1
-        else:
-            index += 1
-
-    return curves_start_end
-
+from cexp.env.utils.scenario_utils import number_class_translation
+from cexp.env.utils.general import get_forward_speed, convert_transform_to_location, \
+                                   distance_vehicle, convert_json_to_transform
 
 
 class Experience(object):
@@ -245,6 +147,9 @@ class Experience(object):
 
         return status
 
+    def get_sensor_data(self):
+
+        return self._sensor_interface.get_data()
 
     def tick_scenarios_control(self, controls):
         """
@@ -253,8 +158,7 @@ class Experience(object):
 
         GameTime.on_carla_tick(self.world.get_snapshot().timestamp)
         CarlaDataProvider.on_carla_tick()
-        #print ("Timeout ", self._timeout,  " Timestamp ", self.world.get_snapshot().timestamp)
-        # update all scenarios
+
         for scenario in self._list_scenarios:  #
             scenario.scenario.scenario_tree.tick_once()
             controls = scenario.change_control(controls)
@@ -277,36 +181,19 @@ class Experience(object):
             spectator.set_transform(carla.Transform(ego_trans.location + carla.Location(z=50),
                                                     carla.Rotation(pitch=-90)))
 
-
     def tick_world(self):
         # Save all the measurements that are interesting
-        # TODO this may go to another function
-        # TODO maybe add not on every iterations, identify every second or half second.
-        # TODO this may be requiried even if no data is saved
 
         if self._save_data:
             _, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                            self._route)
-
-            dist_scenario3, _ = get_distance_closest_crossing_waker(self)
 
             # HERE we may adapt the npc to stop dist_scenario3
 
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
                 'forward_speed': get_forward_speed(self._ego_actor),
-                'distance_intersection': distance_to_intersection(self._ego_actor,
-                                                                  self._ego_actor.get_world().get_map()),
-                'road_angle': get_current_road_angle(self._ego_actor,
-                                                     self._ego_actor.get_world().get_map()),
-                'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._route,
-                                                                   self.world),
-                'distance_crossing_walker': dist_scenario3,
-
-                'distance_closest_scenario4': -1
             }
-
-            print ('S3 ', dist_scenario3, 'S4 ', -1)
 
         self._sync(self.world.tick())
 
@@ -346,8 +233,7 @@ class Experience(object):
         self._ego_actor = CarlaActorPool.request_new_actor(self._vehicle_model, start_transform,
                                                            hero=True)
 
-        CarlaDataProvider.set_ego_vehicle_route(
-            convert_transform_to_location(self._route))
+        CarlaDataProvider.set_ego_vehicle_route( convert_transform_to_location(self._route))
         logging.debug("Created Ego Vehicle")
 
 
@@ -461,8 +347,6 @@ class Experience(object):
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
         master_scenario_configuration.target = route[-1][0]  # Take the last point and add as target.
-        print (" BEFORE CONVERSION ")
-        print (clean_route(route))
         master_scenario_configuration.route = convert_transform_to_location(route)
 
         master_scenario_configuration.town = town_name
@@ -503,22 +387,20 @@ class Experience(object):
         self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
 
-        # We also set the client to record carla loggings for this episode
-        root_path = os.environ["SRL_DATASET_PATH"]
-        env_full_path = os.path.join(root_path, self._exp_params['package_name'],
-                                           self._exp_params['env_name'],
-                                           str(self._exp_params['exp_number'])
-                                     + '_' + self._agent_name)
 
     # Todo make a scenario builder class
 
     def _build_background(self, background_definition, timeout):
-        scenario_configuration = ScenarioConfiguration()
-        scenario_configuration.route = None
-        scenario_configuration.town = self._town_name
+        scenario_configuration_vehicle = ScenarioConfiguration()
+        scenario_configuration_vehicle.route = None
+        scenario_configuration_vehicle.town = self._town_name
+        scenario_configuration_walker = ScenarioConfiguration()
+        scenario_configuration_walker.route = None
+        scenario_configuration_walker.town = self._town_name
         # TODO The random seed should be set
         # print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
-        configuration_instances = []
+        configuration_instances_vehicles = []
+        configuration_instances_walkers = []
         for key, numbers in background_definition.items():
             if 'walker' not in key:
                 model = key
@@ -528,11 +410,24 @@ class Experience(object):
                 actor_configuration_instance = ActorConfigurationData(model, transform,
                                                                       autopilot, random,
                                                                       amount=background_definition[key])
-                configuration_instances.append(actor_configuration_instance)
+                configuration_instances_vehicles.append(actor_configuration_instance)
+            else:
+                model = 'controller.ai.walker'
+                transform = carla.Transform()
+                autopilot = True
+                random = True
+                actor_configuration_instance = ActorConfigurationData(model, transform,
+                                                                      autopilot, random,
+                                                                      amount=background_definition[
+                                                                          key])
+                configuration_instances_walkers.append(actor_configuration_instance)
 
-        scenario_configuration.other_actors = configuration_instances
-        return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
-                                  timeout=timeout, debug_mode=False)
+        scenario_configuration_vehicle.other_actors = configuration_instances_vehicles
+        scenario_configuration_walker.other_actors = configuration_instances_walkers
+        return BackgroundActivity(self.world, self._ego_actor, scenario_configuration_vehicle,
+                                  timeout=timeout, debug_mode=False), \
+            BackgroundActivityWalkers(self.world, self._ego_actor, scenario_configuration_vehicle,
+                       timeout=timeout, debug_mode=False)
 
     # TODO adding also scenario
     def build_scenario_instances(self, scenario_definition_vec, timeout):
@@ -553,8 +448,11 @@ class Experience(object):
             if scenario_name == 'background_activity':  # BACKGROUND ACTIVITY SPECIAL CASE
 
                 background_definition = scenario_definition_vec[scenario_name]
-                list_instanced_scenarios.append(self._build_background(background_definition,
-                                                                       timeout))
+                background, background_walker = self._build_background(background_definition,
+                                                                       timeout)
+
+                list_instanced_scenarios.append(background)
+                list_instanced_scenarios.append(background_walker)
             else:
 
                 # Sample the scenarios to be used for this route instance.
@@ -584,9 +482,6 @@ class Experience(object):
                                                           scenario_configuration,
                                                           criteria_enable=False, timeout=timeout)
                     except Exception as e:
-                        #if  self._exp_params['debug'] > 1:
-                        #     raise e
-                        #else:
                         print("Skipping scenario '{}' due to setup error: {}".format(
                             'Scenario3', e))
                         continue
@@ -658,4 +553,3 @@ class Experience(object):
         # or if did not achieve the correct ammount of points
         logging.debug( "FAILED , DELETING")
         self._writer.delete()
-
