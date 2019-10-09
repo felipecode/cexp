@@ -84,6 +84,11 @@ if __name__ == "__main__":
         type=str,
         default='all'
     )
+    parser.add_argument(
+        '--agent-name',
+        help=' the json configuration file name',
+        default=None
+    )
 
     parser.add_argument(
         '-s', '--step_size',
@@ -119,13 +124,14 @@ if __name__ == "__main__":
     # We keep the three camera configuration with central well
 
     central_camera_name = 'rgb_central'
-    left_camera_name = 'rgb_left'
-    right_camera_name = 'rgb_right'
+    left_camera_name = 'rgb_central'
+    right_camera_name = 'rgb_central'
 
     # A single loop being made
     jsonfile = args.dataset
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
+              'save_sensors': True,
               'docker_name': 'carlalatest:latest',
               'gpu': 0,
               'batch_size': 1,
@@ -135,11 +141,12 @@ if __name__ == "__main__":
               }
     # TODO for now batch size is one
     number_of_iterations = 123
+
     # this could be joined
     # THe experience is built, the files necessary
-    env_batch = CEXP(jsonfile, params, number_of_iterations, sequential=True)
+    env_batch = CEXP(jsonfile, params, execute_all=True, ignore_previous_execution=True)
     # Here some docker was set
-    env_batch.start(no_server=True)  # no carla server mode.
+    env_batch.start(no_server=True, agent_name=args.agent_name)  # no carla server mode.
     # count, we count the environments that are read
     for env in env_batch:
         steer_vec = []
@@ -169,7 +176,8 @@ if __name__ == "__main__":
 
                         if screen is None:
                             screen = ScreenManager()
-                            screen.start_screen([rgb_center.shape[1], rgb_center.shape[0]], [3, 1], 1, no_display=True)
+                            screen.start_screen([rgb_center.shape[1], rgb_center.shape[0]], [3, 1],
+                                                1, no_display=True)
 
                         status = {'speed': forward_speed(data_point['measurements']['ego_actor']),
                                   'directions': 2.0,
@@ -193,16 +201,15 @@ if __name__ == "__main__":
                                                  output_img=output_image)
                         step += step_size
                         count_images += 1
-
-                    make_video('_tmp_img', 'env_'+ env._environment_name +'exp_'+str(exp[1])
+                    if args.make_videos:
+                        make_video('_tmp_img', 'env_'+ env._environment_name +'exp_'+str(exp[1])
                                                 +'_batch_' + str(batch[1]))
-
-
 
 
             print("################################")
 
 
+    # TODO add a more detailed summary for the enves that were collected.
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
     

@@ -553,4 +553,3 @@ class Experience(object):
         # or if did not achieve the correct ammount of points
         logging.debug( "FAILED , DELETING")
         self._writer.delete()
-

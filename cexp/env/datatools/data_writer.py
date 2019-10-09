@@ -29,7 +29,7 @@ class Writer(object):
 
         self._root_path = root_path
         self._experience_name = env_name
-        self._dataset_name  = dataset_name
+        self._dataset_name = dataset_name
         self._latest_id = 0
         # path for the writter for this specific batch
         self._full_path = os.path.join(root_path, dataset_name, env_name,
@@ -40,6 +40,8 @@ class Writer(object):
         self._env_full_path = os.path.join(root_path, dataset_name, env_name,
                                            str(env_number) + '_' + agent_name)
 
+        # if we save the opponent vehicles , this makes the measurements vec more intesnse.
+        self._save_opponents = other_vehicles
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
 
@@ -73,6 +75,20 @@ class Writer(object):
                         "velocity": [velocity.x, velocity.y, velocity.z]
                      }
                     )
+                elif actor.attributes['role_name'] == 'autopilot' and self._save_opponents:
+
+                    transform = actor.get_transform()
+                    velocity = actor.get_velocity()
+                    measurements['opponents'].update( { actor.id: {
+
+                        "position": [transform.location.x, transform.location.y,
+                                     transform.location.z],
+                        "orientation": [transform.rotation.roll, transform.rotation.pitch,
+                                        transform.rotation.yaw],
+                        "velocity": [velocity.x, velocity.y, velocity.z]
+                    }})
+
+
 
         # Add other actors and lane information
         # general actor info

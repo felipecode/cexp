@@ -20,13 +20,13 @@ def generate_corl2017_config_file():
     # For each of the routes to be evaluated.
 
     # Tows to be generated
-    town_sets = {'Town01': {'empty': 'Town01_straight.xml',
+    town_sets = {'Town01': {'straight': 'Town01_straight.xml',
                             'one_curve': 'Town01_one_curve.xml',
                             'navigation': 'Town01_navigation.xml',
                             'navigation_dynamic': 'Town01_navigation.xml'
                             },
 
-                 'Town02': {'empty': 'Town02_straight.xml',
+                 'Town02': {'straight': 'Town02_straight.xml',
                             'one_curve': 'Town02_one_curve.xml',
                             'navigation': 'Town02_navigation.xml',
                             'navigation_dynamic': 'Town02_navigation.xml'
@@ -42,14 +42,14 @@ def generate_corl2017_config_file():
                                     "SoftRainSunset"]
                     }
 
-    tasks = {'empty': {'Town01': {"file": "None"},
-                       'Town02': {"file": "None"}
+    tasks = {'straight': {'Town01': {},
+                       'Town02': {}
                         },
-             'one_curve': {'Town01': {"file": "None"},
-                            'Town02': {"file": "None"}
+             'one_curve': {'Town01': {},
+                            'Town02': {}
                            },
-             'navigation': {'Town01': {"file": "None"},
-                            'Town02': {"file": "None"}
+             'navigation': {'Town01': {},
+                            'Town02': {}
                             },
 
              'navigation_dynamic': {'Town01': {'background_activity': {"vehicle.*": 20,
@@ -88,7 +88,7 @@ def generate_corl2017_config_file():
 
                         env_dict = {
                             "route": {
-                                "file": town_sets[town_name][task_name],
+                                "file": 'corl2017/' + town_sets[town_name][task_name],
                                 "id": env_number
                             },
                             "scenarios": tasks[task_name][town_name],

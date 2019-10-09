@@ -10,15 +10,12 @@ import multiprocessing
 from cexp.agents.NPCAgent import NPCAgent
 from cexp.cexp import CEXP
 import sys
-try:
-    sys.path.append(glob.glob('PythonAPI')[0])
-except IndexError:
-    pass
+
 
 # TODO I have a problem with respect to where to put files
 
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
-def collect_data(json_file, params, number_iterations, eliminated_environments):
+def collect_data(json_file, params, eliminated_environments, collector_id):
     # The idea is that the agent class should be completely independent
 
     # TODO this has to go to a separate file and to be merged with package
@@ -78,18 +75,20 @@ def collect_data(json_file, params, number_iterations, eliminated_environments):
 
                ])
     # this could be joined
-    env_batch = CEXP(json_file, params=params, iterations_to_execute=number_iterations,
+    env_batch = CEXP(json_file, params=params, execute_all=True,
                      eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
 
     # Here some docker was set
+    NPCAgent._name = 'Multi'
     env_batch.start(agent_name=NPCAgent._name)
     for env in env_batch:
         try:
             # The policy selected to run this experience vector (The class basically) This policy can also learn, just
             # by taking the output from the experience.
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
+            print (" Collector ", collector_id, " Collecting for ", env)
             states, rewards = agent.unroll(env)
             agent.reinforce(rewards)
         except KeyboardInterrupt:
@@ -107,9 +106,11 @@ def collect_data(json_file, params, number_iterations, eliminated_environments):
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 
-def execute_collector(json_file, params, number_iterations, eliminated_environments):
+def execute_collector(json_file, params, eliminated_environments,
+                      collector_id):
     p = multiprocessing.Process(target=collect_data,
-                                args=(json_file, params, number_iterations, eliminated_environments,))
+                                args=(json_file, params,
+                                      eliminated_environments, collector_id,))
     p.start()
 
 
@@ -129,6 +130,10 @@ def get_eliminated_environments(json_file, start_position, end_position):
         count += 1
     return eliminated_environments_list
 
+def test_eliminated_environments_division():
+
+    pass
+
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(
@@ -138,21 +143,12 @@ if __name__ == '__main__':
         default=1,
         type=int,
         help=' the number of collectors used')
-    argparser.add_argument(
-        '-e', '--number_episodes',
-        default=200,
-        type=int,
-        help=' the number of episodes per collector used')
+    # TODO add some general repetition
     argparser.add_argument(
         '-b', '--batch_size',
         default=1,
         type=int,
         help=' the batch size for the execution')
-    argparser.add_argument(
-        '-g', '--carlas_per_gpu',
-        default=3,
-        type=int,
-        help=' number of gpus per carla')
     argparser.add_argument(
         '-s', '--start_episode',
         default=0,
@@ -172,7 +168,11 @@ if __name__ == '__main__':
         default='carlalatest:latest',
         help='The name of the docker container used to collect data',
         required=True)
-
+    argparser.add_argument(
+        '-ge',
+        nargs='+',
+        dest='eliminated_gpus',
+        type=str)
 
     args = argparser.parse_args()
     json_file = os.path.join('database', args.json_config)
@@ -183,13 +183,27 @@ if __name__ == '__main__':
     environments_per_collector = len(json_dict['envs'])/args.number_collectors
     if environments_per_collector < 1.0:
         raise ValueError(" Too many collectors")
+    if not environments_per_collector.is_integer():
+        raise ValueError(" Number of Collectors must divide the number of envs %d " % len(json_dict['envs']))
 
+    # Set GPUS to eliminate.
+    # we get all the gpu (STANDARD 10, make variable)
+    gpu_list = ['0', '1', '2', '3', '4', '5', '7', '8', '9']
 
+    # we eliminate the ones not used
+    if args.eliminated_gpus is not None:
+        for el in args.eliminated_gpus:
+            del gpu_list[gpu_list.index(el)]
+
+    print (" FINAL LIST", gpu_list)
     for i in range(args.number_collectors):
-        gpu = str(int(i / args.carlas_per_gpu))
+        gpu = gpu_list[i % len(gpu_list)]
+        print (" GPU ", gpu)
         # A single loop being made
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
+                  'save_sensors': True,
+                  'save_trajectories': True,
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
@@ -206,9 +220,10 @@ if __name__ == '__main__':
         # we list all the possible environments
         eliminated_environments = get_eliminated_environments(json_file,
                                                               int(environments_per_collector) * (i),
-                                                              int(environments_per_collector) * (i+1) + extra_env)
+                                                              int(environments_per_collector) * (i+1)
+                                                              + extra_env)
 
-        print (" Collector ", i )
+        print (" Collector ", i, "Start ",  int(environments_per_collector) * (i),
+               "End ", int(environments_per_collector) * (i+1) + extra_env)
 
-
-        execute_collector(json_file, params, args.number_episodes, eliminated_environments)
+        execute_collector(json_file, params, eliminated_environments, i)

@@ -26,8 +26,8 @@ def generate_nocrash_config_file():
                                     "SoftRainSunset"]
                     }
 
-    tasks = {'empty': { 'Town01': {"file": "None"},
-                        'Town02': {"file": "None"}
+    tasks = {'empty': { 'Town01': {},
+                        'Town02': {}
                         },
              'regular': { 'Town01': {'background_activity': {"vehicle.*": 20,
                                                             "walker.*": 50}} ,
