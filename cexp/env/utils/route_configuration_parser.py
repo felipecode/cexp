@@ -141,10 +141,12 @@ def clean_route(route):
     return curves_start_end
 
 
-def parse_exp_vec(exp_vec):
+def parse_exp_vec(json_path, exp_vec):
+    # TODO probably add the root path here on the definition.
     """
 
     :param exp_vec:
+    :param: json_path: the relative path where the json is located
     :return: A vector with elements ready to instance the experience.
     [{'name':  # The name of this specific
         {'route', # The route ( Trajectory of carla locations ()
@@ -160,7 +162,9 @@ def parse_exp_vec(exp_vec):
     full_loaded_route_files = {}
     # keep track also the loaded scenario files.
     # Read all the dicts
-    routes_root_path = os.path.join('/', *os.path.realpath(__file__).split('/')[:-4], 'database')
+    routes_root_path = json_path
+
+    print (" ROUTES ", routes_root_path)
 
     for exp_name in exp_vec.keys():
         exp_dict = exp_vec[exp_name]
@@ -179,7 +183,7 @@ def parse_exp_vec(exp_vec):
 
                 if int(read_routes['id']) == int(exp_dict['route']['id']):
                     exp_vec_parsed[exp_name].update({'route': read_routes['trajectory']})
-        else: # Here the route is directly on the  json file.
+        else:  # Here the route is directly on the  json file.
             exp_vec_parsed[exp_name].update({'route': exp_dict['route']})
 
         # check the scenarios files (They can be in more than one file) and load the corresponding scenario.

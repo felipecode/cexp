@@ -1,7 +1,6 @@
 import logging
 import traceback
-from cexp.cexp import CEXP
-from cexp.agents.PGAgent import PGAgent
+from cexp.driving_batch import DrivingBatch
 
 
 
@@ -18,9 +17,6 @@ from torch.autograd import Variable
 from torch.distributions import Categorical
 #import pytrees
 import carla
-
-
-from cexp.agents.agent import Agent
 
 from agents.navigation.local_planner import RoadOption
 
@@ -293,7 +289,7 @@ if __name__ == '__main__':
     # agent = PGAgent('8100.pth')
     agent = PGAgent()
     # this could be joined
-    env_batch = CEXP(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
+    env_batch = DrivingBatch(json, params, number_of_iterations, params['batch_size'])  # THe experience is built, the files necessary
                                                                                                # to load CARLA and the scenarios are made
     # Here some docker was set
     env_batch.start()

@@ -11,8 +11,6 @@ from cexp.env.environment import Environment
 import cexp.env.utils.route_configuration_parser as parser
 
 
-
-
 # Consume the environments based on how many times they were already executed
 # Consume de environmens ignoring if they were executed already
 # Do an execution eliminating part of the environments used.
@@ -61,7 +59,6 @@ class DrivingBatch(object):
                 else:  # if tit is not the case you use default
                     self._params.update({key: value})
 
-        print (" FINAL PARQMS ", self._params)
         # THIS IS ALWAYS 1 for now
         self._batch_size = self._params['batch_size']  # How many CARLAs are going to be ran.
         # Create a carla server description here, params set which kind like docker or straight.
@@ -69,7 +66,11 @@ class DrivingBatch(object):
         for i in range(self._batch_size):
             self._environment_batch.append(ServerManagerDocker(self._params))
 
+        # We get the folder where the jsonfile is located.
+        print (jsonfile.split('/')[:-1])
+        self._jsonfile_path = os.path.join(*jsonfile.split('/')[:-1])
         # Read the json file being
+        print ( " THE JSON FILE PATH ", self._jsonfile_path)
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
         # The timeout for waiting for the server to start.
@@ -144,8 +145,8 @@ class DrivingBatch(object):
 
         # We instantiate environments here using the recently connected client
         self._environments = {}
-        parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(
-                                    sort_nicely_dict(self._json['envs'].items())))
+        parserd_exp_dict = parser.parse_exp_vec(self._jsonfile_path, collections.OrderedDict(
+                                                sort_nicely_dict(self._json['envs'].items())))
 
         # For all the environments on the file.
         for env_name in self._json['envs'].keys():
@@ -172,8 +173,6 @@ class DrivingBatch(object):
         # The environment itself is able to tell when the repetition is already made.
 
         execution_list = []
-        print ("EXECUTIONS")
-        print (Environment.number_of_executions)
         for env_name in self._environments.keys():
             # The default is
             repetitions = 1

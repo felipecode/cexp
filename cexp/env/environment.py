@@ -21,11 +21,12 @@ It also can have additional sensors that are environment related not policy rela
 
 # TODO you should only report an episode in case of crash.
 
+
 class Environment(object):
     # We keep track here the number of times this class was executed.
     number_of_executions = {}
 
-    def __init__(self, name, client_vec, env_config, env_params):# ignore_previous=False):
+    def __init__(self, name, client_vec, env_config, env_params):
 
         # The ignore previous param is to avoid searching for executed iterations
         # TODO this requires more testing
@@ -63,6 +64,8 @@ class Environment(object):
         self.RewardFunction = None
         # The information dictionary to be queried by the environment users.
         self._env_exec_info = []
+        # We set an agent to a previous executed agent.
+        self._last_executing_agent = env_params['agent_name']
 
 
     @staticmethod
@@ -103,6 +106,7 @@ class Environment(object):
         # get all the exps to get the summary
         self._env_exec_info = []
         for exp in self._exp_list:
+            exp.record()
             exp.cleanup()
             self._env_exec_info.append(exp.get_summary())
 
@@ -120,7 +124,7 @@ class Environment(object):
 
         self._sensor_desc_vec += sensors
 
-    def reset(self, StateFunction=None, RewardFunction=None, agent_name=''):
+    def reset(self, StateFunction=None, RewardFunction=None, agent_name=None):
         """
         Reset the environment, when reseting it is necessary to define
         the function that will provide the reward at every step and
@@ -140,7 +144,8 @@ class Environment(object):
             StateFunction = (lambda x: None)
 
         # save the last executing agent name. This is to be used for logging purposes
-        self._last_executing_agent = agent_name
+        if agent_name is not None:
+            self._last_executing_agent = agent_name
         # create the environment
         if self._environment_name not in Environment.number_of_executions:
             Environment.number_of_executions.update({self._environment_name: 0})
@@ -170,7 +175,7 @@ class Environment(object):
             }
             self._exp_list.append(Experience(self._client_vec[i], self._vehicle_model, self._route,
                                              self._sensor_desc_vec, self._scenarios, exp_params,
-                                             agent_name))
+                                             self._last_executing_agent))
         # if it is the first time we execute this env
         if self._save_data and self._environment_name in Environment.number_of_executions:
             # we use one of the experiments to build the metadata

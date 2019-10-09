@@ -81,33 +81,12 @@ def check_benchmark_file(benchmark_name , expected_episodes):
 
 
 # TEST 1 Create the entire dataset and them check if the folder has one experiment per environment
-def test_background(number_vehicles, number_walkers):
+def test_benchmark(benchmark_name, agent, agent_params):
 
-    # Collect the full dataset sequential
-    # Expected one episode per
 
-    env_batch = CEXP(JSONFILE, params, execute_all=True, sequential=False, port=6666)
+    benchmark(benchmark_name, 'carlalatest', 0, agent, agent_params,
+              batch_size=1, save_dataset=True, port=6666)
 
-    env_batch.start()
-    env_count = 0
-    for env in env_batch:
-
-        _,_ = agent.unroll(env)
-        # We count the number of vehicles
-        count_vehicles = 0
-        count_walkers = 0
-
-        print (env.get_data())
-
-        #for actor in env._exp_list[0].world.get_actors():
-
-        #    if 'vehicle' in actor.type_id:
-        #        count_vehicles += 1
-        #    if 'walker' in actor.type_id:
-        #        count_walkers += 1
-
-        #print (" count vehicles ", count_vehicles)
-        #print (" count walker ", count_walkers)
 
 
 
@@ -123,10 +102,6 @@ if __name__ == '__main__':
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
-    if not check_test_server(6666):
-        print (" WAITING FOR DOCKER TO BE STARTED")
-        start_test_server(6666, gpu=5)
-
     if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark_background')):
         shutil.rmtree(os.path.join(os.environ["SRL_DATASET_PATH"], 'sample_benchmark_background'))
 
@@ -134,7 +109,7 @@ if __name__ == '__main__':
     print (" First construction")
     vehicles = [20, 0, 0]
     walkers = [50, 0, 0]
-    test_background(vehicles, walkers)
+    test_benchmark(vehicles, NPCAgent, '')
 
     # Auto Cleanup
     # this could be joined

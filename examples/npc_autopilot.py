@@ -33,7 +33,20 @@ class NPCAgent(object):
             self._agent._local_planner.set_global_plan(plan)
             self._route_assigned = True
 
-    def get_sensors(self, exp_list):
+    def get_sensors_dict(self):
+        """
+        The agent sets the sensors that it is going to use. That has to be
+        set into the environment for it to produce this data.
+        """
+        sensors_dict = [{'type': 'sensor.other.gnss',
+                         'x': 0.7, 'y': -0.4, 'z': 1.60,
+                         'id': 'GPS'},
+
+                        ]
+
+        return sensors_dict
+
+    def get_state(self, exp_list):
         """
         The state function that need to be defined to be used by cexp to return
         the state at every iteration.
@@ -80,11 +93,20 @@ def collect_data_loop(renv, agent):
 
     # The first step is to set sensors that are going to be produced
     # representation of the sensor input is showed on the main loop.
-    sensors_dict = [{'type': 'sensor.other.gnss',
+    # We add a camera and a GPS on top of it.
+
+    sensors_dict = [{'type': 'sensor.camera.rgb',
+                         'x': 2.0, 'y': 0.0,
+                         'z': 20.40, 'roll': 0.0,
+                         'pitch': -90.0, 'yaw': 0.0,
+                         'width': 1400, 'height': 1000,
+                         'fov': 120,
+                         'id': 'rgb_central'},
+                    {'type': 'sensor.other.gnss',
                      'x': 0.7, 'y': -0.4, 'z': 1.60,
                      'id': 'GPS'}]
     renv.set_sensors(sensors_dict)
-    state, _ = renv.reset(StateFunction=agent.get_sensors)
+    state, _ = renv.reset(StateFunction=agent.get_state)
 
     while renv.get_info()['status'] == 'Running':
         controls = agent.step(state)
@@ -95,7 +117,6 @@ def collect_data_loop(renv, agent):
 
     renv.stop()
     agent.reset()
-
 
 
 if __name__ == '__main__':
@@ -111,14 +132,20 @@ if __name__ == '__main__':
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
-    description = ("kkk")
+    description = ("Example of the NPC dataset collection system. "
+                   "Set a experience set description jsonfile and the docker you want"
+                   "to use to run it.")
     parser = argparse.ArgumentParser(description=description)
 
     parser.add_argument('--port', default=None, help='Port for an already existent server')
 
     parser.add_argument('-js', '--json-file',
-                        default='database/sample_benchmark.json',
+                        default='sample_descriptions/sample_benchmark.json',
                         help='The json file to be used for this case.')
+
+    parser.add_argument('-d', '--docker',
+                        default='carlaped',
+                        help='the docker image to be executed toguether with the system')
 
     arguments = parser.parse_args()
 
@@ -128,7 +155,7 @@ if __name__ == '__main__':
     params = {'save_dataset': True,
               'save_sensors': True,
               'save_trajectories': True,
-              'docker_name': 'carlalatest:latest',
+              'docker_name': arguments.docker,
               'gpu': 0,
               'batch_size': 1,
               'remove_wrong_data': False,
@@ -147,7 +174,7 @@ if __name__ == '__main__':
     # to load CARLA and the scenarios are made
 
     # Here some docker was set
-    driving_batch.start()
+    driving_batch.start(agent_name='NPC_test')
     for renv in driving_batch:
         try:
             # The policy selected to run this experience vector

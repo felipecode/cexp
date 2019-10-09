@@ -10,6 +10,7 @@ from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDat
 from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.scenarios.background_activity import BackgroundActivity
+from srunner.scenarios.background_activity_walker import BackgroundActivityWalkers
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
 
@@ -390,12 +391,16 @@ class Experience(object):
     # Todo make a scenario builder class
 
     def _build_background(self, background_definition, timeout):
-        scenario_configuration = ScenarioConfiguration()
-        scenario_configuration.route = None
-        scenario_configuration.town = self._town_name
+        scenario_configuration_vehicle = ScenarioConfiguration()
+        scenario_configuration_vehicle.route = None
+        scenario_configuration_vehicle.town = self._town_name
+        scenario_configuration_walker = ScenarioConfiguration()
+        scenario_configuration_walker.route = None
+        scenario_configuration_walker.town = self._town_name
         # TODO The random seed should be set
         # print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
-        configuration_instances = []
+        configuration_instances_vehicles = []
+        configuration_instances_walkers = []
         for key, numbers in background_definition.items():
             if 'walker' not in key:
                 model = key
@@ -405,11 +410,24 @@ class Experience(object):
                 actor_configuration_instance = ActorConfigurationData(model, transform,
                                                                       autopilot, random,
                                                                       amount=background_definition[key])
-                configuration_instances.append(actor_configuration_instance)
+                configuration_instances_vehicles.append(actor_configuration_instance)
+            else:
+                model = 'controller.ai.walker'
+                transform = carla.Transform()
+                autopilot = True
+                random = True
+                actor_configuration_instance = ActorConfigurationData(model, transform,
+                                                                      autopilot, random,
+                                                                      amount=background_definition[
+                                                                          key])
+                configuration_instances_walkers.append(actor_configuration_instance)
 
-        scenario_configuration.other_actors = configuration_instances
-        return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
-                                  timeout=timeout, debug_mode=False)
+        scenario_configuration_vehicle.other_actors = configuration_instances_vehicles
+        scenario_configuration_walker.other_actors = configuration_instances_walkers
+        return BackgroundActivity(self.world, self._ego_actor, scenario_configuration_vehicle,
+                                  timeout=timeout, debug_mode=False), \
+            BackgroundActivityWalkers(self.world, self._ego_actor, scenario_configuration_vehicle,
+                       timeout=timeout, debug_mode=False)
 
     # TODO adding also scenario
     def build_scenario_instances(self, scenario_definition_vec, timeout):
@@ -430,8 +448,11 @@ class Experience(object):
             if scenario_name == 'background_activity':  # BACKGROUND ACTIVITY SPECIAL CASE
 
                 background_definition = scenario_definition_vec[scenario_name]
-                list_instanced_scenarios.append(self._build_background(background_definition,
-                                                                       timeout))
+                background, background_walker = self._build_background(background_definition,
+                                                                       timeout)
+
+                list_instanced_scenarios.append(background)
+                list_instanced_scenarios.append(background_walker)
             else:
 
                 # Sample the scenarios to be used for this route instance.

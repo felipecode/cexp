@@ -22,8 +22,7 @@ for your agent to perform. For example
     python3 -m examples.run_straights -p 2000
 
 opens a CARLA simulator and creates a set of environments
-where you agent has to
-
+where an NPC agent has to perform straights.
 
     GIF here from top ( Save screen )
     
