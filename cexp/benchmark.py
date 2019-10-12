@@ -223,12 +223,14 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                                 benchmark_name, agent_checkpoint_name)
 
                 except KeyboardInterrupt:
+                    env.stop()
                     break
                 except Exception as e:
                     traceback.print_exc()
                     # By any exception you have to delete the environment generated data
                     env.eliminate_data()
                     # And you have to try again so we retry everything and rebuild the CEXP
+                    env.stop()
                     # TODO maybe keep the docker
                     raise e
 

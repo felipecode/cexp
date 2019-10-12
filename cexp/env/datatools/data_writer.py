@@ -110,6 +110,7 @@ class Writer(object):
                 waypoint_y = measurements['closes_waypoint']['position'][1]
                 ego_x = measurements['ego_actor']['position'][0]
                 ego_y = measurements['ego_actor']['position'][1]
+                # road tangent: y = slope * x + b    ---> slope*x-y+b=0
                 slope = math.tan(waypoint_rad)
                 b = waypoint_y - slope * waypoint_x
                 d = abs(slope * ego_x - ego_y + b) / math.sqrt(math.pow(slope,2) + math.pow(-1,2))
