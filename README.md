@@ -19,7 +19,7 @@ With this repo you can quickly generate situations
 for your agent to perform. For example
 
 
-    python3 -m examples.run_straights -p 2000
+    python3 -m examples.npc_autopilot  -j sample_descriptions/straights.json -p 2000
 
 opens a CARLA simulator and creates a set of environments
 where an NPC agent has to perform straights.
@@ -32,7 +32,7 @@ at a json file.
   
 More complex set of environments can also be defined
     
-    python3 -m examples.pedestrian_stopping -p 2000
+    python3 -m examples.npc_autopilot  -j sample_descriptions/straights.json -p 2000
 
 
 Usefull Links
@@ -76,16 +76,13 @@ SEE other examples
 
 #### Benchmarks
 
-
+Use the CARLA driving benchmarks that uses this repo to 
+perform benchmarks on CARLA
 
 
 ### Road MAP
 
-Add background (Free traffic scenario)
-Add other CARLA scenarios. Interface with the open scenario.
-
-Add other 
-
+VIDEO tutorial ?
 
 First CoILTraine Tutorial
 
