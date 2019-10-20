@@ -5,29 +5,20 @@
 
 This  repository serves as a interface to the CARLA simulator
 and the scenario runner to produce fully usable environments.
-
-These environments contain a certain route that an ego-agent
-has to perform as well as condition to make
-and specific scenarios
-from the scenario runner.
-
-This repository also encapsulates the possibility to integrate
-directly an Agent with an Environment.
-
+These environments are driving routes/situations where you
+can train or benchmark your agent.
 
 With this repo you can quickly generate situations 
-for your agent to perform. For example
-
+for your agent to perform. This example
+put the carla BasicAgent to perform on different straight routes
+over the CARLA towns on a single command:
 
     python3 -m examples.npc_autopilot  -j sample_descriptions/straights.json -p 2000
 
-opens a CARLA simulator and creates a set of environments
-where an NPC agent has to perform straights.
 
     GIF here from top ( Save screen )
     
-Each environment can be described by a description 
-at a json file. 
+Each set of environments are  described by json file. 
    
   
 More complex set of environments can also be defined
@@ -35,11 +26,17 @@ More complex set of environments can also be defined
     python3 -m examples.npc_autopilot  -j sample_descriptions/straights.json -p 2000
 
 
-Usefull Links
+We provide a guide on how to install and use this repository
+and 
+
+### Usefull 
 
 
 
 [Install the repository](docs/getting_started.md)
+
+
+
 
 
 Policy Gradient Training example
