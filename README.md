@@ -1,6 +1,5 @@
 
 
-#C-EXP 
 #### C-EXP CARLA Experience
 
 This  repository serves as a interface to the CARLA simulator
@@ -13,81 +12,32 @@ for your agent to perform. This example
 put the carla BasicAgent to perform on different straight routes
 over the CARLA towns on a single command:
 
-    python3 -m examples.npc_autopilot  -j sample_descriptions/straights.json -p 2000
+    python3 -m examples.npc_autopilot -j sample_descriptions -p 2000
+
+![](docs/illustration_1.gif)
 
 
-    GIF here from top ( Save screen )
-    
+
 Each set of environments are  described by json file. 
    
-  
 More complex set of environments can also be defined
     
-    python3 -m examples.npc_autopilot  -j sample_descriptions/straights.json -p 2000
+    python3 -m examples.pedestrian_stopping -p 2000
 
 
-We provide a guide on how to install and use this repository
-and 
 
-### Usefull 
 
+### Usefull Links
 
 
 [Install the repository](docs/getting_started.md)
 
+[Running Examples](docs/examples.md)
 
+    * [Policy Gradient Training Example](docs/examples.md)
+    * [Multi-GPU Data Collection](docs/examples.md)
 
-
-
-Policy Gradient Training example
-
-Mass gpu
-
-The carla benchmarks repository
-
-
-
-
-
-This repository is conditioned on the 
-
-
-This can also be used to g
-
-This can be used to train better train RL based
-agents, collect data etc.
-
-SEE other examples
-
-
-
-
-
-#### Modes
-
-* [C-EXP for training a policy gradient agent](docs/getting_started.md)
-* [C-EXP for data collection](docs/getting_started.md)
-* [C-EXP benchmarking](docs/benchmarking.md)
-
-
-
-#### Benchmarks
-
-Use the CARLA driving benchmarks that uses this repo to 
-perform benchmarks on CARLA
-
-
-### Road MAP
-
-VIDEO tutorial ?
-
-First CoILTraine Tutorial
-
-First video tutorial for msn. Script:
-
-Install
-
-
+[The carla benchmarks repository](https://github.com/carla-simulator/driving-benchmarks)
 
 
  
