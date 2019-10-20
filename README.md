@@ -12,7 +12,7 @@ for your agent to perform. This example
 put the carla BasicAgent to perform on different straight routes
 over the CARLA towns on a single command:
 
-    python3 -m examples.npc_autopilot -j sample_descriptions -p 2000
+    python3 -m examples.npc_autopilot -j sample_descriptions/straights.json -p 2000
 
 ![](docs/illustration_1.gif)
 
