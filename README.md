@@ -34,8 +34,9 @@ More complex set of environments can also be defined
 
 [Running Examples](docs/examples.md)
 
-    * [Policy Gradient Training Example](docs/examples.md)
-    * [Multi-GPU Data Collection](docs/examples.md)
+[Policy Gradient Training Example](docs/examples.md)
+   
+[Multi-GPU Data Collection](docs/examples.md)
 
 [The carla benchmarks repository](https://github.com/carla-simulator/driving-benchmarks)
 
