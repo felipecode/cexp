@@ -36,20 +36,23 @@ Make a docker out of it, so you can run no screen without any problem.
 
 Add CARLA binaries to your PYTHONPATH:
 
-    export PYTHONPATH=`pwd`/<path_to_carla_server_root>/PythonAPI/carla/dist/carla-0.9.6-py3.5-linux-x86_64.egg:$PYTHONPATH
+    export PYTHONPATH=<path_to_carla_server_root>/PythonAPI/carla/dist/carla-0.9.6-py3.5-linux-x86_64.egg:$PYTHONPATH
 
 Add the CARLA API to your PYTHONPATH:
 
-    export PYTHONPATH=`pwd`/carla/PythonAPI/carla:$PYTHONPATH
+    export PYTHONPATH=<path_to_carla_root>/PythonAPI/carla:$PYTHONPATH
     
+You also need to define a path to store the data produced by the repository.
 
-#### Run some examples
+    export SRL_DATASET_PATH=<path_to_store_data>
+
+### Run some examples
 
     python3 -m examples.npc_autopilot -j sample_descriptions/straights.json -p 2000
 
     
     
-##### Dependencies notes
+### Dependencies notes
 
 Use py_trees 0.8.3  not the latest version
 
