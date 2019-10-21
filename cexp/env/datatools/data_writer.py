@@ -94,17 +94,38 @@ class Writer(object):
                 ego_yaw = measurements['ego_actor']['orientation'][2]
                 waypoint_yaw = measurements['closes_waypoint']['orientation'][2]
                 # the axises of yaw are different to Cartesian coordinate system, we need to transform
-                waypoint_yaw = 360 - (waypoint_yaw - 90)
-                if waypoint_yaw >= 360.0:
-                    waypoint_yaw = waypoint_yaw - 360
-                ego_yaw = 360 - (ego_yaw - 90)
-                if ego_yaw >= 360.0:
-                    ego_yaw = ego_yaw - 360
-                ego_rad = ego_yaw * math.pi / 180                             # from degree to radian
-                waypoint_rad = waypoint_yaw * math.pi / 180                          # from degree to radian
+                if waypoint_yaw < -180.0:
+                    waypoint_yaw += 360.0
 
-                measurements.update({'relative_angle': abs(waypoint_rad - ego_rad)})
+                if waypoint_yaw > 180.0:
+                    waypoint_yaw -= 360.0
 
+                ego_yaw = 90.0 - ego_yaw
+                waypoint_yaw = 90.0 - waypoint_yaw
+
+                if waypoint_yaw > 180.0:
+                    waypoint_yaw -= 360
+
+                if ego_yaw > 180.0:
+                    ego_yaw -= 360
+
+                if (ego_yaw * waypoint_yaw) > 0:
+                    relative_angle = np.deg2rad(waypoint_yaw) - np.deg2rad(ego_yaw)
+                else:
+                    if waypoint_yaw >= -5.0 and waypoint_yaw <= 5.0:
+                        if waypoint_yaw > ego_yaw:
+                            relative_angle = np.deg2rad(np.abs(waypoint_yaw) + np.abs(ego_yaw))
+                        else:
+                            relative_angle = -(np.deg2rad(np.abs(waypoint_yaw) + np.abs(ego_yaw)))
+                    elif waypoint_yaw >= -175.0 and waypoint_yaw <= 175.0:
+                        if waypoint_yaw > ego_yaw:
+                            relative_angle = - np.deg2rad((180.0 - np.abs(waypoint_yaw)) + (180.0 - np.abs(ego_yaw)))
+                        else:
+                            relative_angle = np.deg2rad((180.0 - np.abs(waypoint_yaw)) + (180.0 - np.abs(ego_yaw)))
+
+                measurements.update({'relative_angle': relative_angle})
+
+                waypoint_rad = np.deg2rad(waypoint_yaw)                          # from degree to radian
                 # To define the distance to the centerline, we need to firstly calculate the road tangent, then compute the distance between the agent and the tangent
                 waypoint_x = measurements['closes_waypoint']['position'][0]
                 waypoint_y = measurements['closes_waypoint']['position'][1]
