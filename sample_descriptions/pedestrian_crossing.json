@@ -1,182 +1,2741 @@
 {
-    "additional_sensors": [],
     "envs": {
-        "route0": {
+        "ClearNoon_route00000": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 0
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 1.9565879106521606,
+                        "y": 119.5989761352539,
+                        "yaw": 269.9700622558594,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route1": {
+        "ClearNoon_route00001": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 1
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": -2.045022964477539,
+                        "y": 48.959224700927734,
+                        "yaw": 90.02206420898438,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route10": {
+        "ClearNoon_route00002": {
             "route": {
-                "file": "routes/straight_town01.xml",
-                "id": 10
-            },
-            "scenarios": {
-                "file": "None"
-            },
-            "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
-        },
-        "route11": {
-            "route": {
-                "file": "routes/straight_town01.xml",
-                "id": 11
-            },
-            "scenarios": {
-                "file": "None"
-            },
-            "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
-        },
-        "route12": {
-            "route": {
-                "file": "routes/straight_town01.xml",
-                "id": 12
-            },
-            "scenarios": {
-                "file": "None"
-            },
-            "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
-        },
-        "route13": {
-            "route": {
-                "file": "routes/straight_town01.xml",
-                "id": 13
-            },
-            "scenarios": {
-                "file": "None"
-            },
-            "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
-        },
-        "route14": {
-            "route": {
-                "file": "routes/straight_town01.xml",
-                "id": 14
-            },
-            "scenarios": {
-                "file": "None"
-            },
-            "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
-        },
-        "route15": {
-            "route": {
-                "file": "routes/straight_town01.xml",
-                "id": 15
-            },
-            "scenarios": {
-                "file": "None"
-            },
-            "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
-        },
-        "route2": {
-            "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 2
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 262.7239990234375,
+                        "y": 326.60699462890625,
+                        "yaw": 180.00611877441406,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route3": {
+        "ClearNoon_route00003": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 3
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 191.41880798339844,
+                        "y": 133.45510864257812,
+                        "yaw": 0.025599390268325806,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route4": {
+        "ClearNoon_route00004": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 4
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 270.6365051269531,
+                        "y": 129.49050903320312,
+                        "yaw": 180.02560424804688,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route5": {
+        "ClearNoon_route00005": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 5
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 378.591064453125,
+                        "y": -1.983187198638916,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 324.62872314453125,
+                        "y": -2.0118539333343506,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route6": {
+        "ClearNoon_route00006": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 6
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 278.62786865234375,
+                        "y": -2.031263828277588,
+                        "yaw": -179.99388122558594,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route7": {
+        "ClearNoon_route00007": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 7
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 48.0306510925293,
+                        "y": 1.967941164970398,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 103.69404602050781,
+                        "y": 1.9500656127929688,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route8": {
+        "ClearNoon_route00008": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 8
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 299.626953125,
+                        "y": 55.47450637817383,
+                        "yaw": 179.99301147460938,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 143.98776245117188,
+                        "y": 55.49346923828125,
+                        "yaw": 179.99301147460938,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
-        "route9": {
+        "ClearNoon_route00009": {
             "route": {
-                "file": "routes/straight_town01.xml",
+                "file": "corl2017/Town01_straight.xml",
                 "id": 9
             },
             "scenarios": {
-                "file": "None"
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": -2.027554750442505,
+                        "y": 149.96102905273438,
+                        "yaw": 89.9700698852539,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00010": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 10
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 92.38806915283203,
+                        "y": 118.8350830078125,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00011": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 11
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 396.32318115234375,
+                        "y": 249.53919982910156,
+                        "yaw": -90.02226257324219,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00012": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 12
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 14.03065013885498,
+                        "y": 1.9790221452713013,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00013": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 13
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 143.95603942871094,
+                        "y": -2.045637369155884,
+                        "yaw": -179.99388122558594,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 78.3755874633789,
+                        "y": -2.0419487953186035,
+                        "yaw": 179.9813232421875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00014": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 14
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 88.40182495117188,
+                        "y": 209.3256072998047,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00015": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 15
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 22.008926391601562,
+                        "y": 330.5464172363281,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 102.61808776855469,
+                        "y": 330.589599609375,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00016": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 16
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 2.0111751556396484,
+                        "y": 308.60028076171875,
+                        "yaw": 270.0074768066406,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00017": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 17
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 169.08299255371094,
+                        "y": 1.9570444822311401,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 349.228759765625,
+                        "y": 2.0012152194976807,
+                        "yaw": 0.03045654296875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00018": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 18
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 92.38457489013672,
+                        "y": 95.83507537841797,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 92.37686920166016,
+                        "y": 45.15335464477539,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00019": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 19
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 111.39061737060547,
+                        "y": 59.49744415283203,
+                        "yaw": -0.006981649901717901,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 168.17279052734375,
+                        "y": 59.49052429199219,
+                        "yaw": -0.006981649901717901,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00020": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 20
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 88.38097381591797,
+                        "y": 72.15397644042969,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 88.39171600341797,
+                        "y": 142.83578491210938,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00021": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 21
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 396.34613037109375,
+                        "y": 308.5392150878906,
+                        "yaw": -90.02226257324219,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00022": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 22
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 22.008926391601562,
+                        "y": 330.5464172363281,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 102.61808776855469,
+                        "y": 330.589599609375,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00023": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 23
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 378.591064453125,
+                        "y": -1.983187198638916,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 324.62872314453125,
+                        "y": -2.0118539333343506,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearNoon_route00024": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 24
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 14.03065013885498,
+                        "y": 1.9790221452713013,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 103.69404602050781,
+                        "y": 1.9500656127929688,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
+        },
+        "ClearSunset_route00000": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 0
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 1.9565879106521606,
+                        "y": 119.5989761352539,
+                        "yaw": 269.9700622558594,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00001": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 1
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": -2.045022964477539,
+                        "y": 48.959224700927734,
+                        "yaw": 90.02206420898438,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00002": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 2
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 262.7239990234375,
+                        "y": 326.60699462890625,
+                        "yaw": 180.00611877441406,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00003": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 3
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 191.41880798339844,
+                        "y": 133.45510864257812,
+                        "yaw": 0.025599390268325806,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00004": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 4
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 270.6365051269531,
+                        "y": 129.49050903320312,
+                        "yaw": 180.02560424804688,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00005": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 5
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 378.591064453125,
+                        "y": -1.983187198638916,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 324.62872314453125,
+                        "y": -2.0118539333343506,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00006": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 6
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 278.62786865234375,
+                        "y": -2.031263828277588,
+                        "yaw": -179.99388122558594,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00007": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 7
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 48.0306510925293,
+                        "y": 1.967941164970398,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 103.69404602050781,
+                        "y": 1.9500656127929688,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00008": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 8
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 299.626953125,
+                        "y": 55.47450637817383,
+                        "yaw": 179.99301147460938,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 143.98776245117188,
+                        "y": 55.49346923828125,
+                        "yaw": 179.99301147460938,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00009": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 9
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": -2.027554750442505,
+                        "y": 149.96102905273438,
+                        "yaw": 89.9700698852539,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00010": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 10
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 92.38806915283203,
+                        "y": 118.8350830078125,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00011": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 11
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 396.32318115234375,
+                        "y": 249.53919982910156,
+                        "yaw": -90.02226257324219,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00012": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 12
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 14.03065013885498,
+                        "y": 1.9790221452713013,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00013": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 13
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 143.95603942871094,
+                        "y": -2.045637369155884,
+                        "yaw": -179.99388122558594,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 78.3755874633789,
+                        "y": -2.0419487953186035,
+                        "yaw": 179.9813232421875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00014": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 14
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 88.40182495117188,
+                        "y": 209.3256072998047,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00015": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 15
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 22.008926391601562,
+                        "y": 330.5464172363281,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 102.61808776855469,
+                        "y": 330.589599609375,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00016": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 16
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 2.0111751556396484,
+                        "y": 308.60028076171875,
+                        "yaw": 270.0074768066406,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00017": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 17
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 169.08299255371094,
+                        "y": 1.9570444822311401,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 349.228759765625,
+                        "y": 2.0012152194976807,
+                        "yaw": 0.03045654296875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00018": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 18
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 92.38457489013672,
+                        "y": 95.83507537841797,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 92.37686920166016,
+                        "y": 45.15335464477539,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00019": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 19
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 111.39061737060547,
+                        "y": 59.49744415283203,
+                        "yaw": -0.006981649901717901,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 168.17279052734375,
+                        "y": 59.49052429199219,
+                        "yaw": -0.006981649901717901,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00020": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 20
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 88.38097381591797,
+                        "y": 72.15397644042969,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 88.39171600341797,
+                        "y": 142.83578491210938,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00021": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 21
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 396.34613037109375,
+                        "y": 308.5392150878906,
+                        "yaw": -90.02226257324219,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00022": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 22
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 22.008926391601562,
+                        "y": 330.5464172363281,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 102.61808776855469,
+                        "y": 330.589599609375,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00023": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 23
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 378.591064453125,
+                        "y": -1.983187198638916,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 324.62872314453125,
+                        "y": -2.0118539333343506,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "ClearSunset_route00024": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 24
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 14.03065013885498,
+                        "y": 1.9790221452713013,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 103.69404602050781,
+                        "y": 1.9500656127929688,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
+        },
+        "HardRainNoon_route00000": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 0
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 1.9565879106521606,
+                        "y": 119.5989761352539,
+                        "yaw": 269.9700622558594,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00001": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 1
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": -2.045022964477539,
+                        "y": 48.959224700927734,
+                        "yaw": 90.02206420898438,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00002": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 2
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 262.7239990234375,
+                        "y": 326.60699462890625,
+                        "yaw": 180.00611877441406,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00003": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 3
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 191.41880798339844,
+                        "y": 133.45510864257812,
+                        "yaw": 0.025599390268325806,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00004": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 4
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 270.6365051269531,
+                        "y": 129.49050903320312,
+                        "yaw": 180.02560424804688,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00005": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 5
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 378.591064453125,
+                        "y": -1.983187198638916,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 324.62872314453125,
+                        "y": -2.0118539333343506,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00006": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 6
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 278.62786865234375,
+                        "y": -2.031263828277588,
+                        "yaw": -179.99388122558594,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00007": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 7
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 48.0306510925293,
+                        "y": 1.967941164970398,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 103.69404602050781,
+                        "y": 1.9500656127929688,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00008": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 8
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 299.626953125,
+                        "y": 55.47450637817383,
+                        "yaw": 179.99301147460938,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 143.98776245117188,
+                        "y": 55.49346923828125,
+                        "yaw": 179.99301147460938,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00009": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 9
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": -2.027554750442505,
+                        "y": 149.96102905273438,
+                        "yaw": 89.9700698852539,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00010": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 10
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 92.38806915283203,
+                        "y": 118.8350830078125,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00011": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 11
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 396.32318115234375,
+                        "y": 249.53919982910156,
+                        "yaw": -90.02226257324219,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00012": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 12
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 14.03065013885498,
+                        "y": 1.9790221452713013,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00013": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 13
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 143.95603942871094,
+                        "y": -2.045637369155884,
+                        "yaw": -179.99388122558594,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 78.3755874633789,
+                        "y": -2.0419487953186035,
+                        "yaw": 179.9813232421875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00014": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 14
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 88.40182495117188,
+                        "y": 209.3256072998047,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00015": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 15
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 22.008926391601562,
+                        "y": 330.5464172363281,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 102.61808776855469,
+                        "y": 330.589599609375,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00016": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 16
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 2.0111751556396484,
+                        "y": 308.60028076171875,
+                        "yaw": 270.0074768066406,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00017": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 17
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 169.08299255371094,
+                        "y": 1.9570444822311401,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 349.228759765625,
+                        "y": 2.0012152194976807,
+                        "yaw": 0.03045654296875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00018": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 18
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 92.38457489013672,
+                        "y": 95.83507537841797,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 92.37686920166016,
+                        "y": 45.15335464477539,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00019": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 19
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 111.39061737060547,
+                        "y": 59.49744415283203,
+                        "yaw": -0.006981649901717901,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 168.17279052734375,
+                        "y": 59.49052429199219,
+                        "yaw": -0.006981649901717901,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00020": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 20
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 88.38097381591797,
+                        "y": 72.15397644042969,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 88.39171600341797,
+                        "y": 142.83578491210938,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00021": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 21
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 396.34613037109375,
+                        "y": 308.5392150878906,
+                        "yaw": -90.02226257324219,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00022": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 22
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 22.008926391601562,
+                        "y": 330.5464172363281,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 102.61808776855469,
+                        "y": 330.589599609375,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00023": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 23
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 378.591064453125,
+                        "y": -1.983187198638916,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 324.62872314453125,
+                        "y": -2.0118539333343506,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "HardRainNoon_route00024": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 24
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 14.03065013885498,
+                        "y": 1.9790221452713013,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 103.69404602050781,
+                        "y": 1.9500656127929688,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
+        },
+        "WetNoon_route00000": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 0
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 1.9565879106521606,
+                        "y": 119.5989761352539,
+                        "yaw": 269.9700622558594,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00001": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 1
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": -2.045022964477539,
+                        "y": 48.959224700927734,
+                        "yaw": 90.02206420898438,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00002": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 2
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 262.7239990234375,
+                        "y": 326.60699462890625,
+                        "yaw": 180.00611877441406,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00003": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 3
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 191.41880798339844,
+                        "y": 133.45510864257812,
+                        "yaw": 0.025599390268325806,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00004": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 4
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 270.6365051269531,
+                        "y": 129.49050903320312,
+                        "yaw": 180.02560424804688,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00005": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 5
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 378.591064453125,
+                        "y": -1.983187198638916,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 324.62872314453125,
+                        "y": -2.0118539333343506,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00006": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 6
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 278.62786865234375,
+                        "y": -2.031263828277588,
+                        "yaw": -179.99388122558594,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00007": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 7
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 48.0306510925293,
+                        "y": 1.967941164970398,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 103.69404602050781,
+                        "y": 1.9500656127929688,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00008": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 8
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 299.626953125,
+                        "y": 55.47450637817383,
+                        "yaw": 179.99301147460938,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 143.98776245117188,
+                        "y": 55.49346923828125,
+                        "yaw": 179.99301147460938,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00009": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 9
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": -2.027554750442505,
+                        "y": 149.96102905273438,
+                        "yaw": 89.9700698852539,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00010": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 10
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 92.38806915283203,
+                        "y": 118.8350830078125,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00011": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 11
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 396.32318115234375,
+                        "y": 249.53919982910156,
+                        "yaw": -90.02226257324219,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00012": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 12
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 14.03065013885498,
+                        "y": 1.9790221452713013,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00013": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 13
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 143.95603942871094,
+                        "y": -2.045637369155884,
+                        "yaw": -179.99388122558594,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 78.3755874633789,
+                        "y": -2.0419487953186035,
+                        "yaw": 179.9813232421875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00014": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 14
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 88.40182495117188,
+                        "y": 209.3256072998047,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00015": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 15
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 22.008926391601562,
+                        "y": 330.5464172363281,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 102.61808776855469,
+                        "y": 330.589599609375,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00016": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 16
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 2.0111751556396484,
+                        "y": 308.60028076171875,
+                        "yaw": 270.0074768066406,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00017": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 17
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 169.08299255371094,
+                        "y": 1.9570444822311401,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 349.228759765625,
+                        "y": 2.0012152194976807,
+                        "yaw": 0.03045654296875,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00018": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 18
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 92.38457489013672,
+                        "y": 95.83507537841797,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 92.37686920166016,
+                        "y": 45.15335464477539,
+                        "yaw": 269.99127197265625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00019": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 19
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 111.39061737060547,
+                        "y": 59.49744415283203,
+                        "yaw": -0.006981649901717901,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 168.17279052734375,
+                        "y": 59.49052429199219,
+                        "yaw": -0.006981649901717901,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00020": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 20
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 88.38097381591797,
+                        "y": 72.15397644042969,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 88.39171600341797,
+                        "y": 142.83578491210938,
+                        "yaw": 89.99127960205078,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00021": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 21
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 396.34613037109375,
+                        "y": 308.5392150878906,
+                        "yaw": -90.02226257324219,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00022": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 22
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 22.008926391601562,
+                        "y": 330.5464172363281,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 102.61808776855469,
+                        "y": 330.589599609375,
+                        "yaw": 0.03069334849715233,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00023": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 23
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 0.0,
+                        "x": 378.591064453125,
+                        "y": -1.983187198638916,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 0.0,
+                        "x": 324.62872314453125,
+                        "y": -2.0118539333343506,
+                        "yaw": -179.96954345703125,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
+        },
+        "WetNoon_route00024": {
+            "route": {
+                "file": "corl2017/Town01_straight.xml",
+                "id": 24
+            },
+            "scenarios": {
+                "Scenario3": [
+                    {
+                        "pitch": 360.0,
+                        "x": 14.03065013885498,
+                        "y": 1.9790221452713013,
+                        "yaw": 359.9813232421875,
+                        "z": 0.0
+                    },
+                    {
+                        "pitch": 360.0,
+                        "x": 103.69404602050781,
+                        "y": 1.9500656127929688,
+                        "yaw": 0.0061187744140625,
+                        "z": 0.0
+                    }
+                ],
+                "background_activity": {
+                    "vehicle.*": 0,
+                    "walker.*": 0
+                }
+            },
+            "town_name": "Town01",
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
         }
     },
-    "package_name": "straights"
+    "package_name": "pedestrian_crossing"
 }

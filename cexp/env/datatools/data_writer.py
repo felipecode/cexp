@@ -17,7 +17,7 @@ class Writer(object):
     """
 
     def __init__(self, dataset_name, env_name, env_number, batch_number, agent_name,
-                 other_vehicles=False, road_information=False):
+                 other_vehicles=False, road_information=False, walkers=False):
         """
             We have a certain name but also the number of thee environment  ( How many times this env was repeated)
         """
@@ -42,6 +42,8 @@ class Writer(object):
 
         # if we save the opponent vehicles , this makes the measurements vec more intesnse.
         self._save_opponents = other_vehicles
+        # We can also save the walkers, which also make the measurement vec way bigger
+        self._save_walkers = walkers
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
 
@@ -59,6 +61,7 @@ class Writer(object):
 
         measurements = {"ego_actor": {},
                         "opponents": {},   # Todo add more information on demand, now just ego actor
+                        'walkers': {},
                         "lane": {}
                         }
         measurements.update(previous)
@@ -87,8 +90,18 @@ class Writer(object):
                                         transform.rotation.yaw],
                         "velocity": [velocity.x, velocity.y, velocity.z]
                     }})
+            elif 'walker' in actor.type_id:
+                if actor.attributes['role_name'] == 'walker' and self._save_walkers:
+                    transform = actor.get_transform()
+                    velocity = actor.get_velocity()
+                    measurements['walkers'].update({actor.id: {
 
-
+                        "position": [transform.location.x, transform.location.y,
+                                     transform.location.z],
+                        "orientation": [transform.rotation.roll, transform.rotation.pitch,
+                                        transform.rotation.yaw],
+                        "velocity": [velocity.x, velocity.y, velocity.z]
+                    }})
 
         # Add other actors and lane information
         # general actor info
@@ -138,7 +151,6 @@ class Writer(object):
         :param measurements:
         :return:
         """
-
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
         # We join the building of the measurements with some extra data that was calculated

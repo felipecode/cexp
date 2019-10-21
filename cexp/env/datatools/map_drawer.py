@@ -3,7 +3,7 @@ import colorsys
 import argparse
 import os
 import matplotlib.pyplot as plt
-from cexp.env.scenario_identification import identify_scenario
+#from cexp.env.scenario_identification import identify_scenario
 
 
 
@@ -359,6 +359,19 @@ def draw_opp_data(datapoint, agent_number, alpha=None):
     draw_point(location, result_color, size, alpha)
     count += 1
 
+def draw_walker(walker, alpha=None, color= (1,0,0)):
+    """
+    We draw in a certain position at the map with the walkers
+    :param position:
+    :param color:
+    :return:
+    """
+
+    size = 12
+    world_pos = walker['position']
+    location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
+    draw_point(location, color, size, alpha)
+
 
 
 
@@ -419,8 +432,6 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read
                 #else:
                 draw_point_data(batch[0][step], direct_read=direct_read)
                 step += step_size
-            #draw_point(batch[0][step - step_size], end=True)
-            #draw_point(route[-1])
 
     fig.savefig(env_name + '_trajectory.png',
                 orientation='landscape', bbox_inches='tight', dpi=1200)
@@ -460,10 +471,6 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
                 step = 0  # Add the size
 
                 while step < len(batch[0]):
-                    #if first_time:
-                    #    draw_point(batch[0][step], init=True)
-                    #    first_time = False
-                    #else:
 
                     draw_point_data(batch[0][step], color=(0.0,1.0,0.0),  alpha=0.5)
                     draw_opp_data(batch[0][step], agent_number, alpha=0.5)
@@ -472,6 +479,36 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
         print ( " SAVE D AGENT")
         fig.savefig('_opp_traj/'+ env_name + '_opp_' + str(agent_number) + '_trajectory.png',
                     orientation='landscape', bbox_inches='tight', dpi=1200)
+
+
+def draw_pedestrians(env_data, env_name, world, step):
+
+    """
+        This is used on only one step to get a screen shot of how
+        the pedestrians look like.
+    :param env_data:
+    :param env_name:
+    :param world:
+    :return:
+    """
+
+    if not os.path.exists('_walkers'):
+        os.mkdir('_walkers')
+
+    fig = plt.figure()
+    plt.xlim(-200, 5000)
+    plt.ylim(-200, 5000)
+    # We draw the full map
+    draw_map(world)
+    for exp in env_data:
+
+        datapoint = exp[0][0][0][step]
+        for key, walker_info in datapoint['measurements']['walkers'].items():
+            draw_walker(walker_info)
+
+    fig.savefig('_walkers/' + env_name + '_step_' + str(step) + '_trajectory.png',
+                orientation='landscape', bbox_inches='tight', dpi=1200)
+
 
 ### Add some main.
 

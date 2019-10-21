@@ -7,10 +7,10 @@
                 "id": 0
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "WetNoon"
         },
         "route1": {
             "route": {
@@ -18,10 +18,10 @@
                 "id": 1
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearNoon"
         },
         "route10": {
             "route": {
@@ -29,10 +29,10 @@
                 "id": 10
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
         },
         "route11": {
             "route": {
@@ -40,10 +40,10 @@
                 "id": 11
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "HardRainNoon"
         },
         "route12": {
             "route": {
@@ -51,10 +51,10 @@
                 "id": 12
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
         },
         "route13": {
             "route": {
@@ -62,7 +62,6 @@
                 "id": 13
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -73,7 +72,6 @@
                 "id": 14
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -84,7 +82,6 @@
                 "id": 15
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -95,7 +92,6 @@
                 "id": 2
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -106,7 +102,6 @@
                 "id": 3
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -117,7 +112,6 @@
                 "id": 4
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -128,7 +122,6 @@
                 "id": 5
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -139,7 +132,6 @@
                 "id": 6
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -150,10 +142,10 @@
                 "id": 7
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017"
+            "vehicle_model": "vehicle.lincoln.mkz2017",
+            "weather_profile": "ClearSunset"
         },
         "route8": {
             "route": {
@@ -161,7 +153,6 @@
                 "id": 8
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"
@@ -172,7 +163,6 @@
                 "id": 9
             },
             "scenarios": {
-                "file": "None"
             },
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017"

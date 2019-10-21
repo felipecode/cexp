@@ -98,7 +98,7 @@ def parse_weather(exp_weather):
         raise ValueError("Invalid weather on the configuration json file")
 
 
-SECONDS_GIVEN_PER_METERS = 0.8
+SECONDS_GIVEN_PER_METERS = 0.8  # TODO THIS IS A SERIOUS PARAMETER.
 
 def estimate_route_timeout(route):
     route_length = 0.0  # in meters
@@ -108,7 +108,6 @@ def estimate_route_timeout(route):
         route_length += dist
         prev_point = current_point
 
-    #print (" final time ", SECONDS_GIVEN_PER_METERS * route_length)
 
     return int(SECONDS_GIVEN_PER_METERS * route_length)
 
@@ -163,8 +162,6 @@ def parse_exp_vec(json_path, exp_vec):
     # keep track also the loaded scenario files.
     # Read all the dicts
     routes_root_path = json_path
-
-    print (" ROUTES ", routes_root_path)
 
     for exp_name in exp_vec.keys():
         exp_dict = exp_vec[exp_name]

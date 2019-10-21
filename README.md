@@ -1,8 +1,8 @@
 
 
-#### C-EXP CARLA Experience
+## C-EXP CARLA Experience
 
-This  repository serves as a interface to the CARLA simulator
+This  repository  as a interface to the CARLA simulator
 and the scenario runner to produce fully usable environments.
 These environments are driving routes/situations where you
 can train or benchmark your agent.

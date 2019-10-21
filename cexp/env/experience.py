@@ -69,7 +69,9 @@ class Experience(object):
         # if we are going to save, we keep track of a dictionary with all the data
         self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
                               exp_params['exp_number'], agent_name,
-                              other_vehicles=exp_params['save_opponents'])
+                              other_vehicles=exp_params['save_opponents'],
+                              walkers=exp_params['save_walkers'])
+
         self._environment_data = {'exp_measurements': None,  # The exp measurements are specific of the experience
                                   'ego_controls': None,
                                   'scenario_controls': None}
@@ -168,7 +170,6 @@ class Experience(object):
 
         return controls
 
-
     def apply_control(self, controls):
 
         if self._save_data:
@@ -193,6 +194,7 @@ class Experience(object):
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
                 'forward_speed': get_forward_speed(self._ego_actor),
+
             }
 
         self._sync(self.world.tick())
@@ -382,7 +384,7 @@ class Experience(object):
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
         settings.synchronous_mode = True
-        settings.fixed_delta_seconds = 0.05
+        settings.fixed_delta_seconds = 0.05 # 20 FPS here is fixed
 
         self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
@@ -398,7 +400,6 @@ class Experience(object):
         scenario_configuration_walker.route = None
         scenario_configuration_walker.town = self._town_name
         # TODO The random seed should be set
-        # print ("BUILDING BACKGROUND OF DEFINITION ", background_definition)
         configuration_instances_vehicles = []
         configuration_instances_walkers = []
         for key, numbers in background_definition.items():
@@ -467,7 +468,6 @@ class Experience(object):
                     # TODO scenario 4 is out
 
                     ScenarioClass = number_class_translation[scenario_name][0]
-
                     egoactor_trigger_position = convert_json_to_transform(
                         scenario_definition)
                     scenario_configuration = ScenarioConfiguration()

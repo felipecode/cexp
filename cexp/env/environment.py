@@ -4,6 +4,8 @@ import os
 import shutil
 
 from cexp.env.experience import Experience
+from cexp.env.datatools.map_drawer import draw_pedestrians, draw_opp_trajectories, \
+                                          draw_trajectories
 import cexp.env.datatools.data_parser as parser
 
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
@@ -107,7 +109,8 @@ class Environment(object):
         self._env_exec_info = []
         for exp in self._exp_list:
             exp.record()
-            exp.cleanup()
+            # TODO experimental
+            #exp.cleanup()
             self._env_exec_info.append(exp.get_summary())
 
         if self._environment_name in Environment.number_of_executions:
@@ -168,6 +171,7 @@ class Environment(object):
                 'save_data': self._save_data,
                 'save_sensors': self._env_params['save_sensors'],
                 'save_opponents': self._env_params['save_opponents'],
+                'save_walkers': self._env_params['save_walkers'],
                 'non_rendering_mode': self._env_params['non_rendering_mode'],
                 'carla_recording': self._env_params['carla_recording'],
                 'remove_wrong_data': self._env_params['remove_wrong_data'],
@@ -287,6 +291,19 @@ class Environment(object):
         # Todo for now it is working for batch 0
 
         return info
+
+    """
+        DEBUG FUNCTIONS 
+    
+    """
+
+    def draw_pedestrians(self, step):
+        draw_pedestrians(self.get_data(), self._environment_name,
+                         self._exp_list[0].world, step)
+
+    def draw_opp_trajectories(self):
+        pass
+
 
 
 

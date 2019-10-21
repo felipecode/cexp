@@ -89,28 +89,33 @@ class NPCAgent(object):
         self._agent = None
 
 
-def collect_data_loop(renv, agent):
+def collect_data_loop(renv, agent, draw_pedestrians=True):
 
     # The first step is to set sensors that are going to be produced
     # representation of the sensor input is showed on the main loop.
     # We add a camera and a GPS on top of it.
 
-    sensors_dict = [{'type': 'sensor.camera.rgb',
-                         'x': 2.0, 'y': 0.0,
-                         'z': 20.40, 'roll': 0.0,
-                         'pitch': -90.0, 'yaw': 0.0,
-                         'width': 1400, 'height': 1000,
-                         'fov': 120,
-                         'id': 'rgb_central'},
-                    {'type': 'sensor.other.gnss',
-                     'x': 0.7, 'y': -0.4, 'z': 1.60,
-                     'id': 'GPS'}]
+    sensors_dict = [#{'type': 'sensor.camera.rgb',
+                    #     'x': 2.0, 'y': 0.0,
+                    #     'z': 15.40, 'roll': 0.0,
+                    #     'pitch': -30.0, 'yaw': 0.0,
+                    #     'width': 1200, 'height': 800,
+                    #     'fov': 120,
+                    #     'id': 'rgb_central'},
+                    #{'type': 'sensor.other.gnss',
+                    # 'x': 0.7, 'y': -0.4, 'z': 1.60,
+                    # 'id': 'GPS'}]
+        ]
     renv.set_sensors(sensors_dict)
     state, _ = renv.reset(StateFunction=agent.get_state)
 
     while renv.get_info()['status'] == 'Running':
         controls = agent.step(state)
         state, _ = renv.step([controls])
+
+    if draw_pedestrians:
+        renv.draw_pedestrians(0)
+        renv.draw_pedestrians(-1)
 
     if renv.get_info()['status'] == 'Failed':
         renv.remove_data(agent.name)
@@ -137,7 +142,7 @@ if __name__ == '__main__':
                    "to use to run it.")
     parser = argparse.ArgumentParser(description=description)
 
-    parser.add_argument('--port', default=None, help='Port for an already existent server')
+    parser.add_argument('-p','--port', default=None, help='Port for an already existent server')
 
     parser.add_argument('-js', '--json-file',
                         default='sample_descriptions/sample_benchmark.json',
@@ -147,6 +152,11 @@ if __name__ == '__main__':
                         default='carlaped',
                         help='the docker image to be executed toguether with the system')
 
+    parser.add_argument('-sd', '--save-data',
+                        action='store_true',
+                        help='if the sensor data is going to saved or not'
+                        )
+
     arguments = parser.parse_args()
 
     # A single loop being made
@@ -155,6 +165,7 @@ if __name__ == '__main__':
     params = {'save_dataset': True,
               'save_sensors': True,
               'save_trajectories': True,
+              'save_walkers': True,
               'docker_name': arguments.docker,
               'gpu': 0,
               'batch_size': 1,
