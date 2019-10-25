@@ -71,7 +71,6 @@ class DrivingBatch(object):
         print (jsonfile.split('/')[:-1])
         self._jsonfile_path = os.path.join(*jsonfile.split('/')[:-1])
         # Read the json file being
-        print ( " THE JSON FILE PATH ", self._jsonfile_path)
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
         # The timeout for waiting for the server to start.
@@ -160,20 +159,18 @@ class DrivingBatch(object):
             # add the additional sensors ( The ones not provided by the policy )
             self._environments.update({env_name: env})
 
-    def __iter__(self):
+    def _get_execution_list(self):
         """
-        The iterator for the CEXP attempts to execute every experiment on the json file.
-        If the ignore previous execution is set it will reexecute previously executed experiments.
-        Otherwise it just execute the missing ones.
-        :return:
+        We compute the environments that have already been executed. If they were
+        not set to ignore you will not execute an environment again.
+
+
+        :return: a list with the non-executed environments
         """
-        if self._environments is None:
-            raise ValueError("You are trying to iterate over an not started driving "
-                             "object, run the start method ")
+
         # This strategy of execution takes into consideration the env repetition
         #  and execute a certain number of times.from
         # The environment itself is able to tell when the repetition is already made.
-
         execution_list = []
         for env_name in self._environments.keys():
             # The default is
@@ -190,11 +187,27 @@ class DrivingBatch(object):
                 # We add all the repetitions to the execution list
                 execution_list += [self._environments[env_name]] * repetitions
 
-        return iter(execution_list)
+        return execution_list
+
+    def __iter__(self):
+        """
+        The iterator for the CEXP attempts to execute every experiment on the json file.
+        If the ignore previous execution is set it will reexecute previously executed experiments.
+        Otherwise it just execute the missing ones.
+        :return:
+        """
+        if self._environments is None:
+            raise ValueError("You are trying to iterate over an not started driving "
+                             "object, run the start method ")
+
+        return iter(self._get_execution_list())
 
     def __del__(self):
         self.cleanup()
         Environment.number_of_executions = {}
+
+    def __len__(self):
+        return len(self._get_execution_list())
 
     def cleanup(self):
 
