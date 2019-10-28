@@ -92,7 +92,7 @@ class Writer(object):
                 # We calculate the "Relative Angle" by computing the difference of orientation yaw between closest waypoint and ego
                 # Note that the axises and intervals of yaw are different, one is [-180,180], and the other is [0, 360], we need to do some transformations
                 ego_yaw = measurements['ego_actor']['orientation'][2]
-                waypoint_yaw = measurements['closes_waypoint']['orientation'][2]
+                waypoint_yaw = measurements['closest_waypoint']['orientation'][2]
                 # the axises of yaw are different to Cartesian coordinate system, we need to transform
                 if waypoint_yaw < -180.0:
                     waypoint_yaw += 360.0
@@ -127,8 +127,8 @@ class Writer(object):
 
                 waypoint_rad = np.deg2rad(waypoint_yaw)                          # from degree to radian
                 # To define the distance to the centerline, we need to firstly calculate the road tangent, then compute the distance between the agent and the tangent
-                waypoint_x = measurements['closes_waypoint']['position'][0]
-                waypoint_y = measurements['closes_waypoint']['position'][1]
+                waypoint_x = measurements['closest_waypoint']['position'][0]
+                waypoint_y = measurements['closest_waypoint']['position'][1]
                 ego_x = measurements['ego_actor']['position'][0]
                 ego_y = measurements['ego_actor']['position'][1]
                 # road tangent: y = slope * x + b    ---> slope*x-y+b=0
@@ -136,8 +136,6 @@ class Writer(object):
                 b = waypoint_y - slope * waypoint_x
                 d = abs(slope * ego_x - ego_y + b) / math.sqrt(math.pow(slope,2) + math.pow(-1,2))
                 measurements.update({'distance_to_centerline': d})
-
-
 
         # Add other actors and lane information
         # general actor info
