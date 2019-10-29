@@ -96,6 +96,27 @@ def op_vehicle_distance(waypoint, list_close_vehicles):
     # there is not
     return -1
 
+# Get the route for the next points that the vehicle is going to be.
+
+def get_route_of_next_points(vehicle, route):
+
+    # Basically if the distance get bigger means that the points are getting further
+    # away and i found my position on this vector
+    distance_previous = 10000
+
+    for point in route:
+
+        distance_result = vehicle.get_transform().location.distance(
+                                point[0].location)
+        if distance_result > distance_previous:
+
+            return route[(route.index(point)-1):]
+
+        distance_previous = distance_result
+
+
+    return route
+
 def get_distance_lead_vehicle(vehicle, route, world):
     """
 
@@ -105,6 +126,8 @@ def get_distance_lead_vehicle(vehicle, route, world):
     :return:
     """
 
+    route = get_route_of_next_points(vehicle, route)
+    print ( " the route len is ", len(route))
 
     # We get the world map
     wmap = world.get_map()
@@ -115,29 +138,39 @@ def get_distance_lead_vehicle(vehicle, route, world):
 
     min_dist_vehicle = -1
     # waypoint for the ego-vehicle.
+    print (" THere are ", len(op_vehicle_list), " Vehicles close")
+    count = 0
     for point in route:
-
+        print ("Point ", count)
         point_ref_waypoint = wmap.get_waypoint(point[0].location)
         if point[0].location.distance(vehicle.get_transform().location) > \
                 50:
             break
 
+        # We test if the point is very oriented with respect to the vehicle
 
         for op_vehicle in op_vehicle_list:
             op_vehicle_wp = wmap.get_waypoint(op_vehicle.get_transform().location)
 
             # if the waypoints have the same orientation
+            distance_result = op_vehicle.get_transform().location.distance(
+                point_ref_waypoint.transform.location)
             if yaw_difference(op_vehicle_wp.transform,
-                              point_ref_waypoint.transform) < 10:
+                              point_ref_waypoint.transform) < 10 and \
+                    distance_result < 2.0:
+                # This vehicle is close enough.
+
+                # compute the necessary travel distance
+                necessary_travel = op_vehicle.get_transform().location.distance(
+                                    vehicle.get_transform().location)
+
                 if min_dist_vehicle == -1:
                     min_dist_vehicle = 1000
 
-                # get the distance
-                distance_result = op_vehicle.get_transform().location.distance(
-                                                            vehicle.get_transform().location)
-                min_dist_vehicle = min(distance_result, min_dist_vehicle)
+                print ( "vehicle ", op_vehicle.id, " distance ", necessary_travel)
+                min_dist_vehicle = min(necessary_travel, min_dist_vehicle)
 
-
+        count += 1
     logging.debug(" Distance of lead vehicle %s" % str(min_dist_vehicle))
     return min_dist_vehicle
 
