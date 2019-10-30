@@ -278,7 +278,7 @@ class Experience(object):
                                                     carla.Rotation(pitch=-90)))
 
 
-    def tick_world(self, vehicles_in_10meters = False, red_light_in_10meters = False):
+    def tick_world(self, vehicles_in_10meters = False, red_light_in_10meters = False, hazard_detected = False):
         # Save all the measurements that are interesting
         # TODO this may go to another function
         # TODO maybe add not on every iterations, identify every second or half second.
@@ -305,6 +305,7 @@ class Experience(object):
                 'distance_closest_scenario4': -1,
                 'vehicles_in_10meters': vehicles_in_10meters,
                 'red_light_in_10meters': red_light_in_10meters,
+                'hazard_stop': hazard_detected,
                 'closest_waypoint': {'position': [closest_waypoint.location.x, closest_waypoint.location.y,
                                               closest_waypoint.location.z],
                                     'orientation': [closest_waypoint.rotation.roll, closest_waypoint.rotation.pitch,

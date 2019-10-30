@@ -127,7 +127,7 @@ def get_distance_lead_vehicle(vehicle, route, world):
     """
 
     route = get_route_of_next_points(vehicle, route)
-    print ( " the route len is ", len(route))
+    #print ( " the route len is ", len(route))
 
     # We get the world map
     wmap = world.get_map()
@@ -138,10 +138,10 @@ def get_distance_lead_vehicle(vehicle, route, world):
 
     min_dist_vehicle = -1
     # waypoint for the ego-vehicle.
-    print (" THere are ", len(op_vehicle_list), " Vehicles close")
+    #print (" THere are ", len(op_vehicle_list), " Vehicles close")
     count = 0
     for point in route:
-        print ("Point ", count)
+        #print ("Point ", count)
         point_ref_waypoint = wmap.get_waypoint(point[0].location)
         if point[0].location.distance(vehicle.get_transform().location) > \
                 50:
@@ -167,7 +167,7 @@ def get_distance_lead_vehicle(vehicle, route, world):
                 if min_dist_vehicle == -1:
                     min_dist_vehicle = 1000
 
-                print ( "vehicle ", op_vehicle.id, " distance ", necessary_travel)
+                #print ( "vehicle ", op_vehicle.id, " distance ", necessary_travel)
                 min_dist_vehicle = min(necessary_travel, min_dist_vehicle)
 
         count += 1

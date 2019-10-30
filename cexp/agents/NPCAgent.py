@@ -74,12 +74,12 @@ class NPCAgent(Agent):
             print(self._agent._local_planner._target_speed)
 
 
-        control, vehicles_in_10meters, red_light_in_10meters = self._agent.run_step()
+        control, vehicles_in_10meters, red_light_in_10meters, hazard_detected = self._agent.run_step()
 
         # IF WE ARE TO CLOSE TO
 
         logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
-        return control, vehicles_in_10meters, red_light_in_10meters
+        return control, vehicles_in_10meters, red_light_in_10meters, hazard_detected
 
     def reinforce(self, rewards):
         """
