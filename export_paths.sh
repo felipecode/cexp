@@ -22,8 +22,8 @@ export PYTHONPATH=`pwd`/$SCENARIO_RUNNER_PATH:$PYTHONPATH
 # export CEXP itself
 export PYTHONPATH=`pwd`:$PYTHONPATH
 
-# export data path
-export SRL_DATASET_PATH=`pwd`/$DATA_PATH
+# export ABSOLUTE data path
+export SRL_DATASET_PATH=$DATA_PATH
 
 # TODO:
 # - add command parameters
