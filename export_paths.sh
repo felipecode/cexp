@@ -3,10 +3,12 @@
 # usage (in cexp directory): source export_paths.sh
 
 CARLA_ROOT=$1
-DATA_PATH=$2
+SCENARIO_RUNNER_PATH=$2
+DATA_PATH=$3
 
 CARLA_ROOT=${CARLA_ROOT:=Carla96ped} # CARLA_ROOT can be defined by user, default=Carla96ped
 DATA_PATH=${DATA_PATH:=data} # DATA_PATH defined by user, default=data
+SCENARIO_RUNNER_PATH=${SCENARIO_RUNNER_PATH:=scenario_runner}
 
 # export Carla .egg file
 export PYTHONPATH=`pwd`/$CARLA_ROOT/PythonAPI/carla/dist/carla-0.9.6-py3.5-linux-x86_64.egg:Carla96ped/PythonAPI/carla:$PYTHONPATH
@@ -15,7 +17,7 @@ export PYTHONPATH=`pwd`/$CARLA_ROOT/PythonAPI/carla/dist/carla-0.9.6-py3.5-linux
 export PYTHONPATH=`pwd`/$CARLA_ROOT/PythonAPI/carla:$PYTHONPATH
 
 # export scenario runner
-export PYTHONPATH=`pwd`/scenario_runner:$PYTHONPATH
+export PYTHONPATH=`pwd`/$SCENARIO_RUNNER_PATH:$PYTHONPATH
 
 # export CEXP itself
 export PYTHONPATH=`pwd`:$PYTHONPATH
