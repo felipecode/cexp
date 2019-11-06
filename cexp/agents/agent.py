@@ -123,7 +123,7 @@ class Agent(object):
 
         while environment.is_running():
 
-            controls, vehicles_in_10meters_vec, red_light_in_10meters_vec, hazard_detected_vec = self._run_step_batch(state)
+            controls, vehicles_in_10meters_vec, red_light_in_10meters_vec, hazard_detected_vec= self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             # Experiment on the batch.
             state, reward = environment.run_step(controls, vehicles_in_10meters_vec, red_light_in_10meters_vec, hazard_detected_vec)
