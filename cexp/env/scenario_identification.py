@@ -73,18 +73,6 @@ def get_current_road_angle(vehicle, wmap, resolution=0.05):
                                     yet_another_waypoint.transform.location)
 
 
-def get_all_vehicles_closer_than(vehicle, min_distance):
-    world = vehicle.get_world()
-    closest_vehicles = []
-    for op_actor in world.get_actors():
-
-        if 'vehicle' in op_actor.type_id and op_actor.id != vehicle.id:
-            if vehicle.get_transform().location.distance(op_actor.get_transform().location) < min_distance:
-                closest_vehicles.append(op_actor)
-
-
-    return closest_vehicles
-
 def op_vehicle_distance(waypoint, list_close_vehicles):
 
     # if the waypoint has a vehicle different than the ego one.
@@ -117,62 +105,67 @@ def get_route_of_next_points(vehicle, route):
 
     return route
 
-def get_distance_lead_vehicle(vehicle, route, world):
+def get_distance_lead_vehicle(vehicle, map, world, max_distance = 50.0):
+    actor_list = world.get_actors()
+    vehicle_list = actor_list.filter("*vehicle*")
+
+    ego_vehicle_location = vehicle.get_location()
+    ego_vehicle_waypoint = map.get_waypoint(ego_vehicle_location)
+
+    min_distance = max_distance + 10.0
+    for target_vehicle in vehicle_list:
+        # do not account for the ego vehicle
+        if target_vehicle.id == vehicle.id:
+            continue
+
+        # if the object is not in our lane it's not an obstacle
+        target_vehicle_waypoint = map.get_waypoint(target_vehicle.get_location())
+        if target_vehicle_waypoint.road_id != ego_vehicle_waypoint.road_id or \
+                target_vehicle_waypoint.lane_id != ego_vehicle_waypoint.lane_id:
+            continue
+
+        loc = target_vehicle.get_location()
+
+        sign, distance = is_within_distance_ahead(loc, ego_vehicle_location, vehicle.get_transform().rotation.yaw, max_distance)
+
+        if sign:
+            if distance < min_distance:
+                min_distance = distance
+
+    #print('min_distance', min_distance)
+    return min_distance
+
+
+def is_within_distance_ahead(target_location, current_location, orientation, max_distance):
     """
+    Check if a target object is within a certain distance in front of a reference object.
 
-    :param vehicle:
-    :param route:
-    :param world:
-    :return:
+    :param target_location: location of the target object
+    :param current_location: location of the reference object
+    :param orientation: orientation of the reference object
+    :param max_distance: maximum allowed distance
+    :return: True if target object is within max_distance ahead of the reference object
     """
+    target_vector = np.array([target_location.x - current_location.x, target_location.y - current_location.y])
+    norm_target = np.linalg.norm(target_vector)
 
-    route = get_route_of_next_points(vehicle, route)
-    #print ( " the route len is ", len(route))
+    # If the vector is too short, we can simply stop here
+    if norm_target < 0.001:
+        return (True, norm_target)
 
-    # We get the world map
-    wmap = world.get_map()
-    # Check if there is a lead vehicle. By that follow the route of the
-    # current vehicle and test for other vehicles that are close by.
+    # If the target is out of the maximum distance we set, we detect it False. But we still get the distance
+    if norm_target > max_distance:
+        return (False, None)
 
-    op_vehicle_list = get_all_vehicles_closer_than(vehicle, 50)
+    else:
+        forward_vector = np.array([math.cos(math.radians(orientation)), math.sin(math.radians(orientation))])
+        d_angle = math.degrees(math.acos(np.dot(forward_vector, target_vector) / norm_target))
 
-    min_dist_vehicle = -1
-    # waypoint for the ego-vehicle.
-    #print (" THere are ", len(op_vehicle_list), " Vehicles close")
-    count = 0
-    for point in route:
-        #print ("Point ", count)
-        point_ref_waypoint = wmap.get_waypoint(point[0].location)
-        if point[0].location.distance(vehicle.get_transform().location) > \
-                50:
-            break
+        if d_angle < 90.0:
+            return (True, norm_target)
 
-        # We test if the point is very oriented with respect to the vehicle
-
-        for op_vehicle in op_vehicle_list:
-            op_vehicle_wp = wmap.get_waypoint(op_vehicle.get_transform().location)
-
-            # if the waypoints have the same orientation
-            distance_result = op_vehicle.get_transform().location.distance(
-                point_ref_waypoint.transform.location)
-            if yaw_difference(op_vehicle_wp.transform,
-                              point_ref_waypoint.transform) < 10 and \
-                    distance_result < 2.0:
-                # This vehicle is close enough.
-
-                # compute the necessary travel distance
-                necessary_travel = op_vehicle.get_transform().location.distance(
-                                    vehicle.get_transform().location)
-
-                if min_dist_vehicle == -1:
-                    min_dist_vehicle = 1000
-
-                #print ( "vehicle ", op_vehicle.id, " distance ", necessary_travel)
-                min_dist_vehicle = min(necessary_travel, min_dist_vehicle)
-
-        count += 1
-    logging.debug(" Distance of lead vehicle %s" % str(min_dist_vehicle))
-    return min_dist_vehicle
+        else:
+            return (False, None)
 
 
 # TODO this is distance to the triggers not actually useful
