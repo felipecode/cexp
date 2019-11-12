@@ -120,7 +120,7 @@ class Writer(object):
                 angle_distance = waypoint_C_yaw-ego_C_yaw
 
                 # This is for the case that the waypoint yaw and ego yaw are respectively near to 360.0 or 0.0
-                if abs(angle_distance) < 90.0:
+                if abs(angle_distance) < 180.0:
                     relative_angle = np.deg2rad(angle_distance)
                 else:
                     if waypoint_C_yaw > ego_C_yaw:
