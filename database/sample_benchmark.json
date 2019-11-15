@@ -1,9 +1,9 @@
 {
     "envs": {
-        "ClearNoon_navigation_route00009": {
+        "ClearNoon_challenge_route00015": {
             "route": {
-                "file": "corl2017/Town01_navigation.xml",
-                "id": 9
+                "file": "routes/routes_town01.xml",
+                "id": 15
             },
             "scenarios": {
                 "background_activity": {
