@@ -111,7 +111,7 @@ class BasicAgent(Agent):
             hazard_detected = True
 
         # check for the state of the traffic lights
-        light_state, traffic_light = is_light_red(lights_list)
+        light_state, traffic_light = is_light_red(self._vehicle, self._map, vehicle_list, self._proximity_threshold)
         if light_state:
             if debug:
                 print('=== RED LIGHT AHEAD [{}])'.format(traffic_light.id))
