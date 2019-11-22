@@ -2,8 +2,7 @@ import logging
 from cexp.agents.agent import Agent
 from cexp.env.scenario_identification import get_distance_closest_crossing_waker
 
-from agents.navigation.basic_agent import BasicAgent
-
+from cexp.env.utils.basic_agent import BasicAgent
 
 # TODO make a sub class for a non learnable agent
 
