@@ -8,6 +8,7 @@ import numpy as np
 import math
 
 from google.protobuf.json_format import MessageToJson, MessageToDict
+from cexp.env.datatools.affordances import compute_relative_angle, compute_distance_to_centerline
 
 # TODO write expbatch related data.
 
@@ -89,60 +90,10 @@ class Writer(object):
                         "velocity": [velocity.x, velocity.y, velocity.z]
                     }})
 
-                # We calculate the "Relative Angle" by computing the difference of orientation yaw between closest waypoint and ego
-                # Note that the axises and intervals of yaw are different, one is [-180,180], and the other is [0, 360], we need to do some transformations
-                ego_yaw = measurements['ego_actor']['orientation'][2]
-                waypoint_yaw = measurements['closest_waypoint']['orientation'][2]
 
-                # we fistly make all range to be [0, 360)
-                if ego_yaw >= 0.0:
-                    ego_yaw %= 360.0
-                else:
-                    ego_yaw %= -360.0
-                    if ego_yaw != 0.0:
-                        ego_yaw += 360.0
+        measurements.update({'relative_angle': compute_relative_angle(measurements['ego_actor'], measurements['closest_waypoint'])})
+        measurements.update({'distance_to_centerline': compute_distance_to_centerline(measurements['ego_actor'], measurements['closest_waypoint'])})
 
-                if waypoint_yaw >= 0.0:
-                    waypoint_yaw %=  360.0
-                else:
-                    waypoint_yaw %= -360.0
-                    if waypoint_yaw != 0.0:
-                        waypoint_yaw += 360.0
-
-                # we need to do some transformations to Cartesian coordinate system
-                waypoint_C_yaw = 90.0 - waypoint_yaw
-                if waypoint_C_yaw < 0.0:
-                    waypoint_C_yaw += 360.0
-                ego_C_yaw = 90.0 - ego_yaw
-                if ego_C_yaw < 0.0:
-                    ego_C_yaw += 360.0
-
-                angle_distance = waypoint_C_yaw-ego_C_yaw
-
-                # This is for the case that the waypoint yaw and ego yaw are respectively near to 360.0 or 0.0
-                if abs(angle_distance) < 180.0:
-                    relative_angle = np.deg2rad(angle_distance)
-                else:
-                    if waypoint_C_yaw > ego_C_yaw:
-                        angle_distance = (360.0-waypoint_C_yaw) + (ego_C_yaw-0.0)
-                        relative_angle = -np.deg2rad(angle_distance)
-                    else:
-                        angle_distance = (waypoint_C_yaw-0.0) + (360.0-ego_C_yaw)
-                        relative_angle = np.deg2rad(angle_distance)
-
-                measurements.update({'relative_angle': relative_angle})
-
-                waypoint_rad = np.deg2rad(waypoint_C_yaw)                          # from degree to radian
-                # To define the distance to the centerline, we need to firstly calculate the road tangent, then compute the distance between the agent and the tangent
-                waypoint_x = measurements['closest_waypoint']['position'][0]
-                waypoint_y = measurements['closest_waypoint']['position'][1]
-                ego_x = measurements['ego_actor']['position'][0]
-                ego_y = measurements['ego_actor']['position'][1]
-                # road tangent: y = slope * x + b    ---> slope*x-y+b=0
-                slope = math.tan(waypoint_rad)
-                b = waypoint_y - slope * waypoint_x
-                d = abs(slope * ego_x - ego_y + b) / math.sqrt(math.pow(slope,2) + math.pow(-1,2))
-                measurements.update({'distance_to_centerline': d})
 
         # Add other actors and lane information
         # general actor info

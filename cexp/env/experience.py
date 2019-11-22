@@ -19,8 +19,9 @@ from srunner.scenarios.object_crash_intersection import VehicleTurningRight, Veh
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
 from cexp.env.scorer import record_route_statistics_default, get_current_completion
-from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, \
-                                             get_distance_lead_vehicle, get_distance_closest_crossing_waker
+from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, get_distance_closest_crossing_waker
+
+from cexp.env.datatools.affordances import get_distance_lead_vehicle
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
