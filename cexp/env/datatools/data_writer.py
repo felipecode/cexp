@@ -4,6 +4,7 @@
 import os
 import json
 import shutil
+import subprocess
 import numpy as np
 
 from google.protobuf.json_format import MessageToJson, MessageToDict
@@ -27,6 +28,7 @@ class Writer(object):
 
         root_path = os.environ["SRL_DATASET_PATH"]
 
+
         self._root_path = root_path
         self._experience_name = env_name
         self._dataset_name = dataset_name
@@ -39,23 +41,15 @@ class Writer(object):
         # env full path
         self._env_full_path = os.path.join(root_path, dataset_name, env_name,
                                            str(env_number) + '_' + agent_name)
-
         # if we save the opponent vehicles , this makes the measurements vec more intesnse.
         self._save_opponents = other_vehicles
         # We can also save the walkers, which also make the measurement vec way bigger
         self._save_walkers = walkers
+        # Agent name used for this case
+        self._agent_name = agent_name
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
 
-
-    """
-        # We set this synch variable that will be set when all sensors are ready
-        self._ready_to_for_next_point = False
-
-    def ready(self):
-        # Set that the iteration is ready for the next point
-        self._ready_to_for_next_point = True
-    """
 
     def _build_measurements(self, world, previous):
 
@@ -206,6 +200,28 @@ class Writer(object):
         # TODO check this posible inconsistency
         #if len(os.listdir(self._full_path)) == 0:
         #    shutil.rmtree(self._base_path)
+
+    def make_video(self, sensor_names):
+        """
+        The idea of this function is to make a low res video for quickly debuging the
+        dataset generated. That is good for debuging from remote machines
+        :return:
+        """
+        # We have an arbitrary video path here.
+        if not os.path.exists('_videos'):
+            os.mkdir('_videos')
+        # The folder where the episode is.
+        folder_path = self._full_path
+        print (" Saving on this full path")
+
+        for sensor_spec in sensor_names:
+            if sensor_spec['type'].startswith('sensor.camera'):
+                output_name = os.path.join('_videos', self._agent_name + '_' + self._experience_name +
+                                                      '_' + sensor_spec['id'] )
+                print ( " THis is the output name ", output_name)
+                subprocess.call(['ffmpeg', '-f', 'image2', '-i', os.path.join(folder_path,
+                                                                  sensor_spec['id'] + '%06d.png'),
+                                '-vcodec', 'mpeg4', '-y', output_name + '.mp4'])
 
 
     """

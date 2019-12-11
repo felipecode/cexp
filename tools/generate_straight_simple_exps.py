@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
     root_route_file_position = '/network/home/codevilf/experience_database_generator/database/'
     # root_route_file_position = 'srunner/challenge/'
-    filename = os.path.join(root_route_file_position, 'straight_routes.json')
+    filename = os.path.join(root_route_file_position, 'straights.json')
 
     # For each of the routes to be evaluated.
     new_json = {"envs": {},

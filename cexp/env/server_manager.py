@@ -94,10 +94,13 @@ class ServerManagerDocker(ServerManager):
         # TODO quality level to be set here
         my_env = os.environ.copy()
         my_env["NV_GPU"] = str(self._gpu)
+
         logging.debug("Docker command %s" % ' '.join(['docker', 'run', '--name', self._docker_id,'--rm', '-d', '-p',
                                str(port)+'-'+str(port+2)+':'+str(port)+'-'+str(port+2),
                                '--runtime=nvidia', '-e', 'NVIDIA_VISIBLE_DEVICES='+str(self._gpu), self._docker_name,
                                '/bin/bash', 'CarlaUE4.sh', '-carla-port=' + str(port)]))
+
+
         self._proc = subprocess.Popen(['docker', 'run', '--name', self._docker_id,'--rm', '-d', '-p',
                                str(port)+'-'+str(port+2)+':'+str(port)+'-'+str(port+2),
                                '--runtime=nvidia', '-e', 'NVIDIA_VISIBLE_DEVICES='+str(self._gpu), self._docker_name,
@@ -136,10 +139,10 @@ def check_test_server(port):
     # Check if a server is open at some port
 
     try:
-        print ( " TRYING TO CONNECT ", port)
+        logging.debug("Trying to Connect to Server")
         client = carla.Client(host='localhost', port=port)
-        print ( "GETT VERSION ")
         client.get_server_version()
+        logging.debug("Connected to Server")
         del client
         return True
     except:

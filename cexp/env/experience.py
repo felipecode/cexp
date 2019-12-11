@@ -7,10 +7,9 @@ import logging
 
 from srunner.scenariomanager.timer import GameTime, TimeOut
 from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
-from srunner.tools.config_parser import ActorConfigurationData, ScenarioConfiguration
+from srunner.scenarioconfigs.scenario_configuration import ActorConfigurationData, ScenarioConfiguration
 from srunner.scenarios.master_scenario import MasterScenario
 from srunner.scenarios.background_activity import BackgroundActivity
-from srunner.scenarios.background_activity_walker import BackgroundActivityWalkers
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
 
@@ -62,6 +61,8 @@ class Experience(object):
         self._client = client
         # We also set the town name to be used
         self._town_name = exp_params['town_name']
+        # the dictionary of sensors used
+        self._sensors_dict = sensors
 
         self._vehicle_model = vehicle_model
         # if data is being saved we create the writer object
@@ -153,6 +154,28 @@ class Experience(object):
 
         return self._sensor_interface.get_data()
 
+    def get_current_direction(self):
+
+        # for the current position and orientation try to get the closest one from the waypoints
+
+        vehicle_position = self._ego_actor.get_transform().location
+        closest_id = 0
+        min_distance = 100000
+        for index in range(len(self._route)):
+
+            waypoint = self._route[index][0]
+
+            computed_distance = distance_vehicle(waypoint, vehicle_position)
+
+            if computed_distance < min_distance:
+                min_distance = computed_distance
+                closest_id = index
+
+        logging.debug("Closest Waypoint %f", closest_id)
+        direction = self._route[closest_id][1]
+
+        return direction
+
     def tick_scenarios_control(self, controls):
         """
         Here we tick the scenarios and also change the control based on the scenario properties
@@ -171,6 +194,7 @@ class Experience(object):
         return controls
 
     def apply_control(self, controls):
+        # Add the control to the ego agent controls.
 
         if self._save_data:
             self._environment_data['scenario_controls'] = controls
@@ -196,6 +220,8 @@ class Experience(object):
                 'forward_speed': get_forward_speed(self._ego_actor),
 
             }
+            #if self._save_affordances:
+            #    self._update_affordances(self._environment_data)
 
         self._sync(self.world.tick())
 
@@ -357,7 +383,7 @@ class Experience(object):
         master_scenario_configuration.trigger_point = self._ego_actor.get_transform()
         CarlaDataProvider.register_actor(self._ego_actor)
 
-        return MasterScenario(self.world, self._ego_actor, master_scenario_configuration,
+        return MasterScenario(self.world, [self._ego_actor], master_scenario_configuration,
                               timeout=timeout)
 
 
@@ -384,7 +410,7 @@ class Experience(object):
         settings = self.world.get_settings()
         settings.no_rendering_mode = self._exp_params['non_rendering_mode']
         settings.synchronous_mode = True
-        settings.fixed_delta_seconds = 0.05 # 20 FPS here is fixed
+        settings.fixed_delta_seconds = 0.05  # 20 FPS here is fixed WARNING
 
         self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
@@ -393,12 +419,17 @@ class Experience(object):
     # Todo make a scenario builder class
 
     def _build_background(self, background_definition, timeout):
-        scenario_configuration_vehicle = ScenarioConfiguration()
-        scenario_configuration_vehicle.route = None
-        scenario_configuration_vehicle.town = self._town_name
-        scenario_configuration_walker = ScenarioConfiguration()
-        scenario_configuration_walker.route = None
-        scenario_configuration_walker.town = self._town_name
+        """
+        Build background scenario. Adding pedestrians and vehicles wandering
+        around.
+        :param background_definition:
+        :param timeout:
+        :return:
+        """
+
+        scenario_configuration = ScenarioConfiguration()
+        scenario_configuration.route = None
+        scenario_configuration.town = self._town_name
         # TODO The random seed should be set
         configuration_instances_vehicles = []
         configuration_instances_walkers = []
@@ -407,30 +438,33 @@ class Experience(object):
                 model = key
                 transform = carla.Transform()
                 autopilot = True
-                random = True
+                random_location = True
                 actor_configuration_instance = ActorConfigurationData(model, transform,
-                                                                      autopilot, random,
-                                                                      amount=background_definition[key])
+                                                                      autopilot=autopilot,
+                                                                      random=random_location,
+                                                                      amount=background_definition[key],
+                                                                      category='car')
                 configuration_instances_vehicles.append(actor_configuration_instance)
             else:
                 model = 'controller.ai.walker'
                 transform = carla.Transform()
                 autopilot = True
-                random = True
+                random_location = True
                 actor_configuration_instance = ActorConfigurationData(model, transform,
-                                                                      autopilot, random,
+                                                                      autopilot=autopilot,
+                                                                      random=random_location,
                                                                       amount=background_definition[
-                                                                          key])
+                                                                          key],
+                                                                      category='walker')
                 configuration_instances_walkers.append(actor_configuration_instance)
 
-        scenario_configuration_vehicle.other_actors = configuration_instances_vehicles
-        scenario_configuration_walker.other_actors = configuration_instances_walkers
-        return BackgroundActivity(self.world, self._ego_actor, scenario_configuration_vehicle,
-                                  timeout=timeout, debug_mode=False), \
-            BackgroundActivityWalkers(self.world, self._ego_actor, scenario_configuration_vehicle,
-                       timeout=timeout, debug_mode=False)
+        scenario_configuration.other_actors = configuration_instances_vehicles + \
+                                              configuration_instances_walkers
 
-    # TODO adding also scenario
+        # TODO add the cross factor to configuration ( Maybe some defaults)2
+        return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
+                                  cross_factor=0.01, timeout=timeout, debug_mode=False)
+
     def build_scenario_instances(self, scenario_definition_vec, timeout):
 
         """
@@ -449,11 +483,9 @@ class Experience(object):
             if scenario_name == 'background_activity':  # BACKGROUND ACTIVITY SPECIAL CASE
 
                 background_definition = scenario_definition_vec[scenario_name]
-                background, background_walker = self._build_background(background_definition,
-                                                                       timeout)
+                background = self._build_background(background_definition, timeout)
 
                 list_instanced_scenarios.append(background)
-                list_instanced_scenarios.append(background_walker)
             else:
 
                 # Sample the scenarios to be used for this route instance.
@@ -497,7 +529,6 @@ class Experience(object):
 
         return self._route_statistics
 
-
     def record(self):
         self._route_statistics = record_route_statistics_default(self._master_scenario,
                                                                  self._exp_params['env_name'] + '_' +
@@ -509,7 +540,8 @@ class Experience(object):
             if self._exp_params['remove_wrong_data']:
                 if self._route_statistics['result'] == 'FAILURE':
                     self._clean_bad_dataset()
-
+        if self._exp_params['make_videos']:
+            self._writer.make_video(self._sensors_dict)
 
     def cleanup(self, ego=True):
         """

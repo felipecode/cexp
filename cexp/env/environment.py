@@ -81,10 +81,12 @@ class Environment(object):
             if "SRL_DATASET_PATH" not in os.environ:
                 raise ValueError("SRL_DATASET_PATH not defined,"
                                  " set the place where the dataset was saved before")
+            print ("PACKAGE NAME ", package_name)
             Environment.number_of_executions = \
                 parser.get_number_executions(agent_name, os.path.join(
                                                             os.environ["SRL_DATASET_PATH"],
                                                             package_name))
+            logging.debug(Environment.number_of_executions)
 
     def __str__(self):
         return self._environment_name
@@ -169,6 +171,7 @@ class Environment(object):
                 'env_number': Environment.number_of_executions[self._environment_name],
                 'exp_number': i,
                 'save_data': self._save_data,
+                'make_videos': self._env_params['make_videos'],
                 'save_sensors': self._env_params['save_sensors'],
                 'save_opponents': self._env_params['save_opponents'],
                 'save_walkers': self._env_params['save_walkers'],
@@ -226,12 +229,6 @@ class Environment(object):
             raise NoDataGenerated("The data is not generated yet")
 
         shutil.rmtree(root_path)
-
-    #def get_path(self):
-    #    # TODO do we keep this one ?
-
-    #    return os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name, self._environment_name)
-
 
     def _is_running(self):
         """
@@ -297,12 +294,25 @@ class Environment(object):
     
     """
 
-    def draw_pedestrians(self, step):
-        draw_pedestrians(self.get_data(), self._environment_name,
-                         self._exp_list[0].world, step)
+    def draw_pedestrians(self, steps):
+        draw_pedestrians(self._last_executing_agent, self.get_data(), self._environment_name,
+                         self._exp_list[0].world, steps)
 
-    def draw_opp_trajectories(self):
+    def draw_opp_trajectories(self, directory):
         pass
+
+    def draw_trajectory(self, directory):
+        # Draw the trajectory made on the last instance of this enviroment (experience)
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+
+        draw_trajectories(diretory,
+                          self.get_data(),
+                          self._last_executing_agent + '_' + self._package_name + '_' + self._environment_name,
+                          self._exp_list[0].world,
+                          self._exp_list[0]._route,
+                          direct_read=self._env_params['direct_read'])
+
 
 
 

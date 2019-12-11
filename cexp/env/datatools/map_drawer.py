@@ -407,7 +407,7 @@ def draw_route(route):
     draw_point(route[-1][0].location, result_color=(0.0, 1.0, 0), size=24)
 
 
-def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read=False):
+def draw_trajectories(directory, env_data, env_name, world, route, step_size=3, direct_read=False):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
@@ -433,7 +433,7 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read
                 draw_point_data(batch[0][step], direct_read=direct_read)
                 step += step_size
 
-    fig.savefig(env_name + '_trajectory.png',
+    fig.savefig(os.path.join(directory, env_name + '_trajectory.png'),
                 orientation='landscape', bbox_inches='tight', dpi=1200)
 
 
@@ -481,7 +481,7 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
                     orientation='landscape', bbox_inches='tight', dpi=1200)
 
 
-def draw_pedestrians(env_data, env_name, world, step):
+def draw_pedestrians(agent_name, env_data, env_name, world, steps):
 
     """
         This is used on only one step to get a screen shot of how
@@ -494,19 +494,26 @@ def draw_pedestrians(env_data, env_name, world, step):
 
     if not os.path.exists('_walkers'):
         os.mkdir('_walkers')
-
+    # color pallet ! Maximum a few pedestrians
+    color_palet = [(1,0,0), (0,1,0), (0,0,1), (1,1,0), (0,1,1), (1,0,1), (0,0,0), (1,1,1)]
     fig = plt.figure()
     plt.xlim(-200, 5000)
     plt.ylim(-200, 5000)
     # We draw the full map
     draw_map(world)
-    for exp in env_data:
+    count = 0
 
-        datapoint = exp[0][0][0][step]
-        for key, walker_info in datapoint['measurements']['walkers'].items():
-            draw_walker(walker_info)
+    for step in steps:
+        for exp in env_data:
+            number_of_steps = len(exp[0][0][0]) -1
+            datapoint = exp[0][0][0][int(number_of_steps*step)]
+            for key, walker_info in datapoint['measurements']['walkers'].items():
+                draw_walker(walker_info, color=color_palet[count])
+        count += 1
 
-    fig.savefig('_walkers/' + env_name + '_step_' + str(step) + '_trajectory.png',
+    fig.savefig('_walkers/'+ agent_name + '_' + env_name + '_step_' + ''.join(str(e)+'_'
+                                                                              for e in steps)
+                + '_trajectory.png',
                 orientation='landscape', bbox_inches='tight', dpi=1200)
 
 

@@ -143,7 +143,7 @@ class CallBack(object):
             self._parse_image_cb(data, self._tag, self._writer)
         elif isinstance(data, carla.LidarMeasurement):
             self._parse_lidar_cb(data, self._tag, self._writer)
-        elif isinstance(data, carla.GnssEvent):
+        elif isinstance(data, carla.GnssMeasurement):
             self._parse_gnss_cb(data, self._tag, self._writer)
         elif isinstance(data, CANBusMeasurement) or isinstance(data, HDMapMeasurement) \
                 or isinstance(data, SceneLayoutMeasurement) or isinstance(data, ObjectMeasurements):

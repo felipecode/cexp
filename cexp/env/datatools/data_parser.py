@@ -87,7 +87,6 @@ def get_number_executions(agent_name, environments_path):
     envs_list = glob.glob(os.path.join(environments_path, '*'))
     for env in envs_list:
         env_name = env.split('/')[-1]
-        # TODO this is clearly specific, some solution is needed for refactoring
         results, _ = read_benchmark_summary(os.path.join(env,
                                                          agent_name + '_benchmark_summary.csv')
                                             )
@@ -142,6 +141,7 @@ def parse_environment(path, metadata_dict, read_sensors=True, agent_name=''):
 
         batch_list = glob.glob(os.path.join(exp, '[0-9]'))
         batch_vec = []
+        print ( " batch len ", len(batch_vec))
         for batch in batch_list:
             if 'summary.json' not in os.listdir(batch):
                 print (" Episode not finished skiping...")  #TODO this is a debug message on my logging system YET TO BE MADE

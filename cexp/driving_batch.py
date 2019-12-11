@@ -24,11 +24,11 @@ class DrivingBatch(object):
 
     _default_params = {'save_dataset': False,
                        'save_sensors': False,
-                       'save_trajectories': False,  # TODO maybe the trajectories go outside
                        'save_opponents': False,
-                       'save_opp_trajectories': False,
                        'save_walkers': False,
+                       'make_videos': False,
                        'docker_name': None,
+                       'save_affordances': True,
                        'gpu': 0,
                        'batch_size': 1,
                        'remove_wrong_data': False,
@@ -129,12 +129,11 @@ class DrivingBatch(object):
         # Create the configuration dictionary of the exp batch to pass to all environments
         env_params = {
             'batch_size': self._batch_size,
+            'make_videos': self._params['make_videos'],
             'save_dataset': self._params['save_dataset'],
             'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],
             'save_opponents': self._params['save_opponents'], #
-            'save_opp_trajectories': self._params['save_opp_trajectories'],  #
             'package_name': self._json['package_name'],
-            'save_trajectories': self._params['save_trajectories'],
             'save_walkers': self._params['save_walkers'],
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
