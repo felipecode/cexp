@@ -145,10 +145,6 @@ def is_within_distance_ahead(target_location, current_location, orientation, max
 
 
 
-def relative_angle_to_road()
-
-    pass
-
 """
 Aff1 Ego Speed:  must be used in order to properly plan the manouvers
 """
@@ -165,6 +161,7 @@ Aff2 Lateral Distance to Centerlane: The position with respect to the lane the v
 """
 def compute_distance_to_centerline(ego_location, closest_wp_location):
 
+    # TODO which one is the closest waypoint on a intersection.
 
     ego_yaw = ego_location['orientation'][2]
     waypoint_yaw = closest_wp_location['orientation'][2]
@@ -261,6 +258,7 @@ def compute_relative_angle(ego_location, closest_wp_location):
 Aff4 Distance Lead Vehicle: The distance to the vehicle in front
 """
 # TODO we might want to get distance to all the vechicles
+
 
 def get_distance_lead_vehicle(vehicle, map, world, max_distance = 50.0):
 
