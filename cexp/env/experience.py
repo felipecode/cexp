@@ -306,7 +306,7 @@ class Experience(object):
                 'distance_closest_scenario4': -1
             }
 
-            print ('S3 ', dist_scenario3, 'S4 ', -1)
+            #print ('S3 ', dist_scenario3, 'S4 ', -1)
 
         self._sync(self.world.tick())
 

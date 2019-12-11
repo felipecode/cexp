@@ -6,6 +6,7 @@ import importlib
 import shutil
 import numpy as np
 import traceback
+import subprocess
 
 from cexp.cexp import CEXP
 from cexp.env.datatools.data_parser import read_benchmark_summary, read_benchmark_summary_metric
@@ -162,10 +163,33 @@ def add_summary(environment_name, summary, json_filename, agent_checkpoint_name)
 
 
 
+def make_video(environment_name,json_filename, agent_checkpoint_name, sensor_name = 'rgb'):
+    """
+    The idea of this function is to make a low res video for quickly debuging the dataset generated. That is good for deguging from remote machines
+    :return:
+    """
+
+    with open(json_filename, 'r') as f:
+        json_file = json.loads(f.read())
+
+    # The folder where the episode is.
+    folder_path = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
+                            environment_name, agent_checkpoint_name, '0')
+
+    print(" =======> Getting images from ", folder_path)
+    output_name = os.path.join('_videos', environment_name)
+    print(' =======> Output video in this path', output_name)
+    if not os.path.exists(output_name):
+        os.makedirs(output_name)
+
+    subprocess.call(['ffmpeg', '-f', 'image2', '-i', os.path.join(folder_path, sensor_name+'%06d.png'), '-vcodec', 'mpeg4', '-y',
+                     os.path.join(output_name, agent_checkpoint_name + '_' + sensor_name +'.mp4')])
+    subprocess.call(['rm', '-r', folder_path])
+
 
 def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_path,
               batch_size=1, save_dataset=False, port=None, save_sensors=False,
-              agent_checkpoint_name=None, save_trajectories=False, direct_read=False):
+              agent_checkpoint_name=None, save_trajectories=False, direct_read=False, make_videos = False):
 
     """
     Computes the benchmark for a given json file containing a certain number of experiences.
@@ -221,6 +245,12 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     # Add partial summary to allow continuation
                     add_summary(env._environment_name, summary,
                                 benchmark_name, agent_checkpoint_name)
+
+                    if save_sensors and make_videos:
+                        print('making video for visualizing episodes')
+                        make_video(env._environment_name, benchmark_name, agent_checkpoint_name, sensor_name = 'rgb')
+                       # print('After making videos, we delete the images to save space')
+                        #subprocess.call(['rm', '-r', folder_path])
 
                 except KeyboardInterrupt:
                     break
