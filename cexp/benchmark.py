@@ -177,10 +177,8 @@ def make_video(environment_name,json_filename, agent_checkpoint_name, sensor_nam
                             environment_name, agent_checkpoint_name, '0')
 
     print(" =======> Getting images from ", folder_path)
-    output_name = os.path.join('_videos', environment_name)
+    output_name = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'], environment_name)
     print(' =======> Output video in this path', output_name)
-    if not os.path.exists(output_name):
-        os.makedirs(output_name)
 
     subprocess.call(['ffmpeg', '-f', 'image2', '-i', os.path.join(folder_path, sensor_name+'%06d.png'), '-vcodec', 'mpeg4', '-y',
                      os.path.join(output_name, agent_checkpoint_name + '_' + sensor_name +'.mp4')])
