@@ -9,7 +9,8 @@
         "scenarios": {
           "background_activity": {
             "vehicle.*": 70,
-            "walker.*": 150
+            "walker.*": 300,
+            "cross_factor": 0.5
           }
         },
         "town_name": "Town02",
@@ -25,7 +26,8 @@
         "scenarios": {
           "background_activity": {
             "vehicle.*": 70,
-            "walker.*": 150
+            "walker.*": 150,
+            "cross_factor": 0.01
           }
         },
         "town_name": "Town02",
@@ -41,7 +43,8 @@
         "scenarios": {
           "background_activity": {
             "vehicle.*": 70,
-            "walker.*": 150
+            "walker.*": 150,
+            "cross_factor": 0.01
           }
         },
         "town_name": "Town02",
@@ -57,7 +60,8 @@
         "scenarios": {
           "background_activity": {
             "vehicle.*": 70,
-            "walker.*": 150
+            "walker.*": 150,
+            "cross_factor": 0.01
           }
         },
         "town_name": "Town02",
@@ -73,7 +77,8 @@
         "scenarios": {
           "background_activity": {
             "vehicle.*": 70,
-            "walker.*": 150
+            "walker.*": 150,
+            "cross_factor": 0.01
           }
         },
         "town_name": "Town02",
@@ -89,7 +94,8 @@
         "scenarios": {
           "background_activity": {
             "vehicle.*": 70,
-            "walker.*": 150
+            "walker.*": 150,
+            "cross_factor": 0.01
           }
         },
         "town_name": "Town02",

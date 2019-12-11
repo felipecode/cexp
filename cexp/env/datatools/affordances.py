@@ -142,45 +142,79 @@ def is_within_distance_ahead(target_location, current_location, orientation, max
             return (False, None)
 
 
-def get_distance_lead_vehicle(vehicle, map, world, max_distance = 50.0):
-    actor_list = world.get_actors()
-    vehicle_list = actor_list.filter("*vehicle*")
 
-    ego_vehicle_location = vehicle.get_location()
-    ego_vehicle_waypoint = map.get_waypoint(ego_vehicle_location)
 
-    min_distance = max_distance + 10.0
-    for target_vehicle in vehicle_list:
-        # do not account for the ego vehicle
-        if target_vehicle.id == vehicle.id:
-            continue
 
-        # if the object is not in our lane it's not an obstacle
-        target_vehicle_waypoint = map.get_waypoint(target_vehicle.get_location())
-        if target_vehicle_waypoint.road_id != ego_vehicle_waypoint.road_id or \
-                target_vehicle_waypoint.lane_id != ego_vehicle_waypoint.lane_id:
-            continue
+def relative_angle_to_road()
 
-        loc = target_vehicle.get_location()
+    pass
 
-        sign, distance = is_within_distance_ahead(loc, ego_vehicle_location, vehicle.get_transform().rotation.yaw, max_distance)
+"""
+Aff1 Ego Speed:  must be used in order to properly plan the manouvers
+"""
 
-        if sign:
-            if distance < min_distance:
-                min_distance = distance
+def get_speed():
+    """
+     Bassically return the vehicle ego-speed
+    :return:
+    """
+    pass
 
-    #print('min_distance', min_distance)
-    return min_distance
+"""
+Aff2 Lateral Distance to Centerlane: The position with respect to the lane the vehicle  is in.
+"""
+def compute_distance_to_centerline(ego_location, closest_wp_location):
 
+
+    ego_yaw = ego_location['orientation'][2]
+    waypoint_yaw = closest_wp_location['orientation'][2]
+
+    # we fistly make all range to be [0, 360)
+    if ego_yaw >= 0.0:
+        ego_yaw %= 360.0
+    else:
+        ego_yaw %= -360.0
+        if ego_yaw != 0.0:
+            ego_yaw += 360.0
+
+    if waypoint_yaw >= 0.0:
+        waypoint_yaw %= 360.0
+    else:
+        waypoint_yaw %= -360.0
+        if waypoint_yaw != 0.0:
+            waypoint_yaw += 360.0
+
+    # we need to do some transformations to Cartesian coordinate system
+    waypoint_C_yaw = 90.0 - waypoint_yaw
+    waypoint_rad = np.deg2rad(waypoint_C_yaw)                          # from degree to radian
+    # To define the distance to the centerline, we need to firstly calculate the road tangent, then compute the distance between the agent and the tangent
+    waypoint_x = closest_wp_location['position'][0]
+    waypoint_y = closest_wp_location['position'][1]
+    ego_x = ego_location['position'][0]
+    ego_y = ego_location['position'][1]
+    # road tangent: y = slope * x + b    ---> slope*x-y+b=0
+    slope = math.tan(waypoint_rad)
+    b = waypoint_y - slope * waypoint_x
+
+    return abs(slope * ego_x - ego_y + b) / math.sqrt(math.pow(slope,2) + math.pow(-1,2))
+
+"""
+Aff3 Relative Angle: The angle with respect to the center of the lane.
+"""
 
 def compute_relative_angle(ego_location, closest_wp_location):
     """
-    given the location of ego and the closest fordward waypoint on lane, we compute the relative angel between the ego's orientation and lane's orientation
+    given the location of ego and the closest fordward waypoint on lane, w
+    e compute the relative angel between the ego's orientation and lane's orientation
     :return: relative angle
     """
 
-    # We calculate the "Relative Angle" by computing the difference of orientation yaw between closest waypoint and ego
-    # Note that the axises and intervals of yaw are different, one is [-180,180], and the other is [0, 360], we need to do some transformations
+    # TODO intersection is not used we have no sense of the values.
+
+    # We calculate the "Relative Angle" by computing the difference of orientation yaw between
+    # closest waypoint and ego
+    # Note that the axises and intervals of yaw are different, one is [-180,180], and the other
+    # is [0, 360], we need to do some transformations
     ego_yaw = ego_location['orientation'][2]
     waypoint_yaw = closest_wp_location['orientation'][2]
 
@@ -223,57 +257,63 @@ def compute_relative_angle(ego_location, closest_wp_location):
 
     return relative_angle
 
+"""
+Aff4 Distance Lead Vehicle: The distance to the vehicle in front
+"""
+# TODO we might want to get distance to all the vechicles
 
-def compute_distance_to_centerline(ego_location, closest_wp_location):
-    ego_yaw = ego_location['orientation'][2]
-    waypoint_yaw = closest_wp_location['orientation'][2]
+def get_distance_lead_vehicle(vehicle, map, world, max_distance = 50.0):
 
-    # we fistly make all range to be [0, 360)
-    if ego_yaw >= 0.0:
-        ego_yaw %= 360.0
-    else:
-        ego_yaw %= -360.0
-        if ego_yaw != 0.0:
-            ego_yaw += 360.0
+    # We need to be careful if this is properly done.
 
-    if waypoint_yaw >= 0.0:
-        waypoint_yaw %= 360.0
-    else:
-        waypoint_yaw %= -360.0
-        if waypoint_yaw != 0.0:
-            waypoint_yaw += 360.0
+    actor_list = world.get_actors()
+    vehicle_list = actor_list.filter("*vehicle*")
 
-    # we need to do some transformations to Cartesian coordinate system
-    waypoint_C_yaw = 90.0 - waypoint_yaw
-    waypoint_rad = np.deg2rad(waypoint_C_yaw)                          # from degree to radian
-    # To define the distance to the centerline, we need to firstly calculate the road tangent, then compute the distance between the agent and the tangent
-    waypoint_x = closest_wp_location['position'][0]
-    waypoint_y = closest_wp_location['position'][1]
-    ego_x = ego_location['position'][0]
-    ego_y = ego_location['position'][1]
-    # road tangent: y = slope * x + b    ---> slope*x-y+b=0
-    slope = math.tan(waypoint_rad)
-    b = waypoint_y - slope * waypoint_x
+    ego_vehicle_location = vehicle.get_location()
+    ego_vehicle_waypoint = map.get_waypoint(ego_vehicle_location)
 
-    return abs(slope * ego_x - ego_y + b) / math.sqrt(math.pow(slope,2) + math.pow(-1,2))
+    min_distance = max_distance + 10.0
+    for target_vehicle in vehicle_list:
+        # do not account for the ego vehicle
+        if target_vehicle.id == vehicle.id:
+            continue
 
-def get_speed():
-    """"""
-    pass
+        # if the object is not in our lane it's not an obstacle
+        target_vehicle_waypoint = map.get_waypoint(target_vehicle.get_location())
+        if target_vehicle_waypoint.road_id != ego_vehicle_waypoint.road_id or \
+                target_vehicle_waypoint.lane_id != ego_vehicle_waypoint.lane_id:
+            continue
 
-def relative_angle_to_road()
+        loc = target_vehicle.get_location()
 
-    pass
+        sign, distance = is_within_distance_ahead(loc, ego_vehicle_location, vehicle.get_transform().rotation.yaw, max_distance)
 
-def distance to pedestrians()
+        if sign:
+            if distance < min_distance:
+                min_distance = distance
 
-def compute_distance_pedestrians():
-
-    pass
-
-def
+    return min_distance
 
 
+"""
+Aff5 Distance to active traffic light: The closest traffic light.
+"""
+
+
+"""
+Aff6 Distance  Visible Pedestrians: Regressing the distance to all pedestrians that are visible.
+"""
+def distance_to_visible_pedestrians():
+
+    """
+        Adding the FOV for detecting the pedestrians
+    :return:
+    """
+
+    pedestrians_distance = distance_to_all_pedestrians
+
+    #distance_visible_vec
+    return distance_visible_vec
 
 
 """
@@ -286,7 +326,10 @@ def
 def ego_vehicle_moving():
     pass
 
-def properly_oriented_towards
+def properly_oriented_towards():
+    pass
+
+
 
 """
 Classification

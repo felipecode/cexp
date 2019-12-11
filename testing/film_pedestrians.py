@@ -102,13 +102,13 @@ def collect_data_loop(renv, agent, draw_pedestrians=True):
                 #'width': 800, 'height': 600,
                 #'fov': 100,
                 #'id': 'rgb'},
-                 {'type': 'sensor.camera.rgb',
-                     'x': 2.0, 'y': 0.0,
-                     'z': 15.40, 'roll': 0.0,
-                     'pitch': -30.0, 'yaw': 0.0,
-                     'width': 800, 'height': 600,
-                     'fov': 120,
-                     'id': 'rgb_view'},
+                # {'type': 'sensor.camera.rgb',
+                #     'x': 2.0, 'y': 0.0,
+                #     'z': 15.40, 'roll': 0.0,
+                #     'pitch': -30.0, 'yaw': 0.0,
+                #     'width': 800, 'height': 600,
+                #     'fov': 120,
+                #     'id': 'rgb_view'},
                 {'type': 'sensor.other.gnss',
                  'x': 0.7, 'y': -0.4, 'z': 1.60,
                  'id': 'GPS'}]
@@ -121,7 +121,7 @@ def collect_data_loop(renv, agent, draw_pedestrians=True):
         state, _ = renv.step([controls])
 
     if draw_pedestrians:
-        renv.draw_pedestrians([0, 0.5, 1])
+        renv.draw_pedestrians([0, 0.15, 0.3])
 
     if renv.get_info()['status'] == 'Failed':
         renv.remove_data(agent.name)
@@ -148,7 +148,7 @@ if __name__ == '__main__':
                    "to use to run it.")
     parser = argparse.ArgumentParser(description=description)
 
-    parser.add_argument('-p','--port', default=None, help='Port for an already existent server')
+    parser.add_argument('-p', '--port', default=None, help='Port for an already existent server')
 
     parser.add_argument('-js', '--json-file',
                         default='sample_descriptions/sample_benchmark.json',
@@ -176,7 +176,7 @@ if __name__ == '__main__':
               'gpu': 0,
               'batch_size': 1,
               'remove_wrong_data': False,
-              'non_rendering_mode': False,
+              'non_rendering_mode': True,
               'carla_recording': True
               }
 

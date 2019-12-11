@@ -2,6 +2,8 @@ import carla
 import colorsys
 import argparse
 import os
+import matplotlib
+matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 #from cexp.env.scenario_identification import identify_scenario
 
@@ -266,9 +268,9 @@ def draw_topology(carla_topology, index):
 
                 r = r.get_right_lane()
 
-        draw_lane( shoulder, SHOULDER_COLOR)
-        draw_lane( parking, PARKING_COLOR)
-        draw_lane( sidewalk, SIDEWALK_COLOR)
+        draw_lane(shoulder, SHOULDER_COLOR)
+        draw_lane(parking, PARKING_COLOR)
+        draw_lane(sidewalk, SIDEWALK_COLOR)
 
     draw_roads(set_waypoints)
 
@@ -288,6 +290,13 @@ def draw_point(location, result_color, size, alpha=None):
     pixel = world_to_pixel(location)
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
     plt.gca().add_patch(circle)
+
+def draw_line(location_start, location_end, result_color, size, alpha=None):
+
+    pixel_start = world_to_pixel(location_start)
+    pixel_end = world_to_pixel(location_end)
+    line = plt.Polygon([pixel_start, pixel_end], lw=size, edgecolor=result_color, alpha=alpha)
+    plt.gca().add_patch(line)
 
 def draw_text(content, location, result_color, size):
 
@@ -373,6 +382,20 @@ def draw_walker(walker, alpha=None, color= (1,0,0)):
     draw_point(location, color, size, alpha)
 
 
+def draw_walker_move(walker_start, walker_end, alpha=0.5, color=(1,0,0)):
+    """
+    We draw a vector correponding to two walker positions
+    :param position:
+    :param color:
+    :return:
+    """
+
+    size = 1
+    world_pos_start = walker_start['position']
+    world_pos_end = walker_end['position']
+    location_start = carla.Location(x=world_pos_start[0], y=world_pos_start[1], z=world_pos_start[2])
+    location_end = carla.Location(x=world_pos_end[0], y=world_pos_end[1], z=world_pos_end[2])
+    draw_line(location_start, location_end, color, size, alpha)
 
 
 
@@ -497,19 +520,36 @@ def draw_pedestrians(agent_name, env_data, env_name, world, steps):
     # color pallet ! Maximum a few pedestrians
     color_palet = [(1,0,0), (0,1,0), (0,0,1), (1,1,0), (0,1,1), (1,0,1), (0,0,0), (1,1,1)]
     fig = plt.figure()
-    plt.xlim(-200, 5000)
-    plt.ylim(-200, 5000)
+    plt.xlim(-400, 3000)
+    plt.ylim(500, 5000)
     # We draw the full map
     draw_map(world)
     count = 0
+    if len(steps) > 1:  # if we have more than 1 step we may connect the first and the last
+        for exp in env_data:
+            number_of_steps = len(exp[0][0][0]) -1
+            datapoint_start = exp[0][0][0][int(number_of_steps*steps[0])]
+            datapoint_end = exp[0][0][0][int(number_of_steps*steps[-1])]
+
+            for s_walker_info_key, e_walker_info_key in zip(datapoint_start['measurements']['walkers'].keys(),
+                                                    datapoint_end['measurements']['walkers'].keys()):
+
+                s_walker_info = datapoint_start['measurements']['walkers'][s_walker_info_key]
+                e_walker_info = datapoint_end['measurements']['walkers'][e_walker_info_key]
+                draw_walker_move(s_walker_info, e_walker_info, color=(0, 0, 0))
 
     for step in steps:
         for exp in env_data:
-            number_of_steps = len(exp[0][0][0]) -1
+            number_of_steps = len(exp[0][0][0]) - 1
             datapoint = exp[0][0][0][int(number_of_steps*step)]
             for key, walker_info in datapoint['measurements']['walkers'].items():
                 draw_walker(walker_info, color=color_palet[count])
         count += 1
+        
+
+
+
+
 
     fig.savefig('_walkers/'+ agent_name + '_' + env_name + '_step_' + ''.join(str(e)+'_'
                                                                               for e in steps)

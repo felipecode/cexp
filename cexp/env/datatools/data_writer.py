@@ -1,7 +1,5 @@
-
-
-
 import os
+import glob
 import json
 import shutil
 import subprocess
@@ -192,6 +190,15 @@ class Writer(object):
         :return:
         """
         shutil.rmtree(self._full_path)
+
+    def delete_sensors(self):
+        """
+        Delete all the PNG files.
+        Currently only focus on PNG later we can add more formats
+        :return:
+        """
+        for f in glob.glob(os.path.join(self._full_path,"*.png")):
+            os.remove(f)
 
     def delete_env(self):
 

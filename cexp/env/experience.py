@@ -63,7 +63,7 @@ class Experience(object):
         self._town_name = exp_params['town_name']
         # the dictionary of sensors used
         self._sensors_dict = sensors
-
+        # The model of the vehicle to be spawned
         self._vehicle_model = vehicle_model
         # if data is being saved we create the writer object
 
@@ -315,9 +315,10 @@ class Experience(object):
                                                 vehicle)
 
             # setup callback
-            if self._save_sensors:  # We have the options to not save sensors data
+            if self._save_sensors or self._exp_params['make_videos']:
+                # We have the options to not save sensors data unless it is to make video
                 sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
-                                   writer=self._writer))
+                                       writer=self._writer))
             else:
                 sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
                                        writer=None))
@@ -426,11 +427,15 @@ class Experience(object):
         :param timeout:
         :return:
         """
+        if 'cross_factor' not in background_definition:
+            raise ValueError(" Need to add the crossing factor to "
+                             " the background scenario parameters")
 
         scenario_configuration = ScenarioConfiguration()
         scenario_configuration.route = None
         scenario_configuration.town = self._town_name
-        # TODO The random seed should be set
+        # TODO The random seed should be set.
+        # Also the crossing factor should be specified on the benchmark itself.
         configuration_instances_vehicles = []
         configuration_instances_walkers = []
         for key, numbers in background_definition.items():
@@ -442,7 +447,8 @@ class Experience(object):
                 actor_configuration_instance = ActorConfigurationData(model, transform,
                                                                       autopilot=autopilot,
                                                                       random=random_location,
-                                                                      amount=background_definition[key],
+                                                                      amount=int(
+                                                                          background_definition[key]),
                                                                       category='car')
                 configuration_instances_vehicles.append(actor_configuration_instance)
             else:
@@ -453,8 +459,8 @@ class Experience(object):
                 actor_configuration_instance = ActorConfigurationData(model, transform,
                                                                       autopilot=autopilot,
                                                                       random=random_location,
-                                                                      amount=background_definition[
-                                                                          key],
+                                                                      amount=int(background_definition[
+                                                                          key]),
                                                                       category='walker')
                 configuration_instances_walkers.append(actor_configuration_instance)
 
@@ -463,7 +469,8 @@ class Experience(object):
 
         # TODO add the cross factor to configuration ( Maybe some defaults)2
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
-                                  cross_factor=0.01, timeout=timeout, debug_mode=False)
+                                  cross_factor=background_definition['cross_factor'],
+                                  timeout=timeout, debug_mode=False)
 
     def build_scenario_instances(self, scenario_definition_vec, timeout):
 
@@ -476,7 +483,6 @@ class Experience(object):
         list_instanced_scenarios = []
         if scenario_definition_vec is None:
             return list_instanced_scenarios
-
 
         for scenario_name in scenario_definition_vec:
             # The BG activity encapsulates several scenarios that contain vehicles going arround
@@ -541,7 +547,10 @@ class Experience(object):
                 if self._route_statistics['result'] == 'FAILURE':
                     self._clean_bad_dataset()
         if self._exp_params['make_videos']:
+            delete_sensors = not self._exp_params['save_sensors']
             self._writer.make_video(self._sensors_dict)
+            if delete_sensors:
+                self._writer.delete_sensors()
 
     def cleanup(self, ego=True):
         """

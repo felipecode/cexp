@@ -74,7 +74,7 @@ class DrivingBatch(object):
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
         # The timeout for waiting for the server to start.
-        self.client_timeout = 25.0
+        self.client_timeout = 35.0
         # The os environment file
         if "SRL_DATASET_PATH" not in os.environ and self._params['save_dataset']:
             raise ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
