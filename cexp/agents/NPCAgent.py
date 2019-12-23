@@ -1,6 +1,7 @@
 import logging
 import numpy as NP
 from cexp.agents.agent import Agent
+from cexp.env.datatools.affordances import  get_driving_affordances
 from cexp.env.scenario_identification import get_distance_closest_crossing_waker
 
 
@@ -39,6 +40,11 @@ class NPCAgent(Agent):
         return self._sensors_dict
 
     def make_state(self, exp):
+        """
+            Based on the exp object it makes all the affordances.
+        :param exp:
+        :return:
+        """
         #if self._agent is None:
         #    self._agent = BasicAgent(exp._ego_actor)
 
@@ -63,7 +69,7 @@ class NPCAgent(Agent):
     def run_step(self, affordances):
 
 
-        # TODO probably requires that the vehicles reduce speed anyway.
+        # TODO probably requires that the vehicles reduce speed anyway when close to a pedestrian
 
         hazard_detected = False
 

@@ -155,7 +155,7 @@ class PIDLateralController():
             -1 represent maximum steering to left
             +1 maximum steering to right
         """
-        return self._pid_control(waypoint, self._vehicle.get_transform())
+        return self._pid_control(relative_angle)
 
     def _pid_control(self, relative_angle):#, vehicle_transform):
         """
@@ -197,5 +197,5 @@ class PIDLateralController():
             _de = 0.0
             _ie = 0.0
 
-        return np.clip((self._K_P * _dot) + (self._K_D * _de /
+        return np.clip((self._K_P * relative_angle) + (self._K_D * _de /
                                              self._dt) + (self._K_I * _ie * self._dt), -1.0, 1.0)

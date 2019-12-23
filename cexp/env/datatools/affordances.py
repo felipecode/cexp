@@ -242,38 +242,6 @@ def compute_relative_angle(ego_location, closest_wp_location):
     return relative_angle
 
 
-def compute_distance_to_centerline(ego_location, closest_wp_location):
-    ego_yaw = ego_location['orientation'][2]
-    waypoint_yaw = closest_wp_location['orientation'][2]
-
-    # we fistly make all range to be [0, 360)
-    if ego_yaw >= 0.0:
-        ego_yaw %= 360.0
-    else:
-        ego_yaw %= -360.0
-        if ego_yaw != 0.0:
-            ego_yaw += 360.0
-
-    if waypoint_yaw >= 0.0:
-        waypoint_yaw %= 360.0
-    else:
-        waypoint_yaw %= -360.0
-        if waypoint_yaw != 0.0:
-            waypoint_yaw += 360.0
-
-    # we need to do some transformations to Cartesian coordinate system
-    waypoint_C_yaw = 90.0 - waypoint_yaw
-    waypoint_rad = np.deg2rad(waypoint_C_yaw)                          # from degree to radian
-    # To define the distance to the centerline, we need to firstly calculate the road tangent, then compute the distance between the agent and the tangent
-    waypoint_x = closest_wp_location['position'][0]
-    waypoint_y = closest_wp_location['position'][1]
-    ego_x = ego_location['position'][0]
-    ego_y = ego_location['position'][1]
-    # road tangent: y = slope * x + b    ---> slope*x-y+b=0
-    slope = math.tan(waypoint_rad)
-    b = waypoint_y - slope * waypoint_x
-
-    return abs(slope * ego_x - ego_y + b) / math.sqrt(math.pow(slope,2) + math.pow(-1,2))
 
 
 """
