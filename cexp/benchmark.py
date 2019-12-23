@@ -176,9 +176,9 @@ def make_video(environment_name,json_filename, agent_checkpoint_name, sensor_nam
     folder_path = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'],
                             environment_name, '0_'+ agent_checkpoint_name, '0')
 
-    print(" =======> Getting images from ", folder_path)
+    #print(" =======> Getting images from ", folder_path)
     output_name = os.path.join(os.environ["SRL_DATASET_PATH"], json_file['package_name'], environment_name)
-    print(' =======> Output video in this path', output_name)
+    #print(' =======> Output video in this path', output_name)
 
     subprocess.call(['ffmpeg', '-f', 'image2', '-i', os.path.join(folder_path, sensor_name+'%06d.png'), '-vcodec', 'mpeg4', '-y',
                      os.path.join(output_name,  agent_checkpoint_name + '_' + sensor_name +'.mp4')])
@@ -247,10 +247,9 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     if save_sensors and make_videos:
                         print('making video for visualizing episodes')
                         make_video(env._environment_name, benchmark_name, agent_checkpoint_name, sensor_name = 'rgb')
-                       # print('After making videos, we delete the images to save space')
-                        #subprocess.call(['rm', '-r', folder_path])
 
                 except KeyboardInterrupt:
+                    env.stop()
                     break
                 except Exception as e:
                     traceback.print_exc()
