@@ -32,16 +32,10 @@ class Agent(object):
     def _run_step_batch(self, input_data_vec):
         # TODO ELIMINATE this For make the inference inside and code the angent to make it
         controls_vec = []
-        vehicles_in_10meters = []
-        red_light_in_10meters = []
-        hazard_detected = []
         for input_data in input_data_vec:
-            controls_vec.append(self.run_step(input_data)[0])
-            vehicles_in_10meters.append(self.run_step(input_data)[1])
-            red_light_in_10meters.append(self.run_step(input_data)[2])
-            hazard_detected.append(self.run_step(input_data)[3])
+            controls_vec.append(self.run_step(input_data))
 
-        return controls_vec, vehicles_in_10meters, red_light_in_10meters, hazard_detected
+        return controls_vec
 
     def make_reward(self, exp):
         """

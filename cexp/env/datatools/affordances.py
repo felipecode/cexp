@@ -172,6 +172,24 @@ def get_distance_lead_vehicle(vehicle, map, world, max_distance = 50.0):
     #print('min_distance', min_distance)
     return min_distance
 
+def compute_relative_angle_2(vehicle_transform, waypoint ):
+
+    v_begin = vehicle_transform.location
+    v_end = v_begin + carla.Location(x=math.cos(math.radians(vehicle_transform.rotation.yaw)),
+                                     y=math.sin(math.radians(vehicle_transform.rotation.yaw)))
+
+    v_vec = np.array([v_end.x - v_begin.x, v_end.y - v_begin.y, 0.0])
+    w_vec = np.array([waypoint.transform.location.x -
+                      v_begin.x, waypoint.transform.location.y -
+                      v_begin.y, 0.0])
+
+    relative_angle = math.acos(np.clip(np.dot(w_vec, v_vec) /
+                             (np.linalg.norm(w_vec) * np.linalg.norm(v_vec)), -1.0, 1.0))
+    _cross = np.cross(v_vec, w_vec)
+    if _cross[2] < 0:
+        relative_angle *= -1.0
+
+    return relative_angle
 
 def compute_relative_angle(ego_location, closest_wp_location):
     """
@@ -257,3 +275,12 @@ def compute_distance_to_centerline(ego_location, closest_wp_location):
 
     return abs(slope * ego_x - ego_y + b) / math.sqrt(math.pow(slope,2) + math.pow(-1,2))
 
+
+"""
+The access function for the affordances
+"""
+
+def get_driving_affordances(exp):
+
+    # compute all the affordances that are necessary for an NPC agent to drive
+    pass

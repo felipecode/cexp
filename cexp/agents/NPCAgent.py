@@ -1,8 +1,8 @@
 import logging
+import numpy as NP
 from cexp.agents.agent import Agent
 from cexp.env.scenario_identification import get_distance_closest_crossing_waker
 
-from cexp.agents.basic_agent import BasicAgent
 
 # TODO make a sub class for a non learnable agent
 
@@ -10,6 +10,14 @@ from cexp.agents.basic_agent import BasicAgent
     Interface for the CARLA basic npc agent.
 """
 
+class AgentState(Enum):
+    """
+    AGENT_STATE represents the possible states of a roaming agent
+    """
+    NAVIGATING = 1
+    BLOCKED_BY_VEHICLE = 2
+    BLOCKED_RED_LIGHT = 3
+    BLOCKED_BY_PEDESTRIAN = 4
 
 class NPCAgent(Agent):
 
@@ -31,54 +39,64 @@ class NPCAgent(Agent):
         return self._sensors_dict
 
     def make_state(self, exp):
-        if self._agent is None:
-            self._agent = BasicAgent(exp._ego_actor)
+        #if self._agent is None:
+        #    self._agent = BasicAgent(exp._ego_actor)
 
-        if not self.route_assigned:
+        #if not self.route_assigned:
 
-            plan = []
-            for transform, road_option in exp._route:
-                wp = exp._ego_actor.get_world().get_map().get_waypoint(transform.location)
-                plan.append((wp, road_option))
+        #    plan = []
+        #    for transform, road_option in exp._route:
+        #        wp = exp._ego_actor.get_world().get_map().get_waypoint(transform.location)
+        #        plan.append((wp, road_option))
 
-            self._agent._local_planner.set_global_plan(plan)
-            self.route_assigned = True
+        #   self._agent._local_planner.set_global_plan(plan)
+        #    self.route_assigned = True
 
-        self._distance_pedestrian_crossing, self._closest_pedestrian_crossing =\
-                get_distance_closest_crossing_waker(exp)
 
-        # if the closest pedestrian dies we reset
-        if self._closest_pedestrian_crossing is not None and \
-            not self._closest_pedestrian_crossing.is_alive:
-            self._closest_pedestrian_crossing = None
-            self._distance_pedestrian_crossing = -1
-
-        return None
+        return get_driving_affordances(exp)
 
     def make_reward(self, exp):
         # Just basically return None since the reward is not used for a non
 
         return None
 
-    def run_step(self, state):
-
-        #print (self._distance_pedestrian_crossing)
-        if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
-            if self._distance_pedestrian_crossing < 4.5:
-                self._agent._local_planner.set_speed(0.0)
-            else:
-                self._agent._local_planner.set_speed(self._distance_pedestrian_crossing/4.5)
-                
-            print ( "########## SET SPEED #########")
-            print(self._agent._local_planner._target_speed)
+    def run_step(self, affordances):
 
 
-        control, vehicles_in_10meters, red_light_in_10meters, hazard_detected = self._agent.run_step()
+        # TODO probably requires that the vehicles reduce speed anyway.
 
-        # IF WE ARE TO CLOSE TO
+        hazard_detected = False
+
+        pedestrian_distance = affordances['closest_pedestrian_distance']
+        vehicle_distance = affordances['lead_following_vehicle_distance']
+        closest_traffic_light = affordances['closest_traffic_light']
+        closest_tl_state_red = affordances['closest_traffic_light_state_red']
+        relative_angle = affordances['relative_angle']
+        target_speed = affordances['target_speed']
+
+        if pedestrian_distance < self._pedestrian_threshold:
+            self._state = AgentState.BLOCKED_BY_PEDESTRIAN
+            hazard_detected = True
+
+        if vehicle_distance < self._vehicle_threshold:
+            self._state = AgentState.BLOCKED_BY_VEHICLE
+            hazard_detected = True
+
+        if closest_traffic_light < self._tl_threshold and closest_tl_state_red:
+            self._state = AgentState.BLOCKED_RED_LIGHT
+            hazard_detected = True
+
+        if hazard_detected:
+            control = self.emergency_stop()
+
+        else:
+            self._state = AgentState.NAVIGATING
+            # standard local planner behavior
+            # TODO there might be a problem when using less waypoints
+            control = self._local_planner.run_step(relative_angle, target_speed)
 
         logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
-        return control, vehicles_in_10meters, red_light_in_10meters, hazard_detected
+        return control
 
     def reinforce(self, rewards):
         """
