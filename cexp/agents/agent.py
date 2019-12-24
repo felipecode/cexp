@@ -111,16 +111,18 @@ class Agent(object):
         state, reward = environment.reset(self._make_state_batch, self._make_reward_batch,
                                           self._name)
 
+        # print("what is state?", state)      # affordances.py -> get_driving_affordances(exp)
+
         # Start the rewards and state vectors used
         reward_batch = [[]] * environment._batch_size
         state_batch = [[]] * environment._batch_size
 
         while environment.is_running():
 
-            controls, vehicles_in_10meters_vec, red_light_in_10meters_vec, hazard_detected_vec= self._run_step_batch(state)
+            controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             # Experiment on the batch.
-            state, reward = environment.run_step(controls, vehicles_in_10meters_vec, red_light_in_10meters_vec, hazard_detected_vec)
+            state, reward = environment.run_step(controls)
 
             # TODO check the posible sizes mismatches here
             self.add_value(reward_batch, reward)

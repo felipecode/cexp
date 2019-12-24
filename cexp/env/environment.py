@@ -268,7 +268,7 @@ class Environment(object):
         return running_envs, num_running_envs, running_envs_map, running_envs_reverse_map
     # TODO we can make this extra data pretier.
 
-    def run_step(self, control_vec, vehicles_in_10meters_vec, red_light_in_10meters_vec, hazard_detected_vec):
+    def run_step(self, control_vec):
         """
         Run an step on the simulation using the agent control
         :param control_vec:
@@ -283,7 +283,7 @@ class Environment(object):
             control = control_vec[i]
             control = exp.tick_scenarios_control(control)
             exp.apply_control(control)
-            exp.tick_world(vehicles_in_10meters_vec[i], red_light_in_10meters_vec[i], hazard_detected_vec[i])
+            exp.tick_world()
             exp.save_experience()
 
         return self.StateFunction(self._exp_list), \

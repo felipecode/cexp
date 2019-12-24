@@ -21,7 +21,7 @@ from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _
 from cexp.env.scorer import record_route_statistics_default, get_current_completion
 from cexp.env.scenario_identification import distance_to_intersection, get_current_road_angle, get_distance_closest_crossing_waker
 
-from cexp.env.datatools.affordances import get_distance_lead_vehicle
+from cexp.env.datatools import affordances
 
 from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
@@ -279,12 +279,16 @@ class Experience(object):
                                                     carla.Rotation(pitch=-90)))
 
 
-    def tick_world(self, vehicles_in_10meters = False, red_light_in_10meters = False, hazard_detected = False):
+    def tick_world(self):
         # Save all the measurements that are interesting
         # TODO this may go to another function
         # TODO maybe add not on every iterations, identify every second or half second.
         # TODO this may be requiried even if no data is saved
 
+        actor_list = self.world.get_actors()  # we get all objects in this world
+        vehicle_list = actor_list.filter("*vehicle*")  # vehicle objects
+        tl_list = actor_list.filter("*traffic_light*")  # traffic light objects
+        pedestrian_list = actor_list.filter("*pedestrian*")  # pedestrian objects
         if self._save_data:
             closest_waypoint, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                            self._route)
@@ -295,23 +299,12 @@ class Experience(object):
 
             self._environment_data['exp_measurements'] = {
                 'directions': directions,
-                'forward_speed': get_forward_speed(self._ego_actor),
                 'distance_intersection': distance_to_intersection(self._ego_actor,
                                                                   self._ego_actor.get_world().get_map()),
                 'road_angle': get_current_road_angle(self._ego_actor,
                                                      self._ego_actor.get_world().get_map()),
-                'distance_lead_vehicle': get_distance_lead_vehicle(self._ego_actor, self._ego_actor.get_world().get_map(),
-                                                                   self.world),
                 'distance_crossing_walker': dist_scenario3,
-                'distance_closest_scenario4': -1,
-                'vehicles_in_10meters': vehicles_in_10meters,
-                'red_light_in_10meters': red_light_in_10meters,
-                'hazard_stop': hazard_detected,
-                'closest_waypoint': {'position': [closest_waypoint.location.x, closest_waypoint.location.y,
-                                              closest_waypoint.location.z],
-                                    'orientation': [closest_waypoint.rotation.roll, closest_waypoint.rotation.pitch,
-                                                 closest_waypoint.rotation.yaw]}
-
+                'distance_closest_scenario4': -1
             }
 
 

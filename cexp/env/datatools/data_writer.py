@@ -8,7 +8,7 @@ import numpy as np
 import math
 
 from google.protobuf.json_format import MessageToJson, MessageToDict
-from cexp.env.datatools.affordances import compute_relative_angle, compute_distance_to_centerline
+from cexp.env.datatools.affordances import compute_relative_angle
 
 # TODO write expbatch related data.
 
@@ -89,10 +89,6 @@ class Writer(object):
                                         transform.rotation.yaw],
                         "velocity": [velocity.x, velocity.y, velocity.z]
                     }})
-
-
-        measurements.update({'relative_angle': compute_relative_angle(measurements['ego_actor'], measurements['closest_waypoint'])})
-        measurements.update({'distance_to_centerline': compute_distance_to_centerline(measurements['ego_actor'], measurements['closest_waypoint'])})
 
 
         # Add other actors and lane information
