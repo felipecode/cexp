@@ -285,10 +285,6 @@ class Experience(object):
         # TODO maybe add not on every iterations, identify every second or half second.
         # TODO this may be requiried even if no data is saved
 
-        actor_list = self.world.get_actors()  # we get all objects in this world
-        vehicle_list = actor_list.filter("*vehicle*")  # vehicle objects
-        tl_list = actor_list.filter("*traffic_light*")  # traffic light objects
-        pedestrian_list = actor_list.filter("*pedestrian*")  # pedestrian objects
         if self._save_data:
             closest_waypoint, directions = self._get_current_wp_direction(self._ego_actor.get_transform().location,
                                                            self._route)

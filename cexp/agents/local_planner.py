@@ -15,7 +15,7 @@ import random
 import carla
 from cexp.agents.controller import VehiclePIDController
 from cexp.agents.misc import distance_vehicle, draw_waypoints
-
+from cexp.env.datatools.affordances import compute_relative_angle
 
 class RoadOption(Enum):
     """
@@ -186,59 +186,59 @@ class LocalPlanner(object):
         self._target_road_option = RoadOption.LANEFOLLOW
         self._global_plan = True
 
-    def run_step(self, relative_angle, target_speed, debug=True):
+    def get_target_waypoint(self, debug = False):
+
+        # not enough waypoints in the horizon? => add more!
+        if not self._global_plan and len(self._waypoints_queue) < int(self._waypoints_queue.maxlen * 0.5):
+            self._compute_next_waypoints(k=100)
+
+        if len(self._waypoints_queue) == 0:
+            return None
+
+        #   Buffering the waypoints
+        if not self._waypoint_buffer:
+            for i in range(self._buffer_size):
+                if self._waypoints_queue:
+                    self._waypoint_buffer.append(
+                        self._waypoints_queue.popleft())
+                else:
+                    break
+
+        # current vehicle waypoint
+        self._current_waypoint = self._map.get_waypoint(self._vehicle.get_location())
+        # target waypoint
+        self.target_waypoint, self._target_road_option = self._waypoint_buffer[0]
+
+        # purge the queue of obsolete waypoints
+        vehicle_transform = self._vehicle.get_transform()
+        max_index = -1
+
+        for i, (waypoint, _) in enumerate(self._waypoint_buffer):
+            if distance_vehicle(
+                    waypoint, vehicle_transform) < self._min_distance:
+                max_index = i
+        if max_index >= 0:
+            for i in range(max_index + 1):
+                self._waypoint_buffer.popleft()
+
+        if debug:
+            draw_waypoints(self._vehicle.get_world(), [self.target_waypoint], self._vehicle.get_location().z + 1.0)
+
+        return self.target_waypoint
+
+
+    def run_step(self, relative_angle, target_speed):
         """
         Execute one step of local planning which involves running the longitudinal and lateral PID controllers to
         follow the waypoints trajectory.
 
-        :param debug: boolean flag to activate waypoints debugging
+        :param
         :return:
         """
 
-        # not enough waypoints in the horizon? => add more!
-        #if not self._global_plan and len(self._waypoints_queue) < int(self._waypoints_queue.maxlen * 0.5):
-        #    self._compute_next_waypoints(k=100)
-
-        #if len(self._waypoints_queue) == 0:
-        #    control = carla.VehicleControl()
-        #    control.steer = 0.0
-        #    control.throttle = 0.0
-        #    control.brake = 1.0
-        #    control.hand_brake = False
-        #    control.manual_gear_shift = False
-
-        #    return control
-
-        #   Buffering the waypoints
-        #if not self._waypoint_buffer:
-        #    for i in range(self._buffer_size):
-        #        if self._waypoints_queue:
-        #            self._waypoint_buffer.append(
-        #                self._waypoints_queue.popleft())
-        #        else:
-        #            break
-
-        # current vehicle waypoint
-        #vehicle_transform = self._vehicle.get_transform()
-        #self._current_waypoint = self._map.get_waypoint(vehicle_transform.location)
-        # target waypoint
-        # self.target_waypoint, self._target_road_option = self._waypoint_buffer[0]
         # move using PID controllers
         control = self._vehicle_controller.run_step(target_speed, relative_angle)
 
-        # purge the queue of obsolete waypoints
-        max_index = -1
-
-        #for i, (waypoint, _) in enumerate(self._waypoint_buffer):
-        #    if waypoint.transform.location.distance(vehicle_transform.location) < self._min_distance:
-        #        max_index = i
-        #if max_index >= 0:
-        #    for i in range(max_index + 1):
-        #        self._waypoint_buffer.popleft()
-        #
-        #if debug:
-        #    draw_waypoints(self._vehicle.get_world(), [self.target_waypoint], self._vehicle.get_location().z + 1.0)
-        # TODO USE DEBUG ON OTHER PARTS
         return control
 
     def done(self):

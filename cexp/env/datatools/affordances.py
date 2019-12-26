@@ -187,7 +187,7 @@ The access function for the affordances
 
 def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_detected_distance,
                             vehicle_forbidden_distance, vehicle_max_detected_distance,
-                            tl_forbidden_distance, tl_max_detected_distance):
+                            tl_forbidden_distance, tl_max_detected_distance, next_waypoint):
 
     """
     compute all the affordances that are necessary for an NPC agent to drive
@@ -209,9 +209,6 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     # TODO: Not sure if the name of pedestrian object is like this, need to be checked later
     pedestrian_list = actor_list.filter("*pedestrian*")   # pedestrian objects
 
-    # TODO: Here I am not sure which function is getting the right next waypoint
-    next_waypoint = ?????
-
     # Although we need only the classification, we still compute continous distance values for future need
     is_pedestrian_hazard, closest_pedestrian_id, closest_pedestrian_distance = \
         closest_pedestrian(ego, pedestrian_list, pedestrian_forbidden_distance, pedestrian_max_detected_distance)
@@ -232,15 +229,5 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     affordances.update({'forward_speed': forward_speed})
     affordances.update({'relative_angle': relative_angle})
 
-    #print(is_vehicle_hazard, closest_vehicle_id, closest_vehicle_distance)
-    #print(is_red_tl_hazard, closest_tl_id, closest_tl_distance)
-    #print(is_pedestrian_hazard, closest_pedestrian_id, closest_pedestrian_distance)
-
-    # we save the affordances ground truth in measurement files
-    exp._environment_data['exp_measurements'].update({'is_vehicle_hazard': is_vehicle_hazard})
-    exp._environment_data['exp_measurements'].update({'is_red_tl_hazard': is_red_tl_hazard})
-    exp._environment_data['exp_measurements'].update({'is_pedestrian_hazard': is_vehicle_hazard})
-    exp._environment_data['exp_measurements'].update({'forward_speed': forward_speed})
-    exp._environment_data['exp_measurements'].update({'relative_angle': relative_angle})
 
     return affordances

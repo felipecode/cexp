@@ -5,6 +5,9 @@ from cexp.env.datatools.affordances import  get_driving_affordances
 from cexp.env.scenario_identification import get_distance_closest_crossing_waker
 from enum import Enum
 
+import carla
+from cexp.agents.local_planner import LocalPlanner
+
 # TODO make a sub class for a non learnable agent
 
 """
@@ -37,37 +40,62 @@ class NPCAgent(Agent):
         self.route_assigned = False
         self._agent = None
 
-        self._distance_pedestrian_crossing = -1
-        self._closest_pedestrian_crossing = None
+        #self._distance_pedestrian_crossing = -1
+        #self._closest_pedestrian_crossing = None
 
     # TODO we set the sensors here directly.
     def sensors(self):
-
         return self._sensors_dict
 
-    def make_state(self, exp):
+    def make_state(self, exp, target_speed = 20):
         """
             Based on the exp object it makes all the affordances.
         :param exp:
         :return:
         """
-        #if self._agent is None:
-        #    self._agent = BasicAgent(exp._ego_actor)
+        self._vehicle = exp._ego_actor
 
-        #if not self.route_assigned:
+        if self._agent is None:
+            self._agent = True
+            self._state = AgentState.NAVIGATING
+            args_lateral_dict = {
+                'K_P': 1,
+                'K_D': 0.02,
+                'K_I': 0,
+                'dt': 1.0 / 20.0}
+            self._local_planner = LocalPlanner(
+                self._vehicle, opt_dict={'target_speed': target_speed,
+                                         'lateral_control_dict': args_lateral_dict})
 
-        #    plan = []
-        #    for transform, road_option in exp._route:
-        #        wp = exp._ego_actor.get_world().get_map().get_waypoint(transform.location)
-        #        plan.append((wp, road_option))
+            self._hop_resolution = 2.0
+            self._path_seperation_hop = 2
+            self._path_seperation_threshold = 0.5
+            self._target_speed = target_speed
+            self._grp = None
 
-        #   self._agent._local_planner.set_global_plan(plan)
-        #    self.route_assigned = True
+        if not self.route_assigned:
+            plan = []
+            for transform, road_option in exp._route:
+                wp = exp._ego_actor.get_world().get_map().get_waypoint(transform.location)
+                plan.append((wp, road_option))
 
+            self._local_planner.set_global_plan(plan)
+            self.route_assigned = True
 
+        #self._distance_pedestrian_crossing, self._closest_pedestrian_crossing = \
+        #    get_distance_closest_crossing_waker(exp)
+
+        # if the closest pedestrian dies we reset
+        #if self._closest_pedestrian_crossing is not None and \
+        #        not self._closest_pedestrian_crossing.is_alive:
+        #    self._closest_pedestrian_crossing = None
+        #    self._distance_pedestrian_crossing = -1
+
+        print('self._local_planner.target_waypoint', self._local_planner.target_waypoint)
         return get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
                                        self._vehicle_forbidden_distance, self._vehicle_max_detected_distance,
-                                       self._tl_forbidden_distance, self._tl_max_detected_distance)
+                                       self._tl_forbidden_distance, self._tl_max_detected_distance, self._local_planner.get_target_waypoint())
+
 
     def make_reward(self, exp):
         # Just basically return None since the reward is not used for a non
@@ -77,6 +105,17 @@ class NPCAgent(Agent):
     def run_step(self, affordances):
 
         # TODO probably requires that the vehicles reduce speed anyway when close to a pedestrian
+
+        # print (self._distance_pedestrian_crossing)
+        #if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
+        #    if self._distance_pedestrian_crossing < 4.5:
+        #        self._local_planner.set_speed(0.0)
+        #    else:
+        #        self._local_planner.set_speed(self._distance_pedestrian_crossing / 4.5)
+        #    print ("########## SET SPEED #########")
+        #    print(self._local_planner._target_speed)
+
+        print('check affordances', affordances)
 
         hazard_detected = False
 
@@ -120,3 +159,17 @@ class NPCAgent(Agent):
         print (" Correctly reseted the agent")
         self.route_assigned = False
         self._agent = None
+
+
+    def emergency_stop(self):
+        """
+        Send an emergency stop command to the vehicle
+        :return:
+        """
+        control = carla.VehicleControl()
+        control.steer = 0.0
+        control.throttle = 0.0
+        control.brake = 1.0
+        control.hand_brake = False
+
+        return control
