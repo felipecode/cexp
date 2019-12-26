@@ -7,8 +7,8 @@
             },
             "scenarios": {
                 "background_activity": {
-                    "vehicle.*": 0,
-                    "walker.*": 0
+                    "vehicle.*": 50,
+                    "walker.*": 100
                 }
             },
             "town_name": "Town01",
