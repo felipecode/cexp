@@ -40,8 +40,8 @@ class NPCAgent(Agent):
         self.route_assigned = False
         self._agent = None
 
-        #self._distance_pedestrian_crossing = -1
-        #self._closest_pedestrian_crossing = None
+        self._distance_pedestrian_crossing = -1
+        self._closest_pedestrian_crossing = None
 
     # TODO we set the sensors here directly.
     def sensors(self):
@@ -66,11 +66,9 @@ class NPCAgent(Agent):
             self._local_planner = LocalPlanner(
                 self._vehicle, opt_dict={'target_speed': target_speed,
                                          'lateral_control_dict': args_lateral_dict})
-
             self._hop_resolution = 2.0
             self._path_seperation_hop = 2
             self._path_seperation_threshold = 0.5
-            self._target_speed = target_speed
             self._grp = None
 
         if not self.route_assigned:
@@ -82,19 +80,19 @@ class NPCAgent(Agent):
             self._local_planner.set_global_plan(plan)
             self.route_assigned = True
 
-        #self._distance_pedestrian_crossing, self._closest_pedestrian_crossing = \
-        #    get_distance_closest_crossing_waker(exp)
+        self._distance_pedestrian_crossing, self._closest_pedestrian_crossing = \
+            get_distance_closest_crossing_waker(exp)
 
         # if the closest pedestrian dies we reset
-        #if self._closest_pedestrian_crossing is not None and \
-        #        not self._closest_pedestrian_crossing.is_alive:
-        #    self._closest_pedestrian_crossing = None
-        #    self._distance_pedestrian_crossing = -1
+        if self._closest_pedestrian_crossing is not None and \
+                not self._closest_pedestrian_crossing.is_alive:
+            self._closest_pedestrian_crossing = None
+            self._distance_pedestrian_crossing = -1
 
-        print('self._local_planner.target_waypoint', self._local_planner.target_waypoint)
         return get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
                                        self._vehicle_forbidden_distance, self._vehicle_max_detected_distance,
-                                       self._tl_forbidden_distance, self._tl_max_detected_distance, self._local_planner.get_target_waypoint())
+                                       self._tl_forbidden_distance, self._tl_max_detected_distance,
+                                       self._local_planner.get_target_waypoint())
 
 
     def make_reward(self, exp):
@@ -104,18 +102,7 @@ class NPCAgent(Agent):
 
     def run_step(self, affordances):
 
-        # TODO probably requires that the vehicles reduce speed anyway when close to a pedestrian
-
-        # print (self._distance_pedestrian_crossing)
-        #if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
-        #    if self._distance_pedestrian_crossing < 4.5:
-        #        self._local_planner.set_speed(0.0)
-        #    else:
-        #        self._local_planner.set_speed(self._distance_pedestrian_crossing / 4.5)
-        #    print ("########## SET SPEED #########")
-        #    print(self._local_planner._target_speed)
-
-        print('check affordances', affordances)
+        #print('check affordances', affordances)
 
         hazard_detected = False
 
@@ -123,7 +110,12 @@ class NPCAgent(Agent):
         is_red_tl_hazard = affordances['is_red_tl_hazard']
         is_pedestrian_hazard = affordances['is_pedestrian_hazard']
         relative_angle = affordances['relative_angle']
-        target_speed = affordances['forward_speed']
+
+        if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
+            if self._distance_pedestrian_crossing < 4.5:
+                self._local_planner.set_speed(0.0)
+            else:
+                self._local_planner.set_speed(self._distance_pedestrian_crossing / 4.5)
         
         if is_vehicle_hazard:
             self._state = AgentState.BLOCKED_BY_VEHICLE
@@ -142,7 +134,7 @@ class NPCAgent(Agent):
         
         else:
             self._state = AgentState.NAVIGATING
-            control = self._local_planner.run_step(relative_angle, target_speed)
+            control = self._local_planner.run_step(relative_angle)
             
         logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
 

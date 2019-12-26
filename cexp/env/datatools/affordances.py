@@ -2,8 +2,6 @@ import numpy as np
 import math
 import carla
 
-
-
 def compute_relative_angle(vehicle, waypoint):
     vehicle_transform = vehicle.get_transform()
     v_begin = vehicle_transform.location
@@ -109,12 +107,20 @@ def closest_vehicle(ego, object_list, forbidden_distance, max_detected_distance)
              - the closest vehicle distance, set to max_detected_distance if there is no vehicle within max_detected_distance
     """
     ego_location = ego.get_location()
+    map = ego.get_world().get_map()
+    ego_waypoint = map.get_waypoint(ego_location)
 
     distance_vec = []
     vehicle_vec = []
     for vehicle in object_list:
         if vehicle.id == ego.id:
             continue
+        vehicle_waypoint = map.get_waypoint(vehicle.get_location())
+
+        if vehicle_waypoint.road_id != ego_waypoint.road_id or \
+                vehicle_waypoint.lane_id != ego_waypoint.lane_id:
+            continue
+
         loc = vehicle.get_location()
         flag, distance = is_within_forbidden_distance_ahead(loc, ego_location, ego.get_transform().rotation.yaw, forbidden_distance)
         # filter the cases that the object is not in front
@@ -128,7 +134,7 @@ def closest_vehicle(ego, object_list, forbidden_distance, max_detected_distance)
         return (False, None, max_detected_distance)
 
 
-def closest_tl(ego, object_list, forbidden_distance, max_detected_distance):
+def closest_red_tl(ego, object_list, forbidden_distance, max_detected_distance):
     """
     This function is to get the closest traffic light distance
 
@@ -217,7 +223,7 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
         closest_vehicle(ego, vehicle_list, vehicle_forbidden_distance, vehicle_max_detected_distance)
 
     is_red_tl_hazard, closest_tl_id, closest_tl_distance = \
-        closest_tl(ego, tl_list, tl_forbidden_distance, tl_max_detected_distance)
+        closest_red_tl(ego, tl_list, tl_forbidden_distance, tl_max_detected_distance)
 
     forward_speed = get_forward_speed(ego)
     relative_angle = compute_relative_angle(ego, next_waypoint)

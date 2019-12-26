@@ -27,7 +27,7 @@ from agents.navigation.local_planner import RoadOption
 from cexp.env.datatools.data_writer import Writer
 
 from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
-
+from cexp.agents import NPCAgent
 
 number_class_translation = {
 

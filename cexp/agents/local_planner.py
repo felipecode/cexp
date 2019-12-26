@@ -227,7 +227,7 @@ class LocalPlanner(object):
         return self.target_waypoint
 
 
-    def run_step(self, relative_angle, target_speed):
+    def run_step(self, relative_angle):
         """
         Execute one step of local planning which involves running the longitudinal and lateral PID controllers to
         follow the waypoints trajectory.
@@ -237,7 +237,7 @@ class LocalPlanner(object):
         """
 
         # move using PID controllers
-        control = self._vehicle_controller.run_step(target_speed, relative_angle)
+        control = self._vehicle_controller.run_step(self._target_speed, relative_angle)
 
         return control
 

@@ -213,22 +213,3 @@ class Writer(object):
 
     def write_pseudo(self, pseudo_data, pseudo_tag):
         pass
-
-
-
-
-
-"""
-def add_data_point(measurements, control, control_noise, sensor_data, state,
-                   dataset_path, episode_number, data_point_id, sensors_frequency):
-
-    episode_path = os.path.join(dataset_path, 'episode_' + episode_number)
-    if not os.path.exists(os.path.join(dataset_path, 'episode_' + episode_number)):
-        os.mkdir(os.path.join(dataset_path, 'episode_' + episode_number))
-    write_sensor_data(episode_path, data_point_id, sensor_data, sensors_frequency)
-    write_json_measurements(episode_path, data_point_id, measurements, control, control_noise,
-                            state)
-
-# Delete an episode in the case
-def delete_episode(dataset_path, episode_number):
-"""
