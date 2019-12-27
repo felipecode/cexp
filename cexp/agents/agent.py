@@ -122,7 +122,9 @@ class Agent(object):
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
             # Experiment on the batch.
-            state, reward = environment.run_step(controls)
+
+            # we need to save these affordancs to measurement files
+            state, reward = environment.run_step(controls, state)
 
             # TODO check the posible sizes mismatches here
             self.add_value(reward_batch, reward)

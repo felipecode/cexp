@@ -116,12 +116,13 @@ class Writer(object):
 
         return scenario_info
 
-    def _write_json_measurements(self, measurements, control, scenario_control):
+    def _write_json_measurements(self, measurements, control, scenario_control, affordances):
         # Build measurements object
 
         with open(os.path.join(self._full_path, 'measurements_' + str(self._latest_id).zfill(6) + '.json'), 'w') as fo:
             jsonObj = {}
             jsonObj.update(measurements)
+            jsonObj.update(affordances)
             jsonObj.update({'steer': np.nan_to_num(control.steer)})
             jsonObj.update({'throttle': np.nan_to_num(control.throttle)})
             jsonObj.update({'brake': np.nan_to_num(control.brake)})
@@ -133,7 +134,7 @@ class Writer(object):
 
             fo.write(json.dumps(jsonObj, sort_keys=True, indent=4))
 
-    def save_experience(self, world, experience_data):
+    def save_experience(self, world, experience_data, affordances):
         """
          It is also used to step the current data being written
         :param measurements:
@@ -145,7 +146,7 @@ class Writer(object):
         # We join the building of the measurements with some extra data that was calculated
         self._write_json_measurements(self._build_measurements(world, experience_data['exp_measurements']),
                                       experience_data['ego_controls'],
-                                      experience_data['scenario_controls'],
+                                      experience_data['scenario_controls'], affordances
                                      )
 
         # Before we increment we make sure everyone made their writting

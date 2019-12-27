@@ -47,7 +47,7 @@ class NPCAgent(Agent):
     def sensors(self):
         return self._sensors_dict
 
-    def make_state(self, exp, target_speed = 20):
+    def make_state(self, exp, target_speed = 20.0):
         """
             Based on the exp object it makes all the affordances.
         :param exp:
@@ -89,10 +89,18 @@ class NPCAgent(Agent):
             self._closest_pedestrian_crossing = None
             self._distance_pedestrian_crossing = -1
 
-        return get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
+        if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
+            if self._distance_pedestrian_crossing < 4.5:
+                self._local_planner.set_speed(0.0)
+            else:
+                self._local_planner.set_speed(self._distance_pedestrian_crossing / 4.5)
+
+        driving_affordances = get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
                                        self._vehicle_forbidden_distance, self._vehicle_max_detected_distance,
                                        self._tl_forbidden_distance, self._tl_max_detected_distance,
-                                       self._local_planner.get_target_waypoint())
+                                       self._local_planner.get_target_waypoint(), self._local_planner._target_speed)
+
+        return driving_affordances
 
 
     def make_reward(self, exp):
@@ -110,12 +118,8 @@ class NPCAgent(Agent):
         is_red_tl_hazard = affordances['is_red_tl_hazard']
         is_pedestrian_hazard = affordances['is_pedestrian_hazard']
         relative_angle = affordances['relative_angle']
-
-        if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
-            if self._distance_pedestrian_crossing < 4.5:
-                self._local_planner.set_speed(0.0)
-            else:
-                self._local_planner.set_speed(self._distance_pedestrian_crossing / 4.5)
+        target_speed = affordances['target_speed']
+        forward_speed = affordances['forward_speed']
         
         if is_vehicle_hazard:
             self._state = AgentState.BLOCKED_BY_VEHICLE
@@ -134,7 +138,7 @@ class NPCAgent(Agent):
         
         else:
             self._state = AgentState.NAVIGATING
-            control = self._local_planner.run_step(relative_angle)
+            control = self._local_planner.run_step(relative_angle, target_speed)
             
         logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
 

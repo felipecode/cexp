@@ -268,7 +268,7 @@ class Environment(object):
         return running_envs, num_running_envs, running_envs_map, running_envs_reverse_map
     # TODO we can make this extra data pretier.
 
-    def run_step(self, control_vec):
+    def run_step(self, control_vec, affordances):
         """
         Run an step on the simulation using the agent control
         :param control_vec:
@@ -284,7 +284,7 @@ class Environment(object):
             control = exp.tick_scenarios_control(control)
             exp.apply_control(control)
             exp.tick_world()
-            exp.save_experience()
+            exp.save_experience(affordances[i])
 
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)

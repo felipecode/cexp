@@ -312,11 +312,12 @@ class Experience(object):
         assert frame == self.world.get_snapshot().timestamp.frame
         self.frame = frame
 
-    def save_experience(self):
+    def save_experience(self, affordances):
 
         if self._save_data:
             self._sensor_interface.wait_sensors_written(self._writer)
-            self._writer.save_experience(self.world, self._environment_data)
+            self._writer.save_experience(self.world, self._environment_data, affordances)
+
 
     def is_running(self):
         """

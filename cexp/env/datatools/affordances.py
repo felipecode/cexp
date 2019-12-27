@@ -22,7 +22,7 @@ def compute_relative_angle(vehicle, waypoint):
     return relative_angle
 
 
-def is_within_forbidden_distance_ahead(target_location, current_location, orientation, forbidden_distance):
+def is_within_forbidden_distance_ahead(target_location, current_location, orientation, forbidden_distance, type = None):
     """
     Check if a target object is within a certain distance in front of a reference object.
 
@@ -42,19 +42,36 @@ def is_within_forbidden_distance_ahead(target_location, current_location, orient
         return (True, norm_target)
 
     forward_vector = np.array([math.cos(math.radians(orientation)), math.sin(math.radians(orientation))])
-    d_angle = math.degrees(math.acos(np.dot(forward_vector, target_vector) / norm_target))
 
-    # This means the target object is in front of ego
-    if d_angle < 90.0:
-        # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
-        if norm_target > forbidden_distance:
-            return (False, norm_target)
+    if type == 'red_tl':
+        # we consider if the target is at left or right side regard to the forward vector
+        sign = np.sign(np.linalg.det(np.stack((forward_vector, target_vector))))
+        d_angle = math.degrees(math.acos(np.dot(forward_vector, target_vector) / norm_target))
+
+        # for red tl, we don't consider the lights at forward left and behind the ego
+        if d_angle < 90.0 and sign >= 0.0:
+            # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
+            if norm_target > forbidden_distance:
+                return (False, norm_target)
+
+            else:
+                return (True, norm_target)
+        else:
+            return (False, None)
+
+    else:
+        d_angle = math.degrees(math.acos(np.dot(forward_vector, target_vector) / norm_target))
+        # This means the target object is in front of ego
+        if d_angle < 90.0:
+            # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
+            if norm_target > forbidden_distance:
+                return (False, norm_target)
+
+            else:
+                return (True, norm_target)
 
         else:
-            return (True, norm_target)
-    else:
-        return (False, None)
-
+            return (False, None)
 
 
 def closest_pedestrian(ego, object_list, forbidden_distance, max_detected_distance):
@@ -73,12 +90,19 @@ def closest_pedestrian(ego, object_list, forbidden_distance, max_detected_distan
              - the closest pedestrian distance, set to max_detected_distance if there is no pedestrian within max_detected_distance
     """
     ego_location = ego.get_location()
+    map = ego.get_world().get_map()
+    ego_waypoint = map.get_waypoint(ego_location)
 
     distance_vec = []
     pedestrian_vec = []
     for pedestrian in object_list:
+        pedestrian_waypoint = map.get_waypoint(pedestrian.get_location())
+        if pedestrian_waypoint.road_id != ego_waypoint.road_id or \
+                pedestrian_waypoint.lane_id != ego_waypoint.lane_id:
+            continue
+
         loc = pedestrian.get_location()
-        flag, distance = is_within_forbidden_distance_ahead(loc, ego_location, ego.get_transform().rotation.yaw, forbidden_distance)
+        flag, distance = is_within_forbidden_distance_ahead(loc, ego_location, ego.get_transform().rotation.yaw, forbidden_distance, type='pedestrian')
         # filter the cases that the object is not in front
         if distance is not None:
             distance_vec.append(distance)
@@ -122,7 +146,7 @@ def closest_vehicle(ego, object_list, forbidden_distance, max_detected_distance)
             continue
 
         loc = vehicle.get_location()
-        flag, distance = is_within_forbidden_distance_ahead(loc, ego_location, ego.get_transform().rotation.yaw, forbidden_distance)
+        flag, distance = is_within_forbidden_distance_ahead(loc, ego_location, ego.get_transform().rotation.yaw, forbidden_distance, type='vehicle')
         # filter the cases that the object is not in front
         if distance is not None:
             distance_vec.append(distance)
@@ -155,7 +179,7 @@ def closest_red_tl(ego, object_list, forbidden_distance, max_detected_distance):
     tl_vec = []
     for tl in object_list:
         loc = tl.get_location()
-        flag, distance = is_within_forbidden_distance_ahead(loc, ego_location, ego.get_transform().rotation.yaw, forbidden_distance)
+        flag, distance = is_within_forbidden_distance_ahead(loc, ego_location, ego.get_transform().rotation.yaw, forbidden_distance, type='red_tl')
         # filter the cases that the light is not in red
         if flag:
             if tl.state != carla.TrafficLightState.Red:
@@ -193,7 +217,7 @@ The access function for the affordances
 
 def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_detected_distance,
                             vehicle_forbidden_distance, vehicle_max_detected_distance,
-                            tl_forbidden_distance, tl_max_detected_distance, next_waypoint):
+                            tl_forbidden_distance, tl_max_detected_distance, next_waypoint, target_speed):
 
     """
     compute all the affordances that are necessary for an NPC agent to drive
@@ -234,6 +258,6 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     affordances.update({'is_pedestrian_hazard': is_pedestrian_hazard})
     affordances.update({'forward_speed': forward_speed})
     affordances.update({'relative_angle': relative_angle})
-
+    affordances.update({'target_speed': target_speed})
 
     return affordances
