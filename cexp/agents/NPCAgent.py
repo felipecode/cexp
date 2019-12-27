@@ -95,12 +95,10 @@ class NPCAgent(Agent):
             else:
                 self._local_planner.set_speed(self._distance_pedestrian_crossing / 4.5)
 
-        driving_affordances = get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
+        return get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
                                        self._vehicle_forbidden_distance, self._vehicle_max_detected_distance,
                                        self._tl_forbidden_distance, self._tl_max_detected_distance,
                                        self._local_planner.get_target_waypoint(), self._local_planner._target_speed)
-
-        return driving_affordances
 
 
     def make_reward(self, exp):
