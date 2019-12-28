@@ -74,7 +74,7 @@ class DrivingBatch(object):
         with open(jsonfile, 'r') as f:
             self._json = json.loads(f.read())
         # The timeout for waiting for the server to start.
-        self.client_timeout = 35.0
+        self.client_timeout = 45.0
         # The os environment file
         if "SRL_DATASET_PATH" not in os.environ and self._params['save_dataset']:
             raise ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
@@ -122,7 +122,6 @@ class DrivingBatch(object):
                     self._environment_batch[0].reset(port=self._port)
                 free_port = self._port  # This is just a test mode where CARLA is already up.
             # setup world and client assuming that the CARLA server is up and running
-            logging.debug(" Connecting to the free port client")
             self._client_vec = [carla.Client('localhost', free_port)]
             self._client_vec[0].set_timeout(self.client_timeout)
 

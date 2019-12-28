@@ -416,7 +416,7 @@ class Experience(object):
         self.world.set_weather(self._exp_params['weather_profile'])
         self.world.apply_settings(settings)
 
-
+    
     # Todo make a scenario builder class
 
     def _build_background(self, background_definition, timeout):
@@ -427,9 +427,6 @@ class Experience(object):
         :param timeout:
         :return:
         """
-        if 'cross_factor' not in background_definition:
-            raise ValueError(" Need to add the crossing factor to "
-                             " the background scenario parameters")
 
         scenario_configuration = ScenarioConfiguration()
         scenario_configuration.route = None
@@ -438,38 +435,49 @@ class Experience(object):
         # Also the crossing factor should be specified on the benchmark itself.
         configuration_instances_vehicles = []
         configuration_instances_walkers = []
-        for key, numbers in background_definition.items():
-            if 'walker' not in key:
-                model = key
-                transform = carla.Transform()
-                autopilot = True
-                random_location = True
-                actor_configuration_instance = ActorConfigurationData(model, transform,
-                                                                      autopilot=autopilot,
-                                                                      random=random_location,
-                                                                      amount=int(
-                                                                          background_definition[key]),
-                                                                      category='car')
-                configuration_instances_vehicles.append(actor_configuration_instance)
-            else:
-                model = 'controller.ai.walker'
-                transform = carla.Transform()
-                autopilot = True
-                random_location = True
-                actor_configuration_instance = ActorConfigurationData(model, transform,
-                                                                      autopilot=autopilot,
-                                                                      random=random_location,
-                                                                      amount=int(background_definition[
-                                                                          key]),
-                                                                      category='walker')
-                configuration_instances_walkers.append(actor_configuration_instance)
+        # If there are walkers there should be cross factors otherwise it is 0
+        cross_factor = 0.0
+
+        if 'walker.*'  in background_definition:
+
+            model = 'walker'
+            transform = carla.Transform()
+            autopilot = True
+            random_location = True
+            actor_configuration_instance = ActorConfigurationData(model, transform,
+                                                                  autopilot=autopilot,
+                                                                  random=random_location,
+                                                                  amount=int(
+                                                                      background_definition[
+                                                                          'walker.*']),
+                                                                  category='walker')
+            configuration_instances_walkers.append(actor_configuration_instance)
+
+            if "cross_factor" not in background_definition:
+                raise ValueError(" If there are walkers on the json file "
+                                 "background scenario there must also be a cross factor")
+
+            cross_factor = background_definition["cross_factor"]
+
+        if 'vehicle.*' in background_definition:
+            model = 'vehicle'
+            transform = carla.Transform()
+            autopilot = True
+            random_location = True
+            actor_configuration_instance = ActorConfigurationData(model, transform,
+                                                                  autopilot=autopilot,
+                                                                  random=random_location,
+                                                                  amount=int(background_definition[
+                                                                      "vehicle.*"]),
+                                                                  category='vehicle')
+            configuration_instances_vehicles.append(actor_configuration_instance)
 
         scenario_configuration.other_actors = configuration_instances_vehicles + \
                                               configuration_instances_walkers
 
-        # TODO add the cross factor to configuration ( Maybe some defaults)2
+
         return BackgroundActivity(self.world, self._ego_actor, scenario_configuration,
-                                  cross_factor=background_definition['cross_factor'],
+                                  cross_factor=cross_factor,
                                   timeout=timeout, debug_mode=False)
 
     def build_scenario_instances(self, scenario_definition_vec, timeout):
@@ -546,6 +554,7 @@ class Experience(object):
             if self._exp_params['remove_wrong_data']:
                 if self._route_statistics['result'] == 'FAILURE':
                     self._clean_bad_dataset()
+
         if self._exp_params['make_videos']:
             delete_sensors = not self._exp_params['save_sensors']
             self._writer.make_video(self._sensors_dict)

@@ -7,10 +7,10 @@ import glob
 import json
 import multiprocessing
 
-from cexp.agents.NPCAgent import NPCAgent
-from cexp.cexp import CEXP
-import sys
+from .npc_autopilot import NPCAgent
+from .npc_autopilot import collect_data_loop
 
+from cexp.driving_batch import DrivingBatch
 
 # TODO I have a problem with respect to where to put files
 
@@ -19,8 +19,8 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
     # The idea is that the agent class should be completely independent
 
     # TODO this has to go to a separate file and to be merged with package
-    agent = NPCAgent(
-        sensors_dict = [{'type': 'sensor.camera.rgb',
+    agent = NPCAgent()
+    sensors_dict = [{'type': 'sensor.camera.rgb',
                 'x': 2.0, 'y': 0.0,
                 'z': 1.40, 'roll': 0.0,
                 'pitch': -15.0, 'yaw': 0.0,
@@ -28,13 +28,13 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                 'fov': 100,
                 'id': 'rgb_central'},
 
-               {'type': 'sensor.camera.semantic_segmentation',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': 0.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'labels_central'},
+               #{'type': 'sensor.camera.semantic_segmentation',
+               # 'x': 2.0, 'y': 0.0,
+               # 'z': 1.40, 'roll': 0.0,
+               # 'pitch': -15.0, 'yaw': 0.0,
+               # 'width': 800, 'height': 600,
+               # 'fov': 100,
+               # 'id': 'labels_central'},
                {'type': 'sensor.camera.rgb',
                 'x': 2.0, 'y': 0.0,
                 'z': 1.40, 'roll': 0.0,
@@ -43,13 +43,13 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                 'fov': 100,
                 'id': 'rgb_left'},
 
-               {'type': 'sensor.camera.semantic_segmentation',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': -30.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'labels_left'},
+               #{'type': 'sensor.camera.semantic_segmentation',
+               # 'x': 2.0, 'y': 0.0,
+               # 'z': 1.40, 'roll': 0.0,
+               # 'pitch': -15.0, 'yaw': -30.0,
+               # 'width': 800, 'height': 600,
+               # 'fov': 100,
+               # 'id': 'labels_left'},
                {'type': 'sensor.camera.rgb',
                 'x': 2.0, 'y': 0.0,
                 'z': 1.40, 'roll': 0.0,
@@ -57,14 +57,13 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                 'width': 800, 'height': 600,
                 'fov': 100,
                 'id': 'rgb_right'},
-
-               {'type': 'sensor.camera.semantic_segmentation',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': 30.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'labels_right'},
+               #{'type': 'sensor.camera.semantic_segmentation',
+               # 'x': 2.0, 'y': 0.0,
+               # 'z': 1.40, 'roll': 0.0,
+               # 'pitch': -15.0, 'yaw': 30.0,
+               # 'width': 800, 'height': 600,
+               # 'fov': 100,
+               # 'id': 'labels_right'},
                 {'type': 'sensor.can_bus',
                  'reading_frequency': 25,
                  'id': 'can_bus'
@@ -73,10 +72,10 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                  'x': 0.7, 'y': -0.4, 'z': 1.60,
                  'id': 'GPS'}
 
-               ])
+               ]
     # this could be joined
-    env_batch = CEXP(json_file, params=params, execute_all=True,
-                     eliminated_environments=eliminated_environments)
+    env_batch = DrivingBatch(json_file, params=params,
+                             eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
 
@@ -89,8 +88,7 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
             # by taking the output from the experience.
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
             print (" Collector ", collector_id, " Collecting for ", env)
-            states, rewards = agent.unroll(env)
-            agent.reinforce(rewards)
+            collect_data_loop(env, agent, sensors_dict)
         except KeyboardInterrupt:
             env.stop()
             break
@@ -175,7 +173,7 @@ if __name__ == '__main__':
         type=str)
 
     args = argparser.parse_args()
-    json_file = os.path.join('database', args.json_config)
+    json_file = args.json_config
 
     with open(json_file, 'r') as f:
         json_dict = json.loads(f.read())
@@ -204,6 +202,7 @@ if __name__ == '__main__':
         params = {'save_dataset': True,
                   'save_sensors': True,
                   'save_trajectories': True,
+                  'make_videos': True,
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,

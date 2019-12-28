@@ -397,6 +397,21 @@ def draw_walker_move(walker_start, walker_end, alpha=0.5, color=(1,0,0)):
     location_end = carla.Location(x=world_pos_end[0], y=world_pos_end[1], z=world_pos_end[2])
     draw_line(location_start, location_end, color, size, alpha)
 
+def check_for_teleport(datapoint_vec, pedestrian_key, step):
+
+    """
+    if between the steps there is a big move this pedestrian teleported between these
+    positions.
+    :return:
+    """
+
+    #first_iter = True
+    #for i in range(0,step)
+    #
+    #    pedestrian = datapoint_vec[i][pedestrian_key]
+    #     = datapoint
+
+    pass
 
 
 def get_color(scenario):
@@ -525,18 +540,24 @@ def draw_pedestrians(agent_name, env_data, env_name, world, steps):
     # We draw the full map
     draw_map(world)
     count = 0
-    if len(steps) > 1:  # if we have more than 1 step we may connect the first and the last
-        for exp in env_data:
-            number_of_steps = len(exp[0][0][0]) -1
-            datapoint_start = exp[0][0][0][int(number_of_steps*steps[0])]
-            datapoint_end = exp[0][0][0][int(number_of_steps*steps[-1])]
+    for i in range(len(steps)-1):
+        if len(steps) > 1:  # if we have more than 1 step we may connect the first and the last
+            for exp in env_data:
+                number_of_steps = len(exp[0][0][0]) -1
+                datapoint_start = exp[0][0][0][int(number_of_steps*steps[i])]
+                datapoint_end = exp[0][0][0][int(number_of_steps*steps[i+1])]
 
-            for s_walker_info_key, e_walker_info_key in zip(datapoint_start['measurements']['walkers'].keys(),
-                                                    datapoint_end['measurements']['walkers'].keys()):
-
-                s_walker_info = datapoint_start['measurements']['walkers'][s_walker_info_key]
-                e_walker_info = datapoint_end['measurements']['walkers'][e_walker_info_key]
-                draw_walker_move(s_walker_info, e_walker_info, color=(0, 0, 0))
+                for s_walker_info_key, e_walker_info_key in zip(datapoint_start['measurements']['walkers'].keys(),
+                                                        datapoint_end['measurements']['walkers'].keys()):
+                    # we chechck for teleport first if so we don't draw for this pedestrian
+                    # The max step for teleport is sent
+                    print ("keys ", s_walker_info_key, " ", e_walker_info_key)
+                    if s_walker_info_key != e_walker_info_key:
+                        continue
+                    #check_for_teleport(exp[0][0][0], s_walker_info_key, int(number_of_steps*steps[-1]))
+                    s_walker_info = datapoint_start['measurements']['walkers'][s_walker_info_key]
+                    e_walker_info = datapoint_end['measurements']['walkers'][e_walker_info_key]
+                    draw_walker_move(s_walker_info, e_walker_info, color=(0, 0, 0))
 
     for step in steps:
         for exp in env_data:
@@ -545,7 +566,8 @@ def draw_pedestrians(agent_name, env_data, env_name, world, steps):
             for key, walker_info in datapoint['measurements']['walkers'].items():
                 draw_walker(walker_info, color=color_palet[count])
         count += 1
-        
+
+
 
 
 

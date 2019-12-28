@@ -82,7 +82,7 @@ class Writer(object):
                                         transform.rotation.yaw],
                         "velocity": [velocity.x, velocity.y, velocity.z]
                     }})
-            elif 'walker' in actor.type_id:
+            elif 'walker.pedestrian' in actor.type_id:
                 if actor.attributes['role_name'] == 'walker' and self._save_walkers:
                     transform = actor.get_transform()
                     velocity = actor.get_velocity()

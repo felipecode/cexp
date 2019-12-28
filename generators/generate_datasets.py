@@ -7,10 +7,10 @@ def generate(positions,
              number_vehicles,
              number_walkers,
              dataset_name,
-             cross_factor=0.01)
+             cross_factor=0.01):
 
 
-    root_route_file_output = 'database'
+    root_route_file_output = 'sample_descriptions'
     # root_route_file_position = 'srunner/challenge/'
     #filename_town01 = os.path.join(root_route_file_position, 'Town01_navigation.json')
 
@@ -64,7 +64,7 @@ def generate(positions,
                         "scenarios": {
                                       'background_activity': {"vehicle.*": number_vehicles,
                                                               "walker.*": number_walkers,
-                                                              "": cross_factor}
+                                                              "cross_factor": cross_factor}
                                       },
                         "town_name": "Town01",
                         "vehicle_model": "vehicle.lincoln.mkz2017",
@@ -85,7 +85,7 @@ def generate(positions,
 if __name__ == '__main__':
 
 
-    # Generation for pedestrian l0 ( dynamic)
+    # Generation for pedestrian l0 (dynamic)
     # Positions for dataset pedestrians l0
     positions = [64682, 37697, 15327, 30214, 32617, 35954, 16465, 35930, 65599, 33487,
                  4745, 592, 45416, 38200, 16669, 37194, 38802, 26081, 11760, 19045,
@@ -106,4 +106,4 @@ if __name__ == '__main__':
                  49791, 46403, 35705, 56035, 56609, 53267, 27455, 42284, 28753, 13232, 64714,
                  45125, 58840, 32788, 50657, 37201, 19924, 64540, 283, 62721, 5198, 52943,
                  18719, 49577, 33183, 58021, 5107, 35173, 15654]
-    generate(positions, 100, 150, 'dataset_dynamic_l0')
+    generate(positions, 100, 300, 'dataset_dynamic_l0', cross_factor=0.1)

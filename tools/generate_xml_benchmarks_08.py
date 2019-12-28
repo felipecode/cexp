@@ -4,7 +4,8 @@ import os
 import logging
 import sys
 
-
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
@@ -151,13 +152,13 @@ def make_routes(filename, positions, spawn_points, town_name):
             print (point_a, point_b)
 
     write_routes(filename, routes_vector, town_name=town_name)
+    return routes_vector
 
 
-def view_start_positions(world, positions_to_plot):
+def view_start_positions(world, positions_to_plot, file_name):
     # We assume the CARLA server is already waiting for a client to connect at
     # host:port. The same way as in the client example.
     print('CarlaClient connected')
-
 
     count = 0
 
@@ -170,17 +171,13 @@ def view_start_positions(world, positions_to_plot):
     for position in positions_to_plot:
 
         # Check if position is valid
-
         # Convert world to pixel coordinates
         draw_point(position.location, (1,0,0), 12, alpha=None)
-
         draw_text(str(count), position.location, (1,0,0), 5)
-
         count += 1
 
     plt.axis('off')
-    plt.show()
-    fig.savefig('map' + str(count) + '.pdf',
+    fig.savefig(file_name,
                 orientation='landscape', bbox_inches='tight')
 
 def get_positions_further_thresh(filename, world, thresh):
@@ -232,8 +229,31 @@ if __name__ == '__main__':
     world = client.load_world(arguments.town)
 
     spawn_points = world.get_map().get_spawn_points()
-    print (spawn_points)
-    view_start_positions(world, spawn_points)
+
+    if not os.path.exists('_route_files'):
+        os.mkdir('_route_files')
+
+    #######
+    #TOWN01
+    #######
+
+    # STRAIGHTS
+    selected_pos = [[17, 12], [14, 18], [7, 18], [15, 8], [36, 42], [43, 34], [33, 40], [39,34],
+                     [35,0], [89,24], [89,67], [30,21], [22,31], [59, 68], [66,69] ,[62,55] ,[57,63],
+                      [48,52], [51,47], [46,52] , [51,44], [74,76], [75,73], [35,56], [100,24]    ]
+
+
+    routes_vector = make_routes(arguments.output, selected_pos, spawn_points, world.get_map().name)
+
+
+    if not os.path.exists('_route_files/_town01_straights'):
+        os.mkdir('_route_files/_town01_straights')
+
+    count = 0
+    for route in routes_vector:
+        view_start_positions(world, route, '_route_files/_town01_straights/' + str(count) + '.pdf')
+        count += 1
+
 
     selected_pos = [ [10, 54], [53, 11], [48, 7], [61, 71], [74, 62], [50, 79], [75,49],
                      [80, 53], [80, 50], [60, 80], [83, 61], [94, 72], [43, 74],
@@ -241,12 +261,6 @@ if __name__ == '__main__':
                                            [15, 70],  [11, 59],
                        [15, 94], [41, 7],
                        [33, 13], [67, 43],
-
                        [26, 10], [7, 29], [97, 100], [1, 96] ]
 
-    #selected_pos = [[17, 12], [14, 18], [7, 18], [15, 8], [36, 42], [43, 34], [33, 40], [39,34],
-    #                 [35,0], [89,24], [89,67], [30,21], [22,31], [59, 68], [66,69] ,[62,55] ,[57,63],
-    #                  [48,52], [51,47], [46,52] , [51,44], [74,76], [75,73], [35,56], [100,24]    ]
-
-    make_routes(arguments.output, selected_pos, spawn_points, world.get_map().name)
 

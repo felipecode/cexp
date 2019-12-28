@@ -79,7 +79,7 @@ class NPCAgent(object):
         print("<=====================")
         # The sensors however are not needed since this basically run an step for the
         # NPC default agent at CARLA:
-        control, _, _ = self._agent.run_step()
+        control = self._agent.run_step()
         logging.debug("Output %f %f %f " % (control.steer, control.throttle, control.brake))
         return control
 
@@ -89,36 +89,12 @@ class NPCAgent(object):
         self._agent = None
 
 
-def collect_data_loop(renv, agent, draw_pedestrians=True):
+def collect_data_loop(renv, agent, sensors_dict, draw_pedestrians=True):
 
     # The first step is to set sensors that are going to be produced
     # representation of the sensor input is showed on the main loop.
     # We add a camera and a GPS on top of it.
 
-    sensors_dict = [{'type': 'sensor.camera.rgb',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': 0.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'rgb'},
-                    {'type': 'sensor.camera.depth',
-                     'x': 2.0, 'y': 0.0,
-                     'z': 1.40, 'roll': 0.0,
-                     'pitch': -15.0, 'yaw': 0.0,
-                     'width': 800, 'height': 600,
-                     'fov': 100,
-                     'id': 'depth'},
-                    # {'type': 'sensor.camera.rgb',
-                    #     'x': 2.0, 'y': 0.0,
-                    #     'z': 15.40, 'roll': 0.0,
-                    #     'pitch': -30.0, 'yaw': 0.0,
-                    #     'width': 1200, 'height': 800,
-                    #     'fov': 120,
-                    #     'id': 'rgb_central'},
-                    {'type': 'sensor.other.gnss',
-                     'x': 0.7, 'y': -0.4, 'z': 1.60,
-                     'id': 'GPS'}]
 
     renv.set_sensors(sensors_dict)
     state, _ = renv.reset(StateFunction=agent.get_state)
@@ -196,13 +172,37 @@ if __name__ == '__main__':
     driving_batch = DrivingBatch(json_file, params=params, port=arguments.port)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
+    sensors_dict = [{'type': 'sensor.camera.rgb',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 0.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'rgb'},
+                    {'type': 'sensor.camera.depth',
+                     'x': 2.0, 'y': 0.0,
+                     'z': 1.40, 'roll': 0.0,
+                     'pitch': -15.0, 'yaw': 0.0,
+                     'width': 800, 'height': 600,
+                     'fov': 100,
+                     'id': 'depth'},
+                    # {'type': 'sensor.camera.rgb',
+                    #     'x': 2.0, 'y': 0.0,
+                    #     'z': 15.40, 'roll': 0.0,
+                    #     'pitch': -30.0, 'yaw': 0.0,
+                    #     'width': 1200, 'height': 800,
+                    #     'fov': 120,
+                    #     'id': 'rgb_central'},
+                    {'type': 'sensor.other.gnss',
+                     'x': 0.7, 'y': -0.4, 'z': 1.60,
+                     'id': 'GPS'}]
 
     # Here some docker was set
     driving_batch.start(agent_name='NPC_test')
     for renv in driving_batch:
         try:
             # The policy selected to run this experience vector
-            collect_data_loop(renv, agent)
+            collect_data_loop(renv, agent, sensors_dict)
         except KeyboardInterrupt:
             renv.stop()
             break

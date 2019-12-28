@@ -142,7 +142,7 @@ def check_test_server(port):
         logging.debug("Trying to Connect to Server")
         client = carla.Client(host='localhost', port=port)
         client.get_server_version()
-        logging.debug("Connected to Server")
+        logging.debug("Connected to Server port " + str(port))
         del client
         return True
     except:

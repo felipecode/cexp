@@ -11,8 +11,7 @@ import shutil
 
 
 import time
-from cexp.cexp import CEXP
-from cexp.env.scenario_identification import identify_scenario
+from cexp.driving_batch import DrivingBatch
 from cexp.env.environment import NoDataGenerated
 #import seaborn as sns
 from other.screen_manager import ScreenManager
@@ -33,12 +32,6 @@ def orientation_vector(measurement_data):
     yaw = np.deg2rad(measurement_data['orientation'][0])
     orientation = np.array([np.cos(pitch)*np.cos(yaw), np.cos(pitch)*np.sin(yaw), np.sin(pitch)])
     return orientation
-
-def forward_speed(measurement_data):
-    vel_np = np.array(measurement_data['velocity'])
-    speed = np.dot(vel_np, orientation_vector(measurement_data))
-
-    return speed
 
 def tryint(s):
     try:
@@ -144,7 +137,7 @@ if __name__ == "__main__":
 
     # this could be joined
     # THe experience is built, the files necessary
-    env_batch = CEXP(jsonfile, params, execute_all=True, ignore_previous_execution=True)
+    env_batch = DrivingBatch(jsonfile, params, ignore_previous_execution=True)
     # Here some docker was set
     env_batch.start(no_server=True, agent_name=args.agent_name)  # no carla server mode.
     # count, we count the environments that are read
@@ -179,12 +172,8 @@ if __name__ == "__main__":
                             screen.start_screen([rgb_center.shape[1], rgb_center.shape[0]], [3, 1],
                                                 1, no_display=True)
 
-                        status = {'speed': forward_speed(data_point['measurements']['ego_actor']),
-                                  'directions': 2.0,
-                                  'distance_intersection': data_point['measurements']['distance_intersection'],
-                                  'road_angle': data_point['measurements']['road_angle'],
-                                  'scenario': identify_scenario(data_point['measurements']['distance_intersection'],
-                                                                data_point['measurements']['road_angle'])
+                        status = {'speed': data_point['measurements']['forward_speed'],
+                                  'directions': 2.0
                                   }
 
                         # if we make video we set something for output image
@@ -201,6 +190,7 @@ if __name__ == "__main__":
                                                  output_img=output_image)
                         step += step_size
                         count_images += 1
+
                     if args.make_videos:
                         make_video('_tmp_img', 'env_'+ env._environment_name +'exp_'+str(exp[1])
                                                 +'_batch_' + str(batch[1]))

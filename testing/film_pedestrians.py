@@ -109,9 +109,10 @@ def collect_data_loop(renv, agent, draw_pedestrians=True):
                 #     'width': 800, 'height': 600,
                 #     'fov': 120,
                 #     'id': 'rgb_view'},
-                {'type': 'sensor.other.gnss',
-                 'x': 0.7, 'y': -0.4, 'z': 1.60,
-                 'id': 'GPS'}]
+                #{'type': 'sensor.other.gnss',
+                # 'x': 0.7, 'y': -0.4, 'z': 1.60,
+                # 'id': 'GPS'}
+        ]
 
     renv.set_sensors(sensors_dict)
     state, _ = renv.reset(StateFunction=agent.get_state)
@@ -121,7 +122,7 @@ def collect_data_loop(renv, agent, draw_pedestrians=True):
         state, _ = renv.step([controls])
 
     if draw_pedestrians:
-        renv.draw_pedestrians([0, 0.15, 0.3])
+        renv.draw_pedestrians([0.1, 0.5, 0.95])
 
     if renv.get_info()['status'] == 'Failed':
         renv.remove_data(agent.name)
