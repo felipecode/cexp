@@ -48,6 +48,7 @@ if __name__ == '__main__':
                 for env_number in range(25):
 
                     env_dict = {
+                        "repetitions": 1,
                         "route": {
                             "file": town_name,
                             "id": env_number
