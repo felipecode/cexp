@@ -229,14 +229,13 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     :param vehicle_max_detected_distance: maximum detected distance for vehicle
     :param tl_forbidden_distance: forbidden_distance for red traffic light
     :param tl_max_detected_distance: maximum detected distance for red traffic light
-    :return:
+    :return: a dictionary including all affordances that may need to be used
     """
 
     ego = exp._ego_actor
     actor_list = exp.world.get_actors()    # we get all objects in this world
     vehicle_list = actor_list.filter("*vehicle*")    # vehicle objects
     tl_list = actor_list.filter("*traffic_light*")   # traffic light objects
-    # TODO: Not sure if the name of pedestrian object is like this, need to be checked later
     pedestrian_list = actor_list.filter("*pedestrian*")   # pedestrian objects
 
     # Although we need only the classification, we still compute continous distance values for future need

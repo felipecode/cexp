@@ -2,6 +2,8 @@ import carla
 import colorsys
 import argparse
 import os
+import matplotlib
+matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
 from cexp.env.scenario_identification import identify_scenario
 
@@ -266,9 +268,9 @@ def draw_topology(carla_topology, index):
 
                 r = r.get_right_lane()
 
-        draw_lane( shoulder, SHOULDER_COLOR)
-        draw_lane( parking, PARKING_COLOR)
-        draw_lane( sidewalk, SIDEWALK_COLOR)
+        draw_lane(shoulder, SHOULDER_COLOR)
+        draw_lane(parking, PARKING_COLOR)
+        draw_lane(sidewalk, SIDEWALK_COLOR)
 
     draw_roads(set_waypoints)
 
@@ -288,6 +290,13 @@ def draw_point(location, result_color, size, alpha=None):
     pixel = world_to_pixel(location)
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
     plt.gca().add_patch(circle)
+
+def draw_line(location_start, location_end, result_color, size, alpha=None):
+
+    pixel_start = world_to_pixel(location_start)
+    pixel_end = world_to_pixel(location_end)
+    line = plt.Polygon([pixel_start, pixel_end], lw=size, edgecolor=result_color, alpha=alpha)
+    plt.gca().add_patch(line)
 
 def draw_text(content, location, result_color, size):
 
@@ -359,6 +368,34 @@ def draw_opp_data(datapoint, agent_number, alpha=None):
     draw_point(location, result_color, size, alpha)
     count += 1
 
+def draw_walker(walker, alpha=None, color= (1,0,0)):
+    """
+    We draw in a certain position at the map with the walkers
+    :param position:
+    :param color:
+    :return:
+    """
+
+    size = 12
+    world_pos = walker['position']
+    location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
+    draw_point(location, color, size, alpha)
+
+
+def draw_walker_move(walker_start, walker_end, alpha=0.5, color=(1,0,0)):
+    """
+    We draw a vector correponding to two walker positions
+    :param position:
+    :param color:
+    :return:
+    """
+
+    size = 1
+    world_pos_start = walker_start['position']
+    world_pos_end = walker_end['position']
+    location_start = carla.Location(x=world_pos_start[0], y=world_pos_start[1], z=world_pos_start[2])
+    location_end = carla.Location(x=world_pos_end[0], y=world_pos_end[1], z=world_pos_end[2])
+    draw_line(location_start, location_end, color, size, alpha)
 
 
 
@@ -394,7 +431,7 @@ def draw_route(route):
     draw_point(route[-1][0].location, result_color=(0.0, 1.0, 0), size=24)
 
 
-def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read=False):
+def draw_trajectories(directory, env_data, env_name, world, route, step_size=3, direct_read=False):
 
     fig = plt.figure()
     plt.xlim(-200, 6000)
@@ -419,10 +456,8 @@ def draw_trajectories(env_data, env_name, world, route, step_size=3, direct_read
                 #else:
                 draw_point_data(batch[0][step], direct_read=direct_read)
                 step += step_size
-            #draw_point(batch[0][step - step_size], end=True)
-            #draw_point(route[-1])
 
-    fig.savefig(env_name + '_trajectory.png',
+    fig.savefig(os.path.join(directory, env_name + '_trajectory.png'),
                 orientation='landscape', bbox_inches='tight', dpi=1200)
 
 
@@ -460,10 +495,6 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
                 step = 0  # Add the size
 
                 while step < len(batch[0]):
-                    #if first_time:
-                    #    draw_point(batch[0][step], init=True)
-                    #    first_time = False
-                    #else:
 
                     draw_point_data(batch[0][step], color=(0.0,1.0,0.0),  alpha=0.5)
                     draw_opp_data(batch[0][step], agent_number, alpha=0.5)
@@ -472,6 +503,67 @@ def draw_opp_trajectories(env_data, env_name, world, step_size=3):
         print ( " SAVE D AGENT")
         fig.savefig('_opp_traj/'+ env_name + '_opp_' + str(agent_number) + '_trajectory.png',
                     orientation='landscape', bbox_inches='tight', dpi=1200)
+
+
+def draw_pedestrians(agent_name, env_data, env_name, world, steps):
+
+    """
+        This is used on only one step to get a screen shot of how
+        the pedestrians look like.
+    :param env_data:
+    :param env_name:
+    :param world:
+    :return:
+    """
+
+    if not os.path.exists('_walkers'):
+        os.mkdir('_walkers')
+    # color pallet ! Maximum a few pedestrians
+    color_palet = [(1,0,0), (0,1,0), (0,0,1), (1,1,0), (0,1,1), (1,0,1), (0,0,0), (1,1,1)]
+    fig = plt.figure()
+    plt.xlim(-400, 3000)
+    plt.ylim(500, 5000)
+    # We draw the full map
+    draw_map(world)
+    count = 0
+    for i in range(len(steps)-1):
+        if len(steps) > 1:  # if we have more than 1 step we may connect the first and the last
+            for exp in env_data:
+                number_of_steps = len(exp[0][0][0]) -1
+                datapoint_start = exp[0][0][0][int(number_of_steps*steps[i])]
+                datapoint_end = exp[0][0][0][int(number_of_steps*steps[i+1])]
+
+                for s_walker_info_key, e_walker_info_key in zip(datapoint_start['measurements']['walkers'].keys(),
+                                                        datapoint_end['measurements']['walkers'].keys()):
+                    # we chechck for teleport first if so we don't draw for this pedestrian
+                    # The max step for teleport is sent
+                    print ("keys ", s_walker_info_key, " ", e_walker_info_key)
+                    if s_walker_info_key != e_walker_info_key:
+                        continue
+                    #check_for_teleport(exp[0][0][0], s_walker_info_key, int(number_of_steps*steps[-1]))
+                    s_walker_info = datapoint_start['measurements']['walkers'][s_walker_info_key]
+                    e_walker_info = datapoint_end['measurements']['walkers'][e_walker_info_key]
+                    draw_walker_move(s_walker_info, e_walker_info, color=(0, 0, 0))
+
+    for step in steps:
+        for exp in env_data:
+            number_of_steps = len(exp[0][0][0]) - 1
+            datapoint = exp[0][0][0][int(number_of_steps*step)]
+            for key, walker_info in datapoint['measurements']['walkers'].items():
+                draw_walker(walker_info, color=color_palet[count])
+        count += 1
+
+
+
+
+
+
+
+    fig.savefig('_walkers/'+ agent_name + '_' + env_name + '_step_' + ''.join(str(e)+'_'
+                                                                              for e in steps)
+                + '_trajectory.png',
+                orientation='landscape', bbox_inches='tight', dpi=1200)
+
 
 ### Add some main.
 

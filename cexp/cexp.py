@@ -31,6 +31,8 @@ class CEXP(object):
     _default_params = {'save_dataset': False,
                        'save_sensors': False,
                        'save_trajectories': False,
+                       'save_walkers': False,
+                       'make_videos': False,
                        'save_opponents': False,
                        'save_opp_trajectories': False,
                        'docker_name': None,
@@ -78,6 +80,9 @@ class CEXP(object):
         self._environment_batch = []
         for i in range(self._batch_size):
             self._environment_batch.append(ServerManagerDocker(self._params))
+
+        # We get the folder where the jsonfile is located.
+        self._jsonfile_path = os.path.join(*jsonfile.split('/')[:-1])
 
         # Executing
         self._execute_all = execute_all
@@ -144,11 +149,12 @@ class CEXP(object):
         # Create the configuration dictionary of the exp batch to pass to all environments
         env_params = {
             'batch_size': self._batch_size,
+            'make_videos': self._params['make_videos'],
             'save_dataset': self._params['save_dataset'],
             'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],
-            'save_opponents': self._params['save_opponents'], #
-            'save_opp_trajectories': self._params['save_opp_trajectories'],  #
+            'save_opponents': self._params['save_opponents'],
             'package_name': self._json['package_name'],
+            'save_walkers': self._params['save_walkers'],
             'save_trajectories': self._params['save_trajectories'],
             'remove_wrong_data': self._params['remove_wrong_data'],
             'non_rendering_mode': self._params['non_rendering_mode'],
@@ -160,7 +166,7 @@ class CEXP(object):
 
         # We instantiate environments here using the recently connected client
         self._environments = {}
-        parserd_exp_dict = parser.parse_exp_vec(collections.OrderedDict(
+        parserd_exp_dict = parser.parse_exp_vec(self._jsonfile_path, collections.OrderedDict(
                                     sort_nicely_dict(self._json['envs'].items())))
 
         # For all the environments on the file.

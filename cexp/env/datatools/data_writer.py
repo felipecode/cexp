@@ -1,14 +1,9 @@
-
-
-
 import os
+import glob
 import json
 import shutil
+import subprocess
 import numpy as np
-import math
-
-from google.protobuf.json_format import MessageToJson, MessageToDict
-from cexp.env.datatools.affordances import compute_relative_angle
 
 # TODO write expbatch related data.
 
@@ -19,7 +14,7 @@ class Writer(object):
     """
 
     def __init__(self, dataset_name, env_name, env_number, batch_number, agent_name,
-                 other_vehicles=False, road_information=False):
+                 other_vehicles=False, road_information=False, walkers=False):
         """
             We have a certain name but also the number of thee environment  ( How many times this env was repeated)
         """
@@ -28,6 +23,7 @@ class Writer(object):
             raise  ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
 
         root_path = os.environ["SRL_DATASET_PATH"]
+
 
         self._root_path = root_path
         self._experience_name = env_name
@@ -41,33 +37,27 @@ class Writer(object):
         # env full path
         self._env_full_path = os.path.join(root_path, dataset_name, env_name,
                                            str(env_number) + '_' + agent_name)
-
         # if we save the opponent vehicles , this makes the measurements vec more intesnse.
         self._save_opponents = other_vehicles
+        # We can also save the walkers, which also make the measurement vec way bigger
+        self._save_walkers = walkers
+        # Agent name used for this case
+        self._agent_name = agent_name
         if not os.path.exists(self._full_path):
             os.makedirs(self._full_path)
 
 
-    """
-        # We set this synch variable that will be set when all sensors are ready
-        self._ready_to_for_next_point = False
-
-    def ready(self):
-        # Set that the iteration is ready for the next point
-        self._ready_to_for_next_point = True
-    """
-
     def _build_measurements(self, world, previous):
-
         measurements = {"ego_actor": {},
                         "opponents": {},   # Todo add more information on demand, now just ego actor
+                        'walkers': {},
                         "lane": {}
                         }
         measurements.update(previous)
         # All the actors present we save their information
         for actor in world.get_actors():
             if 'vehicle' in actor.type_id:
-                if actor.attributes['role_name'] == 'hero':
+                if actor.attributes['role_name'] == 'scenario':
                     transform = actor.get_transform()
                     velocity = actor.get_velocity()
                     measurements['ego_actor'].update({
@@ -77,7 +67,6 @@ class Writer(object):
                         "velocity": [velocity.x, velocity.y, velocity.z]
                      }
                     )
-
                 elif actor.attributes['role_name'] == 'autopilot' and self._save_opponents:
                     transform = actor.get_transform()
                     velocity = actor.get_velocity()
@@ -89,7 +78,18 @@ class Writer(object):
                                         transform.rotation.yaw],
                         "velocity": [velocity.x, velocity.y, velocity.z]
                     }})
+            elif 'walker.pedestrian' in actor.type_id:
+                if actor.attributes['role_name'] == 'walker' and self._save_walkers:
+                    transform = actor.get_transform()
+                    velocity = actor.get_velocity()
+                    measurements['walkers'].update({actor.id: {
 
+                        "position": [transform.location.x, transform.location.y,
+                                     transform.location.z],
+                        "orientation": [transform.rotation.roll, transform.rotation.pitch,
+                                        transform.rotation.yaw],
+                        "velocity": [velocity.x, velocity.y, velocity.z]
+                    }})
 
         # Add other actors and lane information
         # general actor info
@@ -140,7 +140,6 @@ class Writer(object):
         :param measurements:
         :return:
         """
-
         # saves the dictionary following the measurements - image - episodes format.  Even though episodes
         # Are completely independent now.
         # We join the building of the measurements with some extra data that was calculated
@@ -189,6 +188,15 @@ class Writer(object):
         """
         shutil.rmtree(self._full_path)
 
+    def delete_sensors(self):
+        """
+        Delete all the PNG files.
+        Currently only focus on PNG later we can add more formats
+        :return:
+        """
+        for f in glob.glob(os.path.join(self._full_path,"*.png")):
+            os.remove(f)
+
     def delete_env(self):
 
         shutil.rmtree(self._env_full_path)
@@ -196,6 +204,28 @@ class Writer(object):
         # TODO check this posible inconsistency
         #if len(os.listdir(self._full_path)) == 0:
         #    shutil.rmtree(self._base_path)
+
+    def make_video(self, sensor_names):
+        """
+        The idea of this function is to make a low res video for quickly debuging the
+        dataset generated. That is good for debuging from remote machines
+        :return:
+        """
+        # We have an arbitrary video path here.
+        if not os.path.exists('_videos'):
+            os.mkdir('_videos')
+        # The folder where the episode is.
+        folder_path = self._full_path
+        print (" Saving on this full path")
+
+        for sensor_spec in sensor_names:
+            if sensor_spec['type'].startswith('sensor.camera'):
+                output_name = os.path.join('_videos', self._agent_name + '_' + self._experience_name +
+                                                      '_' + sensor_spec['id'] )
+                print ( " THis is the output name ", output_name)
+                subprocess.call(['ffmpeg', '-f', 'image2', '-i', os.path.join(folder_path,
+                                                                  sensor_spec['id'] + '%06d.png'),
+                                '-vcodec', 'mpeg4', '-y', output_name + '.mp4'])
 
 
     """

@@ -27,7 +27,6 @@ def parse_results_summary(summary):
     return result_dictionary
 
 
-
 def check_benchmarked_environments(json_filename, agent_checkpoint_name):
 
     """ return a dict with each environment that has a vector of dicts of results
@@ -216,7 +215,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     print(" =======> Driving in environment: ", env)
                     _, _ = agent.unroll(env)
                     # Just execute the environment. For this case the rewards doesnt matter.
-                    summary = env.get_summary()
+                    summary = env.get_info()['summary']
                     logging.debug("Finished episode got summary ")
                     # Add partial summary to allow continuation
                     add_summary(env._environment_name, summary,

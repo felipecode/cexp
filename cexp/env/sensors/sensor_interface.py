@@ -11,7 +11,6 @@ import carla
 from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
 from srunner.challenge.envs.scene_layout_sensors import SceneLayoutMeasurement, ObjectMeasurements, threaded
 
-
 class HDMapMeasurement(object):
     def __init__(self, data, frame_number):
         self.data = data
@@ -64,6 +63,7 @@ class HDMapReader(object):
     def destroy(self):
         self._run_ps = False
 
+
 class CANBusMeasurement(object):
     def __init__(self, data, frame_number):
         self.data = data
@@ -103,30 +103,6 @@ class CANBusSensor(object):
     def __call__(self):
 
         """ We convert the vehicle physics information into a convenient dictionary """
-        # TODO if you need more physics we can just do it ONCE !
-        """
-        vehicle_physics = self._vehicle.get_physics_control()
-        wheels_list_dict = []
-        for wheel in vehicle_physics.wheels:
-            wheels_list_dict.append(
-                {'tire_friction': wheel.tire_friction,
-                 'damping_rate': wheel.damping_rate
-                 #'disable_steering': wheel.disable_steering
-
-                 }
-            )
-
-        torque_curve = []
-        for point in vehicle_physics.torque_curve:
-            torque_curve.append({'x': point.x,
-                                'y': point.y
-                                })
-        steering_curve = []
-        for point in vehicle_physics.steering_curve:
-            steering_curve.append({'x': point.x,
-                                'y': point.y
-                                })
-        """
         return {
             'speed': self._get_forward_speed()
         }
@@ -166,7 +142,7 @@ class CallBack(object):
             self._parse_image_cb(data, self._tag, self._writer)
         elif isinstance(data, carla.LidarMeasurement):
             self._parse_lidar_cb(data, self._tag, self._writer)
-        elif isinstance(data, carla.GnssEvent):
+        elif isinstance(data, carla.GnssMeasurement):
             self._parse_gnss_cb(data, self._tag, self._writer)
         elif isinstance(data, CANBusMeasurement) or isinstance(data, HDMapMeasurement) \
                 or isinstance(data, SceneLayoutMeasurement) or isinstance(data, ObjectMeasurements):
@@ -177,7 +153,6 @@ class CallBack(object):
     # Parsing CARLA physical Sensors
 
     def _parse_image_cb(self, image, tag, writer):
-
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
 
         array = np.reshape(array, (image.height, image.width, 4))

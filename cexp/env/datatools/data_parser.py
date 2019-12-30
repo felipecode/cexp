@@ -87,7 +87,6 @@ def get_number_executions(agent_name, environments_path):
     envs_list = glob.glob(os.path.join(environments_path, '*'))
     for env in envs_list:
         env_name = env.split('/')[-1]
-        # TODO this is clearly specific, some solution is needed for refactoring
         results, _ = read_benchmark_summary(os.path.join(env,
                                                          agent_name + '_benchmark_summary.csv')
                                             )

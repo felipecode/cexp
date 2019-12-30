@@ -107,7 +107,7 @@ class Agent(object):
         self.reset()
         # You reset the scenario with and pass the make reward functions
         #  that are going to be used on the training.
-        environment.add_sensors(self.sensors())
+        environment.set_sensors(self.sensors())
         state, reward = environment.reset(self._make_state_batch, self._make_reward_batch,
                                           self._name)
 
@@ -117,7 +117,7 @@ class Agent(object):
         reward_batch = [[]] * environment._batch_size
         state_batch = [[]] * environment._batch_size
 
-        while environment.is_running():
+        while environment._is_running():
 
             controls = self._run_step_batch(state)
             # With this the experience runner also unroll all the scenarios
