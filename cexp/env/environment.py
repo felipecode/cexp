@@ -117,12 +117,7 @@ class Environment(object):
             self._env_exec_info.append(exp.get_summary())
 
         if self._save_trajectories:
-            draw_trajectories(self.trajectories_directory,
-                              self.get_data(),
-                              self._last_executing_agent + '_' + self._package_name  + '_' + self._environment_name,
-                              self._exp_list[0].world,
-                              self._exp_list[0]._route,
-                              direct_read=self._env_params['direct_read'])
+            self.draw_trajectory(self.trajectories_directory)
 
         if self._environment_name in Environment.number_of_executions:
             Environment.number_of_executions[self._environment_name] += 1
