@@ -28,8 +28,8 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
 
     :param target_location: the target object
     :param current_location: location of the reference object (ego itself)
-    :param forbidden_distance: maximum allowed distance
-    :param type: which type of object you consider
+    :param forbidden_distance: within this distance the ego has to take emergency stop
+    :param type: which type of object you consider, can be: vehicle, pedestrian or tl (traffic light)
     :return: a tuple given by (flag, distance), where
              - flag: a bool indicates if there is an object within forbidden distance
              - distance: the distance between target object and the ego, or None if the target is not in front of the ego
@@ -49,7 +49,7 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
     forward_vector = np.array([math.cos(math.radians(ego_orientation)), math.sin(math.radians(ego_orientation))])
     d_angle = math.degrees(math.acos(np.dot(forward_vector, target_vector) / norm_target))
 
-    if type == 'red_tl':
+    if type == 'tl':
         # we consider if the target is at left or right side regard to the forward vector
         sign = np.sign(np.linalg.det(np.stack((forward_vector, target_vector))))
 
@@ -58,7 +58,6 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
             # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
             if norm_target > forbidden_distance:
                 return (False, norm_target)
-
             else:
                 return (True, norm_target)
         else:
@@ -70,10 +69,8 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
             # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
             if norm_target > forbidden_distance:
                 return (False, norm_target)
-
             else:
                 return (True, norm_target)
-
         else:
             return (False, None)
 
@@ -192,7 +189,7 @@ def closest_red_tl(ego, object_list, forbidden_distance, max_detected_distance):
     distance_vec = []
     tl_vec = []
     for tl in object_list:
-        flag, distance = is_within_forbidden_distance_ahead(tl, ego, forbidden_distance, type='red_tl')
+        flag, distance = is_within_forbidden_distance_ahead(tl, ego, forbidden_distance, type='tl')
         # filter the cases that the light is not in red
         if flag:
             if tl.state != carla.TrafficLightState.Red:
@@ -258,7 +255,7 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     is_vehicle_hazard, closest_vehicle_id, closest_vehicle_distance = \
         closest_vehicle(ego, vehicle_list, vehicle_forbidden_distance, vehicle_max_detected_distance)
 
-    is_red_tl_hazard, closest_tl_id, closest_tl_distance = \
+    is_red_tl_hazard, closest_red_tl_id, closest_red_tl_distance = \
         closest_red_tl(ego, tl_list, tl_forbidden_distance, tl_max_detected_distance)
 
     forward_speed = get_forward_speed(ego)
@@ -275,6 +272,6 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     #for debug
     affordances.update({'closest_pedestrian_distance': closest_pedestrian_distance})
     affordances.update({'closest_vehicle_distance': closest_vehicle_distance})
-    affordances.update({'closest_tl_distance': closest_tl_distance})
+    affordances.update({'closest_red_tl_distance': closest_red_tl_distance})
 
     return affordances
