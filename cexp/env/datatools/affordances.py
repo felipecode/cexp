@@ -80,20 +80,17 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, target_w
     elif type == 'pedestrian':
         # This means the target object is in front of ego
         if d_angle < 90.0:
-            target_to_waypoint = np.linalg.norm(np.array([target_location.x - target_waypoint.transform.location.x,
-                                                          target_location.y - target_waypoint.transform.location.y]))
             # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
             if norm_target > forbidden_distance:
                 return (False, norm_target)
 
-            # TODO: This is hard code for setting threshold to define if the walker is inside the lane
-            # The walker is not inside the lane
-            elif target_to_waypoint > 2.0:
-                return (False, norm_target)
-
-            else:
+            target_to_waypoint = np.linalg.norm(np.array([target_location.x - target_waypoint.transform.location.x,
+                                                          target_location.y - target_waypoint.transform.location.y]))
+            # walkers are inside the lanes
+            if target_to_waypoint <= 2.0:
                 return (True, norm_target)
-
+            else:
+                return (False, norm_target)
         else:
             return (False, None)
 
@@ -124,9 +121,9 @@ def closest_pedestrian(ego, object_list, forbidden_distance, max_detected_distan
     pedestrian_vec = []
     for pedestrian in object_list:
         pedestrian_waypoint = map.get_waypoint(pedestrian.get_location())
-        if pedestrian_waypoint.road_id != ego_waypoint.road_id or \
-                pedestrian_waypoint.lane_id != ego_waypoint.lane_id:
-            continue
+        #if pedestrian_waypoint.road_id != ego_waypoint.road_id or \
+        #        pedestrian_waypoint.lane_id != ego_waypoint.lane_id:
+        #    continue
 
         flag, distance = is_within_forbidden_distance_ahead(pedestrian, ego, forbidden_distance, pedestrian_waypoint, type='pedestrian')
         # filter the cases that the object is not in front
@@ -281,5 +278,10 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     affordances.update({'forward_speed': forward_speed})
     affordances.update({'relative_angle': relative_angle})
     affordances.update({'target_speed': target_speed})
+
+    #for debug
+    affordances.update({'closest_pedestrian_distance': closest_pedestrian_distance})
+    affordances.update({'closest_vehicle_distance': closest_vehicle_distance})
+    affordances.update({'closest_tl_distance': closest_tl_distance})
 
     return affordances
