@@ -22,7 +22,7 @@ def compute_relative_angle(vehicle, waypoint):
     return relative_angle
 
 
-def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, target_waypoint = None, type = None):
+def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = None):
     """
     Check if a target object is within a certain distance in front of a reference object.
 
@@ -84,6 +84,7 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, target_w
             if norm_target > forbidden_distance:
                 return (False, norm_target)
 
+            target_waypoint = ego.get_world().get_map().get_waypoint(target_location)
             target_to_waypoint = np.linalg.norm(np.array([target_location.x - target_waypoint.transform.location.x,
                                                           target_location.y - target_waypoint.transform.location.y]))
             # walkers are inside the lanes
@@ -113,19 +114,11 @@ def closest_pedestrian(ego, object_list, forbidden_distance, max_detected_distan
              - pedestrian is the object itself or None if there is no pedestrian affecting us
              - the closest pedestrian distance, set to max_detected_distance if there is no pedestrian within max_detected_distance
     """
-    ego_location = ego.get_location()
-    map = ego.get_world().get_map()
-    ego_waypoint = map.get_waypoint(ego_location)
 
     distance_vec = []
     pedestrian_vec = []
     for pedestrian in object_list:
-        pedestrian_waypoint = map.get_waypoint(pedestrian.get_location())
-        #if pedestrian_waypoint.road_id != ego_waypoint.road_id or \
-        #        pedestrian_waypoint.lane_id != ego_waypoint.lane_id:
-        #    continue
-
-        flag, distance = is_within_forbidden_distance_ahead(pedestrian, ego, forbidden_distance, pedestrian_waypoint, type='pedestrian')
+        flag, distance = is_within_forbidden_distance_ahead(pedestrian, ego, forbidden_distance, type='pedestrian')
         # filter the cases that the object is not in front
         if distance is not None:
             distance_vec.append(distance)
