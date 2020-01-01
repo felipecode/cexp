@@ -41,7 +41,8 @@ class CEXP(object):
                        'remove_wrong_data': False,
                        'non_rendering_mode': False,
                        'carla_recording': True,
-                       'direct_read': False
+                       'direct_read': False,
+                       'trajectories_directory': 'database'
                       }
 
     def __init__(self, jsonfile, params=None, iterations_to_execute=0, sequential=False,
@@ -161,6 +162,7 @@ class CEXP(object):
             'carla_recording': self._params['carla_recording'],
             'direct_read': self._params['direct_read'],
             'agent_name': agent_name,
+            'trajectories_directory': self._params['trajectories_directory'],
             'debug': False  # DEBUG SHOULD BE SET
         }
 

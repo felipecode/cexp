@@ -1,6 +1,7 @@
 {
     "envs": {
         "ClearNoon_challenge_route00000": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 0
@@ -17,6 +18,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00001": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 1
@@ -33,6 +35,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00002": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 2
@@ -49,6 +52,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00003": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 3
@@ -65,6 +69,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00004": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 4
@@ -81,6 +86,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00005": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 5
@@ -97,6 +103,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00006": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 6
@@ -113,6 +120,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00007": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 7
@@ -129,6 +137,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00008": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 8
@@ -145,6 +154,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00009": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 9
@@ -161,6 +171,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00010": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 10
@@ -177,6 +188,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00011": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 11
@@ -193,6 +205,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00012": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 12
@@ -209,6 +222,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00013": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 13
@@ -225,6 +239,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00014": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 14
@@ -241,6 +256,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00015": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 15
@@ -257,6 +273,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00016": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 16
@@ -273,6 +290,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00017": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 17
@@ -289,6 +307,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00018": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 18
@@ -305,6 +324,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00019": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 19
@@ -321,6 +341,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00020": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 20
@@ -337,6 +358,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00021": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 21
@@ -353,6 +375,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00022": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 22
@@ -369,6 +392,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00023": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 23
@@ -385,6 +409,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_challenge_route00024": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 24
@@ -401,6 +426,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00000": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 0
@@ -417,6 +443,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00001": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 1
@@ -433,6 +460,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00002": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 2
@@ -449,6 +477,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00003": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 3
@@ -465,6 +494,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00004": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 4
@@ -481,6 +511,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00005": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 5
@@ -497,6 +528,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00006": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 6
@@ -513,6 +545,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00007": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 7
@@ -529,6 +562,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00008": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 8
@@ -545,6 +579,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00009": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 9
@@ -561,6 +596,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00010": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 10
@@ -577,6 +613,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00011": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 11
@@ -593,6 +630,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00012": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 12
@@ -609,6 +647,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00013": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 13
@@ -625,6 +664,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00014": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 14
@@ -641,6 +681,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00015": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 15
@@ -657,6 +698,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00016": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 16
@@ -673,6 +715,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00017": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 17
@@ -689,6 +732,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00018": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 18
@@ -705,6 +749,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00019": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 19
@@ -721,6 +766,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00020": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 20
@@ -737,6 +783,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00021": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 21
@@ -753,6 +800,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00022": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 22
@@ -769,6 +817,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00023": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 23
@@ -785,6 +834,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearNoon_navigation_route00024": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 24
@@ -801,6 +851,7 @@
             "weather_profile": "ClearNoon"
         },
         "ClearSunset_challenge_route00000": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 0
@@ -817,6 +868,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00001": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 1
@@ -833,6 +885,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00002": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 2
@@ -849,6 +902,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00003": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 3
@@ -865,6 +919,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00004": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 4
@@ -881,6 +936,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00005": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 5
@@ -897,6 +953,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00006": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 6
@@ -913,6 +970,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00007": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 7
@@ -929,6 +987,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00008": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 8
@@ -945,6 +1004,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00009": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 9
@@ -961,6 +1021,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00010": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 10
@@ -977,6 +1038,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00011": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 11
@@ -993,6 +1055,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00012": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 12
@@ -1009,6 +1072,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00013": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 13
@@ -1025,6 +1089,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00014": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 14
@@ -1041,6 +1106,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00015": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 15
@@ -1057,6 +1123,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00016": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 16
@@ -1073,6 +1140,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00017": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 17
@@ -1089,6 +1157,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00018": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 18
@@ -1105,6 +1174,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00019": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 19
@@ -1121,6 +1191,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00020": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 20
@@ -1137,6 +1208,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00021": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 21
@@ -1153,6 +1225,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00022": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 22
@@ -1169,6 +1242,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00023": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 23
@@ -1185,6 +1259,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_challenge_route00024": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 24
@@ -1201,6 +1276,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00000": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 0
@@ -1217,6 +1293,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00001": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 1
@@ -1233,6 +1310,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00002": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 2
@@ -1249,6 +1327,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00003": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 3
@@ -1265,6 +1344,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00004": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 4
@@ -1281,6 +1361,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00005": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 5
@@ -1297,6 +1378,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00006": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 6
@@ -1313,6 +1395,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00007": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 7
@@ -1329,6 +1412,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00008": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 8
@@ -1345,6 +1429,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00009": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 9
@@ -1361,6 +1446,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00010": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 10
@@ -1377,6 +1463,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00011": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 11
@@ -1393,6 +1480,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00012": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 12
@@ -1409,6 +1497,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00013": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 13
@@ -1425,6 +1514,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00014": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 14
@@ -1441,6 +1531,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00015": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 15
@@ -1457,6 +1548,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00016": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 16
@@ -1473,6 +1565,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00017": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 17
@@ -1489,6 +1582,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00018": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 18
@@ -1505,6 +1599,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00019": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 19
@@ -1521,6 +1616,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00020": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 20
@@ -1537,6 +1633,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00021": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 21
@@ -1553,6 +1650,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00022": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 22
@@ -1569,6 +1667,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00023": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 23
@@ -1585,6 +1684,7 @@
             "weather_profile": "ClearSunset"
         },
         "ClearSunset_navigation_route00024": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 24
@@ -1601,6 +1701,7 @@
             "weather_profile": "ClearSunset"
         },
         "HardRainNoon_challenge_route00000": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 0
@@ -1617,6 +1718,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00001": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 1
@@ -1633,6 +1735,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00002": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 2
@@ -1649,6 +1752,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00003": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 3
@@ -1665,6 +1769,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00004": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 4
@@ -1681,6 +1786,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00005": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 5
@@ -1697,6 +1803,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00006": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 6
@@ -1713,6 +1820,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00007": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 7
@@ -1729,6 +1837,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00008": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 8
@@ -1745,6 +1854,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00009": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 9
@@ -1761,6 +1871,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00010": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 10
@@ -1777,6 +1888,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00011": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 11
@@ -1793,6 +1905,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00012": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 12
@@ -1809,6 +1922,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00013": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 13
@@ -1825,6 +1939,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00014": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 14
@@ -1841,6 +1956,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00015": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 15
@@ -1857,6 +1973,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00016": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 16
@@ -1873,6 +1990,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00017": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 17
@@ -1889,6 +2007,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00018": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 18
@@ -1905,6 +2024,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00019": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 19
@@ -1921,6 +2041,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00020": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 20
@@ -1937,6 +2058,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00021": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 21
@@ -1953,6 +2075,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00022": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 22
@@ -1969,6 +2092,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00023": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 23
@@ -1985,6 +2109,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_challenge_route00024": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 24
@@ -2001,6 +2126,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00000": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 0
@@ -2017,6 +2143,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00001": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 1
@@ -2033,6 +2160,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00002": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 2
@@ -2049,6 +2177,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00003": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 3
@@ -2065,6 +2194,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00004": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 4
@@ -2081,6 +2211,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00005": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 5
@@ -2097,6 +2228,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00006": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 6
@@ -2113,6 +2245,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00007": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 7
@@ -2129,6 +2262,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00008": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 8
@@ -2145,6 +2279,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00009": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 9
@@ -2161,6 +2296,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00010": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 10
@@ -2177,6 +2313,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00011": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 11
@@ -2193,6 +2330,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00012": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 12
@@ -2209,6 +2347,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00013": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 13
@@ -2225,6 +2364,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00014": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 14
@@ -2241,6 +2381,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00015": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 15
@@ -2257,6 +2398,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00016": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 16
@@ -2273,6 +2415,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00017": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 17
@@ -2289,6 +2432,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00018": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 18
@@ -2305,6 +2449,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00019": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 19
@@ -2321,6 +2466,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00020": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 20
@@ -2337,6 +2483,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00021": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 21
@@ -2353,6 +2500,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00022": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 22
@@ -2369,6 +2517,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00023": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 23
@@ -2385,6 +2534,7 @@
             "weather_profile": "HardRainNoon"
         },
         "HardRainNoon_navigation_route00024": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 24
@@ -2401,6 +2551,7 @@
             "weather_profile": "HardRainNoon"
         },
         "WetNoon_challenge_route00000": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 0
@@ -2417,6 +2568,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00001": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 1
@@ -2433,6 +2585,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00002": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 2
@@ -2449,6 +2602,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00003": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 3
@@ -2465,6 +2619,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00004": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 4
@@ -2481,6 +2636,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00005": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 5
@@ -2497,6 +2653,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00006": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 6
@@ -2513,6 +2670,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00007": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 7
@@ -2529,6 +2687,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00008": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 8
@@ -2545,6 +2704,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00009": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 9
@@ -2561,6 +2721,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00010": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 10
@@ -2577,6 +2738,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00011": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 11
@@ -2593,6 +2755,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00012": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 12
@@ -2609,6 +2772,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00013": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 13
@@ -2625,6 +2789,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00014": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 14
@@ -2641,6 +2806,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00015": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 15
@@ -2657,6 +2823,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00016": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 16
@@ -2673,6 +2840,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00017": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 17
@@ -2689,6 +2857,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00018": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 18
@@ -2705,6 +2874,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00019": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 19
@@ -2721,6 +2891,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00020": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 20
@@ -2737,6 +2908,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00021": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 21
@@ -2753,6 +2925,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00022": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 22
@@ -2769,6 +2942,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00023": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 23
@@ -2785,6 +2959,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_challenge_route00024": {
+            "repetitions": 1,
             "route": {
                 "file": "routes/routes_town01.xml",
                 "id": 24
@@ -2801,6 +2976,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00000": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 0
@@ -2817,6 +2993,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00001": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 1
@@ -2833,6 +3010,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00002": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 2
@@ -2849,6 +3027,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00003": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 3
@@ -2865,6 +3044,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00004": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 4
@@ -2881,6 +3061,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00005": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 5
@@ -2897,6 +3078,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00006": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 6
@@ -2913,6 +3095,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00007": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 7
@@ -2929,6 +3112,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00008": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 8
@@ -2945,6 +3129,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00009": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 9
@@ -2961,6 +3146,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00010": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 10
@@ -2977,6 +3163,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00011": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 11
@@ -2993,6 +3180,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00012": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 12
@@ -3009,6 +3197,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00013": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 13
@@ -3025,6 +3214,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00014": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 14
@@ -3041,6 +3231,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00015": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 15
@@ -3057,6 +3248,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00016": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 16
@@ -3073,6 +3265,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00017": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 17
@@ -3089,6 +3282,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00018": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 18
@@ -3105,6 +3299,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00019": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 19
@@ -3121,6 +3316,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00020": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 20
@@ -3137,6 +3333,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00021": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 21
@@ -3153,6 +3350,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00022": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 22
@@ -3169,6 +3367,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00023": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 23
@@ -3185,6 +3384,7 @@
             "weather_profile": "WetNoon"
         },
         "WetNoon_navigation_route00024": {
+            "repetitions": 1,
             "route": {
                 "file": "corl2017/Town01_navigation.xml",
                 "id": 24
@@ -3201,5 +3401,5 @@
             "weather_profile": "WetNoon"
         }
     },
-    "package_name": "dataset_vehicles_walkers_affordances_l0"
+    "package_name": "dataset_vehicles_walkers_l0"
 }

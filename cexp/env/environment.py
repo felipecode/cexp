@@ -70,6 +70,7 @@ class Environment(object):
         self._env_exec_info = []
         # We set an agent to a previous executed agent.
         self._last_executing_agent = env_params['agent_name']
+        self.trajectories_directory = env_params['trajectories_directory']
 
 
     @staticmethod
@@ -116,8 +117,9 @@ class Environment(object):
             self._env_exec_info.append(exp.get_summary())
 
         if self._save_trajectories:
-            draw_trajectories(self.get_data(),
-              self._last_executing_agent + '_' + self._package_name  + '_' + self._environment_name,
+            draw_trajectories(self.trajectories_directory,
+                              self.get_data(),
+                              self._last_executing_agent + '_' + self._package_name  + '_' + self._environment_name,
                               self._exp_list[0].world,
                               self._exp_list[0]._route,
                               direct_read=self._env_params['direct_read'])
@@ -307,7 +309,7 @@ class Environment(object):
         if not os.path.exists(directory):
             os.mkdir(directory)
 
-        draw_trajectories(diretory,
+        draw_trajectories(directory,
                           self.get_data(),
                           self._last_executing_agent + '_' + self._package_name + '_' + self._environment_name,
                           self._exp_list[0].world,
