@@ -5,9 +5,7 @@ import os
 import matplotlib
 matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
 import matplotlib.pyplot as plt
-from cexp.env.scenario_identification import identify_scenario
-
-
+from cexp.env.scenario_identification import identify_scenario, identify_scenario_2
 
 
 COLOR_BUTTER_0 = (252/ 255.0, 233/ 255.0, 79/ 255.0)
@@ -322,10 +320,10 @@ def draw_point_data(datapoint, color=None, direct_read=False, alpha=None):
         if direct_read:
             result_color = get_color(datapoint['scenario'])
         else:
-            result_color = get_color(identify_scenario(datapoint['measurements']['distance_intersection'],
-                                               datapoint['measurements']['distance_lead_vehicle'],
-                                               datapoint['measurements']['distance_crossing_walker'],
-                                               ))
+            # we want to debug the hazard stop cases
+            result_color = get_color_2(identify_scenario_2(datapoint['measurements']['is_red_tl_hazard'],
+                                                         datapoint['measurements']['is_vehicle_hazard'],
+                                                         datapoint['measurements']['is_pedestrian_hazard']))
     else:
         result_color = color
 
@@ -333,7 +331,6 @@ def draw_point_data(datapoint, color=None, direct_read=False, alpha=None):
 
     location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
     draw_point(location, result_color, size, alpha)
-
 
 
 def get_N_HexCol(N=5):
@@ -421,6 +418,30 @@ def get_color(scenario):
         return COLOR_BUTTER_2
     elif scenario == 'S6_pedestrian':
         return COLOR_PINK
+
+def get_color_2(scenario):
+    """
+    Based on the scenario we paint the trajectory with a given color.
+    :param scenario:
+    :return:
+    """
+
+    if scenario == 'S0_vehicle_pedestrian_redTL':
+        return COLOR_SCARLET_RED_0
+    elif scenario == 'S1_vehicle_pedestrian':
+        return COLOR_CHOCOLATE_0
+    elif scenario == 'S2_vehicle_redTL':
+        return COLOR_SKY_BLUE_0
+    elif scenario == 'S3_vehicle':
+        return COLOR_BUTTER_0
+    elif scenario == 'S4_pedestrian_redTL':
+        return COLOR_PLUM_0
+    elif scenario == 'S5_pedestrian':
+        return COLOR_ORANGE_0
+    elif scenario == 'S6_redTL':
+        return COLOR_PINK
+    elif scenario == 'S7_normal_driving':
+        return COLOR_BLACK
 
 
 def draw_route(route):

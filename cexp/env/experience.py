@@ -21,7 +21,7 @@ from cexp.env.datatools.data_writer import Writer
 from cexp.env.utils.route_configuration_parser import estimate_route_timeout
 from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
 from cexp.env.utils.scenario_utils import number_class_translation
-from cexp.env.utils.general import get_forward_speed, convert_transform_to_location, \
+from cexp.env.utils.general import convert_transform_to_location, \
                                    distance_vehicle, convert_json_to_transform
 
 

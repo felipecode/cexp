@@ -213,7 +213,8 @@ if __name__ == '__main__':
                   'batch_size': 1,
                   'remove_wrong_data': args.delete_wrong,
                   'non_rendering_mode': False,
-                  'carla_recording': False
+                  'carla_recording': False,
+                  'trajectories_directory': os.path.join('database', args.json_config + '_trajectories')
                   }
 
         if i == args.number_collectors-1 and not environments_per_collector.is_integer():
