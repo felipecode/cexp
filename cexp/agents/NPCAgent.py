@@ -29,7 +29,7 @@ class NPCAgent(Agent):
     def __init__(self, sensors_dict):
         super().__init__(self)
         self._sensors_dict = sensors_dict
-        self._pedestrian_forbidden_distance = 10.0
+        self._pedestrian_forbidden_distance = 6.0
         self._pedestrian_max_detected_distance = 50.0
         self._vehicle_forbidden_distance = 10.0
         self._vehicle_max_detected_distance = 50.0
