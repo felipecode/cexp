@@ -323,37 +323,72 @@ def identify_scenario(distance_intersection,
                 return 'S5_lead_vehicle_inside_intersection'
 
 
+def identify_scenario_2(is_red_tl_hazard=False,
+                        is_vehicle_hazard=False,
+                        is_pedestrian_hazard = False):
+
+    """
+    Returns the scenario for this specific point or trajectory
+
+    S0: Lane Following -Straight - S0_lane_following
+    S1: Intersection - S1_intersection
+    S2: Traffic Light/ before intersection - S2_before_intersection
+    S3: Lane Following with a car in front
+    S4: Stop for a lead vehicle in front of the intersection ( Or continue
+    S5: FOllowing a vehicle inside the intersection.
+    S6: Pedestrian crossing leaving from hiden coca cola thing: S6_pedestrian
 
 
-"""
 
-    #S0 direction equal lane following
-    # More conditions For town01 and 02 for sure, for other towns have to check roundabout ( HOW ??)
+    # These two params are very important when controlling the training procedure
 
-    # S1 Direction equal to STRAIGHT LEFT OR RIGHT
-    # TODO: mighth need to increase the size of the direction .
-
-    # S3 Check distance to a lead vehile if it is smaller than threshold , and it is on the same lane.
+    ### Future ones to add ( higher complexity)
 
 
-
-    # S4 - S5 -S6 S7 : Check if the scenario is affecting. However when the scenario is over we cannot do anything.
-    # Use pytrees to directly get the state of the scenario
-
-
-    if exp._town_name != 'Town01' or exp._town_name != 'Town02':
-        pass
-        # We check here the complex town scenarios
-
-        # S8 is related to the lane change command directly, may need some extra check
-
-        # S9 whe need to figure out how to detect a roundabount, it probably needs world position mapping
-            # TODO do a system to label world positions
-
-        # S10: Also probably requires world position mapping, we may need a system for that.
+    S4: Control Loss (TS1) - S4_control_loss
+    S5: Pedestrian Crossing (TS3) - S5_pedestrian_crossing
+    S6: Bike Crossing (TS4)
+    S7: Vehicles crossing on red light (TS7-8-9)
+    Complex Towns Scenarios
+    S8: Lane change
+    S9: Roundabout
+    S10: Different kinds of intersections with different angles
 
 
-"""
+    :param exp:
+    :return:
+
+    We can have for now
+    """
+
+    # TODO for now only for scenarios 0-2
+
+    if is_vehicle_hazard:
+        if is_pedestrian_hazard:
+            if is_red_tl_hazard:
+                return 'S0_vehicle_pedestrian_redTL'
+            else:
+                return 'S1_vehicle_pedestrian'
+        elif is_red_tl_hazard:
+            return 'S2_vehicle_redTL'
+
+        else:
+            return 'S3_vehicle'
+
+    if is_pedestrian_hazard:
+        if is_red_tl_hazard:
+            return 'S4_pedestrian_redTL'
+
+        else:
+            return 'S5_pedestrian'
+
+    if is_red_tl_hazard:
+        return 'S6_redTL'
+
+    return 'S7_normal_driving'
+
+
+
 
 
 
