@@ -182,6 +182,10 @@ if __name__ == '__main__':
         nargs='+',
         dest='eliminated_gpus',
         type=str)
+    argparser.add_argument(
+        '-r', '--resize-images',
+        action="store_true",
+        help=' resize images once the episode finished')
 
     args = argparser.parse_args()
     json_file = os.path.join('database', args.json_config)
@@ -213,7 +217,7 @@ if __name__ == '__main__':
         params = {'save_dataset': True,
                   'save_sensors': True,
                   'save_trajectories': True,
-                  'resize_images': True,
+                  'resize_images': args.resize_images,
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
