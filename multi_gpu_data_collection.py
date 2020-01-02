@@ -98,7 +98,7 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
             states, rewards = agent.unroll(env)
             if params['resize_images']:
                 print(env,' has been resized, and original images have been deleted')
-                subprocess.call(['rm', '-r', os.path.join(os.path.join(os.environ["SRL_DATASET_PATH"], package_name , env))])
+                subprocess.call(['rm', '-r', os.path.join(os.environ["SRL_DATASET_PATH"], package_name , str(env))])
             agent.reinforce(rewards)
         except KeyboardInterrupt:
             env.stop()
