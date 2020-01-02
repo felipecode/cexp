@@ -53,8 +53,8 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
         # we consider if the target is at left or right side regard to the forward vector
         sign = np.sign(np.linalg.det(np.stack((forward_vector, target_vector))))
 
-        # for red tl, we don't consider the lights at forward left and behind the ego
-        if d_angle < 90.0 and sign >= 0.0:
+        # for red tl, we don't consider the lights at forward left and outer FOV
+        if d_angle < 50.0 and sign >= 0.0:
             # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
             if norm_target > forbidden_distance:
                 return (False, norm_target)
@@ -75,8 +75,8 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
             return (False, None)
 
     elif type == 'pedestrian':
-        # This means the target object is in front of ego
-        if d_angle < 90.0:
+        # the target object is within Field of view 100
+        if d_angle < 50.0:
             # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
             if norm_target > forbidden_distance:
                 return (False, norm_target)
@@ -84,6 +84,7 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
             target_waypoint = ego.get_world().get_map().get_waypoint(target_location)
             target_to_waypoint = np.linalg.norm(np.array([target_location.x - target_waypoint.transform.location.x,
                                                           target_location.y - target_waypoint.transform.location.y]))
+
             # walkers are inside the lanes
             if target_to_waypoint <= 2.0:
                 return (True, norm_target)
