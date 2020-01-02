@@ -537,7 +537,7 @@ class Experience(object):
             if delete_sensors:
                 self._writer.delete_sensors()
 
-        if self._exp_params['resize_data']:
+        if self._exp_params['resize_images']:
             data_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._exp_params['package_name'])
             save_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._exp_params['package_name']+'_resized')
             if not os.path.exists(save_path):
