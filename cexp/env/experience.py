@@ -542,31 +542,30 @@ class Experience(object):
             save_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._exp_params['package_name']+'_resized')
             if not os.path.exists(save_path):
                 os.mkdir(save_path)
-            episode = self._exp_params['env_name']
-            print('Resizing images in ', episode)
-            metadata_file = glob.glob(os.path.join(data_path, episode, '*.json'))
+            print('Resizing images in ', self._exp_params['env_name'])
+            metadata_file = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '*.json'))
             metadata_name = metadata_file[0].split('/')[-1]
-            if not os.path.exists(os.path.join(save_path, episode)):
-                os.mkdir(os.path.join(save_path, episode))
-            shutil.copy(metadata_file[0], os.path.join(os.path.join(save_path, episode), metadata_name))
-            images_list = glob.glob(os.path.join(data_path, episode, '0_Agent', '0', '*.png'))
-            files_list = glob.glob(os.path.join(data_path, episode, '0_Agent', '0','*.json'))
+            if not os.path.exists(os.path.join(save_path, self._exp_params['env_name'])):
+                os.mkdir(os.path.join(save_path, self._exp_params['env_name']))
+            shutil.copy(metadata_file[0], os.path.join(os.path.join(save_path, self._exp_params['env_name']), metadata_name))
+            images_list = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0', '*.png'))
+            files_list = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0','*.json'))
             for image_path in images_list:
                 image_name = image_path.split('/')[-1]
                 image = scipy.misc.imread(image_path)
                 image = image[65:460, :, :]
                 image = scipy.misc.imresize(image, (88, 200))
-                saving_img_dir = os.path.join(save_path, episode, '0_Agent', '0')
+                saving_img_dir = os.path.join(save_path, self._exp_params['env_name'], '0_Agent', '0')
                 if not os.path.exists(saving_img_dir):
                     os.makedirs(saving_img_dir)
                 scipy.misc.imsave(os.path.join(saving_img_dir, image_name), image)
             for file_path in files_list:
                 file_name = file_path.split('/')[-1]
-                saving_files_dir = os.path.join(save_path, episode, '0_Agent', '0')
+                saving_files_dir = os.path.join(save_path, self._exp_params['env_name'], '0_Agent', '0')
                 if not os.path.exists(saving_files_dir):
                     os.makedirs(saving_files_dir)
                 shutil.copy(file_path, os.path.join(saving_files_dir, file_name))
-            print('===> Resizing finished ', episode)
+            print('===> Resizing finished ', self._exp_params['env_name'])
 
 
 
