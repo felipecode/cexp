@@ -55,7 +55,7 @@ if __name__ == '__main__':
                         },
                         "scenarios": {
                                       'background_activity': {"vehicle.*": 80,
-                                                              "walker.*": 100,
+                                                              "walker.*": 300,
                                                               "cross_factor": 0.01}
                                       },
                         "town_name": "Town01",
