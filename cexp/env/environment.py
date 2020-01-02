@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import shutil
+import subprocess
 
 from cexp.env.experience import Experience
 from cexp.env.datatools.map_drawer import draw_pedestrians, draw_opp_trajectories, \
@@ -124,6 +125,9 @@ class Environment(object):
         else:
             raise ValueError("Cleaning up non created environment")
 
+        if self._env_params['resize_images']:
+            subprocess.call(['rm', '-r', os.path.join(os.environ["SRL_DATASET_PATH"], self._package_name['package_name'])])
+
     def stop(self):
         self._cleanup()
 
@@ -176,6 +180,7 @@ class Environment(object):
                 'exp_number': i,
                 'save_data': self._save_data,
                 'make_videos': self._env_params['make_videos'],
+                'resize_images': self._env_params['resize_images'],
                 'save_sensors': self._env_params['save_sensors'],
                 'save_opponents': self._env_params['save_opponents'],
                 'save_walkers': self._env_params['save_walkers'],

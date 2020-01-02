@@ -3,6 +3,10 @@ import py_trees
 import traceback
 import time
 import logging
+import shutil
+import os
+import glob
+import scipy.misc
 
 
 from srunner.scenariomanager.timer import GameTime, TimeOut
@@ -23,6 +27,7 @@ from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInte
 from cexp.env.utils.scenario_utils import number_class_translation
 from cexp.env.utils.general import convert_transform_to_location, \
                                    distance_vehicle, convert_json_to_transform
+
 
 
 class Experience(object):
@@ -531,6 +536,39 @@ class Experience(object):
             self._writer.make_video(self._sensors_dict)
             if delete_sensors:
                 self._writer.delete_sensors()
+
+        if self._exp_params['resize_data']:
+            data_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._exp_params['package_name'])
+            save_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._exp_params['package_name']+'_resized')
+            if not os.path.exists(save_path):
+                os.mkdir(save_path)
+            episode = self._exp_params['env_name']
+            print('Resizing images in ', episode)
+            metadata_file = glob.glob(os.path.join(data_path, episode, '*.json'))
+            metadata_name = metadata_file[0].split('/')[-1]
+            if not os.path.exists(os.path.join(save_path, episode)):
+                os.mkdir(os.path.join(save_path, episode))
+            shutil.copy(metadata_file[0], os.path.join(os.path.join(save_path, episode), metadata_name))
+            images_list = glob.glob(os.path.join(data_path, episode, '0_Agent', '0', '*.png'))
+            files_list = glob.glob(os.path.join(data_path, episode, '0_Agent', '0','*.json'))
+            for image_path in images_list:
+                image_name = image_path.split('/')[-1]
+                image = scipy.misc.imread(image_path)
+                image = image[65:460, :, :]
+                image = scipy.misc.imresize(image, (88, 200))
+                saving_img_dir = os.path.join(save_path, episode, '0_Agent', '0')
+                if not os.path.exists(saving_img_dir):
+                    os.makedirs(saving_img_dir)
+                scipy.misc.imsave(os.path.join(saving_img_dir, image_name), image)
+            for file_path in files_list:
+                file_name = file_path.split('/')[-1]
+                saving_files_dir = os.path.join(save_path, episode, '0_Agent', '0')
+                if not os.path.exists(saving_files_dir):
+                    os.makedirs(saving_files_dir)
+                shutil.copy(file_path, os.path.join(saving_files_dir, file_name))
+            print('===> Resizing finished ', episode)
+
+
 
     def cleanup(self, ego=True):
         """

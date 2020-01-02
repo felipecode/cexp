@@ -215,6 +215,7 @@ def benchmark(benchmark_name, docker_image, gpu, agent_class_path, agent_params_
                     print(" =======> Driving in environment: ", env)
                     _, _ = agent.unroll(env)
                     # Just execute the environment. For this case the rewards doesnt matter.
+
                     summary = env.get_info()['summary']
                     logging.debug("Finished episode got summary ")
                     # Add partial summary to allow continuation

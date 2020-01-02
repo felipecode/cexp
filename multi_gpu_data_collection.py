@@ -208,6 +208,7 @@ if __name__ == '__main__':
         params = {'save_dataset': True,
                   'save_sensors': True,
                   'save_trajectories': True,
+                  'resize_images': True,
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
