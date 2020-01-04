@@ -35,6 +35,7 @@ class NPCAgent(Agent):
         self._vehicle_max_detected_distance = 50.0
         self._tl_forbidden_distance = 10.0
         self._tl_max_detected_distance = 50.0
+        self._speed_detected_distance = 10.0
 
     def setup(self, config_file_path):
         self.route_assigned = False
@@ -80,6 +81,7 @@ class NPCAgent(Agent):
             self._local_planner.set_global_plan(plan)
             self.route_assigned = True
 
+        # TODO: are these necessary??
         self._distance_pedestrian_crossing, self._closest_pedestrian_crossing = \
             get_distance_closest_crossing_waker(exp)
 
@@ -98,7 +100,8 @@ class NPCAgent(Agent):
         return get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
                                        self._vehicle_forbidden_distance, self._vehicle_max_detected_distance,
                                        self._tl_forbidden_distance, self._tl_max_detected_distance,
-                                       self._local_planner.get_target_waypoint(), self._local_planner._target_speed)
+                                       self._local_planner.get_target_waypoint(),
+                                       self._local_planner._default_target_speed, self._local_planner._target_speed, self._speed_detected_distance)
 
 
     def make_reward(self, exp):
@@ -107,16 +110,15 @@ class NPCAgent(Agent):
         return None
 
     def run_step(self, affordances):
-
-        #print('check affordances', affordances)
-
         hazard_detected = False
-
         is_vehicle_hazard = affordances['is_vehicle_hazard']
         is_red_tl_hazard = affordances['is_red_tl_hazard']
         is_pedestrian_hazard = affordances['is_pedestrian_hazard']
         relative_angle = affordances['relative_angle']
         target_speed = affordances['target_speed']
+        # once we meet a speed limit sign, the target speed changes
+        if target_speed != self._local_planner._target_speed:
+            self._local_planner.set_speed(target_speed)
         forward_speed = affordances['forward_speed']
         
         if is_vehicle_hazard:
