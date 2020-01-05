@@ -21,6 +21,13 @@ def compute_relative_angle(vehicle, waypoint):
 
     return relative_angle
 
+def compute_distance(ego_location, target_location):
+
+    target_vector = np.array([target_location.x - ego_location.x, target_location.y - ego_location.y])
+    norm_target = np.linalg.norm(target_vector)
+
+    return norm_target
+
 
 def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = None):
     """
@@ -49,12 +56,12 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
     forward_vector = np.array([math.cos(math.radians(ego_orientation)), math.sin(math.radians(ego_orientation))])
     d_angle = math.degrees(math.acos(np.dot(forward_vector, target_vector) / norm_target))
 
-    if type == 'tl':
+    if type in ['tl', 'ts']:
         # we consider if the target is at left or right side regard to the forward vector
         sign = np.sign(np.linalg.det(np.stack((forward_vector, target_vector))))
 
-        # for red tl, we don't consider the lights at forward left and behind the ego
-        if d_angle < 90.0 and sign >= 0.0:
+        # for red tl, we don't consider the lights at forward left and outer FOV
+        if d_angle < 50.0 and sign >= 0.0:
             # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
             if norm_target > forbidden_distance:
                 return (False, norm_target)
@@ -75,8 +82,8 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
             return (False, None)
 
     elif type == 'pedestrian':
-        # This means the target object is in front of ego
-        if d_angle < 90.0:
+        # the target object is within Field of view 100
+        if d_angle < 50.0:
             # If the target is out of forbidden_distance we set, we detect it False. But we still get the distance
             if norm_target > forbidden_distance:
                 return (False, norm_target)
@@ -84,6 +91,7 @@ def is_within_forbidden_distance_ahead(target, ego, forbidden_distance, type = N
             target_waypoint = ego.get_world().get_map().get_waypoint(target_location)
             target_to_waypoint = np.linalg.norm(np.array([target_location.x - target_waypoint.transform.location.x,
                                                           target_location.y - target_waypoint.transform.location.y]))
+
             # walkers are inside the lanes
             if target_to_waypoint <= 2.0:
                 return (True, norm_target)
@@ -153,7 +161,6 @@ def closest_vehicle(ego, object_list, forbidden_distance, max_detected_distance)
         if vehicle.id == ego.id:
             continue
         vehicle_waypoint = map.get_waypoint(vehicle.get_location())
-
         if vehicle_waypoint.road_id != ego_waypoint.road_id or \
                 vehicle_waypoint.lane_id != ego_waypoint.lane_id:
             continue
@@ -175,7 +182,6 @@ def closest_red_tl(ego, object_list, forbidden_distance, max_detected_distance):
     This function is to get the closest traffic light distance
 
     :param ege: the ego itself
-    :param map: the whole driving map
     :param object_list: the list of all traffic lights
     :param object_list: list containing TrafficLight objects
     :param forbidden_distance: within this distance the ego will be forced to stop
@@ -190,8 +196,8 @@ def closest_red_tl(ego, object_list, forbidden_distance, max_detected_distance):
     tl_vec = []
     for tl in object_list:
         flag, distance = is_within_forbidden_distance_ahead(tl, ego, forbidden_distance, type='tl')
-        # filter the cases that the light is not in red
         if flag:
+            # filter the cases that the light is not in red
             if tl.state != carla.TrafficLightState.Red:
                 continue
             else:
@@ -207,6 +213,39 @@ def closest_red_tl(ego, object_list, forbidden_distance, max_detected_distance):
     else:
         return (False, None, max_detected_distance)
 
+
+def allowed_maximum_speed(ego, object_list, default_target_speed, target_speed, detectable_distance):
+    """
+    This function is for getting the allowed maximum speed for the current road
+    :param ego: the ego itself
+    :param object_list: the list of all traffic signs
+    :param default_target_speed: the default target speed when we don't see any traffic speed sign
+    :param target_speed: the current target speed
+    :param detectable_distance: within this distance, the speed limit sign can be detected, and the target speed need to be switched to that
+    :return:
+    """
+
+    ego_location = ego.get_location()
+    map = ego.get_world().get_map()
+    ego_waypoint = map.get_waypoint(ego_location)
+
+    ts_num = 0
+    for ts in object_list:
+        ts_waypoint = map.get_waypoint(ts.get_location())
+        if ts_waypoint.road_id != ego_waypoint.road_id or \
+                ts_waypoint.lane_id != ts_waypoint.lane_id:
+            continue
+        ts_num += 1
+        # the speed limit sign is within detected_distance
+        flag, distance = is_within_forbidden_distance_ahead(ts, ego, detectable_distance, type='ts')
+        if flag:
+            target_speed = float(ts.type_id.split('.')[-1])
+
+    # No speed limit sign on current road and lane
+    if ts_num == 0:
+        target_speed = default_target_speed
+
+    return target_speed
 
 def get_forward_speed(vehicle):
     """ Convert the vehicle transform directly to forward speed """
@@ -227,7 +266,8 @@ The access function for the affordances
 
 def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_detected_distance,
                             vehicle_forbidden_distance, vehicle_max_detected_distance,
-                            tl_forbidden_distance, tl_max_detected_distance, next_waypoint, target_speed):
+                            tl_forbidden_distance, tl_max_detected_distance, next_waypoint,
+                            default_target_speed, current_target_speed, speed_sign_detectable_distance):
 
     """
     compute all the affordances that are necessary for an NPC agent to drive
@@ -239,6 +279,10 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     :param vehicle_max_detected_distance: maximum detected distance for vehicle
     :param tl_forbidden_distance: forbidden_distance for red traffic light
     :param tl_max_detected_distance: maximum detected distance for red traffic light
+    :param next_waypoint: next waypoint the ego is going to
+    :param default_target_speed: the default target speed when there is no speed limit sign
+    :param current_target_speed: current target speed
+    :param speed_sign_detected_distance: within this distance the speed limit sign can be detected, and the target speed need to be switched to that
     :return: a dictionary including all affordances that may need to be used
     """
 
@@ -247,6 +291,9 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     vehicle_list = actor_list.filter("*vehicle*")    # vehicle objects
     tl_list = actor_list.filter("*traffic_light*")   # traffic light objects
     pedestrian_list = actor_list.filter("*pedestrian*")   # pedestrian objects
+
+    #ts_list = actor_list.filter("*speed_limit*")  # traffic sign speed objects
+    #current_target_speed = allowed_maximum_speed(ego, ts_list, default_target_speed, current_target_speed, speed_sign_detectable_distance)
 
     # Although we need only the classification, we still compute continous distance values for future need
     is_pedestrian_hazard, closest_pedestrian_id, closest_pedestrian_distance = \
@@ -267,7 +314,7 @@ def get_driving_affordances(exp, pedestrian_forbidden_distance, pedestrian_max_d
     affordances.update({'is_pedestrian_hazard': is_pedestrian_hazard})
     affordances.update({'forward_speed': forward_speed})
     affordances.update({'relative_angle': relative_angle})
-    affordances.update({'target_speed': target_speed})
+    affordances.update({'target_speed': current_target_speed})
 
     #for debug
     affordances.update({'closest_pedestrian_distance': closest_pedestrian_distance})

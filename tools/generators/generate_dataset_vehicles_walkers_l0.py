@@ -54,7 +54,7 @@ if __name__ == '__main__':
                             "id": env_number
                         },
                         "scenarios": {
-                                      'background_activity': {"vehicle.*": 100,
+                                      'background_activity': {"vehicle.*": 80,
                                                               "walker.*": 300,
                                                               "cross_factor": 0.01}
                                       },

@@ -33,6 +33,7 @@ class CEXP(object):
                        'save_trajectories': False,
                        'save_walkers': False,
                        'make_videos': False,
+                       'resize_images':False,
                        'save_opponents': False,
                        'save_opp_trajectories': False,
                        'docker_name': None,
@@ -151,6 +152,7 @@ class CEXP(object):
         env_params = {
             'batch_size': self._batch_size,
             'make_videos': self._params['make_videos'],
+            'resize_images': self._params['resize_images'],
             'save_dataset': self._params['save_dataset'],
             'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],
             'save_opponents': self._params['save_opponents'],

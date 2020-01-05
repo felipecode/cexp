@@ -176,6 +176,7 @@ class Environment(object):
                 'exp_number': i,
                 'save_data': self._save_data,
                 'make_videos': self._env_params['make_videos'],
+                'resize_images': self._env_params['resize_images'],
                 'save_sensors': self._env_params['save_sensors'],
                 'save_opponents': self._env_params['save_opponents'],
                 'save_walkers': self._env_params['save_walkers'],

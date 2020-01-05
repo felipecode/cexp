@@ -6,6 +6,7 @@ import os
 import glob
 import json
 import multiprocessing
+import subprocess
 
 from cexp.agents.NPCAgent import NPCAgent
 from cexp.cexp import CEXP
@@ -83,6 +84,7 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                      eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
+    package_name = args.json_config.split('.')[-2]
 
     # Here some docker was set
     NPCAgent._name = 'Multi'
@@ -94,6 +96,9 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
             print (" Collector ", collector_id, " Collecting for ", env)
             states, rewards = agent.unroll(env)
+            if params['resize_images']:
+                print(env,' has been resized, and original images have been deleted')
+                subprocess.call(['rm', '-r', os.path.join(os.environ["SRL_DATASET_PATH"], package_name , str(env))])
             agent.reinforce(rewards)
         except KeyboardInterrupt:
             env.stop()
@@ -177,6 +182,10 @@ if __name__ == '__main__':
         nargs='+',
         dest='eliminated_gpus',
         type=str)
+    argparser.add_argument(
+        '-r', '--resize-images',
+        action="store_true",
+        help=' resize images once the episode finished')
 
     args = argparser.parse_args()
     json_file = os.path.join('database', args.json_config)
@@ -208,6 +217,7 @@ if __name__ == '__main__':
         params = {'save_dataset': True,
                   'save_sensors': True,
                   'save_trajectories': True,
+                  'resize_images': args.resize_images,
                   'docker_name': args.container_name,
                   'gpu': gpu,
                   'batch_size': 1,
