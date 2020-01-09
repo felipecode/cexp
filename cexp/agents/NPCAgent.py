@@ -81,24 +81,6 @@ class NPCAgent(Agent):
             self._local_planner.set_global_plan(plan)
             self.route_assigned = True
 
-        # TODO: are these necessary??
-        """
-        self._distance_pedestrian_crossing, self._closest_pedestrian_crossing = \
-            get_distance_closest_crossing_waker(exp)
-
-        # if the closest pedestrian dies we reset
-        if self._closest_pedestrian_crossing is not None and \
-                not self._closest_pedestrian_crossing.is_alive:
-            self._closest_pedestrian_crossing = None
-            self._distance_pedestrian_crossing = -1
-
-        if self._distance_pedestrian_crossing != -1 and self._distance_pedestrian_crossing < 13.0:
-            if self._distance_pedestrian_crossing < 4.5:
-                self._local_planner.set_speed(0.0)
-            else:
-                self._local_planner.set_speed(self._distance_pedestrian_crossing / 4.5)
-        """
-
         return get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
                                        self._vehicle_forbidden_distance, self._vehicle_max_detected_distance,
                                        self._tl_forbidden_distance, self._tl_max_detected_distance,
