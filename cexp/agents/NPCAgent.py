@@ -82,6 +82,7 @@ class NPCAgent(Agent):
             self.route_assigned = True
 
         # TODO: are these necessary??
+        """
         self._distance_pedestrian_crossing, self._closest_pedestrian_crossing = \
             get_distance_closest_crossing_waker(exp)
 
@@ -96,6 +97,7 @@ class NPCAgent(Agent):
                 self._local_planner.set_speed(0.0)
             else:
                 self._local_planner.set_speed(self._distance_pedestrian_crossing / 4.5)
+        """
 
         return get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
                                        self._vehicle_forbidden_distance, self._vehicle_max_detected_distance,
@@ -117,8 +119,9 @@ class NPCAgent(Agent):
         relative_angle = affordances['relative_angle']
         target_speed = affordances['target_speed']
         # once we meet a speed limit sign, the target speed changes
-        if target_speed != self._local_planner._target_speed:
-            self._local_planner.set_speed(target_speed)
+
+        #if target_speed != self._local_planner._target_speed:
+        #    self._local_planner.set_speed(target_speed)
         forward_speed = affordances['forward_speed']
         
         if is_vehicle_hazard:
