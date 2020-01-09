@@ -549,7 +549,7 @@ class Experience(object):
                 os.mkdir(os.path.join(save_path, self._exp_params['env_name']))
             shutil.copy(metadata_file[0], os.path.join(os.path.join(save_path, self._exp_params['env_name']), metadata_name))
             images_list = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0', '*.png'))
-            files_list = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0','*.json'))
+            files_list = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0','measurements*.json'))
             for image_path in images_list:
                 image_name = image_path.split('/')[-1]
                 image = scipy.misc.imread(image_path)
@@ -565,6 +565,9 @@ class Experience(object):
                 if not os.path.exists(saving_files_dir):
                     os.makedirs(saving_files_dir)
                 shutil.copy(file_path, os.path.join(saving_files_dir, file_name))
+            summary_file_path = os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0', 'summary.json')
+            file_name = summary_file_path.split('/')[-1]
+            shutil.copy(summary_file_path, os.path.join(saving_files_dir, file_name))
             print('===> Resizing finished ', self._exp_params['env_name'])
 
 
