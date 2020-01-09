@@ -19,6 +19,9 @@ def compute_relative_angle(vehicle, waypoint):
     if _cross[2] < 0:
         relative_angle *= -1.0
 
+    if np.isnan(relative_angle):
+        relative_angle = 0.0
+
     return relative_angle
 
 def compute_distance(ego_location, target_location):
