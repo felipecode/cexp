@@ -84,7 +84,9 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                      eliminated_environments=eliminated_environments)
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
-    package_name = args.json_config.split('.')[-2]
+    with open(json_file, 'r') as f:
+        json_dict = json.loads(f.read())
+        package_name = json_dict['package_name']
 
     # Here some docker was set
     NPCAgent._name = 'Multi'
@@ -97,8 +99,9 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
             print (" Collector ", collector_id, " Collecting for ", env)
             states, rewards = agent.unroll(env)
             if params['resize_images']:
-                print(env,' has been resized, and original images have been deleted')
-                subprocess.call(['rm', '-r', os.path.join(os.environ["SRL_DATASET_PATH"], package_name , str(env))])
+                if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], package_name+'_resized' , str(env), '0_Agent', '0', 'summary.json')):
+                    print(env,' has been resized, and original images have been deleted')
+                    subprocess.call(['rm', '-r', os.path.join(os.environ["SRL_DATASET_PATH"], package_name , str(env))])
             agent.reinforce(rewards)
         except KeyboardInterrupt:
             env.stop()
@@ -216,7 +219,7 @@ if __name__ == '__main__':
         # Dictionary with the necessary params related to the execution not the model itself.
         params = {'save_dataset': True,
                   'save_sensors': True,
-                  'save_trajectories': True,
+                  'save_trajectories': False,
                   'resize_images': args.resize_images,
                   'docker_name': args.container_name,
                   'gpu': gpu,
