@@ -172,7 +172,7 @@ if __name__ == '__main__':
         help=' the first episode')
     argparser.add_argument(
         '-j', '--json-config',
-        help=' path to the json configuration file',
+        help=' full path to the json configuration file',
         required=True)
     argparser.add_argument(
         '-ct', '--container-name',
@@ -191,7 +191,9 @@ if __name__ == '__main__':
         help=' resize images once the episode finished')
 
     args = argparser.parse_args()
-    json_file = os.path.join('database', args.json_config)
+    print(os.path.realpath(__file__).split('/')[:-1])
+
+    json_file = args.json_config
 
     with open(json_file, 'r') as f:
         json_dict = json.loads(f.read())
