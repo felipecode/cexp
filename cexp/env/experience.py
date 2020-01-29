@@ -24,7 +24,7 @@ from cexp.env.scorer import record_route_statistics_default, get_current_complet
 from cexp.env.datatools.data_writer import Writer
 from cexp.env.utils.route_configuration_parser import estimate_route_timeout
 from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
-from cexp.env.utils.scenario_utils import number_class_translation
+#from cexp.env.utils.scenario_utils import number_class_translation
 from cexp.env.utils.general import convert_transform_to_location, \
                                    distance_vehicle, convert_json_to_transform
 
@@ -39,7 +39,8 @@ class Experience(object):
          contains all the objects (vehicles, sensors) and scenarios of the the current experience
         :param vehicle_model: the model that is going to be used to spawn the ego CAR
         """
-
+        # The sensors dict is important to make videos after
+        self._sensors_dict = sensors
         # We save the agent name for data savings
         self._agent_name = agent_name
 
@@ -489,7 +490,7 @@ class Experience(object):
 
                     # TODO scenario 4 is out
 
-                    ScenarioClass = number_class_translation[scenario_name][0]
+                    #ScenarioClass = number_class_translation[scenario_name][0]
                     egoactor_trigger_position = convert_json_to_transform(
                         scenario_definition)
                     scenario_configuration = ScenarioConfiguration()

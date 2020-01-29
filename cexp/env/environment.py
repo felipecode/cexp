@@ -252,6 +252,9 @@ class Environment(object):
         :return:
         """
 
+        control = control_vec[0][0]
+        control_noise = control_vec[0][1]
+
         # If we don't receive a list we can force it
         if not isinstance(control_vec, list):
             control_vec = [control_vec]
@@ -259,13 +262,12 @@ class Environment(object):
         # Run the loop for all the experiments on the batch.
         # update all scenarios
         # TODO there is no loop when using multibatch
-        for i in range(len(self._exp_list)):
-            exp = self._exp_list[i]
-            control = control_vec[i]
-            control = exp.tick_scenarios_control(control)
-            exp.apply_control(control)
-            exp.tick_world()
-            exp.save_experience(affordances[i])
+        exp = self._exp_list[0]
+        # We save the normal one and apply the noise control.
+        _ = exp.tick_scenarios_control(control)
+        exp.apply_control(control_noise)
+        exp.tick_world()
+        exp.save_experience(affordances[0])
 
         return self.StateFunction(self._exp_list), \
                     self.RewardFunction(self._exp_list)

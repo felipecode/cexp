@@ -1,6 +1,7 @@
 import logging
 import numpy as NP
 from cexp.agents.agent import Agent
+from cexp.agents.noiser import Noiser
 from cexp.env.datatools.affordances import  get_driving_affordances
 from cexp.env.scenario_identification import get_distance_closest_crossing_waker
 from enum import Enum
@@ -26,7 +27,7 @@ class AgentState(Enum):
 
 class NPCAgent(Agent):
 
-    def __init__(self, sensors_dict):
+    def __init__(self, sensors_dict, noise=False):
         super().__init__(self)
         self._sensors_dict = sensors_dict
         self._pedestrian_forbidden_distance = 10.0
@@ -36,6 +37,12 @@ class NPCAgent(Agent):
         self._tl_forbidden_distance = 10.0
         self._tl_max_detected_distance = 50.0
         self._speed_detected_distance = 10.0
+        self._use_noise = noise
+        if noise:
+            self._noiser = Noiser('Spike')
+            self._name = 'NPC_noise'
+        else:
+            self._name = 'NPC'
 
     def setup(self, config_file_path):
         self.route_assigned = False
@@ -126,8 +133,14 @@ class NPCAgent(Agent):
             control = self._local_planner.run_step(relative_angle, target_speed)
             
         logging.debug("Output %f %f %f " % (control.steer,control.throttle, control.brake))
+        if self._use_noise:
+            control_noise, _, _ = self._noiser.compute_noise(control, forward_speed)
+            logging.debug("Output Noise %f %f %f " %
+                          (control_noise.steer, control_noise.throttle, control_noise.brake))
+        else:
+            control_noise = control
 
-        return control
+        return control, control_noise
 
 
     def reinforce(self, rewards):

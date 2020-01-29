@@ -26,7 +26,6 @@ if __name__ == '__main__':
     root.addHandler(handler)
 
 
-
     description = ("CARLA AD Challenge evaluation: evaluate your Agent in CARLA scenarios\n")
 
     parser = argparse.ArgumentParser(description=description)
@@ -36,7 +35,7 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/corl2017/corl2017_newtown_one_curve_Town02.json'
+    json = 'database/dataset_ICML_Town01_train_samplenoise.json'
 
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
@@ -44,22 +43,22 @@ if __name__ == '__main__':
               'save_trajectories': True,
               'save_opponents': True,
               'save_opp_trajectories': False,
-              'docker_name': 'carlalatest:latest',
+              'docker_name': 'carlaped',
               'gpu': 0,
               'batch_size': 1,
               'remove_wrong_data': False,
               'non_rendering_mode': False,
-              'carla_recording': False
+              'carla_recording': False,
+              'make_videos': True
               }
 
     # The idea is that the agent class should be completely independent
     agent = NPCAgent(
-        sensors_dict = [])
+        sensors_dict=[], noise=True)
     # this could be joined
     env_batch = CEXP(json, params=params, execute_all=True, ignore_previous_execution=True,
                      port=arguments.port)  # THe experience is built, the files necessary
                                            # to load CARLA and the scenarios are made
-
     # Here some docker was set
     env_batch.start()
     for env in env_batch:

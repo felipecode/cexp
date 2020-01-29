@@ -71,8 +71,6 @@ class CEXP(object):
                 else:  # if tit is not the case you use default
                     self._params.update({key: value})
 
-        #print (" FINAL PARQMS ", self._params)
-
         # Todo thuis goes out with the merge
         if 'save_sensors' not in self._params:
             self._params.update({'save_sensors': self._params['save_dataset']})
@@ -84,6 +82,7 @@ class CEXP(object):
             self._environment_batch.append(ServerManagerDocker(self._params))
 
         # We get the folder where the jsonfile is located.
+
         self._jsonfile_path = os.path.join('/', *jsonfile.split('/')[:-1])
 
         # Executing
@@ -95,7 +94,8 @@ class CEXP(object):
         self.client_timeout = 25.0
         # The os environment file
         if "SRL_DATASET_PATH" not in os.environ and self._params['save_dataset']:
-            raise ValueError("SRL DATASET not defined, set the place where the dataset is going to be saved")
+            raise ValueError("SRL DATASET not defined, "
+                             "set the place where the dataset is going to be saved")
 
         # uninitialized environments vector
         self._environments = None
@@ -117,7 +117,6 @@ class CEXP(object):
 
     def start(self, no_server=False, agent_name=None):
         """
-
         :param no_server:
         :param agent_name: the name of an agent to check for previous executions.
         :return:

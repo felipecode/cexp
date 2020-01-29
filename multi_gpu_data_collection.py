@@ -16,7 +16,8 @@ import sys
 # TODO I have a problem with respect to where to put files
 
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
-def collect_data(json_file, params, eliminated_environments, collector_id):
+def collect_data(json_file, params, eliminated_environments,
+                 collector_id, noise=False):
     # The idea is that the agent class should be completely independent
 
     # TODO this has to go to a separate file and to be merged with package
@@ -78,7 +79,7 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
                  'x': 0.7, 'y': -0.4, 'z': 1.60,
                  'id': 'GPS'}
 
-               ])
+               ], noise=noise)
     # this could be joined
     env_batch = CEXP(json_file, params=params, execute_all=True,
                      eliminated_environments=eliminated_environments)
@@ -89,8 +90,11 @@ def collect_data(json_file, params, eliminated_environments, collector_id):
         package_name = json_dict['package_name']
 
     # Here some docker was set
-    NPCAgent._name = 'Multi'
-    env_batch.start(agent_name=NPCAgent._name)
+    if not noise:
+        env_batch.start(agent_name='Multi')
+    else:
+        env_batch.start(agent_name='Multi_noise')
+
     for env in env_batch:
         try:
             # The policy selected to run this experience vector (The class basically) This policy can also learn, just
