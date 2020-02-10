@@ -152,7 +152,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--port', default=None, help='Port for an already existent server')
 
     parser.add_argument('-js', '--json-file',
-                        default='sample_descriptions/sample_benchmark.json',
+                        default='sample_descriptions/sample_description.json',
                         help='The json file to be used for this case.')
 
     parser.add_argument('-d', '--docker',
