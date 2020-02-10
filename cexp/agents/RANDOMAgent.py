@@ -1,5 +1,6 @@
 import logging
 import numpy as NP
+import random
 from cexp.agents.agent import Agent
 from cexp.agents.noiser import Noiser
 from cexp.env.datatools.affordances import  get_driving_affordances
@@ -25,7 +26,7 @@ class AgentState(Enum):
     BLOCKED_BY_PEDESTRIAN = 4
 
 
-class NPCAgent(Agent):
+class RANDOMAgent(Agent):
 
     def __init__(self, sensors_dict, noise=False):
         super().__init__(self)
