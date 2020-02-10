@@ -83,7 +83,7 @@ class CEXP(object):
 
         # We get the folder where the jsonfile is located.
 
-        self._jsonfile_path = os.path.join('/', *jsonfile.split('/')[:-1])
+        self._jsonfile_path = os.path.join( '/', *jsonfile.split('/')[:-1])
 
         # Executing
         self._execute_all = execute_all

@@ -8,7 +8,7 @@ import json
 import multiprocessing
 import subprocess
 
-from cexp.agents.NPCAgent import NPCAgent
+from cexp.agents.RANDOMAgent import RANDOMAgent
 from cexp.cexp import CEXP
 import sys
 
@@ -21,7 +21,7 @@ def collect_data(json_file, params, eliminated_environments,
     # The idea is that the agent class should be completely independent
 
     # TODO this has to go to a separate file and to be merged with package
-    agent = NPCAgent(
+    agent = RANDOMAgent(
         sensors_dict = [{'type': 'sensor.camera.rgb',
                 'x': 2.0, 'y': 0.0,
                 'z': 1.40, 'roll': 0.0,
@@ -30,13 +30,7 @@ def collect_data(json_file, params, eliminated_environments,
                 'fov': 100,
                 'id': 'rgb_central'},
 
-               {'type': 'sensor.camera.semantic_segmentation',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': 0.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'labels_central'},
+
 
                {'type': 'sensor.camera.rgb',
                 'x': 2.0, 'y': 0.0,
@@ -46,13 +40,7 @@ def collect_data(json_file, params, eliminated_environments,
                 'fov': 100,
                 'id': 'rgb_left'},
 
-               {'type': 'sensor.camera.semantic_segmentation',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': -30.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'labels_left'},
+
 
                {'type': 'sensor.camera.rgb',
                 'x': 2.0, 'y': 0.0,
@@ -61,14 +49,6 @@ def collect_data(json_file, params, eliminated_environments,
                 'width': 800, 'height': 600,
                 'fov': 100,
                 'id': 'rgb_right'},
-
-               {'type': 'sensor.camera.semantic_segmentation',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': 30.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'labels_right'},
 
                 {'type': 'sensor.can_bus',
                  'reading_frequency': 25,
@@ -91,9 +71,9 @@ def collect_data(json_file, params, eliminated_environments,
 
     # Here some docker was set
     if not noise:
-        env_batch.start(agent_name='Multi')
+        env_batch.start(agent_name='Random')
     else:
-        env_batch.start(agent_name='Multi_noise')
+        env_batch.start(agent_name='Random_noise')
 
     for env in env_batch:
         try:
