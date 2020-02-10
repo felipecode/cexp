@@ -57,7 +57,45 @@ class RANDOMAgent(Agent):
         return self._sensors_dict
 
     def make_state(self, exp, target_speed = 20.0):
-        return None
+        """
+            Based on the exp object it makes all the affordances.
+        :param exp:
+        :return:
+        """
+        self._vehicle = exp._ego_actor
+
+        if self._agent is None:
+            self._agent = True
+            self._state = AgentState.NAVIGATING
+            args_lateral_dict = {
+                'K_P': 1,
+                'K_D': 0.02,
+                'K_I': 0,
+                'dt': 1.0 / 20.0}
+            self._local_planner = LocalPlanner(
+                self._vehicle, opt_dict={'target_speed': target_speed,
+                                         'lateral_control_dict': args_lateral_dict})
+            self._hop_resolution = 2.0
+            self._path_seperation_hop = 2
+            self._path_seperation_threshold = 0.5
+            self._grp = None
+
+        if not self.route_assigned:
+            plan = []
+            for transform, road_option in exp._route:
+                wp = exp._ego_actor.get_world().get_map().get_waypoint(transform.location)
+                plan.append((wp, road_option))
+
+            self._local_planner.set_global_plan(plan)
+            self.route_assigned = True
+
+        return get_driving_affordances(exp, self._pedestrian_forbidden_distance, self._pedestrian_max_detected_distance,
+                                       self._vehicle_forbidden_distance, self._vehicle_max_detected_distance,
+                                       self._tl_forbidden_distance, self._tl_max_detected_distance,
+                                       self._local_planner.get_target_waypoint(),
+                                       self._local_planner._default_target_speed, self._local_planner._target_speed, self._speed_detected_distance)
+
+
 
     def make_reward(self, exp):
         # Just basically return None since the reward is not used for a non
