@@ -2,8 +2,6 @@
     "default_random_seed": 1,
     "default_seconds_per_meter":  0.8,
     "envs": {
-      "seconds_per_meter": 1,
-      "random_seed": 2,
       "SoftRainSunset_route00000": {
         "repetitions": 1,
         "route": {
