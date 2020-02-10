@@ -12,9 +12,7 @@ from srunner.scenarios.master_scenario import MasterScenario
 from srunner.scenarios.background_activity import BackgroundActivity
 from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
-
 from agents.navigation.local_planner import RoadOption
-
 
 from cexp.env.scorer import record_route_statistics_default, get_current_completion, clean_route
 from cexp.env.datatools.data_writer import Writer
@@ -68,7 +66,8 @@ class Experience(object):
         # if data is being saved we create the writer object
 
         # if we are going to save, we keep track of a dictionary with all the data
-        self._writer = Writer(exp_params['package_name'], exp_params['env_name'], exp_params['env_number'],
+        self._writer = Writer(exp_params['package_name'], exp_params['env_name'],
+                              exp_params['env_number'],
                               exp_params['exp_number'], agent_name,
                               other_vehicles=exp_params['save_opponents'],
                               walkers=exp_params['save_walkers'])
@@ -103,11 +102,14 @@ class Experience(object):
             # We set all the traffic lights to green to avoid having this traffic scenario.
             self._reset_map()
             # Data for building the master scenario
-            self._timeout = estimate_route_timeout(self._route)
+            self._timeout = estimate_route_timeout(self._route,
+                                                   exp_params['seconds_per_meter'])
             self._master_scenario = self.build_master_scenario(self._route,
                                                                exp_params['town_name'],
-                                                               self._timeout)
-            other_scenarios = self.build_scenario_instances(scenario_definitions, self._timeout)
+                                                               self._timeout,
+                                                               True)#exp_params['terminate_on_collison'])
+            other_scenarios = self.build_scenario_instances(scenario_definitions,
+                                                            self._timeout)
             self._list_scenarios = [self._master_scenario] + other_scenarios
             # Route statistics, when the route is finished there will
             # be route statistics on this object. and nothing else
@@ -121,7 +123,6 @@ class Experience(object):
                 self._clean_bad_dataset()
             # Re raise the exception
             raise r
-
 
     def tick_scenarios(self):
 
@@ -164,7 +165,6 @@ class Experience(object):
         for index in range(len(self._route)):
 
             waypoint = self._route[index][0]
-
             computed_distance = distance_vehicle(waypoint, vehicle_position)
 
             if computed_distance < min_distance:
@@ -371,7 +371,7 @@ class Experience(object):
         # TODO for now we are just randomizing the seeds and that is it
 
 
-    def build_master_scenario(self, route, town_name, timeout):
+    def build_master_scenario(self, route, town_name, timeout, terminate_on_collision):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
@@ -385,7 +385,7 @@ class Experience(object):
         CarlaDataProvider.register_actor(self._ego_actor)
 
         return MasterScenario(self.world, [self._ego_actor], master_scenario_configuration,
-                              timeout=timeout)
+                              timeout=timeout, terminate_on_collision=terminate_on_collision)
 
 
     def _load_world(self):

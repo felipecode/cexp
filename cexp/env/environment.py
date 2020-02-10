@@ -2,6 +2,8 @@ import json
 import logging
 import os
 import shutil
+import random
+import numpy as np
 
 from cexp.env.experience import Experience
 from cexp.env.datatools.map_drawer import draw_pedestrians, draw_opp_trajectories, \
@@ -10,6 +12,10 @@ import cexp.env.datatools.data_parser as parser
 
 # The scenarios should not have this triggering thing they can however. add some scenario editor ??
 
+def seed_everything(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
 
 # define the exception for non existent data
 class NoDataGenerated(Exception):
@@ -23,12 +29,11 @@ It also can have additional sensors that are environment related not policy rela
 
 # TODO you should only report an episode in case of crash.
 
-
 class Environment(object):
     # We keep track here the number of times this class was executed.
     number_of_executions = {}
 
-    def __init__(self, name, client_vec, env_config, env_params):
+    def __init__(self, name, client_vec, env_config, env_params, random_seed):
 
         # The ignore previous param is to avoid searching for executed iterations
         # TODO this requires more testing
@@ -68,6 +73,8 @@ class Environment(object):
         self._env_exec_info = []
         # We set an agent to a previous executed agent.
         self._last_executing_agent = env_params['agent_name']
+        # The random seed for the scenario generation (background etc)
+        self._random_seed = random_seed
 
 
     @staticmethod
@@ -111,8 +118,6 @@ class Environment(object):
         self._env_exec_info = []
         for exp in self._exp_list:
             exp.record()
-            # TODO experimental
-            #exp.cleanup()
             self._env_exec_info.append(exp.get_summary())
 
         if self._environment_name in Environment.number_of_executions:
@@ -158,6 +163,8 @@ class Environment(object):
         if len(self._exp_list) > 0:
             self.stop()
 
+        seed_everything(self._random_seed)
+
         # set the state and reward functions to be used on this episode
         self.StateFunction = StateFunction
         self.RewardFunction = RewardFunction
@@ -171,6 +178,7 @@ class Environment(object):
                 'env_number': Environment.number_of_executions[self._environment_name],
                 'exp_number': i,
                 'save_data': self._save_data,
+                'seconds_per_meter': self._env_config['seconds_per_meter'],
                 'make_videos': self._env_params['make_videos'],
                 'save_sensors': self._env_params['save_sensors'],
                 'save_opponents': self._env_params['save_opponents'],
@@ -216,6 +224,10 @@ class Environment(object):
         full_episode_data_dict = parser.parse_environment(root_path, metadata_dict)
 
         return full_episode_data_dict
+
+    def get_timeout(self):
+
+        return self._exp_list[0]._timeout
 
     # TODO does remove data make sense ?
     def remove_data(self):

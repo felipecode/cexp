@@ -122,7 +122,7 @@ def collect_data_loop(renv, agent, draw_pedestrians=True):
         state, _ = renv.step([controls])
 
     if draw_pedestrians:
-        renv.draw_pedestrians([0.1, 0.5, 0.95])
+        renv.draw_pedestrians([0.1, 0.2, 0.3, 0.4, 0.6, 0.8, 0.95])
 
     if renv.get_info()['status'] == 'Failed':
         renv.remove_data(agent.name)
@@ -174,7 +174,7 @@ if __name__ == '__main__':
               'make_videos': True,
               'save_walkers': True,
               'docker_name': arguments.docker,
-              'gpu': 0,
+              'gpu': 3,
               'batch_size': 1,
               'remove_wrong_data': False,
               'non_rendering_mode': True,

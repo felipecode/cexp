@@ -154,7 +154,6 @@ class CallBack(object):
 
     def _parse_image_cb(self, image, tag, writer):
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
-
         array = np.reshape(array, (image.height, image.width, 4))
         array = array[:, :, :3]
         array = array[:, :, ::-1]

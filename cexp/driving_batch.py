@@ -131,7 +131,7 @@ class DrivingBatch(object):
             'make_videos': self._params['make_videos'],
             'save_dataset': self._params['save_dataset'],
             'save_sensors': self._params['save_dataset'] and self._params['save_sensors'],
-            'save_opponents': self._params['save_opponents'], #
+            'save_opponents': self._params['save_opponents'],  #
             'package_name': self._json['package_name'],
             'save_walkers': self._params['save_walkers'],
             'remove_wrong_data': self._params['remove_wrong_data'],
@@ -152,10 +152,42 @@ class DrivingBatch(object):
             # We have the options to eliminate some events from execution.
             if env_name in self._eliminated_environments:
                 continue
+            # Check the random seed, if using a global one or local for each case
+            env_random_seed = self._check_random_seed(parserd_exp_dict, env_name)
+            # Add the seconds per meter metric !
+            if 'seconds_per_meter' not in parserd_exp_dict[env_name]:
+                if 'default_seconds_per_meter' in self._json:
+                    parserd_exp_dict[env_name].update(
+                        {'seconds_per_meter': self._json['default_seconds_per_meter']})
+
+                else:
+                    parserd_exp_dict[env_name].update(
+                        {'seconds_per_meter': 0.8})
             # Instance an _environments.
-            env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name], env_params)
+            env = Environment(env_name, self._client_vec, parserd_exp_dict[env_name],
+                              env_params, env_random_seed)
             # add the additional sensors ( The ones not provided by the policy )
             self._environments.update({env_name: env})
+
+    def _check_random_seed(self, parserd_exp_dict, env_name):
+        if 'random_seed' in parserd_exp_dict[env_name]:
+            env_random_seed = parserd_exp_dict[env_name]['random_seed']
+        elif 'default_random_seed' in self._json:
+            env_random_seed = self._json['default_random_seed']
+        else:
+            env_random_seed = int(random.random() * 100000)
+        return env_random_seed
+
+    def _add_timeout(self, parserd_exp_dict, env_name):
+        if 'seconds_per_meter' not in parserd_exp_dict[env_name]:
+            if 'default_seconds_per_meter' in self._json:
+                parserd_exp_dict[env_name].update(
+                    {'seconds_per_meter': self._json['default_seconds_per_meter']})
+
+            else:
+                parserd_exp_dict[env_name].update(
+                    {'seconds_per_meter': 0.8})
+
 
     def _get_execution_list(self):
         """

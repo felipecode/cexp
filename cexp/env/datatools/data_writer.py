@@ -223,7 +223,8 @@ class Writer(object):
 
         for sensor_spec in sensor_names:
             if sensor_spec['type'].startswith('sensor.camera'):
-                output_name = os.path.join('_videos', self._agent_name + '_' + self._experience_name +
+                output_name = os.path.join('_videos', self._agent_name + '_' + self._dataset_name +
+                                           '_' + self._experience_name +
                                                       '_' + sensor_spec['id'] )
                 print ( " THis is the output name ", output_name)
                 subprocess.call(['ffmpeg', '-f', 'image2', '-i', os.path.join(folder_path,

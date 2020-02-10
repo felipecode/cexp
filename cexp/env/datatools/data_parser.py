@@ -95,12 +95,6 @@ def get_number_executions(agent_name, environments_path):
         else:
             number_executions.update({env_name: len(results)})
 
-        #for file in os.listdir(env):
-        #    env_exec_name = os.path.join(env, file)
-        #    print("     file ", '_'.join(file.split('_')[1:]))
-        #    if os.path.isdir(env_exec_name) and '_'.join(file.split('_')[1:]) == agent_name:
-        #        # it exist but it needs to have a summary !
-
 
     # We should reduce the fact that we have the metadata
     return number_executions

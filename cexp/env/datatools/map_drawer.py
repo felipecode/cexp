@@ -273,6 +273,35 @@ def draw_topology(carla_topology, index):
         draw_lane(sidewalk, SIDEWALK_COLOR)
 
     draw_roads(set_waypoints)
+def get_map_max_min_positions(carla_topology):
+
+    x_min = 10000
+    y_min = 10000
+    x_max = 0
+    y_max = 0
+
+    topology = [x[0] for x in carla_topology]
+    topology = sorted(topology, key=lambda w: w.transform.location.z)
+
+    for waypoint in topology:
+        waypoints = [waypoint]
+        nxt = waypoint.next(precision)
+        if len(nxt) > 0:
+            nxt = nxt[0]
+            while nxt.road_id == waypoint.road_id:
+                waypoints.append(nxt)
+                nxt = nxt.next(precision)
+                if len(nxt) > 0:
+                    nxt = nxt[0]
+                else:
+                    break
+        for w in waypoints:
+            y_min = min(y_min, w.transform.location.y)
+            x_min = min(x_min, w.transform.location.x)
+            x_max = max(x_max, w.transform.location.x)
+            y_max = max(y_max, w.transform.location.y)
+
+    return x_min, x_max, y_min, y_max
 
 ##### the main map drawing function #####
 
@@ -284,6 +313,7 @@ def draw_map(world):
 
 ######################################################
 ##### The car drawing tools ##############
+######################################################
 
 def draw_point(location, result_color, size, alpha=None):
 
@@ -291,12 +321,14 @@ def draw_point(location, result_color, size, alpha=None):
     circle = plt.Circle((pixel[0], pixel[1]), size, fc=result_color, alpha=alpha)
     plt.gca().add_patch(circle)
 
+
 def draw_line(location_start, location_end, result_color, size, alpha=None):
 
     pixel_start = world_to_pixel(location_start)
     pixel_end = world_to_pixel(location_end)
     line = plt.Polygon([pixel_start, pixel_end], lw=size, edgecolor=result_color, alpha=alpha)
     plt.gca().add_patch(line)
+
 
 def draw_text(content, location, result_color, size):
 
@@ -368,7 +400,8 @@ def draw_opp_data(datapoint, agent_number, alpha=None):
     draw_point(location, result_color, size, alpha)
     count += 1
 
-def draw_walker(walker, alpha=None, color= (1,0,0)):
+
+def draw_walker(walker, alpha=None, color= (1,0,0), size=12):
     """
     We draw in a certain position at the map with the walkers
     :param position:
@@ -376,13 +409,12 @@ def draw_walker(walker, alpha=None, color= (1,0,0)):
     :return:
     """
 
-    size = 12
     world_pos = walker['position']
     location = carla.Location(x=world_pos[0], y=world_pos[1], z=world_pos[2])
     draw_point(location, color, size, alpha)
 
 
-def draw_walker_move(walker_start, walker_end, alpha=0.5, color=(1,0,0)):
+def draw_walker_move(walker_start, walker_end, alpha=0.5, color=(1,0,0), size=1):
     """
     We draw a vector correponding to two walker positions
     :param position:
@@ -390,10 +422,10 @@ def draw_walker_move(walker_start, walker_end, alpha=0.5, color=(1,0,0)):
     :return:
     """
 
-    size = 1
     world_pos_start = walker_start['position']
     world_pos_end = walker_end['position']
-    location_start = carla.Location(x=world_pos_start[0], y=world_pos_start[1], z=world_pos_start[2])
+    location_start = carla.Location(x=world_pos_start[0], y=world_pos_start[1],
+                                    z=world_pos_start[2])
     location_end = carla.Location(x=world_pos_end[0], y=world_pos_end[1], z=world_pos_end[2])
     draw_line(location_start, location_end, color, size, alpha)
 
@@ -484,8 +516,6 @@ def get_actor_ids(env_data):
 
 def draw_opp_trajectories(env_data, env_name, world, step_size=3):
 
-
-
     # we draw the route that has to be followed
     actors_ids = get_actor_ids(env_data)
 
@@ -533,10 +563,14 @@ def draw_pedestrians(agent_name, env_data, env_name, world, steps):
     if not os.path.exists('_walkers'):
         os.mkdir('_walkers')
     # color pallet ! Maximum a few pedestrians
-    color_palet = [(1,0,0), (0,1,0), (0,0,1), (1,1,0), (0,1,1), (1,0,1), (0,0,0), (1,1,1)]
+    color_pallet = [(1,0,0),(0,0,1),(0,0,1),(0,0,1),(0,0,1),(0,0,1),
+                   (0,1,0)]
+    sizes_pallet = [12, 3, 3, 3, 3, 3, 12]
     fig = plt.figure()
-    plt.xlim(-400, 3000)
-    plt.ylim(500, 5000)
+    x_min, x_max, y_min, y_max = \
+        get_map_max_min_positions(world.get_map().get_topology())
+    plt.xlim((x_min*pixels_per_meter)-300, (x_max*pixels_per_meter)+300)
+    plt.ylim((y_min*pixels_per_meter)-300, (y_max*pixels_per_meter)+300)
     # We draw the full map
     draw_map(world)
     count = 0
@@ -564,7 +598,8 @@ def draw_pedestrians(agent_name, env_data, env_name, world, steps):
             number_of_steps = len(exp[0][0][0]) - 1
             datapoint = exp[0][0][0][int(number_of_steps*step)]
             for key, walker_info in datapoint['measurements']['walkers'].items():
-                draw_walker(walker_info, color=color_palet[count])
+                draw_walker(walker_info, color=color_pallet[count],
+                            size=sizes_pallet[count])
         count += 1
 
 

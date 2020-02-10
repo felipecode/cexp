@@ -49,7 +49,8 @@ def parse_routes_file(route_filename):
         for waypoint in route.iter('waypoint'):
              waypoint_list.append(carla.Location(x=float(waypoint.attrib['x']),
                                                  y=float(waypoint.attrib['y']),
-                                                 z=float(waypoint.attrib['z'])))  # Waypoints is basically a list of XML nodes
+                                                 z=float(waypoint.attrib['z'])),
+                                  )  # Waypoints is basically a list of XML nodes
 
         list_route_descriptions.append({
                                     'id': route_id,
@@ -98,9 +99,8 @@ def parse_weather(exp_weather):
         raise ValueError("Invalid weather on the configuration json file")
 
 
-SECONDS_GIVEN_PER_METERS = 0.8  # TODO THIS IS A SERIOUS PARAMETER.
+def estimate_route_timeout(route, seconds_per_meter):
 
-def estimate_route_timeout(route):
     route_length = 0.0  # in meters
     prev_point = route[0][0]
     for current_point, _ in route[1:]:
@@ -108,8 +108,8 @@ def estimate_route_timeout(route):
         route_length += dist
         prev_point = current_point
 
+    return int(seconds_per_meter * route_length)
 
-    return int(SECONDS_GIVEN_PER_METERS * route_length)
 
 def clean_route(route):
 
