@@ -95,23 +95,23 @@ def collect_data_loop(renv, agent, draw_pedestrians=True):
     # representation of the sensor input is showed on the main loop.
     # We add a camera and a GPS on top of it.
 
-    sensors_dict = [#{'type': 'sensor.camera.rgb',
-                #'x': 2.0, 'y': 0.0,
-                #'z': 1.40, 'roll': 0.0,
-                #'pitch': -15.0, 'yaw': 0.0,
-                #'width': 800, 'height': 600,
-                #'fov': 100,
-                #'id': 'rgb'},
-                # {'type': 'sensor.camera.rgb',
-                #     'x': 2.0, 'y': 0.0,
-                #     'z': 15.40, 'roll': 0.0,
-                #     'pitch': -30.0, 'yaw': 0.0,
-                #     'width': 800, 'height': 600,
-                #     'fov': 120,
-                #     'id': 'rgb_view'},
-                #{'type': 'sensor.other.gnss',
-                # 'x': 0.7, 'y': -0.4, 'z': 1.60,
-                # 'id': 'GPS'}
+    sensors_dict = [{'type': 'sensor.camera.rgb',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 0.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'rgb'},
+                 {'type': 'sensor.camera.rgb',
+                     'x': 2.0, 'y': 0.0,
+                     'z': 17.40, 'roll': 0.0,
+                     'pitch': -90.0, 'yaw': 0.0,
+                     'width': 800, 'height': 600,
+                     'fov': 120,
+                     'id': 'rgb_view'},
+                {'type': 'sensor.other.gnss',
+                 'x': 0.7, 'y': -0.4, 'z': 1.60,
+                 'id': 'GPS'}
         ]
 
     renv.set_sensors(sensors_dict)
@@ -177,7 +177,7 @@ if __name__ == '__main__':
               'gpu': 3,
               'batch_size': 1,
               'remove_wrong_data': False,
-              'non_rendering_mode': True,
+              'non_rendering_mode': False,
               'carla_recording': True
               }
 
