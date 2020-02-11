@@ -35,7 +35,7 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     # A single loop being made
-    json = 'database/dataset_ICML_Town01_train_samplenoise.json'
+    json = 'database/sample_description.json'
 
     # Dictionary with the necessary params related to the execution not the model itself.
     params = {'save_dataset': True,
@@ -54,7 +54,20 @@ if __name__ == '__main__':
 
     # The idea is that the agent class should be completely independent
     agent = NPCAgent(
-        sensors_dict=[], noise=True)
+        sensors_dict=[{'type': 'sensor.camera.rgb',
+                'x': 2.0, 'y': 0.0,
+                'z': 1.40, 'roll': 0.0,
+                'pitch': -15.0, 'yaw': 0.0,
+                'width': 800, 'height': 600,
+                'fov': 100,
+                'id': 'rgb'},
+                 {'type': 'sensor.camera.rgb',
+                     'x': 2.0, 'y': 0.0,
+                     'z': 15.40, 'roll': 0.0,
+                     'pitch': -30.0, 'yaw': 0.0,
+                     'width': 800, 'height': 600,
+                     'fov': 120,
+                     'id': 'rgb_view'}], noise=True)
     # this could be joined
     env_batch = CEXP(json, params=params, execute_all=True, ignore_previous_execution=True,
                      port=arguments.port)  # THe experience is built, the files necessary
