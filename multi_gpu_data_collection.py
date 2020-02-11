@@ -123,10 +123,10 @@ def collect_data(json_file, params, eliminated_environments,
 
 
 def execute_collector(json_file, params, eliminated_environments,
-                      collector_id):
+                      collector_id, noise=False):
     p = multiprocessing.Process(target=collect_data,
                                 args=(json_file, params,
-                                      eliminated_environments, collector_id,))
+                                      eliminated_environments, collector_id, noise))
     p.start()
 
 
@@ -193,6 +193,10 @@ if __name__ == '__main__':
         '-r', '--resize-images',
         action="store_true",
         help=' resize images once the episode finished')
+    argparser.add_argument(
+        '-o', '--add-noise',
+        action="store_true",
+        help=' adding noise during data collection')
 
     args = argparser.parse_args()
     print(os.path.realpath(__file__).split('/')[:-1])
@@ -250,4 +254,4 @@ if __name__ == '__main__':
         print (" Collector ", i, "Start ",  int(environments_per_collector) * (i),
                "End ", int(environments_per_collector) * (i+1) + extra_env)
 
-        execute_collector(json_file, params, eliminated_environments, i)
+        execute_collector(json_file, params, eliminated_environments, i, noise=args.add_noise)
