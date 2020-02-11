@@ -41,9 +41,9 @@ class RANDOMAgent(Agent):
         self._use_noise = noise
         if noise:
             self._noiser = Noiser('Spike')
-            self._name = 'NPC_noise'
+            self._name = 'RANDOM_noise'
         else:
-            self._name = 'NPC'
+            self._name = 'RANDOM'
 
     def setup(self, config_file_path):
         self.route_assigned = False

@@ -4,6 +4,7 @@ import json
 import shutil
 import subprocess
 import numpy as np
+import scipy.misc
 
 # TODO write expbatch related data.
 
@@ -232,8 +233,16 @@ class Writer(object):
         functions called asynchronously by the thread to write the sensors
     """
 
-    def write_image(self, image, tag):
-        image.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))
+    def write_image(self, image, tag, resize_images=False):
+        if resize_images:
+            array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
+            array = np.reshape(array, (image.height, image.width, 4))
+            array = array[65:460, :, :3]
+            array = array[:, :, ::-1]
+            image = scipy.misc.imresize(array, (88, 200))
+            scipy.misc.imsave(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id), image)
+        else:
+            image.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))
 
     def write_lidar(self, lidar, tag):
         lidar.save_to_disk(os.path.join(self._full_path, tag + '%06d.png' % self._latest_id))

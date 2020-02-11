@@ -5523,38 +5523,6 @@
             "town_name": "Town01",
             "vehicle_model": "vehicle.lincoln.mkz2017",
             "weather_profile": "WetNoon"
-        },
-        "WetNoon_routes_route00098": {
-            "route": {
-                "file": "routes/routes_all.xml",
-                "id": 5574
-            },
-            "scenarios": {
-                "background_activity": {
-                    "cross_factor": 0.1,
-                    "vehicle.*": 100,
-                    "walker.*": 300
-                }
-            },
-            "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017",
-            "weather_profile": "WetNoon"
-        },
-        "WetNoon_routes_route00099": {
-            "route": {
-                "file": "routes/routes_all.xml",
-                "id": 27403
-            },
-            "scenarios": {
-                "background_activity": {
-                    "cross_factor": 0.1,
-                    "vehicle.*": 100,
-                    "walker.*": 300
-                }
-            },
-            "town_name": "Town01",
-            "vehicle_model": "vehicle.lincoln.mkz2017",
-            "weather_profile": "WetNoon"
         }
     },
     "package_name": "dataset_ICML_Town01_l0_random"
