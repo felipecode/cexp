@@ -1,6 +1,4 @@
 {
-    "default_random_seed": 1,
-    "default_seconds_per_meter":  0.8,
     "envs": {
       "SoftRainSunset_route00000": {
         "repetitions": 1,
@@ -15,9 +13,9 @@
             "cross_factor": 0.01
           }
         },
-        "town_name": "Town02",
+        "town_name": "Town01",
         "vehicle_model": "vehicle.lincoln.mkz2017",
-        "weather_profile": "SoftRainNoon"
+        "weather_profile": "ClearSunset"
       },
       "SoftRainSunset_route00001": {
         "repetitions": 1,
@@ -32,7 +30,7 @@
             "cross_factor": 0.1
           }
         },
-        "town_name": "Town02",
+        "town_name": "Town01",
         "vehicle_model": "vehicle.lincoln.mkz2017",
         "weather_profile": "ClearNoon"
       },
@@ -51,7 +49,7 @@
         },
         "town_name": "Town02",
         "vehicle_model": "vehicle.lincoln.mkz2017",
-        "weather_profile": "ClearSunset"
+        "weather_profile": "WetNoon"
       },
       "SoftRainSunset_route00003": {
         "repetitions": 1,
@@ -68,7 +66,7 @@
         },
         "town_name": "Town02",
         "vehicle_model": "vehicle.lincoln.mkz2017",
-        "weather_profile": "SoftRainSunset"
+        "weather_profile": "HardRainNoon"
       },
       "SoftRainSunset_route00004": {
         "repetitions": 1,
@@ -85,7 +83,7 @@
         },
         "town_name": "Town02",
         "vehicle_model": "vehicle.lincoln.mkz2017",
-        "weather_profile": "SoftRainSunset"
+        "weather_profile": "ClearNoon"
       },
       "SoftRainSunset_route00005": {
         "repetitions": 1,
@@ -105,5 +103,5 @@
         "weather_profile": "ClearNoon"
       }
     },
-    "package_name": "test_2"
+    "package_name": "test_print"
 }
