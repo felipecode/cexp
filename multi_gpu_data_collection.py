@@ -9,6 +9,7 @@ import multiprocessing
 import subprocess
 
 from cexp.agents.RANDOMAgent import RANDOMAgent
+from cexp.agents.NPCAgent import NPCAgent
 from cexp.cexp import CEXP
 import sys
 
@@ -17,49 +18,111 @@ import sys
 
 # THE IDEA IS TO RUN EXPERIENCES IN MULTI GPU MODE SUCH AS
 def collect_data(json_file, params, eliminated_environments,
-                 collector_id, noise=False):
+                 collector_id, noise=False, randomAgent=False):
     # The idea is that the agent class should be completely independent
 
     # TODO this has to go to a separate file and to be merged with package
-    agent = RANDOMAgent(
-        sensors_dict = [{'type': 'sensor.camera.rgb',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': 0.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'rgb_central'},
+    if randomAgent:
+        agent = RANDOMAgent(
+            sensors_dict = [{'type': 'sensor.camera.rgb',
+                    'x': 2.0, 'y': 0.0,
+                    'z': 1.40, 'roll': 0.0,
+                    'pitch': -15.0, 'yaw': 0.0,
+                    'width': 800, 'height': 600,
+                    'fov': 100,
+                    'id': 'rgb_central'},
 
 
 
-               {'type': 'sensor.camera.rgb',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': -30.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'rgb_left'},
+                   {'type': 'sensor.camera.rgb',
+                    'x': 2.0, 'y': 0.0,
+                    'z': 1.40, 'roll': 0.0,
+                    'pitch': -15.0, 'yaw': -30.0,
+                    'width': 800, 'height': 600,
+                    'fov': 100,
+                    'id': 'rgb_left'},
 
 
 
-               {'type': 'sensor.camera.rgb',
-                'x': 2.0, 'y': 0.0,
-                'z': 1.40, 'roll': 0.0,
-                'pitch': -15.0, 'yaw': 30.0,
-                'width': 800, 'height': 600,
-                'fov': 100,
-                'id': 'rgb_right'},
+                   {'type': 'sensor.camera.rgb',
+                    'x': 2.0, 'y': 0.0,
+                    'z': 1.40, 'roll': 0.0,
+                    'pitch': -15.0, 'yaw': 30.0,
+                    'width': 800, 'height': 600,
+                    'fov': 100,
+                    'id': 'rgb_right'},
 
-                {'type': 'sensor.can_bus',
-                 'reading_frequency': 25,
-                 'id': 'can_bus'
-                 },
+                    {'type': 'sensor.can_bus',
+                     'reading_frequency': 25,
+                     'id': 'can_bus'
+                     },
 
-                {'type': 'sensor.other.gnss',
-                 'x': 0.7, 'y': -0.4, 'z': 1.60,
-                 'id': 'GPS'}
+                    {'type': 'sensor.other.gnss',
+                     'x': 0.7, 'y': -0.4, 'z': 1.60,
+                     'id': 'GPS'}
 
-               ], noise=noise)
+                   ], noise=noise)
+    else:
+        agent = NPCAgent(
+            sensors_dict=[{'type': 'sensor.camera.rgb',
+                           'x': 2.0, 'y': 0.0,
+                           'z': 1.40, 'roll': 0.0,
+                           'pitch': -15.0, 'yaw': 0.0,
+                           'width': 800, 'height': 600,
+                           'fov': 100,
+                           'id': 'rgb_central'},
+
+                          {'type': 'sensor.camera.semantic_segmentation',
+                           'x': 2.0, 'y': 0.0,
+                           'z': 1.40, 'roll': 0.0,
+                           'pitch': -15.0, 'yaw': 0.0,
+                           'width': 800, 'height': 600,
+                           'fov': 100,
+                           'id': 'labels_central'},
+
+                          {'type': 'sensor.camera.rgb',
+                           'x': 2.0, 'y': 0.0,
+                           'z': 1.40, 'roll': 0.0,
+                           'pitch': -15.0, 'yaw': -30.0,
+                           'width': 800, 'height': 600,
+                           'fov': 100,
+                           'id': 'rgb_left'},
+
+                          {'type': 'sensor.camera.semantic_segmentation',
+                           'x': 2.0, 'y': 0.0,
+                           'z': 1.40, 'roll': 0.0,
+                           'pitch': -15.0, 'yaw': -30.0,
+                           'width': 800, 'height': 600,
+                           'fov': 100,
+                           'id': 'labels_left'},
+
+                          {'type': 'sensor.camera.rgb',
+                           'x': 2.0, 'y': 0.0,
+                           'z': 1.40, 'roll': 0.0,
+                           'pitch': -15.0, 'yaw': 30.0,
+                           'width': 800, 'height': 600,
+                           'fov': 100,
+                           'id': 'rgb_right'},
+
+                          {'type': 'sensor.camera.semantic_segmentation',
+                           'x': 2.0, 'y': 0.0,
+                           'z': 1.40, 'roll': 0.0,
+                           'pitch': -15.0, 'yaw': 30.0,
+                           'width': 800, 'height': 600,
+                           'fov': 100,
+                           'id': 'labels_right'},
+
+                          {'type': 'sensor.can_bus',
+                           'reading_frequency': 25,
+                           'id': 'can_bus'
+                           },
+
+                          {'type': 'sensor.other.gnss',
+                           'x': 0.7, 'y': -0.4, 'z': 1.60,
+                           'id': 'GPS'}
+
+                          ], noise=noise)
+
     # this could be joined
     env_batch = CEXP(json_file, params=params, execute_all=True,
                      eliminated_environments=eliminated_environments)
@@ -70,10 +133,16 @@ def collect_data(json_file, params, eliminated_environments,
         package_name = json_dict['package_name']
 
     # Here some docker was set
-    if not noise:
-        env_batch.start(agent_name='Random')
+    if randomAgent:
+        if not noise:
+            env_batch.start(agent_name='Random')
+        else:
+            env_batch.start(agent_name='Random_noise')
     else:
-        env_batch.start(agent_name='Random_noise')
+        if not noise:
+            env_batch.start(agent_name='Multi')
+        else:
+            env_batch.start(agent_name='Multi_noise')
 
     for env in env_batch:
         try:
@@ -82,10 +151,6 @@ def collect_data(json_file, params, eliminated_environments,
             # I need a mechanism to test the rewards so I can test the policy gradient strategy
             print (" Collector ", collector_id, " Collecting for ", env)
             states, rewards = agent.unroll(env)
-            if params['resize_images']:
-                if os.path.exists(os.path.join(os.environ["SRL_DATASET_PATH"], package_name+'_resized' , str(env), '0_Agent', '0', 'summary.json')):
-                    print(env,' has been resized, and original images have been deleted')
-                    subprocess.call(['rm', '-r', os.path.join(os.environ["SRL_DATASET_PATH"], package_name , str(env))])
             agent.reinforce(rewards)
         except KeyboardInterrupt:
             env.stop()
@@ -103,10 +168,10 @@ def collect_data(json_file, params, eliminated_environments,
 
 
 def execute_collector(json_file, params, eliminated_environments,
-                      collector_id):
+                      collector_id, noise=False, randomAgent=False):
     p = multiprocessing.Process(target=collect_data,
                                 args=(json_file, params,
-                                      eliminated_environments, collector_id,))
+                                      eliminated_environments, collector_id, noise, randomAgent))
     p.start()
 
 
@@ -173,6 +238,14 @@ if __name__ == '__main__':
         '-r', '--resize-images',
         action="store_true",
         help=' resize images once the episode finished')
+    argparser.add_argument(
+        '-o', '--add-noise',
+        action="store_true",
+        help=' adding noise during data collection')
+    argparser.add_argument(
+        '-ra', '--random-agent',
+        action="store_true",
+        help='using random agent during data collection')
 
     args = argparser.parse_args()
     print(os.path.realpath(__file__).split('/')[:-1])
@@ -230,4 +303,4 @@ if __name__ == '__main__':
         print (" Collector ", i, "Start ",  int(environments_per_collector) * (i),
                "End ", int(environments_per_collector) * (i+1) + extra_env)
 
-        execute_collector(json_file, params, eliminated_environments, i)
+        execute_collector(json_file, params, eliminated_environments, i, noise=args.add_noise, randomAgent=args.random_agent)

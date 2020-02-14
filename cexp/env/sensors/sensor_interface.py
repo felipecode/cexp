@@ -131,15 +131,16 @@ class CANBusSensor(object):
         self._run_ps = False
 
 class CallBack(object):
-    def __init__(self, tag, sensor, data_provider, writer=None):
+    def __init__(self, tag, sensor, data_provider, writer=None, resize_images=False):
         self._tag = tag
         self._data_provider = data_provider
         self._data_provider.register_sensor(tag, sensor)
         self._writer = writer
+        self._resize_images=resize_images
 
     def __call__(self, data):
         if isinstance(data, carla.Image):
-            self._parse_image_cb(data, self._tag, self._writer)
+            self._parse_image_cb(data, self._tag, self._writer, self._resize_images)
         elif isinstance(data, carla.LidarMeasurement):
             self._parse_lidar_cb(data, self._tag, self._writer)
         elif isinstance(data, carla.GnssMeasurement):
@@ -152,13 +153,13 @@ class CallBack(object):
 
     # Parsing CARLA physical Sensors
 
-    def _parse_image_cb(self, image, tag, writer):
+    def _parse_image_cb(self, image, tag, writer, resize_images=False):
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
 
         array = np.reshape(array, (image.height, image.width, 4))
         array = array[:, :, :3]
         array = array[:, :, ::-1]
-        self._data_provider.update_sensor(image, tag, array, image.frame_number, writer)
+        self._data_provider.update_sensor(image, tag, array, image.frame_number, writer, resize_images)
 
     def _parse_lidar_cb(self, lidar_data, tag, writer):
 
@@ -202,13 +203,13 @@ class SensorInterface(object):
         self._timestamps[tag] = -1
 
 
-    def update_sensor(self, raw, tag, data, timestamp, writer):
+    def update_sensor(self, raw, tag, data, timestamp, writer, resize_images=False):
         if tag not in self._sensors_objects:
             raise ValueError("The sensor with tag [{}] has not been created!".format(tag))
         self._data_buffers[tag] = data
         self._timestamps[tag] = timestamp
         # While all sensors are not ready we cannot way synchronization
-        self._synchronize_write(writer, tag, raw)
+        self._synchronize_write(writer, tag, raw, resize_images)
 
     def all_sensors_ready(self):
         for key in self._sensors_objects.keys():
@@ -231,7 +232,7 @@ class SensorInterface(object):
 
             time.sleep(0.01)
 
-    def _synchronize_write(self, writer, tag, raw):
+    def _synchronize_write(self, writer, tag, raw, resize_image=False):
         """
         Synchronize to check if all sensors have been written.
         """
@@ -242,7 +243,7 @@ class SensorInterface(object):
             self._lock.release()
             return
         if writer is not None:
-            writer.write_image(raw, tag)
+            writer.write_image(raw, tag, resize_image)
         self._written[tag] += 1
         self._lock.release()
 

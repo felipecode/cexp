@@ -110,7 +110,7 @@ class Experience(object):
             self._timeout = estimate_route_timeout(self._route)
             self._master_scenario = self.build_master_scenario(self._route,
                                                                exp_params['town_name'],
-                                                               self._timeout)
+                                                               self._timeout, True)
             other_scenarios = self.build_scenario_instances(scenario_definitions, self._timeout)
             self._list_scenarios = [self._master_scenario] + other_scenarios
             # Route statistics, when the route is finished there will
@@ -295,7 +295,7 @@ class Experience(object):
             if self._save_sensors or self._exp_params['make_videos']:
                 # We have the options to not save sensors data unless it is to make video
                 sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
-                                       writer=self._writer))
+                                       writer=self._writer, resize_images=self._exp_params['resize_images']))
             else:
                 sensor.listen(CallBack(sensor_spec['id'], sensor, self._sensor_interface,
                                        writer=None))
@@ -348,7 +348,7 @@ class Experience(object):
         # TODO for now we are just randomizing the seeds and that is it
 
 
-    def build_master_scenario(self, route, town_name, timeout):
+    def build_master_scenario(self, route, town_name, timeout, terminate_on_collision):
         # We have to find the target.
         # we also have to convert the route to the expected format
         master_scenario_configuration = ScenarioConfiguration()
@@ -362,7 +362,7 @@ class Experience(object):
         CarlaDataProvider.register_actor(self._ego_actor)
 
         return MasterScenario(self.world, [self._ego_actor], master_scenario_configuration,
-                              timeout=timeout)
+                              timeout=timeout, terminate_on_collision=terminate_on_collision)
 
 
     def _load_world(self):
@@ -537,39 +537,6 @@ class Experience(object):
             self._writer.make_video(self._sensors_dict)
             if delete_sensors:
                 self._writer.delete_sensors()
-
-        if self._exp_params['resize_images']:
-            data_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._exp_params['package_name'])
-            save_path = os.path.join(os.environ["SRL_DATASET_PATH"], self._exp_params['package_name']+'_resized')
-            if not os.path.exists(save_path):
-                os.mkdir(save_path)
-            print('Resizing images in ', self._exp_params['env_name'])
-            metadata_file = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '*.json'))
-            metadata_name = metadata_file[0].split('/')[-1]
-            if not os.path.exists(os.path.join(save_path, self._exp_params['env_name'])):
-                os.mkdir(os.path.join(save_path, self._exp_params['env_name']))
-            shutil.copy(metadata_file[0], os.path.join(os.path.join(save_path, self._exp_params['env_name']), metadata_name))
-            images_list = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0', '*.png'))
-            files_list = glob.glob(os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0','measurements*.json'))
-            for image_path in images_list:
-                image_name = image_path.split('/')[-1]
-                image = scipy.misc.imread(image_path)
-                image = image[65:460, :, :]
-                image = scipy.misc.imresize(image, (88, 200))
-                saving_img_dir = os.path.join(save_path, self._exp_params['env_name'], '0_Agent', '0')
-                if not os.path.exists(saving_img_dir):
-                    os.makedirs(saving_img_dir)
-                scipy.misc.imsave(os.path.join(saving_img_dir, image_name), image)
-            for file_path in files_list:
-                file_name = file_path.split('/')[-1]
-                saving_files_dir = os.path.join(save_path, self._exp_params['env_name'], '0_Agent', '0')
-                if not os.path.exists(saving_files_dir):
-                    os.makedirs(saving_files_dir)
-                shutil.copy(file_path, os.path.join(saving_files_dir, file_name))
-            summary_file_path = os.path.join(data_path, self._exp_params['env_name'], '0_Agent', '0', 'summary.json')
-            file_name = summary_file_path.split('/')[-1]
-            shutil.copy(summary_file_path, os.path.join(saving_files_dir, file_name))
-            print('===> Resizing finished ', self._exp_params['env_name'])
 
 
 
