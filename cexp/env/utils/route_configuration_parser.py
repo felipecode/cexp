@@ -162,12 +162,10 @@ def parse_exp_vec(json_path, exp_vec):
     # keep track also the loaded scenario files.
     # Read all the dicts
     routes_root_path = json_path
-
     for exp_name in exp_vec.keys():
         exp_dict = exp_vec[exp_name]
         # add the exp name as a reference to the dict
         exp_vec_parsed.update({exp_name: {}})
-
         if 'file' in exp_dict['route']:  # This case is where we have a referenced file
             # Read the file
             if exp_dict['route']['file'] not in full_loaded_route_files:
