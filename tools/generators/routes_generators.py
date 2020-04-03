@@ -1,6 +1,8 @@
 import argparse
 from cexp.env.server_manager import start_test_server, check_test_server
 import carla
+import socket
+from contextlib import closing
 """"
 This script generates routes based on the compitation of the start and end scenarios.
 
@@ -44,7 +46,10 @@ def make_routes(filename, world):
 
 
 
-
+def find_free_port():
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
+        s.bind(('', 0))
+        return s.getsockname()[1]
 
 
 if __name__ == '__main__':
@@ -59,15 +64,19 @@ if __name__ == '__main__':
 
     arguments = parser.parse_args()
 
+    free_port = find_free_port()
 
-    if not check_test_server(6666):
-        start_test_server(6666)
+    if not check_test_server(free_port):
+        start_test_server(free_port, gpu=0, docker_name='carlaped')
         print (" WAITING FOR DOCKER TO BE STARTED")
 
 
-    client = carla.Client('localhost', 6666)
+    client = carla.Client('localhost', free_port)
+    client.set_timeout(25.0)
 
     world = client.load_world(arguments.town)
+
+    print('World loaded')
 
     make_routes(arguments.output, world)
 

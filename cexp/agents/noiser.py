@@ -42,12 +42,12 @@ class Noiser(object):
         if self.noise_type == 'Spike' or self.noise_type == 'Throttle':
             if self.current_noise_mean > 0:
 
-                return min(0.55,
+                return min(0.35,  #0.55
                            self.current_noise_mean + (
                                    time.time() - self.noise_start_time) * 0.03 * self.intensity)
             else:
 
-                return max(-0.55,
+                return max(-0.35, #-0.55
                            self.current_noise_mean - (
                                    time.time() - self.noise_start_time) * 0.03 * self.intensity)
 
@@ -57,10 +57,12 @@ class Noiser(object):
         # print added_noise
         if self.noise_type == 'Spike' or self.noise_type == 'Throttle':
             if self.current_noise_mean > 0:
-                added_noise = min(0.55, added_noise + self.current_noise_mean)
+                added_noise = min(0.35, #0.55
+                                  added_noise + self.current_noise_mean)
                 return added_noise - (time.time() - self.noise_end_time) * 0.03 * self.intensity
             else:
-                added_noise = max(-0.55, self.current_noise_mean - added_noise)
+                added_noise = max(-0.35, #-0.55
+                                  self.current_noise_mean - added_noise)
                 return added_noise + (time.time() - self.noise_end_time) * 0.03 * self.intensity
 
     def is_time_for_noise(self, steer):
