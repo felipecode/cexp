@@ -98,7 +98,8 @@ def parse_weather(exp_weather):
         raise ValueError("Invalid weather on the configuration json file")
 
 
-SECONDS_GIVEN_PER_METERS = 0.8  # TODO THIS IS A SERIOUS PARAMETER.
+#SECONDS_GIVEN_PER_METERS = 0.8  # TODO THIS IS A SERIOUS PARAMETER.
+SECONDS_GIVEN_PER_METERS = 1.5
 
 def estimate_route_timeout(route):
     route_length = 0.0  # in meters
