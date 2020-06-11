@@ -96,12 +96,14 @@ def collect_data_loop(renv, agent, sensors_dict, draw_pedestrians=True):
     # We add a camera and a GPS on top of it.
 
 
-    renv.set_sensors(sensors_dict)
-    state, _ = renv.reset(StateFunction=agent.get_state)
+    ds.set_sensors(sensors_dict)
+
+    #  TODO env_params: How is the environment going to be created
+    state, reward = renv.reset(env_params, StateFunction=agent.get_state)
 
     while renv.get_info()['status'] == 'Running':
         controls = agent.step(state)
-        state, _ = renv.step([controls])
+        state, reward = renv.step([controls])
 
     if draw_pedestrians:
         renv.draw_pedestrians([0, 0.5, 1])
@@ -151,25 +153,26 @@ if __name__ == '__main__':
     # A single loop being made
     json_file = arguments.json_file
     # Dictionary with the necessary params related to the execution not the model itself.
+    #  TODO This is like system parameters.
     params = {'save_dataset': True,
               'save_sensors': True,
               'save_trajectories': True,
               'save_walkers': True,
               'docker_name': arguments.docker,
               'gpu': 0,
-              'batch_size': 1,
+              'batch_size': 1, # THIS GOES OUT
               'remove_wrong_data': False,
               'non_rendering_mode': False,
               'carla_recording': True
               }
 
-    # TODO for now batch size is one
 
     # The idea is that the agent class should be completely independent
     agent = NPCAgent()
 
     # The driving batch generate environments from a json file,
-    driving_batch = DrivingBatch(json_file, params=params, port=arguments.port)
+    # TODO Setup all the parameters regarding starting the system.
+    ds = DrivingSchool(json_file, params=params, port=arguments.port) # Where carla is going
     # THe experience is built, the files necessary
     # to load CARLA and the scenarios are made
     sensors_dict = [{'type': 'sensor.camera.rgb',
@@ -198,12 +201,14 @@ if __name__ == '__main__':
                      'id': 'GPS'}]
 
     # Here some docker was set
-    driving_batch.start(agent_name='NPC_test')
-    for renv in driving_batch:
-        try:
-            # The policy selected to run this experience vector
-            collect_data_loop(renv, agent, sensors_dict)
-        except KeyboardInterrupt:
+    ds.start(agent_name='NPC_test')
+
+    collect_data_loop(renv, agent, sensors_dict)
+
+
+
+
+    except KeyboardInterrupt:
             renv.stop()
             break
         except:
