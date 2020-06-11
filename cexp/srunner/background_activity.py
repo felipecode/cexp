@@ -10,9 +10,9 @@ Scenario spawning elements to make the town dynamic and interesting
 
 import py_trees
 
-from srunner.scenariomanager.scenarioatomics.atomic_behaviors import TrafficJamChecker
-from srunner.scenariomanager.carla_data_provider import CarlaActorPool
-from srunner.scenarios.basic_scenario import BasicScenario
+from cexp.srunner.scenarioatomics.atomic_behaviors import TrafficJamChecker
+from cexp.srunner.scenariomanager.carla_data_provider import CarlaActorPool
+from cexp.srunner.basic_scenario import BasicScenario
 
 
 BACKGROUND_ACTIVITY_SCENARIOS = ["BackgroundActivity"]

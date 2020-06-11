@@ -5,16 +5,16 @@ import time
 import logging
 
 
-from srunner.scenariomanager.timer import GameTime, TimeOut
-from srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
-from srunner.scenarioconfigs.scenario_configuration import ActorConfigurationData, ScenarioConfiguration
-from srunner.scenarios.master_scenario import MasterScenario
-from srunner.scenarios.background_activity import BackgroundActivity
-from srunner.challenge.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
+from cexp.srunner.scenariomanager.timer import GameTime
+from cexp.srunner.scenariomanager.carla_data_provider import CarlaActorPool, CarlaDataProvider
+from cexp.srunner.scenario_configs import ActorConfigurationData, ScenarioConfiguration
+from cexp.srunner.master_scenario import MasterScenario
+from cexp.srunner.background_activity import BackgroundActivity
+from cexp.env.utils.route_manipulation import interpolate_trajectory, _get_latlon_ref
 
 from agents.navigation.local_planner import RoadOption
 
-from cexp.env.scorer import record_route_statistics_default, get_current_completion, clean_route
+from cexp.env.scorer import record_route_statistics_default
 from cexp.env.datatools.data_writer import Writer
 from cexp.env.utils.route_configuration_parser import estimate_route_timeout
 from cexp.env.sensors.sensor_interface import CANBusSensor, CallBack, SensorInterface
