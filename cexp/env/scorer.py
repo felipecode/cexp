@@ -1,5 +1,5 @@
 import os
-from srunner.scenariomanager.traffic_events import TrafficEventType
+from cexp.srunner.scenariomanager.traffic_events import TrafficEventType
 from cexp.env.utils.route_configuration_parser import clean_route
 import py_trees
 

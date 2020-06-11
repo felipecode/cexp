@@ -8,8 +8,8 @@ from threading import Thread
 from threading import Lock
 import carla
 
-from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
-from srunner.challenge.envs.scene_layout_sensors import SceneLayoutMeasurement, ObjectMeasurements, threaded
+from cexp.srunner.scenariomanager.carla_data_provider import CarlaDataProvider
+from cexp.env.sensors.scene_layout_sensors import SceneLayoutMeasurement, ObjectMeasurements, threaded
 
 class HDMapMeasurement(object):
     def __init__(self, data, frame_number):

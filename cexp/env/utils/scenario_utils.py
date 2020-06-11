@@ -1,6 +1,6 @@
 
-from srunner.scenarios.object_crash_vehicle import DynamicObjectCrossing
-from srunner.scenarios.object_crash_intersection import VehicleTurningRight, VehicleTurningLeft
+from cexp.srunner.object_crash_vehicle import DynamicObjectCrossing
+from cexp.srunner.object_crash_intersection import VehicleTurningRight, VehicleTurningLeft
 
 
 number_class_translation = {
